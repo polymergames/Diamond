@@ -7,6 +7,6 @@ Logger Logger::*logger = nullptr;
 
 void Logger::setLogger(Logger *logger)
 {
-	if (Logger::logger == nullptr && logger != nullptr)
+	if (Logger::logger == nullptr)
 		Logger::logger = logger;
 }
