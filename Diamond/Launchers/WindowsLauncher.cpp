@@ -8,3 +8,8 @@ void WindowsLauncher::launch()
 {
 	//
 }
+
+void WindowsLauncher::cleanup()
+{
+	//
+}

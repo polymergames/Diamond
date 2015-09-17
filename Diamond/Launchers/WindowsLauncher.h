@@ -9,7 +9,7 @@ class WindowsLauncher
 {
 	public:
 	static void launch();
-
+	static void cleanup();
 };
 
 #endif // WINDOWS_LAUNCHER_H 

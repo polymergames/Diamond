@@ -7,10 +7,10 @@
 
 void Launcher::launch()
 {
-	//
+	WindowsLauncher::launch();
 }
 
 void Launcher::cleanup()
 {
-	//
+	WindowsLauncher::cleanup();
 }
