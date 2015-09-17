@@ -1,7 +1,10 @@
 /*
  Copyright (c) 2015 Polymer Games
  */
-#pragma once
+
+#ifndef LOGGER_H
+#define LOGGER_H
+
 class Logger
 {
 	public:
@@ -10,3 +13,5 @@ class Logger
 	private:
 	static Logger *logger;
 };
+
+#endif // LOGGER_H

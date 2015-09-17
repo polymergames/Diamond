@@ -2,9 +2,15 @@
  Copyright (c) 2015 Polymer Games
  */
 
+#include "Launcher.h"
 #include "WindowsLauncher.h"
 
-void WindowsLauncher::launch() 
+void Launcher::launch()
+{
+	//
+}
+
+void Launcher::cleanup()
 {
 	//
 }
