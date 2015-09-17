@@ -8,7 +8,7 @@
 class Graphics
 {
 	public:
-	static void setGraphics(Graphics &graphics);
+	static void setGraphics(Graphics graphics);
 
 	private:
 	static Graphics graphics;

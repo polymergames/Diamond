@@ -6,7 +6,7 @@
 
 Graphics Graphics::graphics;
 
-void Graphics::setGraphics(Graphics &graphics)
+void Graphics::setGraphics(Graphics graphics)
 {
 	Graphics::graphics = graphics;
 }

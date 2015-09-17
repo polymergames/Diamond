@@ -6,7 +6,7 @@
 
 Logger Logger::logger;
 
-void Logger::setLogger(Logger &logger)
+void Logger::setLogger(Logger logger)
 {
 	Logger::logger = logger;
 }
