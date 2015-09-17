@@ -8,10 +8,10 @@
 class Logger
 {
 	public:
-	static void setLogger(Logger *logger);
+	static void setLogger(Logger &logger);
 
 	private:
-	static Logger *logger;
+	static Logger logger;
 };
 
 #endif // LOGGER_H

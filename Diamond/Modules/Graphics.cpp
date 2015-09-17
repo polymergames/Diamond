@@ -4,9 +4,9 @@
 
 #include "Graphics.h"
 
-Graphics Graphics::*graphics = nullptr;
+Graphics Graphics::graphics;
 
-void Graphics::setGraphics(Graphics *graphics)
+void Graphics::setGraphics(Graphics &graphics)
 {
 	Graphics::graphics = graphics;
 }
