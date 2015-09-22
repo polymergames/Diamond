@@ -7,7 +7,9 @@
 
 #include "Launcher.h"
 #include "Graphics.h"
-#include "SDLGraphics.h"
+#include "SDLRenderer.h"
+#include "Log.h"
+#include "Desktop_Logger.h"
 
 class WindowsLauncher : public Launcher {
 	public:

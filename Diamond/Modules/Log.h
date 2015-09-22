@@ -2,12 +2,13 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef LOG_H
+#define LOG_H
 
 #include <memory>
+#include "Logger.h"
 
-class Logger {
+class Log {
 	public:
 	static void setLogger(std::unique_ptr<Logger> logger);
 
@@ -15,4 +16,4 @@ class Logger {
 	static std::unique_ptr<Logger> logger;
 };
 
-#endif // LOGGER_H
+#endif // LOG_H

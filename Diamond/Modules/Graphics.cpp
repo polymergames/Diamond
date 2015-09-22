@@ -4,11 +4,8 @@
 
 #include "Graphics.h"
 
-std::unique_ptr<Graphics> Graphics::graphics;
+std::unique_ptr<Renderer> Graphics::renderer = nullptr;
 
-void Graphics::setGraphics(std::unique_ptr<Graphics> graphics) {
-	Graphics::graphics = std::move(graphics);
-}
-
-Graphics::~Graphics() {
+void Graphics::setRenderer(std::unique_ptr<Renderer> renderer) {
+	Graphics::renderer = std::move(renderer);
 }

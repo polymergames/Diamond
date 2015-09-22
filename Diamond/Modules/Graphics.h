@@ -6,14 +6,14 @@
 #define GRAPHICS_H
 
 #include <memory>
+#include "Renderer.h"
 
 class Graphics {
 	public:
-	static void setGraphics(std::unique_ptr<Graphics> graphics);
-	virtual ~Graphics();
+	static void setRenderer(std::unique_ptr<Renderer> renderer);
 
 	private:
-	static std::unique_ptr<Graphics> graphics;
+	static std::unique_ptr<Renderer> renderer;
 };
 
 #endif // GRAPHICS_H
