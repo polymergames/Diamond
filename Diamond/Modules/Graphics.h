@@ -5,13 +5,14 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-class Graphics
-{
+#include <memory>
+
+class Graphics {
 	public:
-	static void setGraphics(Graphics graphics);
+	static void setGraphics(std::unique_ptr<Graphics> graphics);
 
 	private:
-	static Graphics graphics;
+	static std::unique_ptr<Graphics> graphics;
 };
 
 #endif // GRAPHICS_H

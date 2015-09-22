@@ -4,9 +4,8 @@
 
 #include "Graphics.h"
 
-Graphics Graphics::graphics;
+std::unique_ptr<Graphics> Graphics::graphics;
 
-void Graphics::setGraphics(Graphics graphics)
-{
-	Graphics::graphics = graphics;
+void Graphics::setGraphics(std::unique_ptr<Graphics> graphics) {
+	Graphics::graphics = std::move(graphics);
 }

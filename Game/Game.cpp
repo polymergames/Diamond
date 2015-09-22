@@ -6,7 +6,5 @@
 
 int main(int argc, char *argv[]) {
 	Launcher::launch();
-
-	Launcher::cleanup();
 	return 0;
 }

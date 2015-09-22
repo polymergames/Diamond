@@ -5,11 +5,15 @@
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
 
-class Launcher
-{
+#include <memory>
+
+class Launcher {
 	public:
 	static void launch();
-	static void cleanup();
+	virtual ~Launcher();
+
+	private:
+	static std::unique_ptr<Launcher> launcher;
 };
 
 #endif // LAUNCHER_H

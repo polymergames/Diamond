@@ -5,12 +5,19 @@
 #include "Launcher.h"
 #include "WindowsLauncher.h"
 
-void Launcher::launch()
-{
-	WindowsLauncher::launch();
+std::unique_ptr<Launcher> Launcher::launcher;
+
+void Launcher::launch() {
+#if defined ANDROID
+	// Android launcher
+#elif defined IOS
+	// IOS launcher
+#elif defined OSX
+	// OSX launcher
+#else
+	launcher = std::unique_ptr<Launcher>(new WindowsLauncher());
+#endif
 }
 
-void Launcher::cleanup()
-{
-	WindowsLauncher::cleanup();
+Launcher::~Launcher() {
 }

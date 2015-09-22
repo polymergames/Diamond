@@ -5,11 +5,12 @@
 #ifndef WINDOWS_LAUNCHER_H
 #define WINDOWS_LAUNCHER_H
 
-class WindowsLauncher
-{
+#include "Launcher.h"
+
+class WindowsLauncher: public Launcher {
 	public:
-	static void launch();
-	static void cleanup();
+	WindowsLauncher();
+	~WindowsLauncher();
 };
 
 #endif // WINDOWS_LAUNCHER_H 
