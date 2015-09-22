@@ -1,11 +1,11 @@
 /*
  Copyright (c) 2015 Polymer Games
- */
+*/
 
 #include "Logger.h"
 
-Logger Logger::logger;
+std::unique_ptr<Logger> Logger::logger;
 
-void Logger::setLogger(Logger logger) {
-	Logger::logger = logger;
+void Logger::setLogger(std::unique_ptr<Logger> logger) {
+	Logger::logger = std::move(logger);
 }

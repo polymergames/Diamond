@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2015 Polymer Games
- */
+*/
 
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
