@@ -6,13 +6,18 @@
 #define SDL_RENDERER_H
 
 #include <iostream>
+#include <memory>
 #include "Renderer.h"
+#include "SDL.h"
 
 namespace Diamond {
 	class SDLRenderer : public Renderer {
 		public:
-		SDLRenderer();
+		SDLRenderer(std::string name, int window_width, int window_height);
 		~SDLRenderer();
+
+		private:
+		std::shared_ptr<SDL_Window> window = nullptr;
 	};
 }
 

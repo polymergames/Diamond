@@ -8,7 +8,7 @@ using namespace Diamond;
 
 std::unique_ptr<Launcher> Diamond::Launcher::launcher;
 
-void Diamond::Launcher::launch() {
+void Diamond::Launcher::launch(Config &config) {
 #if defined ANDROID
 	// Android launcher
 #elif defined IOS
@@ -16,7 +16,7 @@ void Diamond::Launcher::launch() {
 #elif defined OSX
 	// OSX launcher
 #else
-	launcher = std::unique_ptr<Launcher>(new WindowsLauncher());
+	launcher = std::make_unique<WindowsLauncher>(new WindowsLauncher(config));
 #endif
 }
 

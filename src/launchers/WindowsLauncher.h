@@ -14,7 +14,7 @@
 namespace Diamond {
 	class WindowsLauncher : public Launcher {
 		public:
-		WindowsLauncher();
+		WindowsLauncher(Config &config);
 		~WindowsLauncher();
 	};
 }
