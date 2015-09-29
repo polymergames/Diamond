@@ -11,7 +11,7 @@
 namespace Diamond {
 	class Graphics {
 		public:
-		static void setRenderer(std::unique_ptr<Renderer> renderer);
+		static void setRenderer(Renderer *renderer);
 
 		private:
 		static std::unique_ptr<Renderer> renderer;

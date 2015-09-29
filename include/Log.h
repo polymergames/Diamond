@@ -11,7 +11,7 @@
 namespace Diamond {
 	class Log {
 		public:
-		static void setLogger(std::unique_ptr<Logger> logger);
+		static void setLogger(Logger *logger);
 
 		private:
 		static std::unique_ptr<Logger> logger;

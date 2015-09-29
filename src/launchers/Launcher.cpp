@@ -16,7 +16,7 @@ void Diamond::Launcher::launch(Config &config) {
 #elif defined OSX
 	// OSX launcher
 #else
-	launcher = std::make_unique<WindowsLauncher>(new WindowsLauncher(config));
+	launcher = std::unique_ptr<WindowsLauncher>(new WindowsLauncher(config));
 #endif
 }
 

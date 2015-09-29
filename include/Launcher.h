@@ -9,6 +9,12 @@
 #include <memory>
 
 namespace Diamond {
+	struct Config {
+		std::string game_name;
+		int window_width;
+		int window_height;
+	};
+
 	class Launcher {
 		public:
 		static void launch(Config &config);
@@ -16,12 +22,6 @@ namespace Diamond {
 
 		private:
 		static std::unique_ptr<Launcher> launcher;
-	};
-
-	struct Config {
-		std::string game_name;
-		int window_width;
-		int window_height;
 	};
 }
 

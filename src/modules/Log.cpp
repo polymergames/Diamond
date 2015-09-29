@@ -7,6 +7,6 @@ using namespace Diamond;
 
 std::unique_ptr<Logger> Diamond::Log::logger = nullptr;
 
-void Diamond::Log::setLogger(std::unique_ptr<Logger> logger) {
-	Diamond::Log::logger = std::move(logger);
+void Diamond::Log::setLogger(Logger *logger) {
+	Diamond::Log::logger = std::unique_ptr<Logger>(logger);
 }
