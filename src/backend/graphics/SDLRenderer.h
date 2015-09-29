@@ -7,17 +7,20 @@
 
 #include <iostream>
 #include <memory>
+#include "Launcher.h"
 #include "Renderer.h"
 #include "SDL.h"
 
 namespace Diamond {
 	class SDLRenderer : public Renderer {
 		public:
-		SDLRenderer(std::string name, int window_width, int window_height);
+		SDLRenderer(Config &config);
 		~SDLRenderer();
 
 		private:
-		std::shared_ptr<SDL_Window> window = nullptr;
+		SDL_Window *window = nullptr;
+
+		void create_window(std::string name, int window_width, int window_height);
 	};
 }
 

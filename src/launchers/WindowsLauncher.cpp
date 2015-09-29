@@ -6,7 +6,7 @@
 using namespace Diamond;
 
 Diamond::WindowsLauncher::WindowsLauncher(Config &config) {
-	Graphics::setRenderer(new SDLRenderer(config.game_name, config.window_height, config.window_width));
+	Graphics::setRenderer(new SDLRenderer(config));
 	Log::setLogger(new DesktopLogger());
 }
 
