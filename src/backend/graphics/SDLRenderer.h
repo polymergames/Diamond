@@ -8,10 +8,12 @@
 #include <iostream>
 #include "Renderer.h"
 
-class SDLRenderer : public Renderer {
-	public:
-	SDLRenderer();
-	~SDLRenderer();
-};
+namespace Diamond {
+	class SDLRenderer : public Renderer {
+		public:
+		SDLRenderer();
+		~SDLRenderer();
+	};
+}
 
 #endif // SDL_RENDERER_H

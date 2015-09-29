@@ -4,10 +4,10 @@
 
 #include "SDLRenderer.h"
 
-SDLRenderer::SDLRenderer() {
+Diamond::SDLRenderer::SDLRenderer() {
 	//
 }
 
-SDLRenderer::~SDLRenderer() {
+Diamond::SDLRenderer::~SDLRenderer() {
 	// cleanup code
 }

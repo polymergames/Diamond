@@ -9,12 +9,14 @@
 #include "Graphics.h"
 #include "SDLRenderer.h"
 #include "Log.h"
-#include "Desktop_Logger.h"
+#include "DesktopLogger.h"
 
-class WindowsLauncher : public Launcher {
-	public:
-	WindowsLauncher();
-	~WindowsLauncher();
-};
+namespace Diamond {
+	class WindowsLauncher : public Launcher {
+		public:
+		WindowsLauncher();
+		~WindowsLauncher();
+	};
+}
 
 #endif // WINDOWS_LAUNCHER_H 

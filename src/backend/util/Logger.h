@@ -5,9 +5,11 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-class Logger {
-	public:
-	virtual ~Logger();
-};
+namespace Diamond {
+	class Logger {
+		public:
+		virtual ~Logger();
+	};
+}
 
 #endif // LOGGER_H

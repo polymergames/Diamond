@@ -5,6 +5,6 @@
 #include "Launcher.h"
 
 int main(int argc, char *argv[]) {
-	Launcher::launch();
+	Diamond::Launcher::launch();
 	return 0;
 }

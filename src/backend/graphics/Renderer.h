@@ -5,9 +5,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-class Renderer {
-	public:
-	virtual ~Renderer();
-};
+namespace Diamond {
+	class Renderer {
+		public:
+		virtual ~Renderer();
+	};
+}
 
 #endif // RENDERER_H

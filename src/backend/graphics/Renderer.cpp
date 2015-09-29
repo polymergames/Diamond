@@ -4,5 +4,5 @@
 
 #include "Renderer.h"
 
-Renderer::~Renderer() {
+Diamond::Renderer::~Renderer() {
 }

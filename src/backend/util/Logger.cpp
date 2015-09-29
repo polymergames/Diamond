@@ -4,5 +4,5 @@
 
 #include "Logger.h"
 
-Logger::~Logger() {
+Diamond::Logger::~Logger() {
 }
