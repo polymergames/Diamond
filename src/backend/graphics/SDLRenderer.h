@@ -19,11 +19,15 @@ namespace Diamond {
 
 		SoftSprite *gen_soft_sprite(std::string img);
 
+		int blit_soft_sprite(SoftSprite &src);
+
+		int blit_soft_sprite(SoftSprite &src, SoftSprite &dest);
+
 		~SDLRenderer();
 
 		private:
 		SDL_Window *window;
-		SDLSurface *screen_surface;
+		SDL_Surface *screen_surface;
 
 		SDL_Window *create_window(std::string name, int window_width, int window_height);
 	};

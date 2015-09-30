@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Polymer Games
+ Copyright (c) 2015 Polymer Games
 */
 
 #include "SDLSurface.h"
@@ -11,6 +11,10 @@ Diamond::SDLSurface::SDLSurface(std::string img) : surface(nullptr) {
 	SDLSurface::surface = SDL_LoadBMP(img.c_str());
 }
 
+SDL_Surface *Diamond::SDLSurface::get_surface() {
+	return surface;
+}
+
 Diamond::SDLSurface::~SDLSurface() {
-	// Clean up!!!
+	SDL_FreeSurface(surface);
 }

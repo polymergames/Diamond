@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Polymer Games
+ Copyright (c) 2015 Polymer Games
 */
 
 #include "SoftSprite.h"

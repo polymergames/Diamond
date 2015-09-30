@@ -10,9 +10,10 @@
 
 namespace Diamond {
 	struct Config {
-		std::string game_name;
-		int window_width;
-		int window_height;
+		std::string game_name = "Pong";
+		int window_width = 1280;
+		int window_height = 720;
+		bool software_render = false;
 	};
 
 	class Launcher {

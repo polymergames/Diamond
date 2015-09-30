@@ -4,11 +4,10 @@
 
 #include "Launcher.h"
 #include "WindowsLauncher.h"
-using namespace Diamond;
 
-std::unique_ptr<Launcher> Diamond::Launcher::launcher;
+std::unique_ptr<Diamond::Launcher> Diamond::Launcher::launcher;
 
-void Diamond::Launcher::launch(Config &config) {
+void Diamond::Launcher::launch(Diamond::Config &config) {
 #if defined ANDROID
 	// Android launcher
 #elif defined IOS
@@ -16,7 +15,7 @@ void Diamond::Launcher::launch(Config &config) {
 #elif defined OSX
 	// OSX launcher
 #else
-	Launcher::launcher = std::unique_ptr<WindowsLauncher>(new WindowsLauncher(config));
+	Diamond::Launcher::launcher = std::unique_ptr<Diamond::WindowsLauncher>(new Diamond::WindowsLauncher(config));
 #endif
 }
 

@@ -5,7 +5,8 @@
 #include "Launcher.h"
 
 int main(int argc, char *argv[]) {
-	Diamond::Config config = { "Game", 1280, 720 };
+	Diamond::Config config = Diamond::Config();
+	config.software_render = true;
 	Diamond::Launcher::launch(config);
 	return 0;
 }
