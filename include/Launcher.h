@@ -17,7 +17,12 @@ namespace Diamond {
 
 	class Launcher {
 		public:
+
+		/*
+		 Call only once, at beginning of game!
+		*/
 		static void launch(Config &config);
+
 		virtual ~Launcher();
 
 		private:

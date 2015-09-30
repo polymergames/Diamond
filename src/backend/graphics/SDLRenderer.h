@@ -10,17 +10,22 @@
 #include "Launcher.h"
 #include "Renderer.h"
 #include "SDL.h"
+#include "SDLSurface.h"
 
 namespace Diamond {
 	class SDLRenderer : public Renderer {
 		public:
 		SDLRenderer(Config &config);
+
+		SoftSprite *gen_soft_sprite(std::string img);
+
 		~SDLRenderer();
 
 		private:
-		SDL_Window *window = nullptr;
+		SDL_Window *window;
+		SDLSurface *screen_surface;
 
-		void create_window(std::string name, int window_width, int window_height);
+		SDL_Window *create_window(std::string name, int window_width, int window_height);
 	};
 }
 
