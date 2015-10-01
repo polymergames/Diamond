@@ -10,7 +10,7 @@
 #include "Launcher.h"
 #include "Renderer.h"
 #include "SDL.h"
-#include "SDLSurface.h"
+#include "SDLSoftSprite.h"
 
 namespace Diamond {
 	class SDLRenderer : public Renderer {

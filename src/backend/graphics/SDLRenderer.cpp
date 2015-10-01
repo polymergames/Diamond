@@ -23,15 +23,15 @@ Diamond::SDLRenderer::SDLRenderer(Config &config) : window(nullptr), screen_surf
 }
 
 Diamond::SoftSprite *Diamond::SDLRenderer::gen_soft_sprite(std::string img) {
-	return new SDLSurface(img);
+	return new SDLSoftSprite(img);
 }
 
 int Diamond::SDLRenderer::blit_soft_sprite(Diamond::SoftSprite &src) {
-	return SDL_BlitSurface(dynamic_cast<Diamond::SDLSurface&>(src).get_surface(), nullptr, screen_surface, nullptr);
+	return SDL_BlitSurface(dynamic_cast<Diamond::SDLSoftSprite&>(src).get_surface(), nullptr, screen_surface, nullptr);
 }
 
 int Diamond::SDLRenderer::blit_soft_sprite(Diamond::SoftSprite &src, Diamond::SoftSprite &dest) {
-	return SDL_BlitSurface(dynamic_cast<Diamond::SDLSurface&>(src).get_surface(), nullptr, dynamic_cast<Diamond::SDLSurface&>(dest).get_surface(), nullptr);
+	return SDL_BlitSurface(dynamic_cast<Diamond::SDLSoftSprite&>(src).get_surface(), nullptr, dynamic_cast<Diamond::SDLSoftSprite&>(dest).get_surface(), nullptr);
 }
 
 /*
