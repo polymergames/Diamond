@@ -3,11 +3,10 @@
 */
 
 #include "WindowsLauncher.h"
-using namespace Diamond;
 
-Diamond::WindowsLauncher::WindowsLauncher(Config &config) {
-	Graphics::setRenderer(new SDLRenderer(config));
-	Log::setLogger(new DesktopLogger());
+void Diamond::WindowsLauncher::init_engine(Config &config) {
+	Diamond::Graphics::setRenderer(new SDLRenderer(config));
+	Diamond::Log::setLogger(new DesktopLogger());
 }
 
 Diamond::WindowsLauncher::~WindowsLauncher() {

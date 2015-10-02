@@ -18,17 +18,34 @@ namespace Diamond {
 
 	class Launcher {
 		public:
+		static int is_open; // TESTING
 
 		/*
 		 Call only once, at beginning of game!
+		 init should define its operator with no arguments and void return type.
+		 update should define its operator with one float argument (delta time) and void return type.
 		*/
-		static void launch(Config &config);
+		template <class Initialize, class DeltaUpdate> static void launch(Config &config, Initialize init, DeltaUpdate update);
 
 		virtual ~Launcher();
 
 		private:
 		static std::unique_ptr<Launcher> launcher;
 	};
+}
+
+#include "WindowsLauncher.h"
+
+template <class Initialize, class DeltaUpdate> static void Diamond::Launcher::launch(Diamond::Config &config, Initialize init, DeltaUpdate update) {
+#if defined ANDROID
+	// Android launcher
+#elif defined IOS
+	// IOS launcher
+#elif defined OSX
+	// OSX launcher
+#else
+	Diamond::Launcher::launcher = std::unique_ptr<Diamond::WindowsLauncher>(new Diamond::WindowsLauncher(config, init, update));
+#endif
 }
 
 #endif // LAUNCHER_H

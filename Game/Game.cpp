@@ -3,10 +3,26 @@
 */
 
 #include "Launcher.h"
+using namespace Diamond;
+
+class Init {
+	public:
+	void operator() () {
+		std::cout << "Initializing..." << std::endl;
+	}
+};
+
+class Update {
+	public:
+	void operator() (float delta) {
+		std::cout << "Launcher::is_open is " << Launcher::is_open << std::endl;
+		std::cin >> Launcher::is_open;
+	}
+};
 
 int main(int argc, char *argv[]) {
-	Diamond::Config config = Diamond::Config();
+	Config config = Config();
 	config.software_render = true;
-	Diamond::Launcher::launch(config);
+	Launcher::launch(config, Init(), Update());
 	return 0;
 }
