@@ -13,12 +13,11 @@ namespace Diamond {
 		std::string game_name = "Pong";
 		int window_width = 1280;
 		int window_height = 720;
-		bool software_render = false;
 	};
 
 	class Launcher {
 		public:
-		static int is_open; // TESTING
+		static bool is_open; // TESTING
 
 		/*
 		 Call only once, at beginning of game!

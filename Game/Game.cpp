@@ -22,7 +22,6 @@ class Update {
 
 int main(int argc, char *argv[]) {
 	Config config = Config();
-	config.software_render = true;
 	Launcher::launch(config, Init(), Update());
 	return 0;
 }

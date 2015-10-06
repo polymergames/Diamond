@@ -11,10 +11,6 @@
 namespace Diamond {
 	class Renderer {
 		public:
-		virtual SoftSprite *gen_soft_sprite(std::string img) = 0;
-		virtual int blit_soft_sprite(SoftSprite &src) = 0;
-		virtual int blit_soft_sprite(SoftSprite &src, SoftSprite &dest) = 0;
-
 		virtual ~Renderer();
 	};
 }

@@ -7,31 +7,19 @@
 /*
  Initializes SDL and creates window.
 */
-Diamond::SDLRenderer::SDLRenderer(Config &config) : window(nullptr), screen_surface(nullptr) {
+Diamond::SDLRenderer::SDLRenderer(Config &config) : window(nullptr) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		// TODO: Handle initialization failure
+		std::cout << "SDL failed to initialize! SDL Error: " << SDL_GetError() << std::endl;
 	}
 	else {
-		window = create_window(config.game_name, config.window_width, config.window_height);
+		window = SDL_CreateWindow(config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, config.window_width, config.window_height, 
+			config.window_width <=0 || config.window_height <=0 ? SDL_WINDOW_FULLSCREEN : 0);
 		if (window == nullptr) {
 			// TODO: Handle window creation failure
-		}
-		else if (config.software_render) {
-			screen_surface = SDL_GetWindowSurface(window);
+			std::cout << "SDL failed to create window! SDL Error: " << SDL_GetError() << std::endl;
 		}
 	}
-}
-
-Diamond::SoftSprite *Diamond::SDLRenderer::gen_soft_sprite(std::string img) {
-	return new SDLSoftSprite(img);
-}
-
-int Diamond::SDLRenderer::blit_soft_sprite(Diamond::SoftSprite &src) {
-	return SDL_BlitSurface(dynamic_cast<Diamond::SDLSoftSprite&>(src).get_surface(), nullptr, screen_surface, nullptr);
-}
-
-int Diamond::SDLRenderer::blit_soft_sprite(Diamond::SoftSprite &src, Diamond::SoftSprite &dest) {
-	return SDL_BlitSurface(dynamic_cast<Diamond::SDLSoftSprite&>(src).get_surface(), nullptr, dynamic_cast<Diamond::SDLSoftSprite&>(dest).get_surface(), nullptr);
 }
 
 /*
@@ -42,9 +30,4 @@ Diamond::SDLRenderer::~SDLRenderer() {
 	SDL_Quit();
 }
 
-
 /*** Private functions ***/
-
-SDL_Window *Diamond::SDLRenderer::create_window(std::string name, int window_width, int window_height) {
-	return SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, SDL_WINDOW_SHOWN);
-}
