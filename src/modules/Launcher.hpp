@@ -2,7 +2,7 @@
  Copyright (c) 2015 Polymer Games
 */
 
-template <class Initialize, class DeltaUpdate> static void Diamond::Launcher::launch(Diamond::Config &config, Initialize init, DeltaUpdate update) {
+template <class Initialize, class DeltaUpdate> void Diamond::Launcher::launch(Diamond::Config &config, Initialize init, DeltaUpdate update) {
 #if defined ANDROID
 	// Android launcher
 #elif defined IOS
