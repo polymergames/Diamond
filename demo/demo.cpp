@@ -5,6 +5,8 @@
 #include "Launcher.h"
 using namespace Diamond;
 
+float d = 0.0f;
+
 class Init {
 	public:
 	void operator() () {
@@ -15,8 +17,7 @@ class Init {
 class Update {
 	public:
 	void operator() (float delta) {
-		std::cout << "Launcher::is_open is " << Launcher::is_open << std::endl;
-		std::cin >> Launcher::is_open;
+		std::cout << "Delta is " << (d+=delta) << std::endl;
 	}
 };
 

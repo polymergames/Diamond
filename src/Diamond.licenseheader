@@ -1,4 +1,4 @@
-extensions: .cpp .h
+extensions: .cpp .h .hpp
 /*
  Copyright (c) 2015 Polymer Games
 */

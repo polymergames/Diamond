@@ -10,23 +10,21 @@
 #include "Launcher.h"
 #include "Renderer.h"
 #include "SDL.h"
-#include "SDLSoftSprite.h"
 
 namespace Diamond {
 	class SDLRenderer : public Renderer {
 		public:
 		SDLRenderer(Config &config);
 
-		SoftSprite *gen_soft_sprite(std::string img);
-
-		int blit_soft_sprite(SoftSprite &src);
-
-		int blit_soft_sprite(SoftSprite &src, SoftSprite &dest);
+		void render();
 
 		~SDLRenderer();
 
 		private:
 		SDL_Window *window;
+		SDL_Event e;
+
+		void render_graphics();
 	};
 }
 

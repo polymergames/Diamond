@@ -14,7 +14,14 @@ namespace Diamond {
 		int window_width = 1280;
 		int window_height = 720;
 	};
+}
 
+#include "Graphics.h"
+#include "SDLRenderer.h"
+#include "Log.h"
+#include "DesktopLogger.h"
+
+namespace Diamond {
 	class Launcher {
 		public:
 		static bool is_open; // TESTING
@@ -29,22 +36,10 @@ namespace Diamond {
 		virtual ~Launcher();
 
 		private:
-		static std::unique_ptr<Launcher> launcher;
+		static void init_win32(Config &config);
 	};
 }
 
-#include "WindowsLauncher.h"
-
-template <class Initialize, class DeltaUpdate> static void Diamond::Launcher::launch(Diamond::Config &config, Initialize init, DeltaUpdate update) {
-#if defined ANDROID
-	// Android launcher
-#elif defined IOS
-	// IOS launcher
-#elif defined OSX
-	// OSX launcher
-#else
-	Diamond::Launcher::launcher = std::unique_ptr<Diamond::WindowsLauncher>(new Diamond::WindowsLauncher(config, init, update));
-#endif
-}
+#include "Launcher.hpp" // Template implementation
 
 #endif // LAUNCHER_H

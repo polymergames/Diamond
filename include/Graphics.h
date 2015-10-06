@@ -16,6 +16,7 @@ namespace Diamond {
 		 Don't call unless you know what you're doing!
 		*/
 		static void setRenderer(Renderer *renderer);
+		static void render();
 
 		private:
 		static std::unique_ptr<Renderer> renderer;

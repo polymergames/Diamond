@@ -6,11 +6,11 @@
 #define RENDERER_H
 
 #include <iostream>
-#include "SoftSprite.h"
 
 namespace Diamond {
 	class Renderer {
 		public:
+		virtual void render() = 0;
 		virtual ~Renderer();
 	};
 }
