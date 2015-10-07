@@ -8,8 +8,11 @@
 #include <iostream>
 
 namespace Diamond {
+	struct Config;
+
 	class Renderer {
 		public:
+		virtual bool init(Config &config) = 0;
 		virtual void render() = 0;
 		virtual ~Renderer();
 	};

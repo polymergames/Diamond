@@ -7,15 +7,18 @@
 
 #include <iostream>
 #include <memory>
-#include "Renderer.h"
 
 namespace Diamond {
+	class Renderer;
+	struct Config;
+
 	class Graphics {
 		public:
 		/**
 		 Don't call unless you know what you're doing!
 		*/
 		static void setRenderer(Renderer *renderer);
+		static bool init_renderer(Config &config);
 		static void render();
 
 		private:

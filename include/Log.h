@@ -6,9 +6,10 @@
 #define LOG_H
 
 #include <memory>
-#include "Logger.h"
 
 namespace Diamond {
+	class Logger;
+
 	class Log {
 		public:
 		static void setLogger(Logger *logger);

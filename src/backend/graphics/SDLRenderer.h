@@ -7,17 +7,29 @@
 
 #include <iostream>
 #include <memory>
-#include "Launcher.h"
 #include "Renderer.h"
 #include "SDL.h"
 
 namespace Diamond {
+	struct Config;
+
 	class SDLRenderer : public Renderer {
 		public:
-		SDLRenderer(Config &config);
+		SDLRenderer();
+		
+		/**
+		 Initializes SDL and creates window.
+		*/
+		bool init(Config &config);
 
+		/**
+		 Called in main rendering loop.
+		*/
 		void render();
 
+		/**
+		 Destroys window and shuts down SDL.
+		*/
 		~SDLRenderer();
 
 		private:
