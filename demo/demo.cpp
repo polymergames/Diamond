@@ -3,6 +3,7 @@
 */
 
 #include "Launcher.h"
+#include "Input.h"
 using namespace Diamond;
 
 float d = 0.0f;
@@ -17,7 +18,7 @@ class Init {
 class Update {
 	public:
 	void operator() (float delta) {
-		std::cout << "Delta is " << (d+=delta) << std::endl;
+		//std::cout << "Delta is " << (d+=delta) << std::endl;
 	}
 };
 
