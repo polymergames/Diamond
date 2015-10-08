@@ -4,6 +4,7 @@
 
 #include "SDLRenderer.h"
 #include "Launcher.h"
+#include "SDLInput.h"
 
 Diamond::SDLRenderer::SDLRenderer() : window(nullptr) {}
 
@@ -26,11 +27,10 @@ bool Diamond::SDLRenderer::init(Config &config) {
 }
 
 void Diamond::SDLRenderer::render() {
-	// Check for quit event
+	// Handle SDL events
+    Input::reset();
 	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
-			Diamond::Launcher::is_open = false;
-		}
+        SDLInput::handle(e);
 	}
 
 	// Render all the graphics
