@@ -2,7 +2,7 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#include "Renderer.h"
+#include "Renderer2D.h"
 
-Diamond::Renderer::~Renderer() {
+Diamond::Renderer2D::~Renderer2D() {
 }

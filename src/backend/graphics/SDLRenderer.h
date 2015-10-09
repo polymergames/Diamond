@@ -7,13 +7,13 @@
 
 #include <iostream>
 #include <memory>
-#include "Renderer.h"
+#include "Renderer2D.h"
 #include "SDL.h"
 
 namespace Diamond {
 	struct Config;
 
-	class SDLRenderer : public Renderer {
+	class SDLRenderer : public Renderer2D {
 		public:
 		SDLRenderer();
 		

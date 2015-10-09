@@ -21,24 +21,24 @@ class Update {
 	public:
 	void operator() (float delta) {
 		//std::cout << "Delta is " << (d+=delta) << std::endl;
-//        if(Input::keydown[Input::K_W]) {
-//            std::cout << "W pressed!" << std::endl;
-//        }
-//        if(Input::keyup[Input::K_W]) {
-//            std::cout << "W released!" << std::endl;
-//        }
-//        if(Input::keydown[Input::K_UP]) {
-//            std::cout << "Up!" << std::endl;
-//        }
-//        if(Input::keydown[Input::K_DOWN]) {
-//            std::cout << "Down!" << std::endl;
-//        }
-//        if(Input::keydown[Input::K_LEFT]) {
-//            std::cout << "Left!" << std::endl;
-//        }
-//        if(Input::keydown[Input::K_RIGHT]) {
-//            std::cout << "Right!" << std::endl;
-//        }
+        if(Input::keydown[Input::K_W]) {
+            std::cout << "W pressed!" << std::endl;
+        }
+        if(Input::keyup[Input::K_W]) {
+            std::cout << "W released!" << std::endl;
+        }
+        if(Input::keydown[Input::K_UP]) {
+            std::cout << "Up!" << std::endl;
+        }
+        if(Input::keydown[Input::K_DOWN]) {
+            std::cout << "Down!" << std::endl;
+        }
+        if(Input::keydown[Input::K_LEFT]) {
+            std::cout << "Left!" << std::endl;
+        }
+        if(Input::keydown[Input::K_RIGHT]) {
+            std::cout << "Right!" << std::endl;
+        }
 	}
 };
 

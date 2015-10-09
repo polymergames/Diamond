@@ -8,7 +8,7 @@
 #include <iostream>
 #include <memory>
 #include "Config.h"
-#include "Graphics.h"
+#include "Graphics2D.h"
 #include "Log.h"
 
 namespace Diamond {

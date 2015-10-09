@@ -19,6 +19,6 @@ template <class Initialize, class DeltaUpdate> void Diamond::Launcher::launch(Di
 	// Update
 	while (Diamond::Launcher::is_open) {
 		update(1.0f); // TODO: Implement delta time
-		Diamond::Graphics::render();
+		Diamond::Graphics2D::render();
 	}
 }
