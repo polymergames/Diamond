@@ -7,11 +7,10 @@
 
 #include <iostream>
 #include <memory>
+#include "Config.h"
+#include "Renderer.h"
 
 namespace Diamond {
-	class Renderer;
-	struct Config;
-
 	class Graphics {
 		public:
 		/**

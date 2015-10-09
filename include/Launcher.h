@@ -7,19 +7,14 @@
 
 #include <iostream>
 #include <memory>
+#include "Config.h"
 #include "Graphics.h"
 #include "Log.h"
 
 namespace Diamond {
-	struct Config {
-		std::string game_name = "Pong";
-		int window_width = 1280;
-		int window_height = 720;
-	};
-
 	class Launcher {
 		public:
-		static bool is_open; // TESTING
+		static bool is_open;
 
 		/**
 		 Call only once, at beginning of game!
