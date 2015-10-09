@@ -1,12 +1,13 @@
 /*
  Copyright (c) 2015 Polymer Games
- */
+*/
 
 #include "SDLInput.h"
 #include "Input.h"
 #include "Launcher.h"
+using namespace Diamond;
 
-std::map<SDL_Keycode, Diamond::Input::KEY> Diamond::SDLInput::keymap = {
+std::map<SDL_Keycode, Input::KEY> Diamond::SDLInput::keymap = {
     {SDLK_0, Input::K_0},
     {SDLK_1, Input::K_1},
     {SDLK_2, Input::K_2},
@@ -69,7 +70,6 @@ std::map<SDL_Keycode, Diamond::Input::KEY> Diamond::SDLInput::keymap = {
     {SDLK_UP, Input::K_UP},
 };
 
-
 // TODO: TEST what happens when you access a keymap that doesn't exist!
 void Diamond::SDLInput::handle(SDL_Event &e) {
     switch (e.type) {
@@ -80,7 +80,7 @@ void Diamond::SDLInput::handle(SDL_Event &e) {
             Input::keyup[keymap[e.key.keysym.sym]] = true;
             break;
         case SDL_QUIT:
-            Diamond::Launcher::is_open = false;
+            Launcher::is_open = false;
             break;
     }
 }

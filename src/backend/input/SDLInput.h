@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2015 Polymer Games
- */
+*/
 
 #ifndef SDL_INPUT_H
 #define SDL_INPUT_H

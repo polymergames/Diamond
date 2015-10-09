@@ -4,6 +4,7 @@
 
 #include "Launcher.h"
 #include "Input.h"
+#include "SDLInput.h"
 using namespace Diamond;
 
 float d = 0.0f;
@@ -12,6 +13,7 @@ class Init {
 	public:
 	void operator() () {
 		std::cout << "Initializing..." << std::endl;
+		std::cout << Diamond::SDLInput::keymap[SDLK_ASTERISK] << " and " << Diamond::Input::K_UNDEFINED << std::endl;
 	}
 };
 
