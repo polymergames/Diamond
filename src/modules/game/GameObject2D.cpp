@@ -4,6 +4,6 @@
 
 #include "GameObject2D.h"
 
-Diamond::GameObject2D::GameObject2D() : transform() {}
+Diamond::GameObject2D::GameObject2D() : sprite(nullptr), transform() {}
 
-Diamond::GameObject2D::GameObject2D(Transform2 transform) : transform(transform) {}
+Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite, Transform2 transform) : sprite(sprite), transform(transform) {}

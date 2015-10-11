@@ -5,8 +5,6 @@
 #ifndef SDL_RENDERER_2D_H
 #define SDL_RENDERER_2D_H
 
-#include <iostream>
-#include <memory>
 #include "Renderer2D.h"
 #include "SDL.h"
 
@@ -18,7 +16,7 @@ namespace Diamond {
 		SDLRenderer2D();
 		
 		/**
-		 Initializes SDL and creates window.
+		 Initializes SDL, creates window, and initializes image loading.
 		*/
 		bool init(Config &config);
 
@@ -28,12 +26,13 @@ namespace Diamond {
 		void render();
 
 		/**
-		 Destroys window and shuts down SDL.
+		 Destroys window and renderer and shuts down SDL and SDL extensions.
 		*/
 		~SDLRenderer2D();
 
 		private:
 		SDL_Window *window;
+		SDL_Renderer *renderer;
 		SDL_Event e;
 
 		void render_graphics();
