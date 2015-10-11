@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2015 Polymer Games
- */
+*/
 
 #ifndef CONFIG_H
 #define CONFIG_H

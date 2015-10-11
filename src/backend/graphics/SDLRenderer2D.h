@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef SDL_RENDERER_H
-#define SDL_RENDERER_H
+#ifndef SDL_RENDERER_2D_H
+#define SDL_RENDERER_2D_H
 
 #include <iostream>
 #include <memory>
@@ -13,9 +13,9 @@
 namespace Diamond {
 	struct Config;
 
-	class SDLRenderer : public Renderer2D {
+	class SDLRenderer2D : public Renderer2D {
 		public:
-		SDLRenderer();
+		SDLRenderer2D();
 		
 		/**
 		 Initializes SDL and creates window.
@@ -30,7 +30,7 @@ namespace Diamond {
 		/**
 		 Destroys window and shuts down SDL.
 		*/
-		~SDLRenderer();
+		~SDLRenderer2D();
 
 		private:
 		SDL_Window *window;
@@ -40,4 +40,4 @@ namespace Diamond {
 	};
 }
 
-#endif // SDL_RENDERER_H
+#endif // SDL_RENDERER_2D_H

@@ -2,13 +2,13 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#include "SDLRenderer.h"
+#include "SDLRenderer2D.h"
 #include "Launcher.h"
 #include "SDLInput.h"
 
-Diamond::SDLRenderer::SDLRenderer() : window(nullptr) {}
+Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr) {}
 
-bool Diamond::SDLRenderer::init(Config &config) {
+bool Diamond::SDLRenderer2D::init(Config &config) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		// TODO: Handle initialization failure and log
 		std::cout << "SDL failed to initialize! SDL Error: " << SDL_GetError() << std::endl;
@@ -26,7 +26,7 @@ bool Diamond::SDLRenderer::init(Config &config) {
 	return true;
 }
 
-void Diamond::SDLRenderer::render() {
+void Diamond::SDLRenderer2D::render() {
 	// Handle SDL events
     Input::reset();
 	while (SDL_PollEvent(&e)) {
@@ -40,7 +40,7 @@ void Diamond::SDLRenderer::render() {
 	SDL_UpdateWindowSurface(window);
 }
 
-Diamond::SDLRenderer::~SDLRenderer() {
+Diamond::SDLRenderer2D::~SDLRenderer2D() {
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
@@ -48,6 +48,6 @@ Diamond::SDLRenderer::~SDLRenderer() {
 
 /*** Private functions ***/
 
-void Diamond::SDLRenderer::render_graphics() {
+void Diamond::SDLRenderer2D::render_graphics() {
 	// TODO
 }

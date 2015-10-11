@@ -1,7 +1,6 @@
 /*
  Copyright (c) 2015 Polymer Games
 */
-
 #include "Log.h"
 #include "Logger.h"
 
