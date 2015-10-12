@@ -19,6 +19,7 @@ namespace Diamond {
 		static void setRenderer(Renderer2D *renderer);
 		static bool init_renderer(Config &config);
 		static void render();
+		static void gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform);
 
 		private:
 		static std::unique_ptr<Renderer2D> renderer;

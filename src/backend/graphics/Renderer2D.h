@@ -6,6 +6,7 @@
 #define RENDERER_2D_H
 
 #include <iostream>
+#include "GameObject2D.h"
 
 namespace Diamond {
 	struct Config;
@@ -14,6 +15,7 @@ namespace Diamond {
 		public:
 		virtual bool init(Config &config) = 0;
 		virtual void render() = 0;
+		virtual void gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform) = 0;
 		virtual ~Renderer2D();
 	};
 }

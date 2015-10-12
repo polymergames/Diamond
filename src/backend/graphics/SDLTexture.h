@@ -5,6 +5,7 @@
 #ifndef SDL_TEXTURE_H
 #define SDL_TEXTURE_H
 
+#include <memory>
 #include "Texture.h"
 #include "SDL.h"
 
@@ -13,10 +14,9 @@ namespace Diamond {
 		public:
 		SDLTexture();
 		SDLTexture(SDL_Texture *texture);
+		~SDLTexture();
 
 		SDL_Texture *texture;
-
-		~SDLTexture();
 	};
 }
 

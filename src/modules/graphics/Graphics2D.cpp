@@ -17,3 +17,7 @@ bool Diamond::Graphics2D::init_renderer(Config &config) {
 void Diamond::Graphics2D::render() {
 	renderer->render();
 }
+
+void Diamond::Graphics2D::gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform) {
+	renderer->gen_render_obj(parent, texture, transform);
+}

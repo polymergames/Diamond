@@ -6,9 +6,12 @@
 #include <iostream>
 #include "SDL_image.h"
 #include "SDLInput.h"
-#include "Launcher.h"
 
-Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
+int Diamond::SDLRenderer2D::reserve_size = 10;
+
+Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {
+	render_objects.reserve(reserve_size);
+}
 
 bool Diamond::SDLRenderer2D::init(Config &config) {
 	// Initialize SDL
@@ -57,8 +60,20 @@ void Diamond::SDLRenderer2D::render() {
 	// Render all the graphics
 	render_graphics();
 
-	// Update window
+	// Update window. TODO: Change to texture update instead of surface
 	SDL_UpdateWindowSurface(window);
+}
+
+void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform) {
+	if (render_objects.size() == render_objects.capacity()) {
+		// Reallocate render_objects vector then loop through and reset their parents' references
+		// This is done to maintain integrity of render pointers
+		render_objects.reserve(render_objects.size() + reserve_size);
+		for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
+			i->arm_parent();
+		}
+	}
+	render_objects.push_back(SDLRenderObj2D(parent, texture, transform));
 }
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
