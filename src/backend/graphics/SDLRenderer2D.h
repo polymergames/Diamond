@@ -35,6 +35,11 @@ namespace Diamond {
 		void gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform);
 
 		/**
+		 Removes the render object at the given index from the rendering vector.
+		*/
+		void destroy_render_obj(int index);
+
+		/**
 		 Destroys window and renderer and shuts down SDL and SDL extensions.
 		*/
 		~SDLRenderer2D();

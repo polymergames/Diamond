@@ -7,7 +7,7 @@
 
 namespace Diamond {
     struct Config {
-        std::string game_name = "Pong";
+        std::string game_name = "A Game Without a Name";
         int window_width = 1280;
         int window_height = 720;
     };

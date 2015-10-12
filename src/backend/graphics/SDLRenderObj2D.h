@@ -6,6 +6,7 @@
 #define SDL_RENDER_OBJ_2D_H
 
 #include "RenderObj2D.h"
+#include "SDL.h"
 
 namespace Diamond {
 	class SDLRenderObj2D : public RenderObj2D {

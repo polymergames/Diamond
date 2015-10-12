@@ -37,7 +37,11 @@ bool Diamond::GameObject2D::make_visible(Transform2 &transform) {
 }
 
 void Diamond::GameObject2D::make_invisible() {
-	// TODO: delete/clean up this game object's render object
+	this->visible = false;
+	if (render_obj != nullptr) {
+		Graphics2D::destroy_render_obj(render_obj->index);
+		render_obj = nullptr;
+	}
 }
 
 void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
@@ -45,5 +49,7 @@ void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
 }
 
 Diamond::GameObject2D::~GameObject2D() {
-	// TODO: delete/clean up this game object's render object
+	if (render_obj != nullptr) {
+		Graphics2D::destroy_render_obj(render_obj->index);
+	}
 }
