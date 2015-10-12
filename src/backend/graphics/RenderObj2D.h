@@ -14,7 +14,7 @@ namespace Diamond {
 		GameObject2D *parent;
 		Transform2 transform;
 
-		RenderObj2D(GameObject2D *parent, Transform2 &transform);
+		RenderObj2D(GameObject2D *parent);
 
 		virtual void set_texture(Texture *texture) = 0;
 

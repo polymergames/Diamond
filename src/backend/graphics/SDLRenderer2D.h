@@ -32,7 +32,7 @@ namespace Diamond {
 		/**
 		 Creates an SDLRenderObj2D, which is a rendering unit for the render loop.
 		*/
-		void gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform);
+		void gen_render_obj(GameObject2D *parent, Texture *texture);
 
 		/**
 		 Removes the render object at the given index from the rendering vector.

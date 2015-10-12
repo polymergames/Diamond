@@ -18,8 +18,8 @@ void Diamond::Graphics2D::render() {
 	renderer->render();
 }
 
-void Diamond::Graphics2D::gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform) {
-	renderer->gen_render_obj(parent, texture, transform);
+void Diamond::Graphics2D::gen_render_obj(GameObject2D *parent, Texture *texture) {
+	renderer->gen_render_obj(parent, texture);
 }
 
 void Diamond::Graphics2D::destroy_render_obj(int index) {

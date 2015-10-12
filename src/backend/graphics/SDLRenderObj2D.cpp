@@ -5,7 +5,7 @@
 #include "SDLRenderObj2D.h"
 #include "SDLTexture.h"
 
-Diamond::SDLRenderObj2D::SDLRenderObj2D(GameObject2D *parent, Texture *texture, Transform2 &transform) : RenderObj2D(parent, transform) {
+Diamond::SDLRenderObj2D::SDLRenderObj2D(GameObject2D *parent, Texture *texture) : RenderObj2D(parent) {
 	set_texture(texture);
 	arm_parent();
 }

@@ -8,8 +8,8 @@
 
 Diamond::GameObject2D::GameObject2D() : sprite(nullptr), transform(nullptr), render_obj(nullptr), visible(false) {}
 
-Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite, Transform2 &transform) : sprite(sprite), visible(true) {
-	Graphics2D::gen_render_obj(this, sprite.get(), transform);
+Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), transform(nullptr), render_obj(nullptr), visible(true) {
+	Graphics2D::gen_render_obj(this, sprite.get());
 }
 
 std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::get_sprite() {
@@ -25,11 +25,11 @@ bool Diamond::GameObject2D::is_visible() {
 	return visible;
 }
 
-bool Diamond::GameObject2D::make_visible(Transform2 &transform) {
+bool Diamond::GameObject2D::make_visible() {
 	if (sprite != nullptr) {
 		this->visible = true;
 		if (render_obj == nullptr) {
-			Graphics2D::gen_render_obj(this, sprite.get(), transform);
+			Graphics2D::gen_render_obj(this, sprite.get());
 		}
 		return true;
 	}

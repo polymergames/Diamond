@@ -17,7 +17,7 @@ namespace Diamond {
 		Transform2 *transform;
 
 		GameObject2D();
-		GameObject2D(std::shared_ptr<Texture> sprite, Transform2 &transform);
+		GameObject2D(std::shared_ptr<Texture> sprite);
 
 		std::shared_ptr<Texture> get_sprite();
 		void set_sprite(std::shared_ptr<Texture> sprite);
@@ -29,7 +29,7 @@ namespace Diamond {
 		 This game object must have a sprite (use set_sprite() if needed) before calling this function.
 		 Returns whether this game object was successfully made visible.		 
 		*/
-		bool make_visible(Transform2 &transform);
+		bool make_visible();
 
 		void make_invisible();
 

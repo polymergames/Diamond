@@ -64,8 +64,8 @@ void Diamond::SDLRenderer2D::render() {
 	SDL_UpdateWindowSurface(window);
 }
 
-void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture, Transform2 &transform) {
-	int size = render_objects.size();
+void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture) {
+	int size = (int)render_objects.size();
 	if (size == render_objects.capacity()) {
 		// Reallocate render_objects vector then loop through and reset their parents' references
 		// This is done to maintain integrity of render pointers
@@ -74,7 +74,7 @@ void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *textu
 			i->arm_parent();
 		}
 	}
-	render_objects.push_back(SDLRenderObj2D(parent, texture, transform));
+	render_objects.push_back(SDLRenderObj2D(parent, texture));
 	render_objects[size].index = size;
 }
 

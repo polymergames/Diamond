@@ -13,7 +13,7 @@ namespace Diamond {
 		public:
 		SDL_Texture *texture;
 
-		SDLRenderObj2D(GameObject2D *parent, Texture *texture, Transform2 &transform);
+		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
 
 		void set_texture(Texture *texture);
 

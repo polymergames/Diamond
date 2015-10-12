@@ -5,6 +5,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <string>
+
 namespace Diamond {
     struct Config {
         std::string game_name = "A Game Without a Name";
