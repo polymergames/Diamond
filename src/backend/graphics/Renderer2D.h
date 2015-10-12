@@ -16,7 +16,7 @@ namespace Diamond {
 		virtual bool init(Config &config) = 0;
 		virtual void render() = 0;
 		virtual void gen_render_obj(GameObject2D *parent, Texture *texture) = 0;
-		virtual void destroy_render_obj(int index) = 0;
+		virtual void destroy_render_obj(unsigned long index) = 0;
 		virtual ~Renderer2D();
 	};
 }

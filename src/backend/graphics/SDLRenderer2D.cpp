@@ -65,7 +65,7 @@ void Diamond::SDLRenderer2D::render() {
 }
 
 void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture) {
-	int size = (int)render_objects.size();
+	unsigned long size = render_objects.size();
 	if (size == render_objects.capacity()) {
 		// Reallocate render_objects vector then loop through and reset their parents' references
 		// This is done to maintain integrity of render pointers
@@ -78,7 +78,7 @@ void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *textu
 	render_objects[size].index = size;
 }
 
-void Diamond::SDLRenderer2D::destroy_render_obj(int index) {
+void Diamond::SDLRenderer2D::destroy_render_obj(unsigned long index) {
 	if (index < render_objects.size() - 1) { // If in middle of vector, replace it with the last render object in vector
 		render_objects[index] = render_objects.back();
 		render_objects[index].arm_parent();
@@ -97,7 +97,7 @@ Diamond::SDLRenderer2D::~SDLRenderer2D() {
 }
 
 
-/*** Private functions ***/
+// Private functions
 
 void Diamond::SDLRenderer2D::render_graphics() {
 	// TODO

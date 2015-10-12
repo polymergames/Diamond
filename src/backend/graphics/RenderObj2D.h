@@ -10,7 +10,7 @@
 namespace Diamond {
 	class RenderObj2D {
 		public:
-		int index;
+		unsigned long index;
 		GameObject2D *parent;
 		Transform2 transform;
 
