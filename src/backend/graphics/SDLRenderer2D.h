@@ -23,7 +23,7 @@ namespace Diamond {
 		 Initializes SDL, creates window, and initializes image loading.
          Returns whether all of the initialization was successful.
 		*/
-		bool init(Config &config);
+		bool init();
 
 		/**
 		 Called in game loop. Renders graphics as well as handles SDL events.

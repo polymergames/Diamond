@@ -18,7 +18,7 @@ namespace Diamond {
         
 		// Don't call unless you know what you're doing!
 		static void setRenderer(Renderer2D *renderer);
-		static bool init_renderer(Config &config);
+		static bool init_renderer();
 		static void render();
 		static void gen_render_obj(GameObject2D *parent, Texture *texture);
 		static void destroy_render_obj(unsigned long index);

@@ -2,13 +2,13 @@
  Copyright (c) 2015 Polymer Games
 */
 
-template <class Initialize, class DeltaUpdate> void Diamond::Launcher::launch(Diamond::Config &config, Initialize init, DeltaUpdate update) {
+template <class Initialize, class DeltaUpdate> void Diamond::Launcher::launch(Initialize init, DeltaUpdate update) {
 #if defined __ANDROID__
 	// Android launcher
 #elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
 	// IOS launcher
 #elif defined _WIN32 || defined __APPLE__
-	init_win32(config); // Windows launcher (also being used for osx because no osx-specific implementation atm)
+	init_win32(); // Windows launcher (also being used for osx because no osx-specific implementation atm)
 #else
 	// TODO: Log this using logger, and use a better RAII-compliant exit method! (ex. exceptions)
 	std::cout << "Platform unsupported!" << std::endl;

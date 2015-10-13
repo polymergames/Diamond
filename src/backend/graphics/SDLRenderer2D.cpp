@@ -4,6 +4,7 @@
 
 #include "SDLRenderer2D.h"
 #include <iostream>
+#include "Launcher.h"
 #include "SDL_image.h"
 #include "SDLInput.h"
 #include "SDLTexture.h"
@@ -14,7 +15,7 @@ Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {
 	render_objects.reserve(reserve_size);
 }
 
-bool Diamond::SDLRenderer2D::init(Config &config) {
+bool Diamond::SDLRenderer2D::init() {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		// TODO: Handle initialization failure and log
@@ -23,8 +24,9 @@ bool Diamond::SDLRenderer2D::init(Config &config) {
 	}
 
 	// Create window
-	window = SDL_CreateWindow(config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-		config.window_width, config.window_height, config.window_width <= 0 || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    window = SDL_CreateWindow(Launcher::config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                              Launcher::config.window_width, Launcher::config.window_height, Launcher::config.window_width <= 0
+                              || Launcher::config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 	if (window == nullptr) {
 		// TODO: Handle window creation failure and log
 		std::cout << "SDL failed to create window! SDL Error: " << SDL_GetError() << std::endl;
@@ -38,7 +40,7 @@ bool Diamond::SDLRenderer2D::init(Config &config) {
 		std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
-	SDL_SetRenderDrawColor(renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
+	SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a);
 
 	// Initialize image loading
 	int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;

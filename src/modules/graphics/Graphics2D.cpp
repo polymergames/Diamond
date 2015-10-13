@@ -14,8 +14,8 @@ void Diamond::Graphics2D::setRenderer(Renderer2D *renderer) {
 	Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
 }
 
-bool Diamond::Graphics2D::init_renderer(Config &config) {
-	return renderer->init(config);
+bool Diamond::Graphics2D::init_renderer() {
+	return renderer->init();
 }
 
 void Diamond::Graphics2D::render() {

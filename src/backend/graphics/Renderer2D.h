@@ -13,7 +13,7 @@ namespace Diamond {
 
 	class Renderer2D {
 		public:
-		virtual bool init(Config &config) = 0;
+		virtual bool init() = 0;
 		virtual void render() = 0;
         virtual Texture *load_texture(std::string path) = 0;
 		virtual void gen_render_obj(GameObject2D *parent, Texture *texture) = 0;

@@ -41,8 +41,7 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-	Config config = Config();
-    config.bg_color = {0, 128, 255, 255};
-    Launcher::launch(config, Init(), Update());
+    Launcher::config.bg_color = {0, 128, 255, 255};
+    Launcher::launch(Init(), Update());
 	return 0;
 }
