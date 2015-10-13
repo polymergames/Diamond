@@ -16,7 +16,7 @@ namespace Diamond {
         std::string game_name = "A Game Without a Name";
         int window_width = 1280;
         int window_height = 720;
-        struct RGBA bg_color = {0, 0, 0, 100};
+        struct RGBA bg_color = RGBA{0, 0, 0, 100};
     };
 }
 
