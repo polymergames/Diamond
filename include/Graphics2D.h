@@ -13,9 +13,10 @@
 namespace Diamond {
 	class Graphics2D {
 		public:
-		/**
-		 Don't call unless you know what you're doing!
-		*/
+        
+        static Texture *load_texture(std::string path);
+        
+		// Don't call unless you know what you're doing!
 		static void setRenderer(Renderer2D *renderer);
 		static bool init_renderer(Config &config);
 		static void render();

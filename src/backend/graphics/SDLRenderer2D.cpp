@@ -6,6 +6,7 @@
 #include <iostream>
 #include "SDL_image.h"
 #include "SDLInput.h"
+#include "SDLTexture.h"
 
 int Diamond::SDLRenderer2D::reserve_size = 10;
 
@@ -37,7 +38,7 @@ bool Diamond::SDLRenderer2D::init(Config &config) {
 		std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
-	SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255);
+	SDL_SetRenderDrawColor(renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
 
 	// Initialize image loading
 	int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -58,10 +59,32 @@ void Diamond::SDLRenderer2D::render() {
 	}
 
 	// Render all the graphics
-	render_graphics();
+    SDL_RenderClear(renderer);
+    for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
+        SDL_RenderCopy(renderer, i->texture, NULL, NULL);
+    }
 
-	// Update window. TODO: Change to texture update instead of surface
-	SDL_UpdateWindowSurface(window);
+	// Update screen
+    SDL_RenderPresent(renderer);
+}
+
+Diamond::Texture *Diamond::SDLRenderer2D::load_texture(std::string path) {
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (surface == nullptr) {
+        // TODO: Handle image loading failure and log
+        std::cout << "Failed to load image " << path << "! SDL_image Error: " << IMG_GetError() << std::endl;
+        return nullptr;
+    }
+    
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture == nullptr) {
+        // TODO: Handle texture creation failure and log
+        std::cout << "Failed to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
+        return nullptr;
+    }
+    
+    SDL_FreeSurface(surface);
+    return new SDLTexture(texture);
 }
 
 void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture) {
@@ -88,17 +111,9 @@ void Diamond::SDLRenderer2D::destroy_render_obj(unsigned long index) {
 }
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
-	IMG_Quit();
-
 	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-
+    SDL_DestroyWindow(window);
+    
+    IMG_Quit();
 	SDL_Quit();
-}
-
-
-// Private functions
-
-void Diamond::SDLRenderer2D::render_graphics() {
-	// TODO
 }

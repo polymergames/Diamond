@@ -21,6 +21,7 @@ namespace Diamond {
 		
 		/**
 		 Initializes SDL, creates window, and initializes image loading.
+         Returns whether all of the initialization was successful.
 		*/
 		bool init(Config &config);
 
@@ -28,6 +29,12 @@ namespace Diamond {
 		 Called in game loop. Renders graphics as well as handles SDL events.
 		*/
 		void render();
+        
+        /**
+         Loads an image file as an SDL texture. Caller is responsible for ownership!
+         Returns nullptr if texture failed to load.
+        */
+        Texture *load_texture(std::string path);
 
 		/**
 		 Creates an SDLRenderObj2D, which is a rendering unit for the render loop.
@@ -50,8 +57,6 @@ namespace Diamond {
 		SDL_Event e;
 
 		std::vector<SDLRenderObj2D> render_objects;
-
-		void render_graphics();
 	};
 }
 

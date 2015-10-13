@@ -6,6 +6,10 @@
 
 std::unique_ptr<Diamond::Renderer2D> Diamond::Graphics2D::renderer = nullptr;
 
+Diamond::Texture *Diamond::Graphics2D::load_texture(std::string path) {
+    return renderer->load_texture(path);
+}
+
 void Diamond::Graphics2D::setRenderer(Renderer2D *renderer) {
 	Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
 }
