@@ -7,12 +7,17 @@
 #include "SDLInput.h"
 using namespace Diamond;
 
-std::unique_ptr<GameObject2D> spike;
+//std::unique_ptr<GameObject2D> spike;
+GameObject2D *spike;
 
 class Init {
 public:
     void operator() () {
-        spike = std::unique_ptr<GameObject2D>(new GameObject2D(std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"))));
+        //spike = std::unique_ptr<GameObject2D>(new GameObject2D(std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"))));
+        spike = new GameObject2D(std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"))); // Memory leak!
+        spike->transform->position.x = 500;
+        spike->transform->position.y = 400;
+        spike->transform->scale = 0.2;
     }
 };
 

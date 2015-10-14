@@ -63,7 +63,7 @@ void Diamond::SDLRenderer2D::render() {
 	// Render all the graphics
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
-        SDL_RenderCopy(renderer, i->texture, NULL, NULL);
+        i->render(renderer);
     }
 
 	// Update screen
@@ -84,9 +84,11 @@ Diamond::Texture *Diamond::SDLRenderer2D::load_texture(std::string path) {
         std::cout << "Failed to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
         return nullptr;
     }
+    int width = surface->w;
+    int height = surface->h;
     
     SDL_FreeSurface(surface);
-    return new SDLTexture(texture);
+    return new SDLTexture(texture, width, height);
 }
 
 void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture) {

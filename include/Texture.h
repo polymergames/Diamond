@@ -8,7 +8,15 @@
 namespace Diamond {
 	class Texture {
 		public:
+        Texture(int width, int height);
+        
+        int get_width();
+        int get_height();
+        
 		virtual ~Texture();
+        
+        private:
+        int width, height;
 	};
 }
 

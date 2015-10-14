@@ -7,16 +7,19 @@
 
 #include "RenderObj2D.h"
 #include "SDL.h"
+#include "SDLTexture.h"
 
 namespace Diamond {
 	class SDLRenderObj2D : public RenderObj2D {
 		public:
-		SDL_Texture *texture;
+		SDLTexture *texture;
 
 		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
 
 		void set_texture(Texture *texture);
 
+        void render(SDL_Renderer *renderer);
+        
 		void arm_parent();
 	};
 }
