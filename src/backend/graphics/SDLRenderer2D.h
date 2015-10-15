@@ -40,6 +40,10 @@ namespace Diamond {
 		 Creates an SDLRenderObj2D, which is a rendering unit for the render loop.
 		*/
 		void gen_render_obj(GameObject2D *parent, Texture *texture);
+        
+        void activate_render_obj(unsigned long index);
+        
+        void deactivate_render_obj(unsigned long index);
 
 		/**
 		 Removes the render object at the given index from the rendering vector.
@@ -57,6 +61,7 @@ namespace Diamond {
 		SDL_Event e;
 
 		std::vector<SDLRenderObj2D> render_objects;
+        std::vector<SDLRenderObj2D> inactive_render_objects;
 	};
 }
 

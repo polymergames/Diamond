@@ -13,6 +13,7 @@ int Diamond::SDLRenderer2D::reserve_size = 10;
 
 Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {
 	render_objects.reserve(reserve_size);
+    inactive_render_objects.reserve(reserve_size);
 }
 
 bool Diamond::SDLRenderer2D::init() {
@@ -63,6 +64,7 @@ void Diamond::SDLRenderer2D::render() {
 	// Render all the graphics
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
+        //std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG
         i->render(renderer);
     }
 
@@ -102,7 +104,35 @@ void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *textu
 		}
 	}
 	render_objects.push_back(SDLRenderObj2D(parent, texture));
+    render_objects[size].arm_parent();
 	render_objects[size].index = size;
+}
+
+void Diamond::SDLRenderer2D::activate_render_obj(unsigned long index) {
+    unsigned long size = render_objects.size();
+    if (size == render_objects.capacity()) {
+        render_objects.reserve(size + reserve_size);
+        for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
+            i->arm_parent();
+        }
+    }
+    render_objects.push_back(inactive_render_objects[index]);
+    render_objects[size].arm_parent();
+    render_objects[size].index = size;
+}
+
+void Diamond::SDLRenderer2D::deactivate_render_obj(unsigned long index) {
+    unsigned long size = inactive_render_objects.size();
+    if (size == inactive_render_objects.capacity()) {
+        inactive_render_objects.reserve(size + reserve_size);
+        for (std::vector<SDLRenderObj2D>::iterator i = inactive_render_objects.begin(); i != inactive_render_objects.end(); i++) {
+            i->arm_parent();
+        }
+    }
+    inactive_render_objects.push_back(render_objects[index]);
+    destroy_render_obj(index);
+    inactive_render_objects.back().arm_parent();
+    inactive_render_objects.back().index = inactive_render_objects.size() - 1;
 }
 
 void Diamond::SDLRenderer2D::destroy_render_obj(unsigned long index) {
