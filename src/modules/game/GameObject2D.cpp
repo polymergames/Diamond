@@ -4,6 +4,7 @@
 
 #include "GameObject2D.h"
 #include "Graphics2D.h"
+#include "Launcher.h"
 #include "RenderObj2D.h"
 
 Diamond::GameObject2D::GameObject2D() : sprite(nullptr), transform(nullptr), render_obj(nullptr), visible(false) {}
@@ -61,7 +62,7 @@ void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
 }
 
 Diamond::GameObject2D::~GameObject2D() {
-	if (render_obj != nullptr) {
+	if (Launcher::is_open && render_obj != nullptr) {
 		Graphics2D::destroy_render_obj(render_obj->index);
 	}
 }
