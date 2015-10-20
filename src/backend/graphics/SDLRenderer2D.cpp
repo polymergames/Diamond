@@ -41,7 +41,6 @@ bool Diamond::SDLRenderer2D::init() {
 		std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
-	SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a);
 
 	// Initialize image loading
 	int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -56,12 +55,13 @@ bool Diamond::SDLRenderer2D::init() {
 
 void Diamond::SDLRenderer2D::render() {
 	// Handle SDL events
-    Input::reset();
+	Input::reset();
 	while (SDL_PollEvent(&e)) {
         SDLInput::handle(e);
 	}
 
 	// Render all the graphics
+	SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a); // reset color
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
         //std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG

@@ -14,7 +14,7 @@ void Diamond::SDLRenderObj2D::set_texture(Texture *texture) {
 }
 
 void Diamond::SDLRenderObj2D::render(SDL_Renderer *renderer) {
-    SDL_Rect render_rect = {(int)transform.position.x, (int)transform.position.y,
+    render_rect = {(int)transform.position.x, (int)transform.position.y,
         (int)(texture->get_width() * transform.scale), (int)(texture->get_height() * transform.scale)};
     SDL_RenderCopy(renderer, texture->texture, NULL, &render_rect);
 }

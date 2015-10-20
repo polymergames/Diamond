@@ -78,6 +78,7 @@ void Diamond::SDLInput::handle(SDL_Event &e) {
             break;
         case SDL_KEYUP:
             Input::keyup[keymap[e.key.keysym.sym]] = true;
+			Input::keydown[keymap[e.key.keysym.sym]] = false;
             break;
         case SDL_QUIT:
             Launcher::is_open = false;

@@ -10,7 +10,7 @@ using namespace Diamond;
 
 class Demo : public Game {
 	public:
-	const int movespeed = 20;
+	const float movespeed = 0.5f;
 
 	std::unique_ptr<GameObject2D> spike;
 
@@ -23,15 +23,25 @@ class Demo : public Game {
 	}
 
 	void update(float delta) {
-		if (Input::keydown[Input::K_SPACE]) {
+		if (Input::keyup[Input::K_SPACE]) {
 			spike->toggle_visibility();
+		}
+
+		if (Input::keydown[Input::K_LSHIFT]) {
+			spike->transform->scale += 0.0001f;
+		}
+
+		if (Input::keydown[Input::K_LCTRL]) {
+			spike->transform->scale -= 0.0001f;
 		}
 
 		if (Input::keydown[Input::K_W]) {
 			std::cout << "W pressed!" << std::endl;
+			Launcher::config.bg_color = {0, 0, 0, 0};
 		}
 		if (Input::keyup[Input::K_W]) {
 			std::cout << "W released!" << std::endl;
+			Launcher::config.bg_color = {0, 128, 255, 255};
 		}
 		if (Input::keydown[Input::K_UP]) {
 			std::cout << "Up!" << std::endl;

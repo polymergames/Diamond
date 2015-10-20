@@ -20,6 +20,7 @@ namespace Diamond {
 		GameObject2D(std::shared_ptr<Texture> sprite);
 
 		std::shared_ptr<Texture> get_sprite();
+
 		void set_sprite(std::shared_ptr<Texture> sprite);
 
 		bool is_visible();
