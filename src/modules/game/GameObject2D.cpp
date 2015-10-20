@@ -59,6 +59,7 @@ void Diamond::GameObject2D::re_adopt_render_obj() {
 
 void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
 	this->render_obj = render_obj;
+	this->transform = &(render_obj->transform);
 }
 
 Diamond::GameObject2D::~GameObject2D() {

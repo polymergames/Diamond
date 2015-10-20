@@ -20,7 +20,7 @@ namespace Diamond {
         virtual void activate_render_obj(unsigned long index) = 0;
         virtual void deactivate_render_obj(unsigned long index) = 0;
 		virtual void destroy_render_obj(unsigned long index) = 0;
-		virtual ~Renderer2D();
+		virtual ~Renderer2D() {};
 	};
 }
 

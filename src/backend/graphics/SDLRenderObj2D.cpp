@@ -21,5 +21,4 @@ void Diamond::SDLRenderObj2D::render(SDL_Renderer *renderer) {
 
 void Diamond::SDLRenderObj2D::arm_parent() {
 	parent->set_render_obj(this);
-	parent->transform = &transform;
 }
