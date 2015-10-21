@@ -13,6 +13,9 @@ namespace Diamond {
 	class SDLTexture : public Texture {
 		public:
 		SDLTexture(SDL_Texture *texture, int width, int height);
+
+		void set_color(RGB color);
+
 		~SDLTexture();
 
 		SDL_Texture *texture;

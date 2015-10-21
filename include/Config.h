@@ -8,6 +8,10 @@
 #include <string>
 
 namespace Diamond {
+	struct RGB {
+		int r, g, b;
+	};
+
     struct RGBA {
         int r, g, b, a;
     };
