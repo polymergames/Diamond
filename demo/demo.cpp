@@ -13,9 +13,14 @@ class Demo : public Game {
 	const float movespeed = 0.5f;
 
 	std::unique_ptr<GameObject2D> spike;
+	std::shared_ptr<Texture> spike_sprite;
+	std::shared_ptr<Texture> cloud_sprite;
 
 	void init() {
-		spike = std::unique_ptr<GameObject2D>(new GameObject2D(std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"))));
+		spike_sprite = std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"));
+		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::load_texture("cloud.png"));
+
+		spike = std::unique_ptr<GameObject2D>(new GameObject2D(spike_sprite));
 		spike->transform->position.x = 500;
 		spike->transform->position.y = 400;
 		spike->transform->scale = 0.1f;
@@ -23,6 +28,14 @@ class Demo : public Game {
 	}
 
 	void update(float delta) {
+		if (Input::keyup[Input::K_S]) {
+			spike->set_sprite(spike_sprite);
+		}
+
+		if (Input::keyup[Input::K_C]) {
+			spike->set_sprite(cloud_sprite);
+		}
+
 		if (Input::keyup[Input::K_SPACE]) {
 			spike->toggle_visibility();
 		}
