@@ -4,14 +4,14 @@
 
 #include "Texture.h"
 
-Diamond::Texture::Texture(int width, int height) : width(width), height(height) {}
+Diamond::Texture::Texture(int width, int height) : width(width), height(height), color({255, 255, 255, 255}) {}
 
-int Diamond::Texture::get_width() {
-    return width;
+Diamond::RGBA Diamond::Texture::get_color() {
+	return color;
 }
 
-int Diamond::Texture::get_height() {
-    return height;
+void Diamond::Texture::set_color(RGBA color) {
+	this->color = color;
 }
 
 Diamond::Texture::~Texture() {}

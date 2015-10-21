@@ -16,7 +16,7 @@ class Demo : public Game {
 	std::shared_ptr<Texture> spike_sprite;
 	std::shared_ptr<Texture> cloud_sprite;
 
-	RGB spike_color = RGB{ 255, 255, 255 };
+	RGBA spike_color = RGBA{255, 255, 255, 255};
 
 	void init() {
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"));
@@ -31,11 +31,19 @@ class Demo : public Game {
 
 	void update(float delta) {
 		if (Input::keydown[Input::K_R]) {
-			spike_color = { 255, 0, 0 };
+			spike_color = {255, 0, 0, 255};
+			spike->get_sprite()->set_color(spike_color);
 		}
 
 		if (Input::keydown[Input::K_T]) {
-			spike_color = { 255, 255, 255 };
+			spike_color = {255, 255, 255, 255};
+			spike->get_sprite()->set_color(spike_color);
+		}
+
+		if (Input::keyup[Input::K_Y]) {
+			RGBA sc = spike->get_sprite()->get_color();
+			sc.a -= 32;
+			spike->get_sprite()->set_color(sc);
 		}
 
 		if (Input::keyup[Input::K_S]) {
@@ -82,8 +90,6 @@ class Demo : public Game {
 			std::cout << "Right!" << std::endl;
 			spike->transform->position.x += movespeed;
 		}
-
-		spike->get_sprite()->set_color(spike_color);
 	}
 
 	void quit() {};
