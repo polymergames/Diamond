@@ -35,7 +35,7 @@ bool Diamond::SDLRenderer2D::init() {
 	}
 
 	// Create renderer
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | (Launcher::config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
 	if (renderer == nullptr) {
 		// TODO: Handle renderer creation failure and log
 		std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;

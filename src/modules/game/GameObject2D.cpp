@@ -23,6 +23,24 @@ void Diamond::GameObject2D::set_sprite(std::shared_ptr<Texture> sprite) {
     else    Graphics2D::gen_render_obj(this, sprite.get());
 }
 
+void Diamond::GameObject2D::flip_x() {
+	if (render_obj != nullptr)	render_obj->flip_x();
+}
+
+void Diamond::GameObject2D::flip_y() {
+	if (render_obj != nullptr)	render_obj->flip_y();
+}
+
+bool Diamond::GameObject2D::is_flipped_x() {
+	if (render_obj != nullptr)	return render_obj->is_flipped_x();
+	return false;
+}
+
+bool Diamond::GameObject2D::is_flipped_y() {
+	if (render_obj != nullptr)	return render_obj->is_flipped_y();
+	return false;
+}
+
 bool Diamond::GameObject2D::is_visible() {
 	return visible;
 }

@@ -10,7 +10,9 @@ using namespace Diamond;
 
 class Demo : public Game {
 	public:
-	const float movespeed = 0.5f;
+	const float movespeed = 10.0f;
+	const float spinspeed = 10.0f;
+	const float growspeed = 0.01f;
 
 	std::unique_ptr<GameObject2D> spike;
 	std::shared_ptr<Texture> spike_sprite;
@@ -34,23 +36,20 @@ class Demo : public Game {
 			spike_color = {255, 0, 0, 255};
 			spike->get_sprite()->set_color(spike_color);
 		}
-
 		if (Input::keydown[Input::K_T]) {
 			spike_color = {255, 255, 255, 255};
 			spike->get_sprite()->set_color(spike_color);
 		}
-
 		if (Input::keyup[Input::K_Y]) {
 			RGBA sc = spike->get_sprite()->get_color();
 			sc.a -= 32;
 			spike->get_sprite()->set_color(sc);
 		}
 
-		if (Input::keyup[Input::K_S]) {
+		if (Input::keyup[Input::K_1]) {
 			spike->set_sprite(spike_sprite);
 		}
-
-		if (Input::keyup[Input::K_C]) {
+		if (Input::keyup[Input::K_2]) {
 			spike->set_sprite(cloud_sprite);
 		}
 
@@ -59,37 +58,40 @@ class Demo : public Game {
 		}
 
 		if (Input::keydown[Input::K_LSHIFT]) {
-			spike->transform->scale += 0.0001f;
+			spike->transform->scale += growspeed * delta;
+		}
+		if (Input::keydown[Input::K_LCTRL]) {
+			spike->transform->scale -= growspeed * delta;
 		}
 
-		if (Input::keydown[Input::K_LCTRL]) {
-			spike->transform->scale -= 0.0001f;
+		if (Input::keyup[Input::K_DOWN]) {
+			spike->flip_x();
+		}
+		if (Input::keyup[Input::K_UP]) {
+			spike->flip_y();
 		}
 
 		if (Input::keydown[Input::K_W]) {
-			std::cout << "W pressed!" << std::endl;
-			Launcher::config.bg_color = {0, 0, 0, 0};
+			spike->transform->position.y -= movespeed * delta;
 		}
-		if (Input::keyup[Input::K_W]) {
-			std::cout << "W released!" << std::endl;
-			Launcher::config.bg_color = {0, 128, 255, 255};
+		if (Input::keydown[Input::K_S]) {
+			spike->transform->position.y += movespeed * delta;
 		}
-		if (Input::keydown[Input::K_UP]) {
-			std::cout << "Up!" << std::endl;
-			spike->transform->position.y -= movespeed;
+		if (Input::keydown[Input::K_A]) {
+			spike->transform->position.x -= movespeed * delta;
 		}
-		if (Input::keydown[Input::K_DOWN]) {
-			std::cout << "Down!" << std::endl;
-			spike->transform->position.y += movespeed;
+		if (Input::keydown[Input::K_D]) {
+			spike->transform->position.x += movespeed * delta;
 		}
+
 		if (Input::keydown[Input::K_LEFT]) {
-			std::cout << "Left!" << std::endl;
-			spike->transform->position.x -= movespeed;
+			spike->transform->rotation -= spinspeed * delta;
 		}
 		if (Input::keydown[Input::K_RIGHT]) {
-			std::cout << "Right!" << std::endl;
-			spike->transform->position.x += movespeed;
+			spike->transform->rotation += spinspeed * delta;
 		}
+
+		std::cout << "x flip: " << spike->is_flipped_x() << "; y flip: " << spike->is_flipped_y() << std::endl;
 	}
 
 	void quit() {};
@@ -98,7 +100,8 @@ class Demo : public Game {
 int main(int argc, char *argv[]) {
 	Demo demo;
 
-    Launcher::config.bg_color = {0, 128, 255, 255};
+	Launcher::config.vsync = true;
+	Launcher::config.bg_color = {0, 128, 255, 255};
     Launcher::launch(demo);
 
 	return 0;

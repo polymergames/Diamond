@@ -14,10 +14,17 @@ namespace Diamond {
 		public:
 		SDLTexture *texture;
 		SDL_Rect render_rect;
+		SDL_RendererFlip flip;
 
 		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
 
 		void set_texture(Texture *texture);
+
+		void flip_x();
+		void flip_y();
+
+		bool is_flipped_x();
+		bool is_flipped_y();
 
         void render(SDL_Renderer *renderer);
         

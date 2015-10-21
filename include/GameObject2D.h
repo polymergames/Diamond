@@ -20,9 +20,17 @@ namespace Diamond {
 		GameObject2D(std::shared_ptr<Texture> sprite);
 
 		std::shared_ptr<Texture> get_sprite();
-
 		void set_sprite(std::shared_ptr<Texture> sprite);
 
+		void flip_x();
+		void flip_y();
+		
+		bool is_flipped_x();
+		bool is_flipped_y();
+
+		/**
+		 Returns whether this game object's sprite is currently being rendered.
+		*/
 		bool is_visible();
 
 		/**

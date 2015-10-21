@@ -18,6 +18,11 @@ namespace Diamond {
 
 		virtual void set_texture(Texture *texture) = 0;
 
+		virtual void flip_x() = 0;
+		virtual void flip_y() = 0;
+		virtual bool is_flipped_x() = 0;
+		virtual bool is_flipped_y() = 0;
+
 		virtual ~RenderObj2D();
 	};
 }
