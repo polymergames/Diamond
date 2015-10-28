@@ -62,6 +62,9 @@ namespace Diamond {
 
 		std::vector<SDLRenderObj2D> render_objects;
         std::vector<SDLRenderObj2D> inactive_render_objects;
+
+		void reserve_r_obj_vec(std::vector<SDLRenderObj2D> &v);
+		void destroy_inactive_render_obj(unsigned long index);
 	};
 }
 

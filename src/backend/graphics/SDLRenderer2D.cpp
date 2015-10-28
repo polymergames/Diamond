@@ -94,45 +94,26 @@ Diamond::Texture *Diamond::SDLRenderer2D::load_texture(std::string path) {
 }
 
 void Diamond::SDLRenderer2D::gen_render_obj(GameObject2D *parent, Texture *texture) {
-	unsigned long size = render_objects.size();
-	if (size == render_objects.capacity()) {
-		// Reallocate render_objects vector then loop through and reset their parents' references
-		// This is done to maintain integrity of render pointers
-		render_objects.reserve(size + reserve_size);
-		for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
-			i->arm_parent();
-		}
-	}
+	reserve_r_obj_vec(render_objects);
 	render_objects.push_back(SDLRenderObj2D(parent, texture));
-    render_objects[size].arm_parent();
-	render_objects[size].index = size;
+	render_objects.back().arm_parent();
+	render_objects.back().index = render_objects.size() - 1;
 }
 
 void Diamond::SDLRenderer2D::activate_render_obj(unsigned long index) {
-    unsigned long size = render_objects.size();
-    if (size == render_objects.capacity()) {
-        render_objects.reserve(size + reserve_size);
-        for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
-            i->arm_parent();
-        }
-    }
+	reserve_r_obj_vec(render_objects);
     render_objects.push_back(inactive_render_objects[index]);
-    render_objects[size].arm_parent();
-    render_objects[size].index = size;
+    render_objects.back().arm_parent();
+	render_objects.back().index = render_objects.size() - 1;
+	destroy_inactive_render_obj(index);
 }
 
 void Diamond::SDLRenderer2D::deactivate_render_obj(unsigned long index) {
-    unsigned long size = inactive_render_objects.size();
-    if (size == inactive_render_objects.capacity()) {
-        inactive_render_objects.reserve(size + reserve_size);
-        for (std::vector<SDLRenderObj2D>::iterator i = inactive_render_objects.begin(); i != inactive_render_objects.end(); i++) {
-            i->arm_parent();
-        }
-    }
+	reserve_r_obj_vec(inactive_render_objects);
     inactive_render_objects.push_back(render_objects[index]);
-    destroy_render_obj(index);
     inactive_render_objects.back().arm_parent();
-    inactive_render_objects.back().index = inactive_render_objects.size() - 1;
+	inactive_render_objects.back().index = inactive_render_objects.size() - 1;
+	destroy_render_obj(index);
 }
 
 void Diamond::SDLRenderer2D::destroy_render_obj(unsigned long index) {
@@ -150,4 +131,28 @@ Diamond::SDLRenderer2D::~SDLRenderer2D() {
     
     IMG_Quit();
 	SDL_Quit();
+}
+
+
+// Private functions
+
+void Diamond::SDLRenderer2D::reserve_r_obj_vec(std::vector<SDLRenderObj2D> &v) {
+	unsigned long size = v.size();
+	if (size == v.capacity()) {
+		// Reallocate render_objects vector then loop through and reset their parents' references
+		// This is done to maintain integrity of render pointers if their memory locations moved
+		v.reserve(size + reserve_size);
+		for (std::vector<SDLRenderObj2D>::iterator i = v.begin(); i != v.end(); i++) {
+			i->arm_parent();
+		}
+	}
+}
+
+void Diamond::SDLRenderer2D::destroy_inactive_render_obj(unsigned long index) {
+	if (index < inactive_render_objects.size() - 1) { // If in middle of vector, replace it with the last render object in vector
+		inactive_render_objects[index] = inactive_render_objects.back();
+		inactive_render_objects[index].arm_parent();
+		inactive_render_objects[index].index = index;
+	}
+	inactive_render_objects.pop_back();
 }
