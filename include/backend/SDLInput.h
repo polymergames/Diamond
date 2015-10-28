@@ -10,10 +10,10 @@
 #include "SDL.h"
 
 namespace Diamond {
-    namespace SDLInput {
-        extern std::map<SDL_Keycode, Input::KEY> keymap;
-        void handle(SDL_Event &e);
-    }
+	namespace SDLInput {
+		extern std::map<SDL_Keycode, Input::KEY> keymap;
+		void handle(SDL_Event &e);
+	}
 }
 
 #endif // SDL_INPUT_H

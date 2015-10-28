@@ -20,7 +20,7 @@ std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::get_sprite() {
 void Diamond::GameObject2D::set_sprite(std::shared_ptr<Texture> sprite) {
 	this->sprite = sprite;
 	if (render_obj != nullptr)	render_obj->set_texture(sprite.get());
-    else    Graphics2D::gen_render_obj(this, sprite.get());
+	else    Graphics2D::gen_render_obj(this, sprite.get());
 }
 
 void Diamond::GameObject2D::flip_x() {
@@ -48,7 +48,7 @@ bool Diamond::GameObject2D::is_visible() {
 bool Diamond::GameObject2D::make_visible() {
 	if (render_obj != nullptr) {
 		visible = true;
-        Graphics2D::activate_render_obj(render_obj->index);
+		Graphics2D::activate_render_obj(render_obj->index);
 		return true;
 	}
 	return false;
@@ -62,17 +62,17 @@ void Diamond::GameObject2D::make_invisible() {
 }
 
 bool Diamond::GameObject2D::toggle_visibility() {
-    if (visible) {
-        make_invisible();
-        return true;
-    }
-    else {
-        return make_visible();
-    }
+	if (visible) {
+		make_invisible();
+		return true;
+	}
+	else {
+		return make_visible();
+	}
 }
 
 void Diamond::GameObject2D::re_adopt_render_obj() {
-    render_obj->parent = this;
+	render_obj->parent = this;
 }
 
 void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {

@@ -40,21 +40,21 @@ namespace Diamond {
 		*/
 		bool make_visible();
 
-        /**
-         Causes this game object to stop being rendered.
-        */
-        void make_invisible();
-        
-        /**
-         If this game object is currently visible, makes it invisible (ie not rendered), and vice versa.
-        */
-        bool toggle_visibility();
-        
-        /**
-         Updates the render object's parent pointer to point to this game object.
-         Call this if this game object's address has changed.
-         */
-        void re_adopt_render_obj();
+		/**
+		 Causes this game object to stop being rendered.
+		*/
+		void make_invisible();
+		
+		/**
+		 If this game object is currently visible, makes it invisible (ie not rendered), and vice versa.
+		*/
+		bool toggle_visibility();
+		
+		/**
+		 Updates the render object's parent pointer to point to this game object.
+		 Call this if this game object's address has changed.
+		 */
+		void re_adopt_render_obj();
 
 		/**
 		 Do not call unless you know what you're doing!

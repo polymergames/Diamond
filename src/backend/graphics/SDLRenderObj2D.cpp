@@ -30,8 +30,8 @@ bool Diamond::SDLRenderObj2D::is_flipped_y() {
 }
 
 void Diamond::SDLRenderObj2D::render(SDL_Renderer *renderer) {
-    render_rect = {(int)transform.position.x, (int)transform.position.y,
-        (int)(texture->width * transform.scale), (int)(texture->height * transform.scale)};
+	render_rect = {(int)transform.position.x, (int)transform.position.y,
+		(int)(texture->width * transform.scale), (int)(texture->height * transform.scale)};
 	SDL_RenderCopyEx(renderer, texture->texture, NULL, &render_rect, transform.rotation, NULL, flip);
 }
 

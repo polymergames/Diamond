@@ -9,16 +9,16 @@
 
 namespace Diamond {
 	struct RGBA {
-        int  r, g, b, a;
-    };
-    
-    struct Config {
-        std::string game_name = "A Game Without a Name";
-        int window_width = 1280;
-        int window_height = 720;
+		int  r, g, b, a;
+	};
+	
+	struct Config {
+		std::string game_name = "A Game Without a Name";
+		int window_width = 1280;
+		int window_height = 720;
 		bool vsync = false;
-        RGBA bg_color = RGBA{0, 0, 0, 100};
-    };
+		RGBA bg_color = RGBA{0, 0, 0, 100};
+	};
 }
 
 #endif // CONFIG_H

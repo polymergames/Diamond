@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
 	Launcher::config.vsync = true;
 	Launcher::config.bg_color = {0, 128, 255, 255};
-    Launcher::launch(demo);
+	Launcher::launch(demo);
 
 	return 0;
 }

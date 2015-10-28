@@ -26,8 +26,8 @@ namespace Diamond {
 		bool is_flipped_x();
 		bool is_flipped_y();
 
-        void render(SDL_Renderer *renderer);
-        
+		void render(SDL_Renderer *renderer);
+		
 		void arm_parent();
 	};
 }

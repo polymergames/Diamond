@@ -13,16 +13,16 @@
 namespace Diamond {
 	class Graphics2D {
 		public:
-        
-        static Texture *load_texture(std::string path);
-        
+		
+		static Texture *load_texture(std::string path);
+		
 		// Don't call unless you know what you're doing!
 		static void setRenderer(Renderer2D *renderer);
 		static bool init_renderer();
 		static void render();
 		static void gen_render_obj(GameObject2D *parent, Texture *texture);
-        static void activate_render_obj(unsigned long index);
-        static void deactivate_render_obj(unsigned long index);
+		static void activate_render_obj(unsigned long index);
+		static void deactivate_render_obj(unsigned long index);
 		static void destroy_render_obj(unsigned long index);
 
 		private:

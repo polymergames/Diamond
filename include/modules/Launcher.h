@@ -16,8 +16,8 @@ namespace Diamond {
 	class Launcher {
 		public:
 		static bool is_open;
-        
-        static struct Config config;
+		
+		static struct Config config;
 
 		/**
 		 Call only once, at beginning of game!

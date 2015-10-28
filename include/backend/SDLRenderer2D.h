@@ -21,7 +21,7 @@ namespace Diamond {
 		
 		/**
 		 Initializes SDL, creates window, and initializes image loading.
-         Returns whether all of the initialization was successful.
+		 Returns whether all of the initialization was successful.
 		*/
 		bool init();
 
@@ -29,21 +29,21 @@ namespace Diamond {
 		 Called in game loop. Renders graphics as well as handles SDL events.
 		*/
 		void render();
-        
-        /**
-         Loads an image file as an SDL texture. Caller is responsible for ownership!
-         Returns nullptr if texture failed to load.
-        */
-        Texture *load_texture(std::string path);
+		
+		/**
+		 Loads an image file as an SDL texture. Caller is responsible for ownership!
+		 Returns nullptr if texture failed to load.
+		*/
+		Texture *load_texture(std::string path);
 
 		/**
 		 Creates an SDLRenderObj2D, which is a rendering unit for the render loop.
 		*/
 		void gen_render_obj(GameObject2D *parent, Texture *texture);
-        
-        void activate_render_obj(unsigned long index);
-        
-        void deactivate_render_obj(unsigned long index);
+		
+		void activate_render_obj(unsigned long index);
+		
+		void deactivate_render_obj(unsigned long index);
 
 		/**
 		 Removes the render object at the given index from the rendering vector.
@@ -61,7 +61,7 @@ namespace Diamond {
 		SDL_Event e;
 
 		std::vector<SDLRenderObj2D> render_objects;
-        std::vector<SDLRenderObj2D> inactive_render_objects;
+		std::vector<SDLRenderObj2D> inactive_render_objects;
 
 		void reserve_r_obj_vec(std::vector<SDLRenderObj2D> &v);
 		void destroy_inactive_render_obj(unsigned long index);

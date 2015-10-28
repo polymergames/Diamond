@@ -7,7 +7,7 @@
 std::unique_ptr<Diamond::Renderer2D> Diamond::Graphics2D::renderer = nullptr;
 
 Diamond::Texture *Diamond::Graphics2D::load_texture(std::string path) {
-    return renderer->load_texture(path);
+	return renderer->load_texture(path);
 }
 
 void Diamond::Graphics2D::setRenderer(Renderer2D *renderer) {
@@ -27,11 +27,11 @@ void Diamond::Graphics2D::gen_render_obj(GameObject2D *parent, Texture *texture)
 }
 
 void Diamond::Graphics2D::activate_render_obj(unsigned long index) {
-    renderer->activate_render_obj(index);
+	renderer->activate_render_obj(index);
 }
 
 void Diamond::Graphics2D::deactivate_render_obj(unsigned long index) {
-    renderer->deactivate_render_obj(index);
+	renderer->deactivate_render_obj(index);
 }
 
 void Diamond::Graphics2D::destroy_render_obj(unsigned long index) {

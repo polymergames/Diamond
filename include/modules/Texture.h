@@ -10,17 +10,17 @@
 namespace Diamond {
 	class Texture {
 		public:
-        Texture(int width, int height);
-        
+		Texture(int width, int height);
+		
 		virtual RGBA get_color();
 
 		virtual void set_color(RGBA color);
-        
+		
 		virtual ~Texture();
 
 		int width, height;
-        
-        protected:
+		
+		protected:
 		RGBA color;
 	};
 }
