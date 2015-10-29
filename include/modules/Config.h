@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef D_CONFIG_H
+#define D_CONFIG_H
 
 #include <string>
 
@@ -21,4 +21,4 @@ namespace Diamond {
 	};
 }
 
-#endif // CONFIG_H
+#endif // D_CONFIG_H

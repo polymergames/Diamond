@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef D_GAME_H
+#define D_GAME_H
 
 namespace Diamond {
 	class Game {
@@ -28,4 +28,4 @@ namespace Diamond {
 	};
 }
 
-#endif // GAME_H
+#endif // D_GAME_H

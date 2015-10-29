@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef GAME_OBJECT_2D_H
-#define GAME_OBJECT_2D_H
+#ifndef D_GAME_OBJECT_2D_H
+#define D_GAME_OBJECT_2D_H
 
 #include <memory>
 #include "Texture.h"
@@ -70,4 +70,4 @@ namespace Diamond {
 	};
 }
 
-#endif // GAME_OBJECT_2D_H
+#endif // D_GAME_OBJECT_2D_H

@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef TRANSFORM_2_H
-#define TRANSFORM_2_H
+#ifndef D_TRANSFORM_2_H
+#define D_TRANSFORM_2_H
 
 #include "Vector2.h"
 
@@ -18,4 +18,4 @@ namespace Diamond {
 	};
 }
 
-#endif // TRANSFORM_2_H
+#endif // D_TRANSFORM_2_H

@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef SDL_INPUT_H
-#define SDL_INPUT_H
+#ifndef D_SDL_INPUT_H
+#define D_SDL_INPUT_H
 
 #include <map>
 #include "Input.h"
@@ -16,4 +16,4 @@ namespace Diamond {
 	}
 }
 
-#endif // SDL_INPUT_H
+#endif // D_SDL_INPUT_H

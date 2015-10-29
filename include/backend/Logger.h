@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef D_LOGGER_H
+#define D_LOGGER_H
 
 namespace Diamond {
 	class Logger {
@@ -12,4 +12,4 @@ namespace Diamond {
 	};
 }
 
-#endif // LOGGER_H
+#endif // D_LOGGER_H

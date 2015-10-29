@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef GRAPHICS_2D_H
-#define GRAPHICS_2D_H
+#ifndef D_GRAPHICS_2D_H
+#define D_GRAPHICS_2D_H
 
 #include <iostream>
 #include <memory>
@@ -30,4 +30,4 @@ namespace Diamond {
 	};
 }
 
-#endif // GRAPHICS_2D_H
+#endif // D_GRAPHICS_2D_H

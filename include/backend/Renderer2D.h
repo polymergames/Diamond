@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef RENDERER_2D_H
-#define RENDERER_2D_H
+#ifndef D_RENDERER_2D_H
+#define D_RENDERER_2D_H
 
 #include <iostream>
 #include "GameObject2D.h"
@@ -24,4 +24,4 @@ namespace Diamond {
 	};
 }
 
-#endif // RENDERER_2D_H
+#endif // D_RENDERER_2D_H

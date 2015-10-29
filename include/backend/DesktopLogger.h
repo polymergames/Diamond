@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef DESKTOP_LOGGER_H
-#define DESKTOP_LOGGER_H
+#ifndef D_DESKTOP_LOGGER_H
+#define D_DESKTOP_LOGGER_H
 
 #include "Logger.h"
 
@@ -15,4 +15,4 @@ namespace Diamond {
 	};
 }
 
-#endif // DESKTOP_LOGGER_H
+#endif // D_DESKTOP_LOGGER_H

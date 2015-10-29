@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef SDL_RENDER_OBJ_2D_H
-#define SDL_RENDER_OBJ_2D_H
+#ifndef D_SDL_RENDER_OBJ_2D_H
+#define D_SDL_RENDER_OBJ_2D_H
 
 #include "RenderObj2D.h"
 #include "SDL.h"
@@ -32,4 +32,4 @@ namespace Diamond {
 	};
 }
 
-#endif // SDL_RENDER_OBJ_2D_H
+#endif // D_SDL_RENDER_OBJ_2D_H

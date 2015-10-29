@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef D_TEXTURE_H
+#define D_TEXTURE_H
 
 #include "Config.h"
 
@@ -25,4 +25,4 @@ namespace Diamond {
 	};
 }
 
-#endif // TEXTURE_H
+#endif // D_TEXTURE_H

@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef D_INPUT_H
+#define D_INPUT_H
 
 #include <vector>
 
@@ -28,4 +28,4 @@ namespace Diamond {
 	}
 }
 
-#endif // INPUT_H
+#endif // D_INPUT_H

@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef SDL_TEXTURE_H
-#define SDL_TEXTURE_H
+#ifndef D_SDL_TEXTURE_H
+#define D_SDL_TEXTURE_H
 
 #include <memory>
 #include "Texture.h"
@@ -22,4 +22,4 @@ namespace Diamond {
 	};
 }
 
-#endif // SDL_TEXTURE_H
+#endif // D_SDL_TEXTURE_H

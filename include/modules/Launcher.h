@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef LAUNCHER_H
-#define LAUNCHER_H
+#ifndef D_LAUNCHER_H
+#define D_LAUNCHER_H
 
 #include <iostream>
 #include <memory>
@@ -29,4 +29,4 @@ namespace Diamond {
 	};
 }
 
-#endif // LAUNCHER_H
+#endif // D_LAUNCHER_H

@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef VECTOR_2_H
-#define VECTOR_2_H
+#ifndef D_VECTOR_2_H
+#define D_VECTOR_2_H
 
 namespace Diamond {
 	class Vector2 {
@@ -19,4 +19,4 @@ namespace Diamond {
 	};
 }
 
-#endif // VECTOR_2_H
+#endif // D_VECTOR_2_H

@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef SDL_RENDERER_2D_H
-#define SDL_RENDERER_2D_H
+#ifndef D_SDL_RENDERER_2D_H
+#define D_SDL_RENDERER_2D_H
 
 #include <vector>
 #include "Config.h"
@@ -68,4 +68,4 @@ namespace Diamond {
 	};
 }
 
-#endif // SDL_RENDERER_2D_H
+#endif // D_SDL_RENDERER_2D_H
