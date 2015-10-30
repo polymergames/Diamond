@@ -14,14 +14,24 @@ namespace Diamond {
 
 	class GameObject2D {
 		public:
-		Transform2 *transform;
-
 		GameObject2D();
 		GameObject2D(std::shared_ptr<Texture> sprite);
 
 		std::shared_ptr<Texture> get_sprite();
 		void set_sprite(std::shared_ptr<Texture> sprite);
 
+		/**
+		 Returns a COPY of this game object's transform if it has one, or returns a new transform.
+		*/
+		Transform2 get_transform();
+		
+		void set_transform(Transform2 &transform);
+		void set_transform(Vector2 &position);
+		void set_transform(float x, float y, float rotation, float scale);
+		void set_transform(float x, float y);
+		void set_rotation(float rotation);
+		void set_scale(float scale);
+		
 		void flip_x();
 		void flip_y();
 		
@@ -52,7 +62,7 @@ namespace Diamond {
 		
 		/**
 		 Updates the render object's parent pointer to point to this game object.
-		 Call this if this game object's address has changed.
+		 Call this if this game object's address has changed (might happen if, for ex, you store your gameobjects in a vector).
 		 */
 		void re_adopt_render_obj();
 

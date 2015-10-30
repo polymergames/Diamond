@@ -7,9 +7,9 @@
 #include "Launcher.h"
 #include "RenderObj2D.h"
 
-Diamond::GameObject2D::GameObject2D() : sprite(nullptr), transform(nullptr), render_obj(nullptr), visible(false) {}
+Diamond::GameObject2D::GameObject2D() : sprite(nullptr), render_obj(nullptr), visible(false) {}
 
-Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), transform(nullptr), render_obj(nullptr), visible(true) {
+Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), render_obj(nullptr), visible(true) {
 	Graphics2D::gen_render_obj(this, sprite.get());
 }
 
@@ -21,6 +21,48 @@ void Diamond::GameObject2D::set_sprite(std::shared_ptr<Texture> sprite) {
 	this->sprite = sprite;
 	if (render_obj != nullptr)	render_obj->set_texture(sprite.get());
 	else    Graphics2D::gen_render_obj(this, sprite.get());
+}
+
+Diamond::Transform2 Diamond::GameObject2D::get_transform() {
+	return render_obj != nullptr ? render_obj->transform : Transform2();
+}
+
+void Diamond::GameObject2D::set_transform(Diamond::Transform2 &transform) {
+	if (render_obj != nullptr)	render_obj->transform = transform;
+}
+
+void Diamond::GameObject2D::set_transform(Diamond::Vector2 &position) {
+	if (render_obj != nullptr) {
+		render_obj->transform.position = position;
+	}
+}
+
+void Diamond::GameObject2D::set_transform(float x, float y, float rotation, float scale) {
+	if (render_obj != nullptr) {
+		render_obj->transform.position.x = x;
+		render_obj->transform.position.y = y;
+		render_obj->transform.rotation = rotation;
+		render_obj->transform.scale = scale;
+	}
+}
+
+void Diamond::GameObject2D::set_transform(float x, float y) {
+	if (render_obj != nullptr) {
+		render_obj->transform.position.x = x;
+		render_obj->transform.position.y = y;
+	}
+}
+
+void Diamond::GameObject2D::set_rotation(float rotation) {
+	if (render_obj != nullptr) {
+		render_obj->transform.rotation = rotation;
+	}
+}
+
+void Diamond::GameObject2D::set_scale(float scale) {
+	if (render_obj != nullptr) {
+		render_obj->transform.scale = scale;
+	}
 }
 
 void Diamond::GameObject2D::flip_x() {
@@ -77,7 +119,6 @@ void Diamond::GameObject2D::re_adopt_render_obj() {
 
 void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
 	this->render_obj = render_obj;
-	this->transform = &(render_obj->transform);
 }
 
 Diamond::GameObject2D::~GameObject2D() {
