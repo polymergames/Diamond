@@ -32,9 +32,7 @@ void Diamond::GameObject2D::set_transform(Diamond::Transform2 &transform) {
 }
 
 void Diamond::GameObject2D::set_transform(Diamond::Vector2 &position) {
-	if (render_obj != nullptr) {
-		render_obj->transform.position = position;
-	}
+	if (render_obj != nullptr)	render_obj->transform.position = position;
 }
 
 void Diamond::GameObject2D::set_transform(float x, float y, float rotation, float scale) {
@@ -54,15 +52,11 @@ void Diamond::GameObject2D::set_transform(float x, float y) {
 }
 
 void Diamond::GameObject2D::set_rotation(float rotation) {
-	if (render_obj != nullptr) {
-		render_obj->transform.rotation = rotation;
-	}
+	if (render_obj != nullptr)	render_obj->transform.rotation = rotation;
 }
 
 void Diamond::GameObject2D::set_scale(float scale) {
-	if (render_obj != nullptr) {
-		render_obj->transform.scale = scale;
-	}
+	if (render_obj != nullptr)	render_obj->transform.scale = scale;
 }
 
 void Diamond::GameObject2D::flip_x() {
