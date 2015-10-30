@@ -122,7 +122,7 @@ void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
 }
 
 Diamond::GameObject2D::~GameObject2D() {
-	if (Launcher::is_open && render_obj != nullptr) {
+	if (Launcher::is_open && render_obj != nullptr) { // TODO: find exception-safer method of memory management. ie it's possible that render_obj has been destroyed/game has ended/crashed even if is_open = true
 		Graphics2D::destroy_render_obj(render_obj->index);
 	}
 }
