@@ -12,7 +12,9 @@ namespace Diamond {
 	class DiskJockey2D {
 		public:
 		virtual bool init() = 0;
+
 		virtual Sound2D *load_sound(std::string path) = 0;
+
 		virtual ~DiskJockey2D() {};
 	};
 }

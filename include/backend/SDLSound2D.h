@@ -15,11 +15,22 @@ namespace Diamond {
 		SDLSound2D(Mix_Chunk *sound);
 
 		void play() override;
+
+		void pause() override;
+
+		void resume() override;
+
+		void stop() override;
+
+		int get_volume() override;
+
+		void set_volume(int volume) override;
 		
 		~SDLSound2D();
 
 		private:
 		Mix_Chunk *sound;
+		int channel;
 	};
 }
 

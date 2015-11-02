@@ -9,9 +9,10 @@
 
 namespace Diamond {
 	namespace AudioManager2D {
+		// TODO: getting and setting master volume
 
 		/**
-		 Loads a sound file as a sound effect. Currently only WAV files are supported.
+		 Loads a sound file as a sound effect.
 		 Returns nullptr if sound failed to load.
 		*/
 		Sound2D *load_sound(std::string path);
