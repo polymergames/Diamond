@@ -3,6 +3,7 @@
 */
 
 #include "Vector2.h"
+
 using Diamond::Vector2;
 
 Diamond::Vector2::Vector2() : x(0), y(0) {}

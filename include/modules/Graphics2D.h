@@ -5,20 +5,22 @@
 #ifndef D_GRAPHICS_2D_H
 #define D_GRAPHICS_2D_H
 
-#include <iostream>
 #include <memory>
-#include "Config.h"
 #include "Renderer2D.h"
 
 namespace Diamond {
 	class Graphics2D {
 		public:
 		
+		/**
+		 Loads an image file as a texture.
+		 Returns nullptr if texture failed to load.
+		*/
 		static Texture *load_texture(std::string path);
 		
 		// Don't call unless you know what you're doing!
-		static void setRenderer(Renderer2D *renderer);
-		static bool init_renderer();
+		static void set_renderer(Renderer2D *renderer);
+		static bool init_renderer(); // returns whether initialization was successful
 		static void render();
 		static void gen_render_obj(GameObject2D *parent, Texture *texture);
 		static void activate_render_obj(unsigned long index);

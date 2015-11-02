@@ -6,8 +6,9 @@
 #define D_SDL_INPUT_H
 
 #include <map>
-#include "Input.h"
 #include "SDL.h"
+
+#include "Input.h"
 
 namespace Diamond {
 	namespace SDLInput {

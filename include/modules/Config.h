@@ -8,16 +8,25 @@
 #include <string>
 
 namespace Diamond {
+	enum {MONO, STEREO};
+
 	struct RGBA {
 		int  r, g, b, a;
 	};
 	
 	struct Config {
 		std::string game_name = "A Game Without a Name";
+
+		// Graphics settings
 		int window_width = 1280;
 		int window_height = 720;
 		bool vsync = false;
 		RGBA bg_color = RGBA{0, 0, 0, 100};
+
+		// Audio settings
+		int audio_channels = STEREO;
+		long audio_out_freq = 44100; // in hertz
+		long audio_out_sample_size = 2048; // in bytes
 	};
 }
 

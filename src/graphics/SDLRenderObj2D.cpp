@@ -3,6 +3,7 @@
 */
 
 #include "SDLRenderObj2D.h"
+
 #include "SDLTexture.h"
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(GameObject2D *parent, Texture *texture) : RenderObj2D(parent), flip(SDL_FLIP_NONE) {
@@ -21,11 +22,11 @@ void Diamond::SDLRenderObj2D::flip_y() {
 	flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_VERTICAL);
 }
 
-bool Diamond::SDLRenderObj2D::is_flipped_x() {
+int Diamond::SDLRenderObj2D::is_flipped_x() {
 	return flip & SDL_FLIP_HORIZONTAL;
 }
 
-bool Diamond::SDLRenderObj2D::is_flipped_y() {
+int Diamond::SDLRenderObj2D::is_flipped_y() {
 	return flip & SDL_FLIP_VERTICAL;
 }
 

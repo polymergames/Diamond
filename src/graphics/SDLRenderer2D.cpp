@@ -3,9 +3,11 @@
 */
 
 #include "SDLRenderer2D.h"
+
 #include <iostream>
-#include "Launcher.h"
 #include "SDL_image.h"
+
+#include "Launcher.h"
 #include "SDLInput.h"
 #include "SDLTexture.h"
 
@@ -18,7 +20,7 @@ Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {
 
 bool Diamond::SDLRenderer2D::init() {
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		// TODO: Handle initialization failure and log
 		std::cout << "SDL failed to initialize! SDL Error: " << SDL_GetError() << std::endl;
 		return false;
@@ -41,6 +43,7 @@ bool Diamond::SDLRenderer2D::init() {
 		std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
+	SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a);
 
 	// Initialize image loading
 	int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -61,7 +64,7 @@ void Diamond::SDLRenderer2D::render() {
 	}
 
 	// Render all the graphics
-	SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a); // reset color
+	//SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a); // reset color
 	SDL_RenderClear(renderer);
 	for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
 		//std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG
@@ -74,14 +77,14 @@ void Diamond::SDLRenderer2D::render() {
 
 Diamond::Texture *Diamond::SDLRenderer2D::load_texture(std::string path) {
 	SDL_Surface* surface = IMG_Load(path.c_str());
-	if (surface == nullptr) {
+	if (surface == NULL) {
 		// TODO: Handle image loading failure and log
 		std::cout << "Failed to load image " << path << "! SDL_image Error: " << IMG_GetError() << std::endl;
 		return nullptr;
 	}
 	
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-	if (texture == nullptr) {
+	if (texture == NULL) {
 		// TODO: Handle texture creation failure and log
 		std::cout << "Failed to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
 		return nullptr;

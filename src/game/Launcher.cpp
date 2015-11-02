@@ -3,6 +3,7 @@
 */
 
 #include "Launcher.h"
+
 #include "DesktopLogger.h"
 #include "SDLRenderer2D.h"
 
@@ -38,7 +39,7 @@ void Diamond::Launcher::launch(Game &game) {
 void Diamond::Launcher::init_win32() {
 	Diamond::Log::setLogger(new DesktopLogger());
 
-	Diamond::Graphics2D::setRenderer(new SDLRenderer2D());
+	Diamond::Graphics2D::set_renderer(new SDLRenderer2D());
 	if (!Graphics2D::init_renderer()) {
 		// TODO: Handle render initialization failure
 	}

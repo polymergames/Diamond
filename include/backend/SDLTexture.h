@@ -6,8 +6,9 @@
 #define D_SDL_TEXTURE_H
 
 #include <memory>
-#include "Texture.h"
 #include "SDL.h"
+
+#include "Texture.h"
 
 namespace Diamond {
 	class SDLTexture : public Texture {

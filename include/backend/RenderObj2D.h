@@ -20,8 +20,8 @@ namespace Diamond {
 
 		virtual void flip_x() = 0;
 		virtual void flip_y() = 0;
-		virtual bool is_flipped_x() = 0;
-		virtual bool is_flipped_y() = 0;
+		virtual int is_flipped_x() = 0;
+		virtual int is_flipped_y() = 0;
 
 		virtual ~RenderObj2D();
 	};

@@ -3,6 +3,7 @@
 */
 
 #include "GameObject2D.h"
+
 #include "Graphics2D.h"
 #include "Launcher.h"
 #include "RenderObj2D.h"
@@ -67,12 +68,12 @@ void Diamond::GameObject2D::flip_y() {
 	if (render_obj != nullptr)	render_obj->flip_y();
 }
 
-bool Diamond::GameObject2D::is_flipped_x() {
+int Diamond::GameObject2D::is_flipped_x() {
 	if (render_obj != nullptr)	return render_obj->is_flipped_x();
 	return false;
 }
 
-bool Diamond::GameObject2D::is_flipped_y() {
+int Diamond::GameObject2D::is_flipped_y() {
 	if (render_obj != nullptr)	return render_obj->is_flipped_y();
 	return false;
 }

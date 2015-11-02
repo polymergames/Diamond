@@ -6,6 +6,7 @@
 #define D_RENDERER_2D_H
 
 #include <iostream>
+
 #include "GameObject2D.h"
 
 namespace Diamond {

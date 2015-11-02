@@ -35,8 +35,8 @@ namespace Diamond {
 		void flip_x();
 		void flip_y();
 		
-		bool is_flipped_x();
-		bool is_flipped_y();
+		int is_flipped_x();
+		int is_flipped_y();
 
 		/**
 		 Returns whether this game object's sprite is currently being rendered.
@@ -63,7 +63,7 @@ namespace Diamond {
 		/**
 		 Updates the render object's parent pointer to point to this game object.
 		 Call this if this game object's address has changed (might happen if, for ex, you store your gameobjects in a vector).
-		 */
+		*/
 		void re_adopt_render_obj();
 
 		/**

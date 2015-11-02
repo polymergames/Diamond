@@ -3,8 +3,10 @@
 */
 
 #include "SDLInput.h"
+
 #include "Input.h"
 #include "Launcher.h"
+
 using namespace Diamond;
 
 std::map<SDL_Keycode, Input::KEY> Diamond::SDLInput::keymap = {

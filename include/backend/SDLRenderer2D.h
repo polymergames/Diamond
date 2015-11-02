@@ -6,9 +6,10 @@
 #define D_SDL_RENDERER_2D_H
 
 #include <vector>
+#include "SDL.h"
+
 #include "Config.h"
 #include "Renderer2D.h"
-#include "SDL.h"
 #include "SDLRenderObj2D.h"
 
 namespace Diamond {

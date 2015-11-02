@@ -5,8 +5,9 @@
 #ifndef D_SDL_RENDER_OBJ_2D_H
 #define D_SDL_RENDER_OBJ_2D_H
 
-#include "RenderObj2D.h"
 #include "SDL.h"
+
+#include "RenderObj2D.h"
 #include "SDLTexture.h"
 
 namespace Diamond {
@@ -17,13 +18,13 @@ namespace Diamond {
 
 		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
 
-		void set_texture(Texture *texture);
+		void set_texture(Texture *texture) override;
 
-		void flip_x();
-		void flip_y();
+		void flip_x() override;
+		void flip_y() override;
 
-		bool is_flipped_x();
-		bool is_flipped_y();
+		int is_flipped_x() override;
+		int is_flipped_y() override;
 
 		void render(SDL_Renderer *renderer);
 		
