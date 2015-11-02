@@ -2,10 +2,10 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#include "Game.h"
-#include "Launcher.h"
-#include "Input.h"
-#include "SDLInput.h"
+#include "D_Game.h"
+#include "D_Launcher.h"
+#include "D_Input.h"
+#include "D_SDLInput.h"
 using namespace Diamond;
 
 class Demo : public Game {
