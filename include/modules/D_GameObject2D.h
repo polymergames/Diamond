@@ -17,14 +17,19 @@ namespace Diamond {
 		public:
 		GameObject2D();
 		GameObject2D(std::shared_ptr<Texture> sprite);
+		GameObject2D(const GameObject2D &other);
+		GameObject2D(GameObject2D &&other);
 
-		std::shared_ptr<Texture> get_sprite();
+		GameObject2D &operator=(const GameObject2D &other);
+		GameObject2D &operator=(GameObject2D &&other);
+
+		std::shared_ptr<Texture> get_sprite() const;
 		void set_sprite(std::shared_ptr<Texture> sprite);
 
 		/**
 		 Returns a COPY of this game object's transform if it has one, or returns a new transform.
 		*/
-		Transform2 get_transform();
+		Transform2 get_transform() const;
 		
 		void set_transform(Transform2 &transform);
 		void set_transform(Vector2 &position);
@@ -36,13 +41,13 @@ namespace Diamond {
 		void flip_x();
 		void flip_y();
 		
-		int is_flipped_x();
-		int is_flipped_y();
+		int is_flipped_x() const;
+		int is_flipped_y() const;
 
 		/**
 		 Returns whether this game object's sprite is currently being rendered.
 		*/
-		bool is_visible();
+		bool is_visible() const;
 
 		/**
 		 Causes this game object to be rendered.
@@ -71,6 +76,7 @@ namespace Diamond {
 		 Do not call unless you know what you're doing!
 		*/
 		void set_render_obj(RenderObj2D *render_obj);
+		void destroy_render_obj();
 
 		~GameObject2D();
 

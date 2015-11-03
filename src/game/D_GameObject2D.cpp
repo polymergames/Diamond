@@ -14,7 +14,64 @@ Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sp
 	Graphics2D::gen_render_obj(this, sprite.get());
 }
 
-std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::get_sprite() {
+// TODO: test
+Diamond::GameObject2D::GameObject2D(const GameObject2D &other) : sprite(other.sprite), render_obj(nullptr) {
+	if (sprite != nullptr) {
+		visible = true;
+		Graphics2D::gen_render_obj(this, sprite.get());
+	}
+	else {
+		visible = false;
+	}
+}
+
+// TODO: test
+Diamond::GameObject2D::GameObject2D(GameObject2D &&other) : sprite(other.sprite), render_obj(other.render_obj), visible(other.visible) {
+	re_adopt_render_obj();
+
+	other.sprite = nullptr;
+	other.render_obj = nullptr;
+	other.visible = false;
+}
+
+// TODO: test
+Diamond::GameObject2D &Diamond::GameObject2D::operator=(const GameObject2D &other) {
+	if (this != &other) {
+		destroy_render_obj();
+
+		sprite = other.sprite;
+		if (sprite != nullptr) {
+			visible = true;
+			Graphics2D::gen_render_obj(this, sprite.get());
+		}
+		else {
+			visible = false;
+		}
+	}
+
+	return *this;
+}
+
+// TODO: test
+Diamond::GameObject2D &Diamond::GameObject2D::operator=(GameObject2D &&other) {
+	if (this != &other) {
+		destroy_render_obj();
+
+		sprite = other.sprite;
+		render_obj = other.render_obj;
+		visible = other.visible;
+
+		re_adopt_render_obj();
+
+		other.sprite = nullptr;
+		other.render_obj = nullptr;
+		other.visible = false;
+	}
+
+	return *this;
+}
+
+std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::get_sprite() const {
 	return sprite;
 }
 
@@ -24,7 +81,7 @@ void Diamond::GameObject2D::set_sprite(std::shared_ptr<Texture> sprite) {
 	else    Graphics2D::gen_render_obj(this, sprite.get());
 }
 
-Diamond::Transform2 Diamond::GameObject2D::get_transform() {
+Diamond::Transform2 Diamond::GameObject2D::get_transform() const {
 	return render_obj != nullptr ? render_obj->transform : Transform2();
 }
 
@@ -68,33 +125,35 @@ void Diamond::GameObject2D::flip_y() {
 	if (render_obj != nullptr)	render_obj->flip_y();
 }
 
-int Diamond::GameObject2D::is_flipped_x() {
+int Diamond::GameObject2D::is_flipped_x() const {
 	if (render_obj != nullptr)	return render_obj->is_flipped_x();
 	return false;
 }
 
-int Diamond::GameObject2D::is_flipped_y() {
+int Diamond::GameObject2D::is_flipped_y() const {
 	if (render_obj != nullptr)	return render_obj->is_flipped_y();
 	return false;
 }
 
-bool Diamond::GameObject2D::is_visible() {
+bool Diamond::GameObject2D::is_visible() const {
 	return visible;
 }
 
 bool Diamond::GameObject2D::make_visible() {
 	if (render_obj != nullptr) {
-		visible = true;
+		if (visible) return true;
 		Graphics2D::activate_render_obj(render_obj->index);
-		return true;
+		return visible = true;
 	}
-	return false;
+	return visible = false;
 }
 
 void Diamond::GameObject2D::make_invisible() {
-	visible = false;
-	if (render_obj != nullptr) {
-		Graphics2D::deactivate_render_obj(render_obj->index);
+	if (visible) {
+		visible = false;
+		if (render_obj != nullptr) {
+			Graphics2D::deactivate_render_obj(render_obj->index);
+		}
 	}
 }
 
@@ -109,15 +168,26 @@ bool Diamond::GameObject2D::toggle_visibility() {
 }
 
 void Diamond::GameObject2D::re_adopt_render_obj() {
-	render_obj->parent = this;
+	if(render_obj != nullptr)	render_obj->parent = this;
 }
 
 void Diamond::GameObject2D::set_render_obj(RenderObj2D *render_obj) {
 	this->render_obj = render_obj;
 }
 
-Diamond::GameObject2D::~GameObject2D() {
-	if (Launcher::is_open && render_obj != nullptr) { // TODO: find exception-safer method of memory management. ie it's possible that render_obj has been destroyed/game has ended/crashed even if is_open = true
-		Graphics2D::destroy_render_obj(render_obj->index);
+void Diamond::GameObject2D::destroy_render_obj() {
+	if (render_obj != nullptr) {
+		if (visible) {
+			Graphics2D::destroy_render_obj(render_obj->index);
+		}
+		else {
+			Graphics2D::destroy_inactive_render_obj(render_obj->index);
+		}
 	}
+	render_obj = nullptr;
+}
+
+Diamond::GameObject2D::~GameObject2D() {
+	// TODO: find exception-safer method of memory management. ie it's possible that render_obj has been destroyed/game has ended/crashed even if is_open = true
+	if (Launcher::is_open)	destroy_render_obj();
 }

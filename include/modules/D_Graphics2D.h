@@ -25,6 +25,7 @@ namespace Diamond {
 		void activate_render_obj(unsigned long index);
 		void deactivate_render_obj(unsigned long index);
 		void destroy_render_obj(unsigned long index);
+		void destroy_inactive_render_obj(unsigned long index);
 	};
 }
 

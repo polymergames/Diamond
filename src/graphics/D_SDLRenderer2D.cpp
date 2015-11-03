@@ -128,6 +128,15 @@ void Diamond::SDLRenderer2D::destroy_render_obj(unsigned long index) {
 	render_objects.pop_back();
 }
 
+void Diamond::SDLRenderer2D::destroy_inactive_render_obj(unsigned long index) {
+	if (index < inactive_render_objects.size() - 1) { // If in middle of vector, replace it with the last render object in vector
+		inactive_render_objects[index] = inactive_render_objects.back();
+		inactive_render_objects[index].arm_parent();
+		inactive_render_objects[index].index = index;
+	}
+	inactive_render_objects.pop_back();
+}
+
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
@@ -149,13 +158,4 @@ void Diamond::SDLRenderer2D::reserve_r_obj_vec(std::vector<SDLRenderObj2D> &v) {
 			i->arm_parent();
 		}
 	}
-}
-
-void Diamond::SDLRenderer2D::destroy_inactive_render_obj(unsigned long index) {
-	if (index < inactive_render_objects.size() - 1) { // If in middle of vector, replace it with the last render object in vector
-		inactive_render_objects[index] = inactive_render_objects.back();
-		inactive_render_objects[index].arm_parent();
-		inactive_render_objects[index].index = index;
-	}
-	inactive_render_objects.pop_back();
 }

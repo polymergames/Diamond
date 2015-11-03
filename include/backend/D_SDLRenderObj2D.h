@@ -13,8 +13,6 @@
 namespace Diamond {
 	class SDLRenderObj2D : public RenderObj2D {
 		public:
-		SDLTexture *texture;
-		SDL_RendererFlip flip;
 
 		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
 
@@ -29,6 +27,10 @@ namespace Diamond {
 		void render(SDL_Renderer *renderer);
 		
 		void arm_parent();
+
+		private:
+		SDLTexture *texture;
+		SDL_RendererFlip flip;
 	};
 }
 

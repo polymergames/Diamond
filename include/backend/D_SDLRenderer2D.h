@@ -50,6 +50,8 @@ namespace Diamond {
 		 Removes the render object at the given index from the rendering vector.
 		*/
 		void destroy_render_obj(unsigned long index);
+		
+		void destroy_inactive_render_obj(unsigned long index);
 
 		/**
 		 Destroys window and renderer and shuts down SDL and SDL extensions.
@@ -65,7 +67,6 @@ namespace Diamond {
 		std::vector<SDLRenderObj2D> inactive_render_objects;
 
 		void reserve_r_obj_vec(std::vector<SDLRenderObj2D> &v);
-		void destroy_inactive_render_obj(unsigned long index);
 	};
 }
 

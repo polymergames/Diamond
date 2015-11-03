@@ -43,3 +43,7 @@ void Diamond::Graphics2D::deactivate_render_obj(unsigned long index) {
 void Diamond::Graphics2D::destroy_render_obj(unsigned long index) {
 	renderer->destroy_render_obj(index);
 }
+
+void Diamond::Graphics2D::destroy_inactive_render_obj(unsigned long index) {
+	renderer->destroy_inactive_render_obj(index);
+}
