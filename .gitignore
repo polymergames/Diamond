@@ -2,6 +2,7 @@
 *.sln
 *.vcxproj
 *.filters
+/android-project
 
 # User-specific files
 *.suo

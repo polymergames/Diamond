@@ -6,6 +6,9 @@
 #define D_SOUND_2D_H
 
 namespace Diamond {
+	/**
+	 If using the SDL sound implementation, see D_SDLSound2D.h for an important note on the reliability of some functions.
+	*/
 	class Sound2D {
 		public:
 		// TODO: bool is_playing()
@@ -19,7 +22,10 @@ namespace Diamond {
 		virtual void stop() = 0;
 
 		virtual int get_volume() = 0;
-
+		
+		/**
+		 Note: you can use the get_max_volume() function in AudioManager2D to scale your volume values.
+		*/
 		virtual void set_volume(int volume) = 0;
 
 		virtual ~Sound2D() {};

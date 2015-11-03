@@ -14,6 +14,22 @@ namespace Diamond {
 
 		Sound2D *load_sound(std::string path) override;
 
+		Music *load_music(std::string path) override;
+
+		int get_max_volume() override;
+
+		void pause_music() override;
+
+		void resume_music() override;
+
+		void stop_music() override;
+
+		bool is_music_playing() override;
+
+		int get_music_volume() override;
+
+		void set_music_volume(int volume) override;
+
 		~SDLDiskJockey2D();
 	};
 }
