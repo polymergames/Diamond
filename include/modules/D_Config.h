@@ -25,8 +25,8 @@ namespace Diamond {
 
 		// Audio settings
 		audio_channels_t audio_channels = STEREO;
-		long audio_out_freq = 44100; // in hertz
-		long audio_out_sample_size = 2048; // in bytes
+		int audio_out_freq = 44100; // in hertz
+		int audio_out_sample_size = 2048; // in bytes
 	};
 }
 
