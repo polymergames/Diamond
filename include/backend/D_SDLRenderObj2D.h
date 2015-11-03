@@ -21,8 +21,8 @@ namespace Diamond {
 		void flip_x() override;
 		void flip_y() override;
 
-		int is_flipped_x() override;
-		int is_flipped_y() override;
+		int is_flipped_x() const override;
+		int is_flipped_y() const override;
 
 		void render(SDL_Renderer *renderer);
 		

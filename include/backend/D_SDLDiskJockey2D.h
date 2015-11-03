@@ -16,7 +16,7 @@ namespace Diamond {
 
 		Music *load_music(std::string path) override;
 
-		int get_max_volume() override;
+		int get_max_volume() const override;
 
 		void pause_music() override;
 
@@ -24,9 +24,9 @@ namespace Diamond {
 
 		void stop_music() override;
 
-		bool is_music_playing() override;
+		bool is_music_playing() const override;
 
-		int get_music_volume() override;
+		int get_music_volume() const override;
 
 		void set_music_volume(int volume) override;
 

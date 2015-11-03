@@ -22,11 +22,11 @@ void Diamond::SDLRenderObj2D::flip_y() {
 	flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_VERTICAL);
 }
 
-int Diamond::SDLRenderObj2D::is_flipped_x() {
+int Diamond::SDLRenderObj2D::is_flipped_x() const {
 	return flip & SDL_FLIP_HORIZONTAL;
 }
 
-int Diamond::SDLRenderObj2D::is_flipped_y() {
+int Diamond::SDLRenderObj2D::is_flipped_y() const {
 	return flip & SDL_FLIP_VERTICAL;
 }
 

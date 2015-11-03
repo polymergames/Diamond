@@ -15,7 +15,6 @@ namespace Diamond {
 
 	class GameObject2D {
 		public:
-		GameObject2D();
 		GameObject2D(std::shared_ptr<Texture> sprite);
 		GameObject2D(const GameObject2D &other);
 		GameObject2D(GameObject2D &&other);
@@ -27,7 +26,7 @@ namespace Diamond {
 		void set_sprite(std::shared_ptr<Texture> sprite);
 
 		/**
-		 Returns a COPY of this game object's transform if it has one, or returns a new transform.
+		 Returns a COPY of this game object's transform.
 		*/
 		Transform2 get_transform() const;
 		
@@ -52,9 +51,8 @@ namespace Diamond {
 		/**
 		 Causes this game object to be rendered.
 		 This game object must have a sprite (use set_sprite() if needed) before calling this function.
-		 Returns whether this game object was successfully made visible.		 
 		*/
-		bool make_visible();
+		void make_visible();
 
 		/**
 		 Causes this game object to stop being rendered.
@@ -64,7 +62,7 @@ namespace Diamond {
 		/**
 		 If this game object is currently visible, makes it invisible (ie not rendered), and vice versa.
 		*/
-		bool toggle_visibility();
+		void toggle_visibility();
 		
 		/**
 		 Updates the render object's parent pointer to point to this game object.

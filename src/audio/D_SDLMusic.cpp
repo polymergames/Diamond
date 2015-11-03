@@ -27,7 +27,7 @@ void Diamond::SDLMusic::set_loop(bool loop) {
 	loop ? this->loop = -1 : this->loop = 1;
 }
 
-int Diamond::SDLMusic::get_volume() {
+int Diamond::SDLMusic::get_volume() const {
 	return Mix_VolumeMusic(-1);
 }
 

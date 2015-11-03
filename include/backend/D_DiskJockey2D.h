@@ -19,7 +19,7 @@ namespace Diamond {
 
 		virtual Music *load_music(std::string path) = 0;
 
-		virtual int get_max_volume() = 0;
+		virtual int get_max_volume() const = 0;
 
 		virtual void pause_music() = 0;
 
@@ -27,9 +27,9 @@ namespace Diamond {
 
 		virtual void stop_music() = 0;
 
-		virtual bool is_music_playing() = 0;
+		virtual bool is_music_playing() const = 0;
 
-		virtual int get_music_volume() = 0;
+		virtual int get_music_volume() const = 0;
 
 		virtual void set_music_volume(int volume) = 0;
 

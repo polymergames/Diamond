@@ -21,7 +21,7 @@ namespace Diamond {
 
 		virtual void stop() = 0;
 
-		virtual int get_volume() = 0;
+		virtual int get_volume() const = 0;
 		
 		/**
 		 Note: you can use the get_max_volume() function in AudioManager2D to scale your volume values.

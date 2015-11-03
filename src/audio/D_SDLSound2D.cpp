@@ -23,7 +23,7 @@ void Diamond::SDLSound2D::stop() {
 	Mix_HaltChannel(channel);
 }
 
-int Diamond::SDLSound2D::get_volume() {
+int Diamond::SDLSound2D::get_volume() const {
 	return Mix_VolumeChunk(sound, -1);
 }
 

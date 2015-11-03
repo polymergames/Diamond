@@ -28,7 +28,7 @@ namespace Diamond {
 
 		void set_loop(bool loop) override;
 
-		int get_volume() override;
+		int get_volume() const override;
 
 		void set_volume(int volume) override;
 

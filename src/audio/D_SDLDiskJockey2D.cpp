@@ -42,7 +42,7 @@ Diamond::Music *Diamond::SDLDiskJockey2D::load_music(std::string path) {
 	return new SDLMusic(music);
 }
 
-int Diamond::SDLDiskJockey2D::get_max_volume() {
+int Diamond::SDLDiskJockey2D::get_max_volume() const {
 	return MIX_MAX_VOLUME;
 }
 
@@ -58,11 +58,11 @@ void Diamond::SDLDiskJockey2D::stop_music() {
 	Mix_HaltMusic();
 }
 
-bool Diamond::SDLDiskJockey2D::is_music_playing() {
+bool Diamond::SDLDiskJockey2D::is_music_playing() const {
 	return Mix_PlayingMusic() ? !Mix_PausedMusic() : false;
 }
 
-int Diamond::SDLDiskJockey2D::get_music_volume() {
+int Diamond::SDLDiskJockey2D::get_music_volume() const {
 	return Mix_VolumeMusic(-1);
 }
 
