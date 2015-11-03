@@ -7,7 +7,9 @@
 #include <memory>
 
 namespace Diamond {
-	static std::unique_ptr<Diamond::DiskJockey2D> dj = nullptr;
+	namespace AudioManager2D {
+		static std::unique_ptr<Diamond::DiskJockey2D> dj = nullptr;
+	}
 }
 
 Diamond::Sound2D *Diamond::AudioManager2D::load_sound(std::string path) {
@@ -47,7 +49,7 @@ void Diamond::AudioManager2D::set_music_volume(int volume) {
 }
 
 void Diamond::AudioManager2D::set_dj(Diamond::DiskJockey2D *dj) {
-	Diamond::dj = std::unique_ptr<DiskJockey2D>(dj);
+	AudioManager2D::dj = std::unique_ptr<DiskJockey2D>(dj);
 }
 
 bool Diamond::AudioManager2D::init_dj() {

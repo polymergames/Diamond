@@ -5,13 +5,8 @@
 #ifndef D_LAUNCHER_H
 #define D_LAUNCHER_H
 
-#include <iostream>
-#include <memory>
-
 #include "D_Config.h"
 #include "D_Game.h"
-#include "D_Graphics2D.h"
-#include "D_Log.h"
 
 namespace Diamond {
 	class Launcher {

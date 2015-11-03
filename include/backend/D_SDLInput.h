@@ -12,7 +12,6 @@
 
 namespace Diamond {
 	namespace SDLInput {
-		extern std::map<SDL_Keycode, Input::KEY> keymap;
 		void handle(SDL_Event &e);
 	}
 }

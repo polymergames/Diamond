@@ -2,8 +2,8 @@
  Copyright (c) 2015 Polymer Games
 */
 
-#ifndef SDL_DISK_JOCKEY_2D_H
-#define SDL_DISK_JOCKEY_2D_H
+#ifndef D_SDL_DISK_JOCKEY_2D_H
+#define D_SDL_DISK_JOCKEY_2D_H
 
 #include "D_DiskJockey2D.h"
 
@@ -34,4 +34,4 @@ namespace Diamond {
 	};
 }
 
-#endif // SDL_DISK_JOCKEY_2D_H
+#endif // D_SDL_DISK_JOCKEY_2D_H

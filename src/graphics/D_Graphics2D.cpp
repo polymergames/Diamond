@@ -4,7 +4,11 @@
 
 #include "D_Graphics2D.h"
 
-std::unique_ptr<Diamond::Renderer2D> Diamond::Graphics2D::renderer = nullptr;
+namespace Diamond {
+	namespace Graphics2D {
+		static std::unique_ptr<Diamond::Renderer2D> renderer = nullptr;
+	}
+}
 
 Diamond::Texture *Diamond::Graphics2D::load_texture(std::string path) {
 	return renderer->load_texture(path);
