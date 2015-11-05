@@ -43,7 +43,7 @@ void Diamond::Launcher::launch(Game &game) {
 }
 
 void Diamond::Launcher::init_win32() {
-	Log::setLogger(new DesktopLogger());
+	Log::set_logger(new DesktopLogger());
 
 	Graphics2D::set_renderer(new SDLRenderer2D());
 	if (!Graphics2D::init_renderer()) {

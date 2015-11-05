@@ -5,8 +5,12 @@
 
 #include "D_Logger.h"
 
-std::unique_ptr<Diamond::Logger> Diamond::Log::logger = nullptr;
+namespace Diamond {
+	namespace Log {
+		static std::unique_ptr<Logger> logger = nullptr;
+	}
+}
 
-void Diamond::Log::setLogger(Logger *logger) {
+void Diamond::Log::set_logger(Logger *logger) {
 	Log::logger = std::unique_ptr<Logger>(logger);
 }

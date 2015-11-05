@@ -7,15 +7,14 @@
 
 #include <memory>
 
+#include "D_Logger.h"
+
 namespace Diamond {
-	class Logger;
-
-	class Log {
-		public:
-		static void setLogger(Logger *logger);
-
-		private:
-		static std::unique_ptr<Logger> logger;
+	namespace Log {
+		
+		// Don't call unless you know what you're doing!
+		void set_logger(Logger *logger);
+		
 	};
 }
 

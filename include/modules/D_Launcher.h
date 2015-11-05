@@ -9,19 +9,17 @@
 #include "D_Game.h"
 
 namespace Diamond {
-	class Launcher {
-		public:
-		static bool is_open;
+	namespace Launcher {
+		extern bool is_open;
 		
-		static struct Config config;
+		extern Config config;
 
 		/**
 		 Call only once, at beginning of game!
 		*/
-		static void launch(Game &game);
+		void launch(Game &game);
 
-		private:
-		static void init_win32();
+		void init_win32();
 	};
 }
 
