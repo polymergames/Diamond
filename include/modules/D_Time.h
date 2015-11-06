@@ -11,7 +11,9 @@ namespace Diamond {
 
 		float seconds_since_start();
 
-		// Do not call unless you know what you're doing!
+		/**
+		 Called by Diamond launcher to set the platform-specific timing implementation.
+		*/
 		void set_timer(Timer *timer);
 	};
 }

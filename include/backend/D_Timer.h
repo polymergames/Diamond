@@ -8,6 +8,7 @@
 namespace Diamond {
 	class Timer {
 		public:
+
 		virtual float seconds_since_start() = 0;
 
 		~Timer() {};

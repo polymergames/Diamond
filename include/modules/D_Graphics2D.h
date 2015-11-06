@@ -21,9 +21,8 @@ namespace Diamond {
 		*/
 		Texture *load_texture(std::string path);
 		
-		// Don't call unless you know what you're doing!
-		void set_renderer(Renderer2D *renderer);
-		bool init_renderer(); // returns whether initialization was successful
+		// TODO: move functions like load_texture to a public resource management header, and move these to a backend header (ie not visible to users)
+		bool init_renderer(Renderer2D *renderer); // returns whether initialization was successful
 		void render();
 		void gen_render_obj(GameObject2D *parent, Texture *texture);
 		void activate_render_obj(unsigned long index);

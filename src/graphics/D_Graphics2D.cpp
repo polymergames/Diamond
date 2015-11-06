@@ -18,13 +18,11 @@ Diamond::Texture *Diamond::Graphics2D::load_texture(std::string path) {
 	return renderer->load_texture(path);
 }
 
-void Diamond::Graphics2D::set_renderer(Renderer2D *renderer) {
-	Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
-}
-
-bool Diamond::Graphics2D::init_renderer() {
-	if (renderer != nullptr)
+bool Diamond::Graphics2D::init_renderer(Renderer2D *renderer) {
+	if (Graphics2D::renderer == nullptr && renderer != nullptr) {
+		Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
 		return renderer->init();
+	}
 	return false;
 }
 

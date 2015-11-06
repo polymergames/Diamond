@@ -13,3 +13,8 @@ namespace Diamond {
 		std::unique_ptr<Timer> timer = nullptr;
 	}
 }
+
+void Diamond::Time::set_timer(Timer *timer) {
+	if (Time::timer == nullptr && timer != nullptr)
+		Time::timer = std::unique_ptr<Timer>(timer);
+}

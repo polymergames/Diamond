@@ -24,13 +24,11 @@ namespace Diamond {
 		static void init_desktop() {
 			Log::set_logger(new DesktopLogger());
 
-			Graphics2D::set_renderer(new SDLRenderer2D());
-			if (!Graphics2D::init_renderer()) {
-				// TODO: Handle render initialization failure
+			if (!Graphics2D::init_renderer(new SDLRenderer2D())) {
+				// TODO: Handle renderer initialization failure
 			}
 
-			AudioManager2D::set_dj(new SDLDiskJockey2D());
-			if (!AudioManager2D::init_dj()) {
+			if (!AudioManager2D::init_dj(new SDLDiskJockey2D())) {
 				// TODO: Handle audio initialization failure
 			}
 		}

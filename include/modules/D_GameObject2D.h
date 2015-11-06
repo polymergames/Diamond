@@ -74,7 +74,6 @@ namespace Diamond {
 		 Do not call unless you know what you're doing!
 		*/
 		void set_render_obj(RenderObj2D *render_obj);
-		void destroy_render_obj();
 
 		~GameObject2D();
 
@@ -82,6 +81,8 @@ namespace Diamond {
 		std::shared_ptr<Texture> sprite;
 		RenderObj2D *render_obj;
 		bool visible;
+
+		void destroy_render_obj();
 	};
 }
 

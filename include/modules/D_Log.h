@@ -9,7 +9,9 @@ namespace Diamond {
 	class Logger;
 	namespace Log {
 		
-		// Don't call unless you know what you're doing!
+		/**
+		 Called by Diamond launcher to set the platform-specific logging implementation.
+		*/
 		void set_logger(Logger *logger);
 		
 	};

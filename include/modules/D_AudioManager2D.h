@@ -63,9 +63,10 @@ namespace Diamond {
 		*/
 		void set_music_volume(int volume);
 
-		// Don't call unless you know what you're doing!
-		void set_dj(DiskJockey2D *dj);
-		bool init_dj(); // returns whether initialization was successful
+		/**
+		 Called by Diamond launcher to initialize sound.
+		*/
+		bool init_dj(DiskJockey2D *dj); // returns whether initialization was successful
 	};
 }
 
