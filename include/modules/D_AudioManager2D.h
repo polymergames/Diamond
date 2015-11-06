@@ -20,53 +20,53 @@ namespace Diamond {
 		 Loads an audio file as a sound effect.
 		 Returns nullptr if sound failed to load.
 		*/
-		Sound2D *load_sound(std::string path);
+		Sound2D *loadSound(std::string path);
 
 		/**
 		 Loads an audio file as a music track.
 		 Returns nullptr if music failed to load.
 		*/
-		Music *load_music(std::string path);
+		Music *loadMusic(std::string path);
 
 		/**
 		Returns the maximum volume value of the currently active sound system.
 		*/
-		int get_max_volume();
+		int getMaxVolume();
 
 		/**
 		 Pause all music that is currently playing.
 		*/
-		void pause_music();
+		void pauseMusic();
 
 		/**
 		 Resume active music if paused.
 		*/
-		void resume_music();
+		void resumeMusic();
 
 		/**
 		 Stops all music that is currently playing.
 		*/
-		void stop_music();
+		void stopMusic();
 
 		/**
 		 Returns whether any music is actively playing.
 		*/
-		bool is_music_playing();
+		bool isMusicPlaying();
 
 		/**
 		 Get the current volume of any actively playing music.
 		*/
-		int get_music_volume();
+		int getMusicVolume();
 
 		/**
 		 Set the volume for any music that is playing/will be played.
 		*/
-		void set_music_volume(int volume);
+		void setMusicVolume(int volume);
 
 		/**
 		 Called by Diamond launcher to initialize sound.
 		*/
-		bool init_dj(DiskJockey2D *dj); // returns whether initialization was successful
+		bool initDj(DiskJockey2D *dj); // returns whether initialization was successful
 	};
 }
 

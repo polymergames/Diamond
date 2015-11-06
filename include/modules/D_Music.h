@@ -28,14 +28,14 @@ namespace Diamond {
 		 Sets whether or not this music should loop.
 		 In some implementations (ie. SDL), this will only take effect the next time play() is called for this music.
 		*/
-		virtual void set_loop(bool loop) = 0;
+		virtual void setLoop(bool loop) = 0;
 
-		virtual int get_volume() const = 0;
+		virtual int getVolume() const = 0;
 
 		/**
-		 Note: you can use the get_max_volume() function in AudioManager2D to scale your volume values.
+		 Note: you can use the getMaxVolume() function in AudioManager2D to scale your volume values.
 		*/
-		virtual void set_volume(int volume) = 0;
+		virtual void setVolume(int volume) = 0;
 
 		virtual ~Music() {};
 

@@ -24,7 +24,7 @@ namespace Diamond {
 		extern std::vector<bool> keydown;
 		extern std::vector<bool> keyup;
 		
-		void reset_keyup();
+		void resetKeyup();
 	}
 }
 

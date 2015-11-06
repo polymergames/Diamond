@@ -6,11 +6,11 @@
 
 Diamond::Texture::Texture(int width, int height) : width(width), height(height), color({255, 255, 255, 255}) {}
 
-Diamond::RGBA Diamond::Texture::get_color() const {
+Diamond::RGBA Diamond::Texture::getColor() const {
 	return color;
 }
 
-void Diamond::Texture::set_color(RGBA color) {
+void Diamond::Texture::setColor(RGBA color) {
 	this->color = color;
 }
 

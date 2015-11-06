@@ -19,12 +19,12 @@ namespace Diamond {
 
 		RenderObj2D(GameObject2D *parent);
 
-		virtual void set_texture(Texture *texture) = 0;
+		virtual void setTexture(Texture *texture) = 0;
 
-		virtual void flip_x() = 0;
-		virtual void flip_y() = 0;
-		virtual int is_flipped_x() const = 0;
-		virtual int is_flipped_y() const = 0;
+		virtual void flipX() = 0;
+		virtual void flipY() = 0;
+		virtual int isFlippedX() const = 0;
+		virtual int isFlippedY() const = 0;
 
 		virtual ~RenderObj2D();
 	};

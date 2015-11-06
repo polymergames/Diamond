@@ -19,16 +19,16 @@ namespace Diamond {
 		 Loads an image file as a texture.
 		 Returns nullptr if texture failed to load.
 		*/
-		Texture *load_texture(std::string path);
+		Texture *loadTexture(std::string path);
 		
-		// TODO: move functions like load_texture to a public resource management header, and move these to a backend header (ie not visible to users)
-		bool init_renderer(Renderer2D *renderer); // returns whether initialization was successful
-		void render();
-		void gen_render_obj(GameObject2D *parent, Texture *texture);
-		void activate_render_obj(unsigned long index);
-		void deactivate_render_obj(unsigned long index);
-		void destroy_render_obj(unsigned long index);
-		void destroy_inactive_render_obj(unsigned long index);
+		// TODO: move functions like loadTexture to a public resource management header, and move these to a backend header (ie not visible to users)
+		bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
+		void render(); // renders everything
+		void genRenderObj(GameObject2D *parent, Texture *texture);
+		void activateRenderObj(unsigned long index);
+		void deactivateRenderObj(unsigned long index);
+		void destroyRenderObj(unsigned long index);
+		void destroyInactiveRenderObj(unsigned long index);
 	};
 }
 

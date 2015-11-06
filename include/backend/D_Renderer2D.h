@@ -15,12 +15,12 @@ namespace Diamond {
 		public:
 		virtual bool init() = 0;
 		virtual void render() = 0;
-		virtual Texture *load_texture(std::string path) = 0;
-		virtual void gen_render_obj(GameObject2D *parent, Texture *texture) = 0;
-		virtual void activate_render_obj(unsigned long index) = 0;
-		virtual void deactivate_render_obj(unsigned long index) = 0;
-		virtual void destroy_render_obj(unsigned long index) = 0;
-		virtual void destroy_inactive_render_obj(unsigned long index) = 0;
+		virtual Texture *loadTexture(std::string path) = 0;
+		virtual void genRenderObj(GameObject2D *parent, Texture *texture) = 0;
+		virtual void activateRenderObj(unsigned long index) = 0;
+		virtual void deactivateRenderObj(unsigned long index) = 0;
+		virtual void destroyRenderObj(unsigned long index) = 0;
+		virtual void destroyInactiveRenderObj(unsigned long index) = 0;
 		virtual ~Renderer2D() {};
 	};
 }

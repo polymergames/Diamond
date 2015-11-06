@@ -12,9 +12,9 @@ namespace Diamond {
 		public:
 		Texture(int width, int height);
 		
-		virtual RGBA get_color() const;
+		virtual RGBA getColor() const;
 
-		virtual void set_color(RGBA color);
+		virtual void setColor(RGBA color);
 		
 		virtual ~Texture();
 

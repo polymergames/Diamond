@@ -34,23 +34,23 @@ namespace Diamond {
 		 Loads an image file as an SDL texture. Caller is responsible for ownership!
 		 Returns nullptr if texture failed to load.
 		*/
-		Texture *load_texture(std::string path) override;
+		Texture *loadTexture(std::string path) override;
 
 		/**
 		 Creates an SDLRenderObj2D, which is a rendering unit for the render loop.
 		*/
-		void gen_render_obj(GameObject2D *parent, Texture *texture) override;
+		void genRenderObj(GameObject2D *parent, Texture *texture) override;
 		
-		void activate_render_obj(unsigned long index) override;
+		void activateRenderObj(unsigned long index) override;
 		
-		void deactivate_render_obj(unsigned long index) override;
+		void deactivateRenderObj(unsigned long index) override;
 
 		/**
 		 Removes the render object at the given index from the rendering vector.
 		*/
-		void destroy_render_obj(unsigned long index) override;
+		void destroyRenderObj(unsigned long index) override;
 		
-		void destroy_inactive_render_obj(unsigned long index) override;
+		void destroyInactiveRenderObj(unsigned long index) override;
 
 		/**
 		 Destroys window and renderer and shuts down SDL and SDL extensions.
@@ -65,7 +65,7 @@ namespace Diamond {
 		std::vector<SDLRenderObj2D> render_objects;
 		std::vector<SDLRenderObj2D> inactive_render_objects;
 
-		void reserve_r_obj_vec(std::vector<SDLRenderObj2D> &v);
+		void reserveRObjVec(std::vector<SDLRenderObj2D> &v);
 	};
 }
 

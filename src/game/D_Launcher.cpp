@@ -25,18 +25,18 @@ namespace Diamond {
 		
 		static int nframes = 0;
 
-		static void init_desktop() {
-			Log::set_logger(new DesktopLogger());
+		static void initDesktop() {
+			Log::setLogger(new DesktopLogger());
 
-			if (!Graphics2D::init_renderer(new SDLRenderer2D())) {
+			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
 				// TODO: Handle renderer initialization failure
 			}
 
-			if (!AudioManager2D::init_dj(new SDLDiskJockey2D())) {
+			if (!AudioManager2D::initDj(new SDLDiskJockey2D())) {
 				// TODO: Handle audio initialization failure
 			}
 			
-			Time::set_timer(new SDLTimer());
+			Time::setTimer(new SDLTimer());
 		}
 	}
 }
@@ -47,7 +47,7 @@ void Diamond::Launcher::launch(Game &game) {
 #elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
 	// IOS launcher
 #elif defined _WIN32 || defined __APPLE__
-	init_desktop(); // Desktop launcher (windows/osx)
+	initDesktop(); // Desktop launcher (windows/osx)
 #else
 	// TODO: Log this using logger, and use a better RAII-compliant exit method! (ex. exceptions)
 	std::cout << "Platform unsupported!" << std::endl;
@@ -55,7 +55,7 @@ void Diamond::Launcher::launch(Game &game) {
 #endif
 
 	uint32_t time;
-	uint32_t last_time = Time::ms_elapsed();
+	uint32_t last_time = Time::msElapsed();
 	uint32_t delta;
 	
 	// Init game
@@ -65,7 +65,7 @@ void Diamond::Launcher::launch(Game &game) {
 	while (Launcher::is_open) {
 		nframes++;
 		
-		time = Time::ms_elapsed();
+		time = Time::msElapsed();
 		delta = time - last_time;
 		last_time = time;
 		

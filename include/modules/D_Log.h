@@ -12,7 +12,7 @@ namespace Diamond {
 		/**
 		 Called by Diamond launcher to set the platform-specific logging implementation.
 		*/
-		void set_logger(Logger *logger);
+		void setLogger(Logger *logger);
 		
 	};
 }

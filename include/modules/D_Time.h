@@ -16,12 +16,12 @@ namespace Diamond {
 		/**
 		 Returns the number of milliseconds elapsed since the game was launched.
 		*/
-		uint32_t ms_elapsed();
+		uint32_t msElapsed();
 
 		/**
 		 Called by Diamond launcher to set the platform-specific timing implementation.
 		*/
-		void set_timer(Timer *timer);
+		void setTimer(Timer *timer);
 	};
 }
 

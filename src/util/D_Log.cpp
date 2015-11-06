@@ -14,7 +14,7 @@ namespace Diamond {
 	}
 }
 
-void Diamond::Log::set_logger(Logger *logger) {
+void Diamond::Log::setLogger(Logger *logger) {
 	if (Log::logger == nullptr && logger != nullptr)
 		Log::logger = std::unique_ptr<Logger>(logger);
 }

@@ -14,43 +14,43 @@ namespace Diamond {
 	}
 }
 
-Diamond::Sound2D *Diamond::AudioManager2D::load_sound(std::string path) {
-	return dj->load_sound(path);
+Diamond::Sound2D *Diamond::AudioManager2D::loadSound(std::string path) {
+	return dj->loadSound(path);
 }
 
-Diamond::Music *Diamond::AudioManager2D::load_music(std::string path) {
-	return dj->load_music(path);
+Diamond::Music *Diamond::AudioManager2D::loadMusic(std::string path) {
+	return dj->loadMusic(path);
 }
 
-int Diamond::AudioManager2D::get_max_volume() {
-	return dj->get_max_volume();
+int Diamond::AudioManager2D::getMaxVolume() {
+	return dj->getMaxVolume();
 }
 
-void Diamond::AudioManager2D::pause_music() {
-	dj->pause_music();
+void Diamond::AudioManager2D::pauseMusic() {
+	dj->pauseMusic();
 }
 
-void Diamond::AudioManager2D::resume_music() {
-	dj->resume_music();
+void Diamond::AudioManager2D::resumeMusic() {
+	dj->resumeMusic();
 }
 
-void Diamond::AudioManager2D::stop_music() {
-	dj->stop_music();
+void Diamond::AudioManager2D::stopMusic() {
+	dj->stopMusic();
 }
 
-bool Diamond::AudioManager2D::is_music_playing() {
-	return dj->is_music_playing();
+bool Diamond::AudioManager2D::isMusicPlaying() {
+	return dj->isMusicPlaying();
 }
 
-int Diamond::AudioManager2D::get_music_volume() {
-	return dj->get_music_volume();
+int Diamond::AudioManager2D::getMusicVolume() {
+	return dj->getMusicVolume();
 }
 
-void Diamond::AudioManager2D::set_music_volume(int volume) {
-	dj->set_music_volume(volume);
+void Diamond::AudioManager2D::setMusicVolume(int volume) {
+	dj->setMusicVolume(volume);
 }
 
-bool Diamond::AudioManager2D::init_dj(DiskJockey2D *dj) {
+bool Diamond::AudioManager2D::initDj(DiskJockey2D *dj) {
 	if (AudioManager2D::dj == nullptr && dj != nullptr) {
 		AudioManager2D::dj = std::unique_ptr<DiskJockey2D>(dj);
 		return dj->init();

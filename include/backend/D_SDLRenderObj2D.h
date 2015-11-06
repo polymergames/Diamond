@@ -16,17 +16,17 @@ namespace Diamond {
 
 		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
 
-		void set_texture(Texture *texture) override;
+		void setTexture(Texture *texture) override;
 
-		void flip_x() override;
-		void flip_y() override;
+		void flipX() override;
+		void flipY() override;
 
-		int is_flipped_x() const override;
-		int is_flipped_y() const override;
+		int isFlippedX() const override;
+		int isFlippedY() const override;
 
 		void render(SDL_Renderer *renderer);
 		
-		void arm_parent();
+		void armParent();
 
 		private:
 		SDLTexture *texture;

@@ -10,7 +10,7 @@
 namespace Diamond {
 	class SDLTimer : public Timer {
 		public:
-		uint32_t ms_elapsed() override;
+		uint32_t msElapsed() override;
 	};
 }
 

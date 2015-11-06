@@ -27,9 +27,9 @@ namespace Diamond {
 
 		void stop() override;
 
-		int get_volume() const override;
+		int getVolume() const override;
 
-		void set_volume(int volume) override;
+		void setVolume(int volume) override;
 		
 		~SDLSound2D();
 

@@ -16,11 +16,11 @@ namespace Diamond {
 	}
 }
 
-uint32_t Diamond::Time::ms_elapsed() {
-	return timer->ms_elapsed();
+uint32_t Diamond::Time::msElapsed() {
+	return timer->msElapsed();
 }
 
-void Diamond::Time::set_timer(Timer *timer) {
+void Diamond::Time::setTimer(Timer *timer) {
 	if (Time::timer == nullptr && timer != nullptr)
 		Time::timer = std::unique_ptr<Timer>(timer);
 }

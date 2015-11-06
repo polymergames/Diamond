@@ -11,7 +11,7 @@ namespace Diamond {
 	class Timer {
 		public:
 
-		virtual uint32_t ms_elapsed() = 0;
+		virtual uint32_t msElapsed() = 0;
 
 		~Timer() {};
 	};

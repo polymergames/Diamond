@@ -23,15 +23,15 @@ void Diamond::SDLMusic::stop() {
 	Mix_HaltMusic();
 }
 
-void Diamond::SDLMusic::set_loop(bool loop) {
+void Diamond::SDLMusic::setLoop(bool loop) {
 	loop ? this->loop = -1 : this->loop = 1;
 }
 
-int Diamond::SDLMusic::get_volume() const {
+int Diamond::SDLMusic::getVolume() const {
 	return Mix_VolumeMusic(-1);
 }
 
-void Diamond::SDLMusic::set_volume(int volume) {
+void Diamond::SDLMusic::setVolume(int volume) {
 	Mix_VolumeMusic(volume);
 }
 

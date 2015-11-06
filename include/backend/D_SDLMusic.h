@@ -11,7 +11,7 @@
 
 namespace Diamond {
 	/**
-	 Note: the pause(), resume(), stop(), and set_volume() functions affect whatever music is active,
+	 Note: the pause(), resume(), stop(), and setVolume() functions affect whatever music is active,
 	 even if it is not this one.
 	*/
 	class SDLMusic : public Music {
@@ -26,11 +26,11 @@ namespace Diamond {
 
 		void stop() override;
 
-		void set_loop(bool loop) override;
+		void setLoop(bool loop) override;
 
-		int get_volume() const override;
+		int getVolume() const override;
 
-		void set_volume(int volume) override;
+		void setVolume(int volume) override;
 
 		~SDLMusic();
 

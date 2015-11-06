@@ -14,11 +14,11 @@ namespace Diamond {
 	}
 }
 
-Diamond::Texture *Diamond::Graphics2D::load_texture(std::string path) {
-	return renderer->load_texture(path);
+Diamond::Texture *Diamond::Graphics2D::loadTexture(std::string path) {
+	return renderer->loadTexture(path);
 }
 
-bool Diamond::Graphics2D::init_renderer(Renderer2D *renderer) {
+bool Diamond::Graphics2D::initRenderer(Renderer2D *renderer) {
 	if (Graphics2D::renderer == nullptr && renderer != nullptr) {
 		Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
 		return renderer->init();
@@ -30,22 +30,22 @@ void Diamond::Graphics2D::render() {
 	renderer->render();
 }
 
-void Diamond::Graphics2D::gen_render_obj(GameObject2D *parent, Texture *texture) {
-	renderer->gen_render_obj(parent, texture);
+void Diamond::Graphics2D::genRenderObj(GameObject2D *parent, Texture *texture) {
+	renderer->genRenderObj(parent, texture);
 }
 
-void Diamond::Graphics2D::activate_render_obj(unsigned long index) {
-	renderer->activate_render_obj(index);
+void Diamond::Graphics2D::activateRenderObj(unsigned long index) {
+	renderer->activateRenderObj(index);
 }
 
-void Diamond::Graphics2D::deactivate_render_obj(unsigned long index) {
-	renderer->deactivate_render_obj(index);
+void Diamond::Graphics2D::deactivateRenderObj(unsigned long index) {
+	renderer->deactivateRenderObj(index);
 }
 
-void Diamond::Graphics2D::destroy_render_obj(unsigned long index) {
-	renderer->destroy_render_obj(index);
+void Diamond::Graphics2D::destroyRenderObj(unsigned long index) {
+	renderer->destroyRenderObj(index);
 }
 
-void Diamond::Graphics2D::destroy_inactive_render_obj(unsigned long index) {
-	renderer->destroy_inactive_render_obj(index);
+void Diamond::Graphics2D::destroyInactiveRenderObj(unsigned long index) {
+	renderer->destroyInactiveRenderObj(index);
 }

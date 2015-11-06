@@ -22,58 +22,58 @@ namespace Diamond {
 		GameObject2D &operator=(const GameObject2D &other);
 		GameObject2D &operator=(GameObject2D &&other);
 
-		std::shared_ptr<Texture> get_sprite() const;
-		void set_sprite(std::shared_ptr<Texture> sprite);
+		std::shared_ptr<Texture> getSprite() const;
+		void setSprite(std::shared_ptr<Texture> sprite);
 
 		/**
 		 Returns a COPY of this game object's transform.
 		*/
-		Transform2 get_transform() const;
+		Transform2 getTransform() const;
 		
-		void set_transform(Transform2 &transform);
-		void set_transform(Vector2 &position);
-		void set_transform(float x, float y, float rotation, float scale);
-		void set_transform(float x, float y);
-		void set_rotation(float rotation);
-		void set_scale(float scale);
+		void setTransform(Transform2 &transform);
+		void setTransform(Vector2 &position);
+		void setTransform(float x, float y, float rotation, float scale);
+		void setTransform(float x, float y);
+		void setRotation(float rotation);
+		void setScale(float scale);
 		
-		void flip_x();
-		void flip_y();
+		void flipX();
+		void flipY();
 		
-		int is_flipped_x() const;
-		int is_flipped_y() const;
+		int isFlippedX() const;
+		int isFlippedY() const;
 
 		/**
 		 Returns whether this game object's sprite is currently being rendered.
 		*/
-		bool is_visible() const;
+		bool isVisible() const;
 
 		/**
 		 Causes this game object to be rendered.
-		 This game object must have a sprite (use set_sprite() if needed) before calling this function.
+		 This game object must have a sprite (use setSprite() if needed) before calling this function.
 		*/
-		void make_visible();
+		void makeVisible();
 
 		/**
 		 Causes this game object to stop being rendered.
 		*/
-		void make_invisible();
+		void makeInvisible();
 		
 		/**
 		 If this game object is currently visible, makes it invisible (ie not rendered), and vice versa.
 		*/
-		void toggle_visibility();
+		void toggleVisibility();
 		
 		/**
 		 Updates the render object's parent pointer to point to this game object.
 		 Call this if this game object's address has changed (might happen if, for ex, you store your gameobjects in a vector).
 		*/
-		void re_adopt_render_obj();
+		void reAdoptRenderObj();
 
 		/**
 		 Do not call unless you know what you're doing!
 		*/
-		void set_render_obj(RenderObj2D *render_obj);
+		void setRenderObj(RenderObj2D *render_obj);
 
 		~GameObject2D();
 
@@ -82,7 +82,7 @@ namespace Diamond {
 		RenderObj2D *render_obj;
 		bool visible;
 
-		void destroy_render_obj();
+		void destroyRenderObj();
 	};
 }
 
