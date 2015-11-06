@@ -5,11 +5,13 @@
 #ifndef D_TIMER_H
 #define D_TIMER_H
 
+#include <stdint.h>
+
 namespace Diamond {
 	class Timer {
 		public:
 
-		virtual float seconds_since_start() = 0;
+		virtual uint32_t ms_elapsed() = 0;
 
 		~Timer() {};
 	};

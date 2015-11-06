@@ -10,8 +10,14 @@
 
 namespace Diamond {
 	namespace Time {
-		std::unique_ptr<Timer> timer = nullptr;
+		float fps;
+		
+		static std::unique_ptr<Timer> timer = nullptr;
 	}
+}
+
+uint32_t Diamond::Time::ms_elapsed() {
+	return timer->ms_elapsed();
 }
 
 void Diamond::Time::set_timer(Timer *timer) {

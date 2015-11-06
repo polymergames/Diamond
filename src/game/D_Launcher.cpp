@@ -10,16 +10,20 @@
 #include "D_DesktopLogger.h"
 #include "D_Graphics2D.h"
 #include "D_Log.h"
+#include "D_Time.h"
 
 #if defined __ANDROID__ || defined IOS || _WIN32 || defined __APPLE__
 #include "D_SDLDiskJockey2D.h"
 #include "D_SDLRenderer2D.h"
+#include "D_SDLTimer.h"
 #endif
 
 namespace Diamond {
 	namespace Launcher {
 		bool is_open = true;
 		Config config = Config();
+		
+		static int nframes = 0;
 
 		static void init_desktop() {
 			Log::set_logger(new DesktopLogger());
@@ -31,6 +35,8 @@ namespace Diamond {
 			if (!AudioManager2D::init_dj(new SDLDiskJockey2D())) {
 				// TODO: Handle audio initialization failure
 			}
+			
+			Time::set_timer(new SDLTimer());
 		}
 	}
 }
@@ -48,12 +54,24 @@ void Diamond::Launcher::launch(Game &game) {
 	std::exit();
 #endif
 
+	uint32_t time;
+	uint32_t last_time = Time::ms_elapsed();
+	uint32_t delta;
+	
 	// Init game
 	game.init();
 
 	// Update
 	while (Launcher::is_open) {
-		game.update(1.0f); // TODO: Implement delta time
+		nframes++;
+		
+		time = Time::ms_elapsed();
+		delta = time - last_time;
+		last_time = time;
+		
+		Time::fps = nframes / (time / 1000.0);
+		
+		game.update(delta);
 		Graphics2D::render();
 	}
 

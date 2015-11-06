@@ -10,13 +10,14 @@
 #include "D_Graphics2D.h"
 #include "D_Input.h"
 #include "D_Launcher.h"
+#include "D_Time.h"
 using namespace Diamond;
 
 class Demo : public Game {
 	public:
-	const float movespeed = 10.0f;
-	const float spinspeed = 10.0f;
-	const float growspeed = 0.01f;
+	const float movespeed = 0.75f;
+	const float spinspeed = 0.75f;
+	const float growspeed = 0.00075f;
 
 	std::unique_ptr<GameObject2D> spike;
 
@@ -27,7 +28,7 @@ class Demo : public Game {
 
 	std::unique_ptr<Sound2D> haha;
 	
-	void init() {
+	void init() override {
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::load_texture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::load_texture("cloud.png"));
 
@@ -37,7 +38,7 @@ class Demo : public Game {
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::load_sound("haha.wav"));
 	}
 
-	void update(float delta) {
+	void update(uint32_t delta) override {
 		// Coloring
 		if (Input::keydown[Input::K_R]) {
 			spike_color = {255, 0, 0, 255};
@@ -117,10 +118,11 @@ class Demo : public Game {
 			haha->play();
 		}
 
-		std::cout << "x flip: " << spike->is_flipped_x() << "; y flip: " << spike->is_flipped_y() << std::endl;
+//		std::cout << "x flip: " << spike->is_flipped_x() << "; y flip: " << spike->is_flipped_y() << std::endl;
+		std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
 	}
 
-	void quit() {};
+	void quit() override {};
 };
 
 int main(int argc, char *argv[]) {
