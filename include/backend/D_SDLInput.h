@@ -5,7 +5,6 @@
 #ifndef D_SDL_INPUT_H
 #define D_SDL_INPUT_H
 
-#include <map>
 #include "SDL.h"
 
 #include "D_Input.h"

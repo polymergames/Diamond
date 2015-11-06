@@ -12,7 +12,7 @@
 
 namespace Diamond {
 	class RenderObj2D;
-
+	
 	class GameObject2D {
 		public:
 		GameObject2D(std::shared_ptr<Texture> sprite);

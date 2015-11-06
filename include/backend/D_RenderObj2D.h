@@ -6,8 +6,11 @@
 #define D_RENDER_OBJ_2D_H
 
 #include "D_GameObject2D.h"
+#include "D_Texture.h"
+#include "D_Transform2.h"
 
 namespace Diamond {
+
 	class RenderObj2D {
 		public:
 		unsigned long index;

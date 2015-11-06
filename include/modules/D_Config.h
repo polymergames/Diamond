@@ -8,7 +8,7 @@
 #include <string>
 
 namespace Diamond {
-	enum audio_channels_t {MONO, STEREO};
+	enum audio_channels_t {D_MONO, D_STEREO};
 
 	struct RGBA {
 		unsigned char r, g, b, a;
@@ -24,7 +24,7 @@ namespace Diamond {
 		RGBA bg_color = RGBA{0, 0, 0, 100};
 
 		// Audio settings
-		audio_channels_t audio_channels = STEREO;
+		audio_channels_t audio_channels = D_STEREO;
 		int audio_out_freq = 44100; // in hertz
 		int audio_out_sample_size = 2048; // in bytes
 	};

@@ -8,9 +8,9 @@
 #include "SDL.h"
 
 #include "D_RenderObj2D.h"
-#include "D_SDLTexture.h"
 
 namespace Diamond {
+	class SDLTexture;
 	class SDLRenderObj2D : public RenderObj2D {
 		public:
 

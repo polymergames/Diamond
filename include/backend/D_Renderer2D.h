@@ -8,10 +8,9 @@
 #include <iostream>
 
 #include "D_GameObject2D.h"
+#include "D_Texture.h"
 
 namespace Diamond {
-	struct Config;
-
 	class Renderer2D {
 		public:
 		virtual bool init() = 0;

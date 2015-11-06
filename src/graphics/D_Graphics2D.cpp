@@ -4,6 +4,10 @@
 
 #include "D_Graphics2D.h"
 
+#include <memory>
+
+#include "D_Renderer2D.h"
+
 namespace Diamond {
 	namespace Graphics2D {
 		static std::unique_ptr<Diamond::Renderer2D> renderer = nullptr;

@@ -13,7 +13,6 @@
 #include "D_SDLRenderObj2D.h"
 
 namespace Diamond {
-
 	class SDLRenderer2D : public Renderer2D {
 		public:
 		static int reserve_size; ///< For advanced users: can set the # objects by which to reallocate when growing rendering vectors

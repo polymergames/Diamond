@@ -5,12 +5,16 @@
 #ifndef D_GRAPHICS_2D_H
 #define D_GRAPHICS_2D_H
 
-#include <memory>
+#include <iostream>
 
-#include "D_Renderer2D.h"
+#include "D_GameObject2D.h"
+#include "D_Texture.h"
 
 namespace Diamond {
+	class Renderer2D;
+	
 	namespace Graphics2D {
+		
 		/**
 		 Loads an image file as a texture.
 		 Returns nullptr if texture failed to load.

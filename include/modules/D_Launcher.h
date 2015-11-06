@@ -18,8 +18,6 @@ namespace Diamond {
 		 Call only once, at beginning of game!
 		*/
 		void launch(Game &game);
-
-		void init_win32();
 	};
 }
 

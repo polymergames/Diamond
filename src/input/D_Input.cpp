@@ -7,6 +7,6 @@
 std::vector<bool> Diamond::Input::keydown(NUMKEYS, 0);
 std::vector<bool> Diamond::Input::keyup(NUMKEYS, 0);
 
-void Diamond::Input::reset() {
+void Diamond::Input::reset_keyup() {
 	std::fill(keyup.begin(), keyup.end(), 0);
 }

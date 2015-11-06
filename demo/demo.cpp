@@ -10,7 +10,6 @@
 #include "D_Graphics2D.h"
 #include "D_Input.h"
 #include "D_Launcher.h"
-#include "D_SDLInput.h"
 using namespace Diamond;
 
 class Demo : public Game {

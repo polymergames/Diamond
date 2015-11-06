@@ -5,9 +5,14 @@
 #ifndef D_AUDIO_MANAGER_2D_H
 #define D_AUDIO_MANAGER_2D_H
 
-#include "D_DiskJockey2D.h"
+#include <iostream>
+
+#include "D_Music.h"
+#include "D_Sound2D.h"
 
 namespace Diamond {
+	class DiskJockey2D;
+
 	namespace AudioManager2D {
 		// TODO: getting and setting master volume
 

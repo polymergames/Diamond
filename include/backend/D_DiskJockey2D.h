@@ -7,8 +7,8 @@
 
 #include <iostream>
 
-#include "D_Music.h"
 #include "D_Sound2D.h"
+#include "D_Music.h"
 
 namespace Diamond {
 	class DiskJockey2D {

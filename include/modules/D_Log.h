@@ -5,11 +5,8 @@
 #ifndef D_LOG_H
 #define D_LOG_H
 
-#include <memory>
-
-#include "D_Logger.h"
-
 namespace Diamond {
+	class Logger;
 	namespace Log {
 		
 		// Don't call unless you know what you're doing!

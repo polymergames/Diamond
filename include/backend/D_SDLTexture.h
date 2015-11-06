@@ -5,7 +5,6 @@
 #ifndef D_SDL_TEXTURE_H
 #define D_SDL_TEXTURE_H
 
-#include <memory>
 #include "SDL.h"
 
 #include "D_Texture.h"

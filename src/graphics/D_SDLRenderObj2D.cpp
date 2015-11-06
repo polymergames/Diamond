@@ -4,6 +4,7 @@
 
 #include "D_SDLRenderObj2D.h"
 
+#include "D_GameObject2D.h"
 #include "D_SDLTexture.h"
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(GameObject2D *parent, Texture *texture) : RenderObj2D(parent), flip(SDL_FLIP_NONE) {

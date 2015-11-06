@@ -4,6 +4,8 @@
 
 #include "D_SDLInput.h"
 
+#include <map>
+
 #include "D_Input.h"
 #include "D_Launcher.h"
 

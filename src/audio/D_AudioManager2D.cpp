@@ -6,6 +6,8 @@
 
 #include <memory>
 
+#include "D_DiskJockey2D.h"
+
 namespace Diamond {
 	namespace AudioManager2D {
 		static std::unique_ptr<Diamond::DiskJockey2D> dj = nullptr;

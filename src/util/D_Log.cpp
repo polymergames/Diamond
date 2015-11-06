@@ -1,7 +1,10 @@
 /*
  Copyright (c) 2015 Polymer Games
 */
+
 #include "D_Log.h"
+
+#include <memory>
 
 #include "D_Logger.h"
 
