@@ -1,8 +1,13 @@
-# Don't want dis
+/android-project
+
+# Exclude visual studio stuff
 *.sln
 *.vcxproj
 *.filters
-/android-project
+
+# Mac junk
+*.DS_Store
+*.xcodeproj
 
 # User-specific files
 *.suo
