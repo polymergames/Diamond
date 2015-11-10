@@ -22,27 +22,30 @@
 
 Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), render_obj(nullptr), visible(true) {
 	Graphics2D::genRenderObj(this, sprite.get());
+	setScale(1.0f);
 }
 
 // TODO: test
-Diamond::GameObject2D::GameObject2D(const GameObject2D &other) : sprite(other.sprite), render_obj(nullptr), visible(other.visible) {
+Diamond::GameObject2D::GameObject2D(const GameObject2D &other) : sprite(other.sprite), render_obj(nullptr), visible(other.visible), scale(other.scale) {
 	Graphics2D::genRenderObj(this, sprite.get());
 	if (!visible) {
 		Graphics2D::deactivateRenderObj(render_obj->index);
 	}
 	
-	render_obj->transform = other.render_obj->transform;
-	if (other.isFlippedX())	flipX();
-	if (other.isFlippedY())	flipY();
+//	render_obj->transform = other.render_obj->transform;
+//	if (other.isFlippedX())	flipX();
+//	if (other.isFlippedY())	flipY();
+	*render_obj = *(other.render_obj);
 }
 
 // TODO: test
-Diamond::GameObject2D::GameObject2D(GameObject2D &&other) : sprite(other.sprite), render_obj(other.render_obj), visible(other.visible) {
+Diamond::GameObject2D::GameObject2D(GameObject2D &&other) : sprite(other.sprite), render_obj(other.render_obj), visible(other.visible), scale(other.scale) {
 	reAdoptRenderObj();
 
 	other.sprite = nullptr;
 	other.render_obj = nullptr;
 	other.visible = false;
+	other.scale = 1.0f;
 }
 
 // TODO: test
@@ -52,14 +55,17 @@ Diamond::GameObject2D &Diamond::GameObject2D::operator=(const GameObject2D &othe
 
 		sprite = other.sprite;
 		visible = other.visible;
+		scale = other.scale;
+		
 		Graphics2D::genRenderObj(this, sprite.get());
 		if (!visible) {
 			Graphics2D::deactivateRenderObj(render_obj->index);
 		}
 		
-		render_obj->transform = other.render_obj->transform;
-		if (other.isFlippedX())	flipX();
-		if (other.isFlippedY())	flipY();
+//		render_obj->transform = other.render_obj->transform;
+//		if (other.isFlippedX())	flipX();
+//		if (other.isFlippedY())	flipY();
+		*render_obj = *(other.render_obj);
 	}
 
 	return *this;
@@ -73,12 +79,14 @@ Diamond::GameObject2D &Diamond::GameObject2D::operator=(GameObject2D &&other) {
 		sprite = other.sprite;
 		render_obj = other.render_obj;
 		visible = other.visible;
+		scale = other.scale;
 
 		reAdoptRenderObj();
 
 		other.sprite = nullptr;
 		other.render_obj = nullptr;
 		other.visible = false;
+		other.scale = 1.0f;
 	}
 
 	return *this;
@@ -91,38 +99,37 @@ std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::getSprite() const {
 void Diamond::GameObject2D::setSprite(std::shared_ptr<Texture> sprite) {
 	this->sprite = sprite;
 	render_obj->setTexture(sprite.get());
+	setScale(scale);
 }
 
-Diamond::Transform2 Diamond::GameObject2D::getTransform() const {
+Diamond::Transform2i Diamond::GameObject2D::getTransform() const {
 	return render_obj->transform;
 }
 
-void Diamond::GameObject2D::setTransform(Diamond::Transform2 &transform) {
+void Diamond::GameObject2D::setTransform(Diamond::Transform2i &transform) {
 	render_obj->transform = transform;
 }
 
-void Diamond::GameObject2D::setTransform(Diamond::Vector2 &position) {
+void Diamond::GameObject2D::setTransform(Diamond::Vector2i &position) {
 	render_obj->transform.position = position;
 }
 
-void Diamond::GameObject2D::setTransform(float x, float y, float rotation, float scale) {
+void Diamond::GameObject2D::setTransform(int x, int y) {
 	render_obj->transform.position.x = x;
 	render_obj->transform.position.y = y;
-	render_obj->transform.rotation = rotation;
-	render_obj->transform.scale = scale;
 }
 
-void Diamond::GameObject2D::setTransform(float x, float y) {
-	render_obj->transform.position.x = x;
-	render_obj->transform.position.y = y;
+void Diamond::GameObject2D::setSize(Diamond::Vector2i &size) {
+	render_obj->transform.size = size;
+}
+
+void Diamond::GameObject2D::setScale(float scale) {
+	this->scale = scale;
+	render_obj->transform.size = Vector2i(sprite->width * scale, sprite->height *scale);
 }
 
 void Diamond::GameObject2D::setRotation(float rotation) {
 	render_obj->transform.rotation = rotation;
-}
-
-void Diamond::GameObject2D::setScale(float scale) {
-	render_obj->transform.scale = scale;
 }
 
 void Diamond::GameObject2D::flipX() {

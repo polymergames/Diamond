@@ -14,8 +14,28 @@
     limitations under the License.
 */
 
-#include "D_Transform2.h"
+#ifndef D_TRANSFORM_2I_H
+#define D_TRANSFORM_2I_H
 
-Diamond::Transform2::Transform2() : position(), rotation(0), scale(1) {}
+#include "D_Vector2i.h"
 
-Diamond::Transform2::Transform2(Vector2 position, float rotation, float scale) : position(position), rotation(rotation), scale(scale) {}
+namespace Diamond {
+	class Transform2i {
+		public:
+		
+		Vector2i position;
+		Vector2i size;
+		
+		float rotation;
+		
+		Transform2i() : position(), size(1, 1), rotation(0) {}
+		
+		Transform2i(Vector2i position) : position(position), size(1, 1), rotation(0) {}
+		
+		Transform2i(Vector2i position, float rotation) : position(position), size(1, 1), rotation(rotation) {}
+		
+		Transform2i(Vector2i position, Vector2i size, float rotation) : position(position), size(size), rotation(rotation) {}
+	};
+}
+
+#endif // D_TRANSFORM_2I_H

@@ -45,7 +45,8 @@ class Demo : public Game {
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
 
 		spike = std::unique_ptr<GameObject2D>(new GameObject2D(cloud_sprite));
-		spike->setTransform(500, 400, 0, 0.1f);
+		spike->setTransform(500, 400);
+		spike->setScale(0.1f);
 
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
 	}
@@ -81,10 +82,10 @@ class Demo : public Game {
 
 		// Stretching
 		if (Input::keydown[Input::K_LSHIFT]) {
-			spike->setScale(spike->getTransform().scale + growspeed * delta);
+			spike->setScale(spike->getScale() + growspeed * delta);
 		}
 		if (Input::keydown[Input::K_LCTRL]) {
-			spike->setScale(spike->getTransform().scale - growspeed * delta);
+			spike->setScale(spike->getScale() - growspeed * delta);
 		}
 
 		// Flipping
@@ -97,22 +98,22 @@ class Demo : public Game {
 
 		// Movement
 		if (Input::keydown[Input::K_W]) {
-			Transform2 trans = spike->getTransform();
+			Transform2i trans = spike->getTransform();
 			trans.position.y -= movespeed * delta;
 			spike->setTransform(trans);
 		}
 		if (Input::keydown[Input::K_S]) {
-			Transform2 trans = spike->getTransform();
+			Transform2i trans = spike->getTransform();
 			trans.position.y += movespeed * delta;
 			spike->setTransform(trans);
 		}
 		if (Input::keydown[Input::K_A]) {
-			Transform2 trans = spike->getTransform();
+			Transform2i trans = spike->getTransform();
 			trans.position.x -= movespeed * delta;
 			spike->setTransform(trans);
 		}
 		if (Input::keydown[Input::K_D]) {
-			Transform2 trans = spike->getTransform();
+			Transform2i trans = spike->getTransform();
 			trans.position.x += movespeed * delta;
 			spike->setTransform(trans);
 		}

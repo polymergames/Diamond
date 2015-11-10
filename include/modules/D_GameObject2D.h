@@ -20,7 +20,7 @@
 #include <memory>
 
 #include "D_Texture.h"
-#include "D_Transform2.h"
+#include "D_Transform2i.h"
 
 namespace Diamond {
 	class RenderObj2D;
@@ -40,14 +40,18 @@ namespace Diamond {
 		/**
 		 Returns a COPY of this game object's transform.
 		*/
-		Transform2 getTransform() const;
+		Transform2i getTransform() const;
 		
-		void setTransform(Transform2 &transform);
-		void setTransform(Vector2 &position);
-		void setTransform(float x, float y, float rotation, float scale);
-		void setTransform(float x, float y);
-		void setRotation(float rotation);
+		inline float getScale() const {
+			return scale;
+		}
+		
+		void setTransform(Transform2i &transform);
+		void setTransform(Vector2i &position);
+		void setTransform(int x, int y);
+		void setSize(Vector2i &size);
 		void setScale(float scale);
+		void setRotation(float rotation);
 		
 		void flipX();
 		void flipY();
@@ -93,6 +97,7 @@ namespace Diamond {
 		std::shared_ptr<Texture> sprite;
 		RenderObj2D *render_obj;
 		bool visible;
+		float scale;
 
 		void destroyRenderObj();
 	};

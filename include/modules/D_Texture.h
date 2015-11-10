@@ -22,6 +22,8 @@
 namespace Diamond {
 	class Texture {
 		public:
+		int width, height;
+		
 		Texture(int width, int height);
 		
 		virtual RGBA getColor() const;
@@ -29,8 +31,6 @@ namespace Diamond {
 		virtual void setColor(RGBA color);
 		
 		virtual ~Texture();
-
-		int width, height;
 		
 		protected:
 		RGBA color;

@@ -19,7 +19,7 @@
 
 #include "D_GameObject2D.h"
 #include "D_Texture.h"
-#include "D_Transform2.h"
+#include "D_Transform2i.h"
 
 namespace Diamond {
 
@@ -27,7 +27,7 @@ namespace Diamond {
 		public:
 		unsigned long index;
 		GameObject2D *parent;
-		Transform2 transform;
+		Transform2i transform;
 
 		RenderObj2D(GameObject2D *parent);
 
