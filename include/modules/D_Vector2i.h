@@ -26,6 +26,10 @@ namespace Diamond {
 		
 		Vector2i(int x, int y) : x(x), y(y) {}
 
+		inline void set(int x, int y) {
+			this->x = x, this->y = y;
+		}
+
 		inline Vector2i &add(Vector2i b) {
 			x += b.x, y += b.y;
 			return *this;
