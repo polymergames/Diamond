@@ -23,7 +23,6 @@ set(CMAKE_CXX_FLAGS -std=c++11)
 # Header includes
 include_directories(
 	include/backend
-	include/backend
 	include/modules
 	extern/Quantum2D/include
 	extern/SDL2-2.0.3/include
