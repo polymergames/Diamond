@@ -50,14 +50,16 @@ class Demo : public Game {
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
 
+		transform = QuantumWorld2D::genTransform();
+		body = QuantumWorld2D::genRigidbody(transform);
+		
+		QuantumWorld2D::transforms[transform].position.set(500, 400);
+		
 		spike = std::unique_ptr<GameObject2D>(new GameObject2D(cloud_sprite));
-		spike->setTransform(500, 400);
+		spike->setTransform(QuantumWorld2D::transforms[transform]);
 		spike->setScale(0.1f);
 
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
-		
-		transform = QuantumWorld2D::genTransform();
-		body = QuantumWorld2D::genRigidbody(transform);
 	}
 
 	void update(uint32_t delta) override {
@@ -111,28 +113,28 @@ class Demo : public Game {
 //			trans.position.y -= movespeed * delta;
 //			spike->setTransform(trans);
 			QuantumWorld2D::transforms[transform].position.y -= movespeed * delta;
-			spike->setTransform(QuantumWorld2D::transforms[transform]);
+			spike->setTransform(QuantumWorld2D::transforms[transform].position);
 		}
 		if (Input::keydown[Input::K_S]) {
 //			Transform2i trans = spike->getTransform();
 //			trans.position.y += movespeed * delta;
 //			spike->setTransform(trans);
 			QuantumWorld2D::transforms[transform].position.y += movespeed * delta;
-			spike->setTransform(QuantumWorld2D::transforms[transform]);
+			spike->setTransform(QuantumWorld2D::transforms[transform].position);
 		}
 		if (Input::keydown[Input::K_A]) {
 //			Transform2i trans = spike->getTransform();
 //			trans.position.x -= movespeed * delta;
 //			spike->setTransform(trans);
 			QuantumWorld2D::transforms[transform].position.x -= movespeed * delta;
-			spike->setTransform(QuantumWorld2D::transforms[transform]);
+			spike->setTransform(QuantumWorld2D::transforms[transform].position);
 		}
 		if (Input::keydown[Input::K_D]) {
 //			Transform2i trans = spike->getTransform();
 //			trans.position.x += movespeed * delta;
 //			spike->setTransform(trans);
 			QuantumWorld2D::transforms[transform].position.x += movespeed * delta;
-			spike->setTransform(QuantumWorld2D::transforms[transform]);
+			spike->setTransform(QuantumWorld2D::transforms[transform].position);
 		}
 
 		// Rotation
@@ -148,8 +150,12 @@ class Demo : public Game {
 			haha->play();
 		}
 
+//		std::cout << "Position in Quantum: " << QuantumWorld2D::transforms[transform].position.x << ", "
+//			<< QuantumWorld2D::transforms[transform].position.y << "; Position in spike: "
+//			<< spike->getTransform().position.x << ", "
+//			<< spike->getTransform().position.y << std::endl;
 //		std::cout << "x flip: " << spike->isFlippedX() << "; y flip: " << spike->isFlippedY() << std::endl;
-		std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
+//		std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
 	}
 
 	void quit() override {};

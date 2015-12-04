@@ -50,6 +50,11 @@ link_directories(extern/Quantum2D/lib)
 file(GLOB_RECURSE SOURCES src/*.cpp)
 
 
-# Create library
+# Build Diamond library
 add_library(Diamond SHARED ${SOURCES})
 target_link_libraries(Diamond ${LINK_LIBS})
+install(TARGETS Diamond DESTINATION lib)
+
+
+# Build subdirectories
+add_subdirectory(demo)

@@ -108,6 +108,7 @@ Diamond::Transform2i Diamond::GameObject2D::getTransform() const {
 
 void Diamond::GameObject2D::setTransform(Diamond::Transform2i &transform) {
 	render_obj->transform = transform;
+	setScale(scale);
 }
 
 void Diamond::GameObject2D::setTransform(Diamond::Vector2i &position) {
