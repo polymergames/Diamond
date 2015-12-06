@@ -46,7 +46,7 @@ namespace Quantum2D {
 		 Note: the reference returned is only guaranteed to be valid until the next time a new rigidbody is created.
 		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
 		*/
-		Rigidbody2D &getRigidbody(body2d_id body) {
+		inline Rigidbody2D &getRigidbody(body2d_id body) {
 			return bodies[body_id_index_map[body]];
 		}
 		
