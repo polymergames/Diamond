@@ -19,20 +19,26 @@
 
 #include <iostream>
 
+#include "Q_typedefs.h"
+
 #include "D_GameObject2D.h"
+#include "D_RenderObj2D.h"
 #include "D_Texture.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
 	class Renderer2D {
 		public:
 		virtual bool init() = 0;
-		virtual void render() = 0;
+		
+		virtual void renderAll() = 0;
+		
 		virtual Texture *loadTexture(std::string path) = 0;
-		virtual void genRenderObj(GameObject2D *parent, Texture *texture) = 0;
-		virtual void activateRenderObj(unsigned long index) = 0;
-		virtual void deactivateRenderObj(unsigned long index) = 0;
-		virtual void destroyRenderObj(unsigned long index) = 0;
-		virtual void destroyInactiveRenderObj(unsigned long index) = 0;
+		
+		virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
+		virtual renderobj_id genRenderObj(Texture *texture, transform2_id transform) = 0;
+		virtual void freeRenderObj(renderobj_id render_obj) = 0;
+		
 		virtual ~Renderer2D() {};
 	};
 }

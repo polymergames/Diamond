@@ -27,8 +27,6 @@
 namespace Diamond {
 	class SDLRenderer2D : public Renderer2D {
 		public:
-		static int reserve_size; ///< For advanced users: can set the # objects by which to reallocate when growing rendering vectors
-
 		SDLRenderer2D();
 		
 		/**
@@ -40,7 +38,7 @@ namespace Diamond {
 		/**
 		 Called in game loop. Renders graphics as well as handles SDL events.
 		*/
-		void render() override;
+		void renderAll() override;
 		
 		/**
 		 Loads an image file as an SDL texture. Caller is responsible for ownership!
@@ -48,22 +46,18 @@ namespace Diamond {
 		*/
 		Texture *loadTexture(std::string path) override;
 
+		RenderObj2D *getRenderObj(renderobj_id render_obj) override;
+		
 		/**
-		 Creates an SDLRenderObj2D, which is a rendering unit for the render loop.
+		 Creates and returns id of an SDLRenderObj2D, which is a rendering unit for the render loop.
 		*/
-		void genRenderObj(GameObject2D *parent, Texture *texture) override;
+		renderobj_id genRenderObj(Texture *texture, transform2_id transform) override;
 		
-		void activateRenderObj(unsigned long index) override;
-		
-		void deactivateRenderObj(unsigned long index) override;
-
 		/**
-		 Removes the render object at the given index from the rendering vector.
+		 Marks the given id as available for a new SDLRenderObj2D, and removes its currently associated renderobj.
 		*/
-		void destroyRenderObj(unsigned long index) override;
+		void freeRenderObj(renderobj_id render_obj) override;
 		
-		void destroyInactiveRenderObj(unsigned long index) override;
-
 		/**
 		 Destroys window and renderer and shuts down SDL and SDL extensions.
 		*/
@@ -75,9 +69,8 @@ namespace Diamond {
 		SDL_Event e;
 
 		std::vector<SDLRenderObj2D> render_objects;
-		std::vector<SDLRenderObj2D> inactive_render_objects;
-
-		void reserveRObjVec(std::vector<SDLRenderObj2D> &v);
+		std::vector<unsigned long> renderobj_id_index_map;
+		std::vector<renderobj_id> renderobj_id_stack;
 	};
 }
 

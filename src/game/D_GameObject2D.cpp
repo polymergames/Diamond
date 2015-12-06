@@ -16,56 +16,50 @@
 
 #include "D_GameObject2D.h"
 
-#include "D_Graphics2D.h"
 #include "D_Launcher.h"
 #include "D_RenderObj2D.h"
 
-Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), render_obj(nullptr), visible(true) {
-	Graphics2D::genRenderObj(this, sprite.get());
+Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), visible(true) {
+	transform = Quantum2D::QuantumWorld2D::genTransform();
+	render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
 	setScale(1.0f);
 }
 
 // TODO: test
-Diamond::GameObject2D::GameObject2D(const GameObject2D &other) : sprite(other.sprite), render_obj(nullptr), visible(other.visible), scale(other.scale) {
-	Graphics2D::genRenderObj(this, sprite.get());
-	if (!visible) {
-		Graphics2D::deactivateRenderObj(render_obj->index);
+Diamond::GameObject2D::GameObject2D(const GameObject2D &other)
+: sprite(other.sprite), visible(other.visible), scale(other.scale) {
+	transform = Quantum2D::QuantumWorld2D::genTransform();
+	getTransform() = other.getTransform();
+	if (visible) {
+		render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
 	}
 	
-//	render_obj->transform = other.render_obj->transform;
-//	if (other.isFlippedX())	flipX();
-//	if (other.isFlippedY())	flipY();
-	*render_obj = *(other.render_obj);
+	if (other.isFlippedX())	flipX();
+	if (other.isFlippedY())	flipY();
 }
 
 // TODO: test
-Diamond::GameObject2D::GameObject2D(GameObject2D &&other) : sprite(other.sprite), render_obj(other.render_obj), visible(other.visible), scale(other.scale) {
-	reAdoptRenderObj();
-
+Diamond::GameObject2D::GameObject2D(GameObject2D &&other)
+: sprite(other.sprite), transform(other.transform), render_obj(other.render_obj), visible(other.visible), scale(other.scale) {
 	other.sprite = nullptr;
-	other.render_obj = nullptr;
-	other.visible = false;
-	other.scale = 1.0f;
+	other.transform = Diamond::INVALID;
+	other.render_obj = Diamond::INVALID;
 }
 
 // TODO: test
 Diamond::GameObject2D &Diamond::GameObject2D::operator=(const GameObject2D &other) {
 	if (this != &other) {
-		destroyRenderObj();
-
 		sprite = other.sprite;
 		visible = other.visible;
 		scale = other.scale;
 		
-		Graphics2D::genRenderObj(this, sprite.get());
-		if (!visible) {
-			Graphics2D::deactivateRenderObj(render_obj->index);
+		getTransform() = other.getTransform();
+		if (visible) {
+			render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
 		}
 		
-//		render_obj->transform = other.render_obj->transform;
-//		if (other.isFlippedX())	flipX();
-//		if (other.isFlippedY())	flipY();
-		*render_obj = *(other.render_obj);
+		if (other.isFlippedX())	flipX();
+		if (other.isFlippedY())	flipY();
 	}
 
 	return *this;
@@ -74,95 +68,48 @@ Diamond::GameObject2D &Diamond::GameObject2D::operator=(const GameObject2D &othe
 // TODO: test
 Diamond::GameObject2D &Diamond::GameObject2D::operator=(GameObject2D &&other) {
 	if (this != &other) {
-		destroyRenderObj();
+		freeRenderObj();
 
 		sprite = other.sprite;
+		transform = other.transform;
 		render_obj = other.render_obj;
 		visible = other.visible;
 		scale = other.scale;
 
-		reAdoptRenderObj();
-
 		other.sprite = nullptr;
-		other.render_obj = nullptr;
-		other.visible = false;
-		other.scale = 1.0f;
+		other.transform = Diamond::INVALID;
+		other.render_obj = Diamond::INVALID;
 	}
 
 	return *this;
 }
 
-std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::getSprite() const {
-	return sprite;
-}
-
 void Diamond::GameObject2D::setSprite(std::shared_ptr<Texture> sprite) {
 	this->sprite = sprite;
-	render_obj->setTexture(sprite.get());
-	setScale(scale);
+	Graphics2D::getRenderObj(render_obj)->setTexture(sprite.get());
+	applyScale();
 }
 
-Diamond::Transform2i Diamond::GameObject2D::getTransform() const {
-	return render_obj->transform;
-}
-
-void Diamond::GameObject2D::setTransform(Diamond::Transform2i &transform) {
-	render_obj->transform = transform;
-	setScale(scale);
-}
-
-void Diamond::GameObject2D::setTransform(Diamond::Vector2i &position) {
-	render_obj->transform.position = position;
-}
-
-void Diamond::GameObject2D::setTransform(int x, int y) {
-	render_obj->transform.position.x = x;
-	render_obj->transform.position.y = y;
-}
-
-void Diamond::GameObject2D::setSize(Diamond::Vector2i &size) {
-	render_obj->transform.size = size;
+void Diamond::GameObject2D::setTransform(Transform2i &new_transform) {
+	getTransform() = new_transform;
+	applyScale();
 }
 
 void Diamond::GameObject2D::setScale(float scale) {
 	this->scale = scale;
-	render_obj->transform.size = Vector2i(sprite->width * scale, sprite->height *scale);
-}
-
-void Diamond::GameObject2D::setRotation(float rotation) {
-	render_obj->transform.rotation = rotation;
-}
-
-void Diamond::GameObject2D::flipX() {
-	render_obj->flipX();
-}
-
-void Diamond::GameObject2D::flipY() {
-	render_obj->flipY();
-}
-
-int Diamond::GameObject2D::isFlippedX() const {
-	return render_obj->isFlippedX();
-}
-
-int Diamond::GameObject2D::isFlippedY() const {
-	return render_obj->isFlippedY();
-}
-
-bool Diamond::GameObject2D::isVisible() const {
-	return visible;
+	applyScale();
 }
 
 void Diamond::GameObject2D::makeVisible() {
 	if (!visible) {
-		Graphics2D::activateRenderObj(render_obj->index);
+		render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
 		visible = true;
 	}
 }
 
 void Diamond::GameObject2D::makeInvisible() {
 	if (visible) {
-		Graphics2D::deactivateRenderObj(render_obj->index);
+		freeRenderObj();
 		visible = false;
 	}
 }
@@ -171,27 +118,28 @@ void Diamond::GameObject2D::toggleVisibility() {
 	visible ? makeInvisible() : makeVisible();
 }
 
-void Diamond::GameObject2D::reAdoptRenderObj() {
-	render_obj->parent = this;
+void Diamond::GameObject2D::applyScale() {
+	getTransform().size = Vector2i(sprite->width * scale, sprite->height *scale);
 }
 
-void Diamond::GameObject2D::setRenderObj(RenderObj2D *render_obj) {
-	this->render_obj = render_obj;
-}
-
-void Diamond::GameObject2D::destroyRenderObj() {
-	if (render_obj != nullptr) {
-		if (visible) {
-			Graphics2D::destroyRenderObj(render_obj->index);
-		}
-		else {
-			Graphics2D::destroyInactiveRenderObj(render_obj->index);
-		}
+void Diamond::GameObject2D::freeTransform() {
+	if ((t_valid)transform != Diamond::INVALID) {
+		Quantum2D::QuantumWorld2D::freeTransform(transform);
 	}
-	render_obj = nullptr;
+	transform = Diamond::INVALID;
+}
+
+void Diamond::GameObject2D::freeRenderObj() {
+	if ((t_valid)render_obj != Diamond::INVALID) {
+		Graphics2D::freeRenderObj(render_obj);
+	}
+	render_obj = Diamond::INVALID;
 }
 
 Diamond::GameObject2D::~GameObject2D() {
 	// TODO: find exception-safer method of memory management. ie it's possible that render_obj has been destroyed/game has ended/crashed even if is_open = true
-	if (Launcher::is_open)	destroyRenderObj();
+	if (Launcher::is_open) {
+		freeTransform();
+		freeRenderObj();
+	}
 }

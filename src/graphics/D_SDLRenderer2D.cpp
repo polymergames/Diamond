@@ -18,17 +18,24 @@
 
 #include <iostream>
 #include "SDL_image.h"
+#include "Q_QuantumWorld2D.h"
 
 #include "D_Launcher.h"
 #include "D_SDLInput.h"
 #include "D_SDLTexture.h"
 
-int Diamond::SDLRenderer2D::reserve_size = 10;
-
-Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {
-	render_objects.reserve(reserve_size);
-	inactive_render_objects.reserve(reserve_size);
+namespace Diamond {
+	namespace SDLRenderSpace {
+		static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
+			Diamond::Transform2i transform = Quantum2D::QuantumWorld2D::transforms[obj.transform];
+			SDL_Rect render_rect = {transform.position.x, transform.position.y, transform.size.x, transform.size.y};
+			SDL_RenderCopyEx(renderer, obj.texture->texture, NULL, &render_rect, transform.rotation, NULL, obj.flip);
+		}
+	}
 }
+
+
+Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
 
 bool Diamond::SDLRenderer2D::init() {
 	// Initialize SDL
@@ -68,7 +75,7 @@ bool Diamond::SDLRenderer2D::init() {
 	return true;
 }
 
-void Diamond::SDLRenderer2D::render() {
+void Diamond::SDLRenderer2D::renderAll() {
 	// Handle SDL events
 	Input::resetKeyup();
 	while (SDL_PollEvent(&e)) {
@@ -80,7 +87,7 @@ void Diamond::SDLRenderer2D::render() {
 	SDL_RenderClear(renderer);
 	for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
 		//std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG
-		i->render(renderer);
+		SDLRenderSpace::render(*i, renderer);
 	}
 
 	// Update screen
@@ -108,45 +115,33 @@ Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
 	return new SDLTexture(texture, width, height);
 }
 
-void Diamond::SDLRenderer2D::genRenderObj(GameObject2D *parent, Texture *texture) {
-	reserveRObjVec(render_objects);
-	render_objects.push_back(SDLRenderObj2D(parent, texture));
-	render_objects.back().armParent();
-	render_objects.back().index = render_objects.size() - 1;
+Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_obj) {
+	return &render_objects[renderobj_id_index_map[render_obj]];
 }
 
-void Diamond::SDLRenderer2D::activateRenderObj(unsigned long index) {
-	reserveRObjVec(render_objects);
-	render_objects.push_back(inactive_render_objects[index]);
-	render_objects.back().armParent();
-	render_objects.back().index = render_objects.size() - 1;
-	destroyInactiveRenderObj(index);
+renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_id transform) {
+	renderobj_id render_obj;
+	if (renderobj_id_stack.size() > 0) {
+		render_obj = renderobj_id_stack.back();
+		renderobj_id_stack.pop_back();
+		renderobj_id_index_map[render_obj] = render_objects.size();
+	}
+	else {
+		render_obj = renderobj_id_index_map.size();
+		renderobj_id_index_map.push_back(render_objects.size());
+	}
+	render_objects.push_back(SDLRenderObj2D(render_obj, texture, transform));
+	return render_obj;
 }
 
-void Diamond::SDLRenderer2D::deactivateRenderObj(unsigned long index) {
-	reserveRObjVec(inactive_render_objects);
-	inactive_render_objects.push_back(render_objects[index]);
-	inactive_render_objects.back().armParent();
-	inactive_render_objects.back().index = inactive_render_objects.size() - 1;
-	destroyRenderObj(index);
-}
-
-void Diamond::SDLRenderer2D::destroyRenderObj(unsigned long index) {
-	if (index < render_objects.size() - 1) { // If in middle of vector, replace it with the last render object in vector
+void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {
+	unsigned long index = renderobj_id_index_map[render_obj];
+	if (index < render_objects.size() - 1) { // If in middle of vector, replace it with last element in vector
 		render_objects[index] = render_objects.back();
-		render_objects[index].armParent();
-		render_objects[index].index = index;
+		renderobj_id_index_map[render_objects[index].obj_id] = index;
 	}
 	render_objects.pop_back();
-}
-
-void Diamond::SDLRenderer2D::destroyInactiveRenderObj(unsigned long index) {
-	if (index < inactive_render_objects.size() - 1) { // If in middle of vector, replace it with the last render object in vector
-		inactive_render_objects[index] = inactive_render_objects.back();
-		inactive_render_objects[index].armParent();
-		inactive_render_objects[index].index = index;
-	}
-	inactive_render_objects.pop_back();
+	renderobj_id_stack.push_back(render_obj);
 }
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
@@ -155,19 +150,4 @@ Diamond::SDLRenderer2D::~SDLRenderer2D() {
 	
 	IMG_Quit();
 	SDL_Quit();
-}
-
-
-// Private functions
-
-void Diamond::SDLRenderer2D::reserveRObjVec(std::vector<SDLRenderObj2D> &v) {
-	unsigned long size = v.size();
-	if (size == v.capacity()) {
-		// Reallocate render_objects vector then loop through and reset their parents' references
-		// This is done to maintain integrity of render pointers if their memory locations moved
-		v.reserve(size + reserve_size);
-		for (std::vector<SDLRenderObj2D>::iterator i = v.begin(); i != v.end(); i++) {
-			i->armParent();
-		}
-	}
 }

@@ -17,19 +17,19 @@
 #ifndef D_RENDER_OBJ_2D_H
 #define D_RENDER_OBJ_2D_H
 
-#include "D_GameObject2D.h"
+#include "Q_QuantumWorld2D.h"
+
 #include "D_Texture.h"
-#include "D_Transform2i.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
 
 	class RenderObj2D {
 		public:
-		unsigned long index;
-		GameObject2D *parent;
-		Transform2i transform;
+		renderobj_id obj_id;
+		transform2_id transform;
 
-		RenderObj2D(GameObject2D *parent);
+		RenderObj2D(renderobj_id obj_id, transform2_id transform);
 
 		virtual void setTexture(Texture *texture) = 0;
 

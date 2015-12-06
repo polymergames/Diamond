@@ -29,13 +29,26 @@ namespace Quantum2D {
 		
 		extern std::vector<Diamond::Transform2i> transforms;
 		extern std::vector<Quantum2D::Rigidbody2D> bodies;
+
+		extern std::vector<unsigned long> body_id_index_map;
+
+		/**
+		 Returns a reference to the transform with the given id.
+		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
+		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
+		*/
+		inline Diamond::Transform2i &getTransform(transform2_id transform) {
+			return transforms[transform];
+		}
 		
 		/**
-		 Returns a pointer to the rigidbody with the given id.
-		 Note: the pointer returned is only guaranteed to be valid until the next time a new rigidbody is created in the bodies vector.
-		 Only use this pointer immediately after calling this function! (ie, call this function again every time you want access)
+		 Returns a reference to the rigidbody with the given id.
+		 Note: the reference returned is only guaranteed to be valid until the next time a new rigidbody is created.
+		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
 		*/
-		Rigidbody2D *getRigidbody(body2d_id body);
+		Rigidbody2D &getRigidbody(body2d_id body) {
+			return bodies[body_id_index_map[body]];
+		}
 		
 		/**
 		 Creates a Transform2i object and returns its index in the transforms vector.

@@ -16,6 +16,6 @@
 
 #include "D_RenderObj2D.h"
 
-Diamond::RenderObj2D::RenderObj2D(GameObject2D *parent) : parent(parent), transform() {}
+Diamond::RenderObj2D::RenderObj2D(renderobj_id obj_id, transform2_id transform) : obj_id(obj_id), transform(transform) {}
 
 Diamond::RenderObj2D::~RenderObj2D() {}

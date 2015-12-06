@@ -23,10 +23,13 @@
 
 namespace Diamond {
 	class SDLTexture;
+	
 	class SDLRenderObj2D : public RenderObj2D {
 		public:
+		SDLTexture *texture;
+		SDL_RendererFlip flip;
 
-		SDLRenderObj2D(GameObject2D *parent, Texture *texture);
+		SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform);
 
 		void setTexture(Texture *texture) override;
 
@@ -35,14 +38,6 @@ namespace Diamond {
 
 		int isFlippedX() const override;
 		int isFlippedY() const override;
-
-		void render(SDL_Renderer *renderer);
-		
-		void armParent();
-
-		private:
-		SDLTexture *texture;
-		SDL_RendererFlip flip;
 	};
 }
 

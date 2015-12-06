@@ -84,7 +84,7 @@ void Diamond::Launcher::launch(Game &game) {
 		Time::fps = nframes / (time / 1000.0);
 		
 		game.update(delta);
-		Graphics2D::render();
+		Graphics2D::renderAll();
 	}
 
 	// End game

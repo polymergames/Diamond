@@ -18,9 +18,11 @@
 #define D_GRAPHICS_2D_H
 
 #include <iostream>
+#include "Q_typedefs.h"
 
-#include "D_GameObject2D.h"
+#include "D_RenderObj2D.h"
 #include "D_Texture.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
 	class Renderer2D;
@@ -35,12 +37,10 @@ namespace Diamond {
 		
 		// TODO: move functions like loadTexture to a public resource management header, and move these to a backend header (ie not visible to users)
 		bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
-		void render(); // renders everything
-		void genRenderObj(GameObject2D *parent, Texture *texture);
-		void activateRenderObj(unsigned long index);
-		void deactivateRenderObj(unsigned long index);
-		void destroyRenderObj(unsigned long index);
-		void destroyInactiveRenderObj(unsigned long index);
+		void renderAll(); // renders everything
+		RenderObj2D *getRenderObj(renderobj_id render_obj); // returned pointer is only temporarily valid
+		renderobj_id genRenderObj(Texture *texture, transform2_id transform);
+		void freeRenderObj(renderobj_id render_obj);
 	};
 }
 
