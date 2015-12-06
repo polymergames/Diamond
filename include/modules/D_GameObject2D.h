@@ -28,7 +28,7 @@
 namespace Diamond {
 	class GameObject2D {
 		public:
-		GameObject2D(std::shared_ptr<Texture> sprite);
+		GameObject2D(std::shared_ptr<Texture> sprite, bool visible = true);
 		GameObject2D(const GameObject2D &other);
 		GameObject2D(GameObject2D &&other);
 

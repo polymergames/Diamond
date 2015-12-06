@@ -19,9 +19,15 @@
 #include "D_Launcher.h"
 #include "D_RenderObj2D.h"
 
-Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite) : sprite(sprite), visible(true) {
+Diamond::GameObject2D::GameObject2D(std::shared_ptr<Texture> sprite, bool visible)
+: sprite(sprite), visible(visible) {
 	transform = Quantum2D::QuantumWorld2D::genTransform();
-	render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
+	if (visible) {
+		render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
+	}
+	else {
+		render_obj = Diamond::INVALID;
+	}
 	setScale(1.0f);
 }
 
@@ -32,6 +38,9 @@ Diamond::GameObject2D::GameObject2D(const GameObject2D &other)
 	getTransform() = other.getTransform();
 	if (visible) {
 		render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
+	}
+	else {
+		render_obj = Diamond::INVALID;
 	}
 	
 	if (other.isFlippedX())	flipX();
@@ -56,6 +65,9 @@ Diamond::GameObject2D &Diamond::GameObject2D::operator=(const GameObject2D &othe
 		getTransform() = other.getTransform();
 		if (visible) {
 			render_obj = Graphics2D::genRenderObj(sprite.get(), transform);
+		}
+		else {
+			render_obj = Diamond::INVALID;
 		}
 		
 		if (other.isFlippedX())	flipX();
@@ -125,15 +137,15 @@ void Diamond::GameObject2D::applyScale() {
 void Diamond::GameObject2D::freeTransform() {
 	if ((t_valid)transform != Diamond::INVALID) {
 		Quantum2D::QuantumWorld2D::freeTransform(transform);
+		transform = Diamond::INVALID;
 	}
-	transform = Diamond::INVALID;
 }
 
 void Diamond::GameObject2D::freeRenderObj() {
 	if ((t_valid)render_obj != Diamond::INVALID) {
 		Graphics2D::freeRenderObj(render_obj);
+		render_obj = Diamond::INVALID;
 	}
-	render_obj = Diamond::INVALID;
 }
 
 Diamond::GameObject2D::~GameObject2D() {
