@@ -30,7 +30,7 @@ namespace Quantum2D {
 		extern std::vector<Diamond::Transform2i> transforms;
 		extern std::vector<Quantum2D::Rigidbody2D> bodies;
 
-		extern std::vector<unsigned long> body_id_index_map;
+		extern std::vector<tD_index> body_id_index_map;
 
 		/**
 		 Returns a reference to the transform with the given id.

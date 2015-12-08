@@ -24,7 +24,7 @@ namespace Diamond {
 	enum audio_channels_t {D_MONO, D_STEREO};
 
 	struct RGBA {
-		unsigned char r, g, b, a;
+		uint8_t r, g, b, a;
 	};
 	
 	struct Config {

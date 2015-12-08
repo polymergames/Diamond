@@ -135,7 +135,7 @@ renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_i
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {
-	unsigned long index = renderobj_id_index_map[render_obj];
+	tD_index index = renderobj_id_index_map[render_obj];
 	if (index < render_objects.size() - 1) { // If in middle of vector, replace it with last element in vector
 		render_objects[index] = render_objects.back();
 		renderobj_id_index_map[render_objects[index].obj_id] = index;

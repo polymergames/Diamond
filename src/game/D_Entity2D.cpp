@@ -61,7 +61,7 @@ void Diamond::Entity2D::update(int16_t delta_ms) {
 }
 
 void Diamond::Entity2D::freeTransform() {
-	if ((t_index)transform != Diamond::INVALID) {
+	if ((tD_index)transform != Diamond::INVALID) {
 		Quantum2D::QuantumWorld2D::freeTransform(transform);
 		transform = Diamond::INVALID;
 	}

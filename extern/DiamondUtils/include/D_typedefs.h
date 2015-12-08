@@ -19,12 +19,12 @@
 
 #include <stdint.h>
 
-typedef uint16_t t_index;
+typedef uint16_t tD_index;
 
-typedef t_index renderobj_id;
+typedef tD_index renderobj_id;
 
 namespace Diamond {
-	const t_index INVALID = 0xffff;
+	const tD_index INVALID = 0xffff;
 }
 
 #endif // D_TYPEDEFS_H

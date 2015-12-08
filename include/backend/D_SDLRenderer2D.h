@@ -69,7 +69,7 @@ namespace Diamond {
 		SDL_Event e;
 
 		std::vector<SDLRenderObj2D> render_objects;
-		std::vector<unsigned long> renderobj_id_index_map;
+		std::vector<tD_index> renderobj_id_index_map;
 		std::vector<renderobj_id> renderobj_id_stack;
 	};
 }

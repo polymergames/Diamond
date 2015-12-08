@@ -20,7 +20,7 @@
 #include <stdint.h>
 #include "D_typedefs.h"
 
-typedef t_index transform2_id;
-typedef t_index body2d_id;
+typedef tD_index transform2_id;
+typedef tD_index body2d_id;
 
 #endif // Q_TYPEDEFS_H

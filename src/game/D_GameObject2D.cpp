@@ -106,14 +106,14 @@ Diamond::GameObject2D &Diamond::GameObject2D::operator=(GameObject2D &&other) {
 
 void Diamond::GameObject2D::setSprite(std::shared_ptr<Texture> sprite) {
 	this->sprite = sprite;
-	if ((t_index)render_obj != Diamond::INVALID) {
+	if ((tD_index)render_obj != Diamond::INVALID) {
 		Graphics2D::getRenderObj(render_obj)->setTexture(sprite.get(), scale);
 	}
 }
 
 void Diamond::GameObject2D::setScale(float scale) {
 	this->scale = scale;
-	if ((t_index)render_obj != Diamond::INVALID) {
+	if ((tD_index)render_obj != Diamond::INVALID) {
 		Graphics2D::getRenderObj(render_obj)->applyScale(scale);
 	}
 }
@@ -137,7 +137,7 @@ void Diamond::GameObject2D::toggleVisibility() {
 }
 
 void Diamond::GameObject2D::freeRenderObj() {
-	if ((t_index)render_obj != Diamond::INVALID) {
+	if ((tD_index)render_obj != Diamond::INVALID) {
 		Graphics2D::freeRenderObj(render_obj);
 		render_obj = Diamond::INVALID;
 	}
