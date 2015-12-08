@@ -19,13 +19,19 @@
 #include "D_GameObject2D.h"
 #include "D_SDLTexture.h"
 
-Diamond::SDLRenderObj2D::SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform)
-	: RenderObj2D(obj_id, transform), flip(SDL_FLIP_NONE) {
-	setTexture(texture);
+Diamond::SDLRenderObj2D::SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform, float scale)
+: RenderObj2D(obj_id, transform), flip(SDL_FLIP_NONE) {
+	setTexture(texture, scale);
 }
 
-void Diamond::SDLRenderObj2D::setTexture(Texture *texture) {
+void Diamond::SDLRenderObj2D::setTexture(Texture *texture, float scale) {
 	this->texture = dynamic_cast<SDLTexture*>(texture);
+	applyScale(scale);
+}
+
+void Diamond::SDLRenderObj2D::applyScale(float scale) {
+	size.x = texture->width * scale;
+	size.y = texture->height * scale;
 }
 
 void Diamond::SDLRenderObj2D::flipX() {

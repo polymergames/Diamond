@@ -28,10 +28,12 @@ namespace Diamond {
 		public:
 		SDLTexture *texture;
 		SDL_RendererFlip flip;
+		Vector2i size;
 
-		SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform);
+		SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform, float scale);
 
-		void setTexture(Texture *texture) override;
+		void setTexture(Texture *texture, float scale) override;
+		void applyScale(float scale) override;
 
 		void flipX() override;
 		void flipY() override;

@@ -14,13 +14,17 @@
 	limitations under the License.
 */
 
-#ifndef Q_TYPEDEFS_H
-#define Q_TYPEDEFS_H
+#ifndef D_TYPEDEFS_H
+#define D_TYPEDEFS_H
 
 #include <stdint.h>
-#include "D_typedefs.h"
 
-typedef t_index transform2_id;
-typedef t_index body2d_id;
+typedef uint16_t t_index;
 
-#endif // Q_TYPEDEFS_H
+typedef t_index renderobj_id;
+
+namespace Diamond {
+	const t_index INVALID = 0xffff;
+}
+
+#endif // D_TYPEDEFS_H

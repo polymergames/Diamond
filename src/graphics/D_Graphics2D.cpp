@@ -43,8 +43,8 @@ Diamond::RenderObj2D *Diamond::Graphics2D::getRenderObj(renderobj_id render_obj)
 	return renderer->getRenderObj(render_obj);
 }
 
-renderobj_id Diamond::Graphics2D::genRenderObj(Texture *texture, transform2_id transform) {
-	return renderer->genRenderObj(texture, transform);
+renderobj_id Diamond::Graphics2D::genRenderObj(Texture *texture, transform2_id transform, float scale) {
+	return renderer->genRenderObj(texture, transform, scale);
 }
 
 void Diamond::Graphics2D::freeRenderObj(renderobj_id render_obj) {

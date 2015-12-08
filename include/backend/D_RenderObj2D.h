@@ -23,16 +23,16 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
-
 	class RenderObj2D {
 		public:
 		renderobj_id obj_id;
 		transform2_id transform;
 
 		RenderObj2D(renderobj_id obj_id, transform2_id transform);
-
-		virtual void setTexture(Texture *texture) = 0;
-
+		
+		virtual void setTexture(Texture *texture, float scale) = 0;
+		virtual void applyScale(float scale) = 0;
+		
 		virtual void flipX() = 0;
 		virtual void flipY() = 0;
 		virtual int isFlippedX() const = 0;

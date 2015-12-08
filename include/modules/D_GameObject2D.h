@@ -17,44 +17,28 @@
 #ifndef D_GAME_OBJECT_2D_H
 #define D_GAME_OBJECT_2D_H
 
-#include <memory>
-#include "Q_QuantumWorld2D.h"
-
+#include "D_Entity2D.h"
 #include "D_Graphics2D.h"
 #include "D_Texture.h"
-#include "D_Transform2i.h"
-#include "D_typedefs.h"
 
 namespace Diamond {
-	class GameObject2D {
+	class GameObject2D : public Entity2D {
 		public:
-		GameObject2D(std::shared_ptr<Texture> sprite, bool visible = true);
+		GameObject2D(Texture *sprite, bool visible = true, float scale = 1.0f);
+		GameObject2D(std::shared_ptr<Texture> sprite, bool visible = true, float scale = 1.0f);
+		~GameObject2D();
+		
 		GameObject2D(const GameObject2D &other);
 		GameObject2D(GameObject2D &&other);
-
+		
 		GameObject2D &operator=(const GameObject2D &other);
 		GameObject2D &operator=(GameObject2D &&other);
 
 		std::shared_ptr<Texture> getSprite() const;
-		
 		void setSprite(std::shared_ptr<Texture> sprite);
-
-		/**
-		 Returns a reference to this gameobject's transform.
-		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
-		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
-		*/
-		Transform2i &getTransform() const;
 		
 		float getScale() const;
-		
-		void setTransform(Transform2i &new_transform);
-		
-		void setTransform(Vector2i &position);
-		void setTransform(int x, int y);
-		void setSize(Vector2i &size);
 		void setScale(float scale);
-		void setRotation(float rotation);
 		
 		void flipX();
 		void flipY();
@@ -83,17 +67,12 @@ namespace Diamond {
 		*/
 		void toggleVisibility();
 		
-		~GameObject2D();
-
 		private:
 		std::shared_ptr<Texture> sprite;
-		transform2_id transform;
 		renderobj_id render_obj;
 		bool visible;
 		float scale;
 
-		void applyScale();
-		void freeTransform();
 		void freeRenderObj();
 	};
 }
@@ -102,29 +81,8 @@ inline std::shared_ptr<Diamond::Texture> Diamond::GameObject2D::getSprite() cons
 	return sprite;
 }
 
-inline Diamond::Transform2i &Diamond::GameObject2D::getTransform() const {
-	return Quantum2D::QuantumWorld2D::getTransform(transform);
-}
-
 inline float Diamond::GameObject2D::getScale() const {
 	return scale;
-}
-
-inline void Diamond::GameObject2D::setTransform(Diamond::Vector2i &position) {
-	Quantum2D::QuantumWorld2D::getTransform(transform).position = position;
-}
-
-inline void Diamond::GameObject2D::setTransform(int x, int y) {
-	Quantum2D::QuantumWorld2D::getTransform(transform).position.x = x;
-	Quantum2D::QuantumWorld2D::getTransform(transform).position.y = y;
-}
-
-inline void Diamond::GameObject2D::setSize(Diamond::Vector2i &size) {
-	Quantum2D::QuantumWorld2D::getTransform(transform).size = size;
-}
-
-inline void Diamond::GameObject2D::setRotation(float rotation) {
-	Quantum2D::QuantumWorld2D::getTransform(transform).rotation = rotation;
 }
 
 inline void Diamond::GameObject2D::flipX() {

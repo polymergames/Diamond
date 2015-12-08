@@ -39,7 +39,7 @@ namespace Diamond {
 		bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
 		void renderAll(); // renders everything
 		RenderObj2D *getRenderObj(renderobj_id render_obj); // returned pointer is only temporarily valid
-		renderobj_id genRenderObj(Texture *texture, transform2_id transform);
+		renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale);
 		void freeRenderObj(renderobj_id render_obj);
 	};
 }

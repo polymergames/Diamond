@@ -28,7 +28,7 @@ namespace Diamond {
 	namespace SDLRenderSpace {
 		static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
 			Diamond::Transform2i transform = Quantum2D::QuantumWorld2D::transforms[obj.transform];
-			SDL_Rect render_rect = {transform.position.x, transform.position.y, transform.size.x, transform.size.y};
+			SDL_Rect render_rect = {transform.position.x, transform.position.y, obj.size.x, obj.size.y};
 			SDL_RenderCopyEx(renderer, obj.texture->texture, NULL, &render_rect, transform.rotation, NULL, obj.flip);
 		}
 	}
@@ -119,7 +119,7 @@ Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_o
 	return &render_objects[renderobj_id_index_map[render_obj]];
 }
 
-renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_id transform) {
+renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_id transform, float scale) {
 	renderobj_id render_obj;
 	if (renderobj_id_stack.size() > 0) {
 		render_obj = renderobj_id_stack.back();
@@ -130,7 +130,7 @@ renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_i
 		render_obj = renderobj_id_index_map.size();
 		renderobj_id_index_map.push_back(render_objects.size());
 	}
-	render_objects.push_back(SDLRenderObj2D(render_obj, texture, transform));
+	render_objects.push_back(SDLRenderObj2D(render_obj, texture, transform, scale));
 	return render_obj;
 }
 

@@ -48,8 +48,9 @@ class Demo : public Game {
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
 		
-		spike = std::unique_ptr<GameObject2D>(new GameObject2D(cloud_sprite, true, 0.1f));
+		spike = std::unique_ptr<GameObject2D>(new GameObject2D(cloud_sprite));
 		spike->setTransform(500, 400);
+		spike->setScale(0.1f);
 
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
 	}

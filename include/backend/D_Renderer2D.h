@@ -36,7 +36,7 @@ namespace Diamond {
 		virtual Texture *loadTexture(std::string path) = 0;
 		
 		virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
-		virtual renderobj_id genRenderObj(Texture *texture, transform2_id transform) = 0;
+		virtual renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale) = 0;
 		virtual void freeRenderObj(renderobj_id render_obj) = 0;
 		
 		virtual ~Renderer2D() {};
