@@ -77,6 +77,7 @@ bool Diamond::SDLRenderer2D::init() {
 
 void Diamond::SDLRenderer2D::renderAll() {
 	// Handle SDL events
+	SDL_Event e;
 	Input::resetKeyup();
 	while (SDL_PollEvent(&e)) {
 		SDLInput::handle(e);

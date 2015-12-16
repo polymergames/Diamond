@@ -66,7 +66,6 @@ namespace Diamond {
 		private:
 		SDL_Window *window;
 		SDL_Renderer *renderer;
-		SDL_Event e;
 
 		std::vector<SDLRenderObj2D> render_objects;
 		std::vector<tD_index> renderobj_id_index_map;
