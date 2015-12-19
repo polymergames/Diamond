@@ -19,9 +19,12 @@
 
 #include "D_typedefs.h"
 
+#include "D_Entity2D.h"
+
 namespace Diamond {
 	class Component {
-		virtual void update(tD_delta delta_ms) = 0;
+		public:
+		virtual void setParent(Entity2D *parent) = 0;
 	};
 }
 

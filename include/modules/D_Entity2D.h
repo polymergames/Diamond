@@ -54,6 +54,7 @@ namespace Diamond {
 		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
 		*/
 		Transform2i &getTransform() const;
+		transform2_id getTransformID() const;
 		
 		void setTransform(Transform2i &new_transform);
 		void setTransform(Vector2i &position);
@@ -96,12 +97,16 @@ inline T *Entity2D::getComponent() const {
 	}
 }
 
-inline Diamond::Entity2D * Diamond::Entity2D::getParent() const {
+inline Diamond::Entity2D *Diamond::Entity2D::getParent() const {
 	return parent;
 }
 
 inline Diamond::Transform2i &Diamond::Entity2D::getTransform() const {
 	return Quantum2D::QuantumWorld2D::getTransform(transform);
+}
+
+inline transform2_id Diamond::Entity2D::getTransformID() const {
+	return transform;
 }
 
 inline void Diamond::Entity2D::setTransform(Transform2i &new_transform) {
