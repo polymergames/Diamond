@@ -27,6 +27,10 @@ Diamond::Entity2D::~Entity2D() {
 	// TODO: find exception-safer method of memory management. ie it's possible that transform has been destroyed/game has ended/crashed even if is_open = true
 	if (Launcher::is_open) {
 		freeTransform();
+
+		for (Entity2D *child : children) {
+			child->setParent(parent);
+		}
 	}
 }
 
@@ -56,12 +60,17 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
 	return *this;
 }
 
-void Diamond::Entity2D::setParent(Entity2D *parent) {
-	this->parent = parent;
-}
-
 void Diamond::Entity2D::addChild(Entity2D *child){
 	children.push_back(child);
+	child->setParent(this);
+}
+
+void Diamond::Entity2D::addComponent(Component *component) {
+	components[std::type_index(typeid(*component))] = std::unique_ptr<Component>(component);
+}
+
+void Diamond::Entity2D::setParent(Entity2D *parent) {
+	this->parent = parent;
 }
 
 void Diamond::Entity2D::updateComponents(tD_delta delta_ms) {

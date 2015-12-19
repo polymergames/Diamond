@@ -101,27 +101,15 @@ class Demo : public Game {
 
 		// Movement
 		if (Input::keydown[Input::K_W]) {
-//			Transform2i trans = spike->getTransform();
-//			trans.position.y -= movespeed * delta;
-//			spike->setTransform(trans);
 			spike->getTransform().position.y -= movespeed * delta;
 		}
 		if (Input::keydown[Input::K_S]) {
-//			Transform2i trans = spike->getTransform();
-//			trans.position.y += movespeed * delta;
-//			spike->setTransform(trans);
 			spike->getTransform().position.y += movespeed * delta;
 		}
 		if (Input::keydown[Input::K_A]) {
-//			Transform2i trans = spike->getTransform();
-//			trans.position.x -= movespeed * delta;
-//			spike->setTransform(trans);
 			spike->getTransform().position.x -= movespeed * delta;
 		}
 		if (Input::keydown[Input::K_D]) {
-//			Transform2i trans = spike->getTransform();
-//			trans.position.x += movespeed * delta;
-//			spike->setTransform(trans);
 			spike->getTransform().position.x += movespeed * delta;
 		}
 

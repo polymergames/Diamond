@@ -18,14 +18,19 @@
 #define D_ENTITY2D_H
 
 #include <memory>
+#include <typeindex>
+#include <unordered_map>
 #include "Q_QuantumWorld2D.h"
 
 #include "D_Component.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
+	// Special thanks to Chewy Gumball and vijoc on stackoverflow for addComponent() and getComponent() functions.
+	// http://gamedev.stackexchange.com/questions/55950/entity-component-systems-with-c-accessing-components
 	class Entity2D {
 		public:
+
 		Entity2D();
 		~Entity2D();
 		
@@ -35,16 +40,19 @@ namespace Diamond {
 		Entity2D &operator=(const Entity2D &other);
 		Entity2D &operator=(Entity2D &&other);
 		
-		void setParent(Entity2D *parent);
-		void addChild(Entity2D *child);
+		//tD_id getID() const;
 
-		void updateComponents(tD_delta delta_ms);
+		void addChild(Entity2D *child);
+		Entity2D *getParent() const;
+
+		void addComponent(Component *component);
+		template <class T> T *getComponent() const;
 
 		/**
 		 Returns a reference to this entity's transform.
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
 		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
-		 */
+		*/
 		Transform2i &getTransform() const;
 		
 		void setTransform(Transform2i &new_transform);
@@ -52,16 +60,44 @@ namespace Diamond {
 		void setTransform(int x, int y);
 		void setRotation(float rotation);
 		
+		/**
+		 You should call addChild() on the parent instead, which then calls this.
+		*/
+		void setParent(Entity2D *parent);
+
+		void updateComponents(tD_delta delta_ms);
+
 		protected:
 		transform2_id transform;
 		
 		Entity2D *parent;
 		std::vector<Entity2D*> children;
-		std::vector<std::unique_ptr<Component>> components;
+		std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
 		
 		private:
+		//tD_id id;
+
 		void freeTransform();
 	};
+}
+
+/*inline tD_id Diamond::Entity2D::getID() const {
+	return id;
+}*/
+
+template<class T>
+inline T *Entity2D::getComponent() const {
+	std::type_index index(typeid(T));
+	if (components.find(index) != components.end()) {
+		return static_cast<T*>(components[index].get());
+	}
+	else {
+		return nullptr;
+	}
+}
+
+inline Diamond::Entity2D * Diamond::Entity2D::getParent() const {
+	return parent;
 }
 
 inline Diamond::Transform2i &Diamond::Entity2D::getTransform() const {
