@@ -1,12 +1,12 @@
 /*
 	Copyright 2015 Ahnaf Siddiqui
- 
+
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
- 
+
 	http://www.apache.org/licenses/LICENSE-2.0
- 
+
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,21 +14,20 @@
 	limitations under the License.
 */
 
-#ifndef D_TYPEDEFS_H
-#define D_TYPEDEFS_H
+#include "D_Animatronics.h"
 
-#include <stdint.h>
+#include <vector>
 
-// time typedefs
-typedef uint32_t tD_time; // time type
-typedef int16_t tD_delta; // delta time type
-
-// ID/index typedefs
-typedef uint16_t tD_index; // array index type
-typedef tD_index renderobj_id; // render object id type
+#include "D_Animator.h"
 
 namespace Diamond {
-	const tD_index INVALID = 0xffff; // represents an invalid id or array index. can't use negative if tD_index is unsigned type
+	namespace Animatronics {
+		static std::vector<Animator> animators;
+	}
 }
 
-#endif // D_TYPEDEFS_H
+void Diamond::Animatronics::update(tD_delta delta_ms) {
+	for (Animator &animator : animators) {
+		animator.update(delta_ms);
+	}
+}

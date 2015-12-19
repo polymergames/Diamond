@@ -35,6 +35,11 @@ namespace Diamond {
 		Entity2D &operator=(const Entity2D &other);
 		Entity2D &operator=(Entity2D &&other);
 		
+		void setParent(Entity2D *parent);
+		void addChild(Entity2D *child);
+
+		void updateComponents(tD_delta delta_ms);
+
 		/**
 		 Returns a reference to this entity's transform.
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
@@ -46,8 +51,6 @@ namespace Diamond {
 		void setTransform(Vector2i &position);
 		void setTransform(int x, int y);
 		void setRotation(float rotation);
-		
-		void update(int16_t delta_ms);
 		
 		protected:
 		transform2_id transform;

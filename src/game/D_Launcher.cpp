@@ -17,7 +17,9 @@
 #include "D_Launcher.h"
 
 #include <iostream>
+#include "D_typedefs.h"
 
+#include "D_Animatronics.h"
 #include "D_AudioManager2D.h"
 #include "D_DesktopLogger.h"
 #include "D_Graphics2D.h"
@@ -66,9 +68,8 @@ void Diamond::Launcher::launch(Game &game) {
 	std::exit();
 #endif
 
-	uint32_t time;
-	uint32_t last_time = Time::msElapsed();
-	uint32_t delta;
+	tD_time time, last_time = Time::msElapsed();
+	tD_delta delta;
 	
 	// Init game
 	game.init();
@@ -84,6 +85,7 @@ void Diamond::Launcher::launch(Game &game) {
 		Time::fps = nframes / (time / 1000.0);
 		
 		game.update(delta);
+		Animatronics::update(delta);
 		Graphics2D::renderAll();
 	}
 

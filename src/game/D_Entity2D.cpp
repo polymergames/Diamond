@@ -56,8 +56,19 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
 	return *this;
 }
 
-void Diamond::Entity2D::update(int16_t delta_ms) {
-	//
+void Diamond::Entity2D::setParent(Entity2D *parent) {
+	this->parent = parent;
+}
+
+void Diamond::Entity2D::addChild(Entity2D *child){
+	children.push_back(child);
+}
+
+void Diamond::Entity2D::updateComponents(tD_delta delta_ms) {
+	// TODO: update this entity's components
+	for (Entity2D *child : children) {
+		child->updateComponents(delta_ms);
+	}
 }
 
 void Diamond::Entity2D::freeTransform() {

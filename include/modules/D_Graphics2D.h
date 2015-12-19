@@ -41,7 +41,7 @@ namespace Diamond {
 		RenderObj2D *getRenderObj(renderobj_id render_obj); // returned pointer is only temporarily valid
 		renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale);
 		void freeRenderObj(renderobj_id render_obj);
-	};
+	}
 }
 
 #endif // D_GRAPHICS_2D_H

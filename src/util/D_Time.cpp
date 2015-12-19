@@ -33,6 +33,6 @@ uint32_t Diamond::Time::msElapsed() {
 }
 
 void Diamond::Time::setTimer(Timer *timer) {
-	if (Time::timer == nullptr && timer != nullptr)
+	if (Time::timer == nullptr)
 		Time::timer = std::unique_ptr<Timer>(timer);
 }

@@ -17,11 +17,11 @@
 #ifndef D_COMPONENT_H
 #define D_COMPONENT_H
 
-#include <stdint.h>
+#include "D_typedefs.h"
 
 namespace Diamond {
 	class Component {
-		virtual void update(int16_t delta_ms) = 0;
+		virtual void update(tD_delta delta_ms) = 0;
 	};
 }
 

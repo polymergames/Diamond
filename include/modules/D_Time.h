@@ -34,7 +34,7 @@ namespace Diamond {
 		 Called by Diamond launcher to set the platform-specific timing implementation.
 		*/
 		void setTimer(Timer *timer);
-	};
+	}
 }
 
 #endif // D_TIME_H
