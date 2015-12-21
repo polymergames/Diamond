@@ -25,6 +25,8 @@
 namespace Diamond {
 	class DiskJockey2D {
 		public:
+		virtual ~DiskJockey2D() {};
+
 		virtual bool init() = 0;
 
 		virtual Sound2D *loadSound(std::string path) = 0;
@@ -44,8 +46,6 @@ namespace Diamond {
 		virtual int getMusicVolume() const = 0;
 
 		virtual void setMusicVolume(int volume) = 0;
-
-		virtual ~DiskJockey2D() {};
 	};
 }
 

@@ -32,7 +32,7 @@ namespace Diamond {
 		public:
 
 		Entity2D();
-		~Entity2D();
+		virtual ~Entity2D();
 		
 		Entity2D(const Entity2D &other);
 		Entity2D(Entity2D &&other);

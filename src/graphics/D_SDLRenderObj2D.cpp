@@ -16,7 +16,6 @@
 
 #include "D_SDLRenderObj2D.h"
 
-#include "D_GameObject2D.h"
 #include "D_SDLTexture.h"
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform, float scale)

@@ -27,6 +27,7 @@ namespace Diamond {
 	*/
 	class Music {
 		public:
+		virtual ~Music() {};
 
 		virtual void play() = 0;
 
@@ -48,9 +49,6 @@ namespace Diamond {
 		 Note: you can use the getMaxVolume() function in AudioManager2D to scale your volume values.
 		*/
 		virtual void setVolume(int volume) = 0;
-
-		virtual ~Music() {};
-
 	};
 }
 

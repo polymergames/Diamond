@@ -27,8 +27,9 @@ namespace Diamond {
 		public:
 		renderobj_id obj_id;
 		transform2_id transform;
-
+		
 		RenderObj2D(renderobj_id obj_id, transform2_id transform);
+		virtual ~RenderObj2D();
 		
 		virtual void setTexture(Texture *texture, float scale) = 0;
 		virtual void applyScale(float scale) = 0;
@@ -37,8 +38,6 @@ namespace Diamond {
 		virtual void flipY() = 0;
 		virtual int isFlippedX() const = 0;
 		virtual int isFlippedY() const = 0;
-
-		virtual ~RenderObj2D();
 	};
 }
 

@@ -21,7 +21,6 @@
 
 #include "Q_typedefs.h"
 
-#include "D_GameObject2D.h"
 #include "D_RenderObj2D.h"
 #include "D_Texture.h"
 #include "D_typedefs.h"

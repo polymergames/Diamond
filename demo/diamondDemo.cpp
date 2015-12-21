@@ -136,7 +136,7 @@ class Demo : public Game {
 	void quit() override {};
 };
 
-int main(int argc, char *argv[]) {
+int main() {
 	Demo demo;
 
 	Launcher::config.vsync = true;
