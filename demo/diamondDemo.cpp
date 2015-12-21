@@ -21,10 +21,11 @@ using namespace Quantum2D;
 
 #include "D_AudioManager2D.h"
 #include "D_Game.h"
-#include "D_GameObject2D.h"
+#include "D_Entity2D.h"
 #include "D_Graphics2D.h"
 #include "D_Input.h"
 #include "D_Launcher.h"
+#include "D_RenderComponent2D.h"
 #include "D_Time.h"
 using namespace Diamond;
 
@@ -34,7 +35,7 @@ class Demo : public Game {
 	const float spinspeed = 0.75f;
 	const float growspeed = 0.00075f;
 
-	std::unique_ptr<GameObject2D> spike;
+	Entity2D spike;
 
 	std::shared_ptr<Texture> spike_sprite;
 	std::shared_ptr<Texture> cloud_sprite;
@@ -48,8 +49,11 @@ class Demo : public Game {
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
 		
-		spike = std::unique_ptr<GameObject2D>(new GameObject2D(cloud_sprite, true, 0.1f));
-		spike->setTransform(500, 400);
+		spike.addComponent(new RenderComponent2D(&spike, cloud_sprite, 0.1f));
+		spike.setTransform(500, 400);
+		if (!spike.getComponent<RenderComponent2D>()) {
+			std::cout << "NULL!" << std::endl;
+		}
 
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
 	}
@@ -58,67 +62,67 @@ class Demo : public Game {
 		// Coloring
 		if (Input::keydown[Input::K_R]) {
 			spike_color = {255, 0, 0, 255};
-			spike->getSprite()->setColor(spike_color);
+			spike.getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
 		}
 		if (Input::keydown[Input::K_T]) {
 			spike_color = {255, 255, 255, 255};
-			spike->getSprite()->setColor(spike_color);
+			spike.getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
 		}
 		if (Input::keyup[Input::K_Y]) {
-			RGBA sc = spike->getSprite()->getColor();
+			RGBA sc = spike.getComponent<RenderComponent2D>()->getSprite()->getColor();
 			sc.a -= 32;
-			spike->getSprite()->setColor(sc);
+			spike.getComponent<RenderComponent2D>()->getSprite()->setColor(sc);
 		}
 
 		// Sprite switching
 		if (Input::keyup[Input::K_1]) {
-			spike->setSprite(spike_sprite);
+			spike.getComponent<RenderComponent2D>()->setSprite(spike_sprite);
 		}
 		if (Input::keyup[Input::K_2]) {
-			spike->setSprite(cloud_sprite);
+			spike.getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
 		}
 
 		// Visibility
 		if (Input::keyup[Input::K_SPACE]) {
-			spike->toggleVisibility();
+			spike.getComponent<RenderComponent2D>()->toggleVisibility();
 		}
 
 		// Stretching
 		if (Input::keydown[Input::K_LSHIFT]) {
-			spike->setScale(spike->getScale() + growspeed * delta);
+			spike.getComponent<RenderComponent2D>()->setScale(spike.getComponent<RenderComponent2D>()->getScale() + growspeed * delta);
 		}
 		if (Input::keydown[Input::K_LCTRL]) {
-			spike->setScale(spike->getScale() - growspeed * delta);
+			spike.getComponent<RenderComponent2D>()->setScale(spike.getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
 		}
 
 		// Flipping
 		if (Input::keyup[Input::K_DOWN]) {
-			spike->flipX();
+			spike.getComponent<RenderComponent2D>()->flipX();
 		}
 		if (Input::keyup[Input::K_UP]) {
-			spike->flipY();
+			spike.getComponent<RenderComponent2D>()->flipY();
 		}
 
 		// Movement
 		if (Input::keydown[Input::K_W]) {
-			spike->getTransform().position.y -= movespeed * delta;
+			spike.getTransform().position.y -= movespeed * delta;
 		}
 		if (Input::keydown[Input::K_S]) {
-			spike->getTransform().position.y += movespeed * delta;
+			spike.getTransform().position.y += movespeed * delta;
 		}
 		if (Input::keydown[Input::K_A]) {
-			spike->getTransform().position.x -= movespeed * delta;
+			spike.getTransform().position.x -= movespeed * delta;
 		}
 		if (Input::keydown[Input::K_D]) {
-			spike->getTransform().position.x += movespeed * delta;
+			spike.getTransform().position.x += movespeed * delta;
 		}
 
 		// Rotation
 		if (Input::keydown[Input::K_LEFT]) {
-			spike->setRotation(spike->getTransform().rotation - spinspeed * delta);
+			spike.setRotation(spike.getTransform().rotation - spinspeed * delta);
 		}
 		if (Input::keydown[Input::K_RIGHT]) {
-			spike->setRotation(spike->getTransform().rotation + spinspeed * delta);
+			spike.setRotation(spike.getTransform().rotation + spinspeed * delta);
 		}
 
 		// Sound
@@ -126,8 +130,7 @@ class Demo : public Game {
 			haha->play();
 		}
 
-//		std::cout << "x flip: " << spike->isFlippedX() << "; y flip: " << spike->isFlippedY() << std::endl;
-//		std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
+		std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
 	}
 
 	void quit() override {};

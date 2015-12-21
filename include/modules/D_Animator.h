@@ -14,29 +14,17 @@
 	limitations under the License.
 */
 
-#ifndef D_COMPONENT_H
-#define D_COMPONENT_H
+#ifndef D_ANIMATOR_H
+#define D_ANIMATOR_H
 
 #include "D_typedefs.h"
 
 namespace Diamond {
-	class Entity2D;
-	class Component {
+	class Animator {
 		public:
-		Component(Entity2D *parent);
-		virtual ~Component() {};
-
-		Entity2D *getParent();
-
-		protected:
-		Entity2D *parent;
+		void update(tD_delta delta_ms) {};
 	};
 }
 
-inline Diamond::Component::Component(Entity2D *parent) : parent(parent) {}
+#endif // D_ANIMATOR_H
 
-inline Diamond::Entity2D *Diamond::Component::getParent() {
-	return parent;
-}
-
-#endif // D_COMPONENT_H

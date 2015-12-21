@@ -30,6 +30,11 @@ namespace Diamond {
 		SDLRenderer2D();
 		
 		/**
+		Destroys window and renderer and shuts down SDL and SDL extensions.
+		*/
+		~SDLRenderer2D();
+
+		/**
 		 Initializes SDL, creates window, and initializes image loading.
 		 Returns whether all of the initialization was successful.
 		*/
@@ -57,11 +62,6 @@ namespace Diamond {
 		 Marks the given id as available for a new SDLRenderObj2D, and removes its currently associated renderobj.
 		*/
 		void freeRenderObj(renderobj_id render_obj) override;
-		
-		/**
-		 Destroys window and renderer and shuts down SDL and SDL extensions.
-		*/
-		~SDLRenderer2D();
 
 		private:
 		SDL_Window *window;

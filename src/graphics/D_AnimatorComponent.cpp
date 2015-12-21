@@ -16,6 +16,4 @@
 
 #include "D_AnimatorComponent.h"
 
-void Diamond::AnimatorComponent::setParent(Entity2D *parent) {
-	// Check if parent has a render component. If it doesn't, add one.
-}
+

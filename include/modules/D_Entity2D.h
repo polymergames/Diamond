@@ -46,7 +46,8 @@ namespace Diamond {
 		Entity2D *getParent() const;
 
 		void addComponent(Component *component);
-		template <class T> T *getComponent() const;
+		template <class T> T *getComponent();
+		template <class T> void removeComponent();
 
 		/**
 		 Returns a reference to this entity's transform.
@@ -87,13 +88,21 @@ namespace Diamond {
 }*/
 
 template<class T>
-inline T *Entity2D::getComponent() const {
-	std::type_index index(typeid(T));
-	if (components.find(index) != components.end()) {
-		return static_cast<T*>(components[index].get());
+inline T *Diamond::Entity2D::getComponent() {
+	auto c = components.find(std::type_index(typeid(T)));
+	if (c != components.end()) {
+		return static_cast<T*>(c->second.get());
 	}
 	else {
 		return nullptr;
+	}
+}
+
+template<class T>
+inline void Diamond::Entity2D::removeComponent() {
+	auto c = components.find(std::type_index(typeid(T)));
+	if (c != components.end()) {
+		components.erase(c);
 	}
 }
 

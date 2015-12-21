@@ -18,19 +18,12 @@
 
 #include "D_Launcher.h"
 
-Diamond::RenderComponent2D::RenderComponent2D(Texture *sprite, bool visible, float scale)
-	: RenderComponent2D(std::shared_ptr<Texture>(sprite), visible, scale) {}
+Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, Texture *sprite, float scale)
+	: RenderComponent2D(parent, std::shared_ptr<Texture>(sprite), scale) {}
 
-Diamond::RenderComponent2D::RenderComponent2D(std::shared_ptr<Texture> sprite, bool visible, float scale)
-	: sprite(sprite), visible(visible), scale(scale) {}
-
-void Diamond::RenderComponent2D::setParent(Entity2D *parent) {
-	if (visible) {
-		render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID(), scale);
-	}
-	else {
-		render_obj = Diamond::INVALID;
-	}
+Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, std::shared_ptr<Texture> sprite, float scale)
+	: Component(parent), sprite(sprite), scale(scale) {
+	render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID(), scale);
 }
 
 Diamond::RenderComponent2D::~RenderComponent2D() {

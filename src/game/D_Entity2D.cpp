@@ -15,6 +15,7 @@
 */
 
 #include "D_Entity2D.h"
+
 #include "D_Launcher.h"
 
 
@@ -66,7 +67,6 @@ void Diamond::Entity2D::addChild(Entity2D *child){
 }
 
 void Diamond::Entity2D::addComponent(Component *component) {
-	component->setParent(this);
 	components[std::type_index(typeid(*component))] = std::unique_ptr<Component>(component);
 }
 

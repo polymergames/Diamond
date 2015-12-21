@@ -17,19 +17,20 @@
 #ifndef D_RENDER_COMPONENT_2D_H
 #define D_RENDER_COMPONENT_2D_H
 
+#include <memory>
+
 #include "D_Component.h"
+#include "D_Entity2D.h"
 #include "D_Graphics2D.h"
 #include "D_Texture.h"
 
 namespace Diamond {
 	class RenderComponent2D : public Component {
 		public:
-		RenderComponent2D(Texture *sprite, bool visible = true, float scale = 1.0f);
-		RenderComponent2D(std::shared_ptr<Texture> sprite, bool visible = true, float scale = 1.0f);
+		RenderComponent2D(Entity2D *parent, Texture *sprite, float scale = 1.0f);
+		RenderComponent2D(Entity2D *parent, std::shared_ptr<Texture> sprite, float scale = 1.0f);
 		~RenderComponent2D();
-
-		void setParent(Entity2D *parent) override;
-
+		
 		std::shared_ptr<Texture> getSprite() const;
 		void setSprite(Texture *sprite);
 		void setSprite(std::shared_ptr<Texture> sprite);
@@ -65,11 +66,8 @@ namespace Diamond {
 		void toggleVisibility();
 
 		private:
-		Entity2D *parent;
-
 		std::shared_ptr<Texture> sprite;
 		renderobj_id render_obj;
-		bool visible;
 		float scale;
 
 		void freeRenderObj();
@@ -95,7 +93,7 @@ inline float Diamond::RenderComponent2D::getScale() const {
 	return scale;
 }
 
-void Diamond::RenderComponent2D::setScale(float scale) {
+inline void Diamond::RenderComponent2D::setScale(float scale) {
 	this->scale = scale;
 	if ((tD_index)render_obj != Diamond::INVALID) {
 		Graphics2D::getRenderObj(render_obj)->applyScale(scale);
@@ -103,41 +101,53 @@ void Diamond::RenderComponent2D::setScale(float scale) {
 }
 
 inline void Diamond::RenderComponent2D::flipX() {
-	Graphics2D::getRenderObj(render_obj)->flipX();
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		Graphics2D::getRenderObj(render_obj)->flipX();
+	}
 }
 
 inline void Diamond::RenderComponent2D::flipY() {
-	Graphics2D::getRenderObj(render_obj)->flipY();
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		Graphics2D::getRenderObj(render_obj)->flipY();
+	}
 }
 
 inline int Diamond::RenderComponent2D::isFlippedX() const {
-	return Graphics2D::getRenderObj(render_obj)->isFlippedX();
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		return Graphics2D::getRenderObj(render_obj)->isFlippedX();
+	}
+	else {
+		return 0;
+	}
 }
 
 inline int Diamond::RenderComponent2D::isFlippedY() const {
-	return Graphics2D::getRenderObj(render_obj)->isFlippedY();
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		return Graphics2D::getRenderObj(render_obj)->isFlippedY();
+	}
+	else {
+		return 0;
+	}
 }
 
 inline bool Diamond::RenderComponent2D::isVisible() const {
-	return visible;
+	return (tD_index)render_obj != Diamond::INVALID;
 }
 
-void Diamond::RenderComponent2D::makeVisible() {
-	if (!visible) {
-		render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID, scale);
-		visible = true;
+inline void Diamond::RenderComponent2D::makeVisible() {
+	if ((tD_index)render_obj == Diamond::INVALID) {
+		render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID(), scale);
 	}
 }
 
-void Diamond::RenderComponent2D::makeInvisible() {
-	if (visible) {
+inline void Diamond::RenderComponent2D::makeInvisible() {
+	if ((tD_index)render_obj != Diamond::INVALID) {
 		freeRenderObj();
-		visible = false;
 	}
 }
 
-void Diamond::RenderComponent2D::toggleVisibility() {
-	visible ? makeInvisible() : makeVisible();
+inline void Diamond::RenderComponent2D::toggleVisibility() {
+	render_obj == Diamond::INVALID ? makeVisible() : makeInvisible();
 }
 
 #endif // D_RENDER_COMPONENT_2D_H

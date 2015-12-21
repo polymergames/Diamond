@@ -24,7 +24,6 @@
 namespace Diamond {
 	class AnimatorComponent : public Component {
 		public:
-		void setParent(Entity2D *parent) override;
 	};
 }
 
