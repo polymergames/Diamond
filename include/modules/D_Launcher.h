@@ -17,6 +17,10 @@
 #ifndef D_LAUNCHER_H
 #define D_LAUNCHER_H
 
+#ifdef __ANDROID__
+#include "SDL.h"
+#endif
+
 #include "D_Config.h"
 #include "D_Game.h"
 

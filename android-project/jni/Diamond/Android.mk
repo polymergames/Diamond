@@ -20,6 +20,12 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := Diamond
 
+FILE_SRC_LIST := $(wildcard $(LOCAL_PATH)/src/audio/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/game/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/graphics/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/input/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/util/*.cpp)
+
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include \
 	$(LOCAL_PATH)/../../../include/backend \
 	$(LOCAL_PATH)/../../../include/modules \
@@ -29,14 +35,21 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include \
 	$(LOCAL_PATH)/../../../extern/SDL2_mixer-2.0.0/include \
 	$(LOCAL_PATH)/../../../extern/SDL2-2.0.3/include
 
-LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/../../../src/audio/*.cpp) \
+LOCAL_SRC_FILES := \
+	$(subst $(LOCAL_PATH)/,, \
+	$(wildcard $(LOCAL_PATH)/../../../src/audio/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/game/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/graphics/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/input/*.cpp) \
-	$(wildcard $(LOCAL_PATH)/../../../src/util/*.cpp)
+	$(wildcard $(LOCAL_PATH)/../../../src/util/*.cpp))
 
-# TODO: Add SDL2_mixer
-LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image
+#$(wildcard src/audio/*.cpp) \
+#$(wildcard src/game/*.cpp) \
+#$(wildcard src/graphics/*.cpp) \
+#$(wildcard src/input/*.cpp) \
+#$(wildcard src/util/*.cpp)
+
+LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image SDL2_mixer
 
 LOCAL_STATIC_LIBRARIES := Quantum2D
 

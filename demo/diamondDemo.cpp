@@ -16,9 +16,6 @@
 
 #include <memory>
 
-#include "Q_QuantumWorld2D.h"
-using namespace Quantum2D;
-
 #include "D_AudioManager2D.h"
 #include "D_Game.h"
 #include "D_Entity2D.h"
@@ -136,7 +133,8 @@ class Demo : public Game {
 	void quit() override {};
 };
 
-int main() {
+
+int main(int argc, char *argv[]) {
 	Demo demo;
 
 	Launcher::config.vsync = true;

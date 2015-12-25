@@ -1,7 +1,8 @@
 # See CPLUSPLUS-SUPPORT.html in the NDK documentation for more information
-APP_STL := stlport_shared
+APP_STL := gnustl_shared
 
-# TODO: include x86. First build SDL for x86.
+APP_CPPFLAGS += -std=c++11
+
 APP_ABI := armeabi armeabi-v7a
 
 APP_MODULES := Diamond

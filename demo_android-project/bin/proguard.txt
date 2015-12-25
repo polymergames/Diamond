@@ -1,0 +1,3 @@
+# view AndroidManifest.xml #generated:24
+-keep class com.polymergames.polymer.PolymerActivity { <init>(...); }
+
