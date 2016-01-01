@@ -39,12 +39,11 @@ namespace Diamond {
 		 Returns whether all of the initialization was successful.
 		*/
 		bool init() override;
-
-		/**
-		 Called in game loop. Renders graphics as well as handles SDL events.
-		*/
+		
 		void renderAll() override;
 		
+		Vector2<int> getResolution() override;
+
 		/**
 		 Loads an image file as an SDL texture. Caller is responsible for ownership!
 		 Returns nullptr if texture failed to load.

@@ -34,6 +34,11 @@ namespace Diamond {
 		*/
 		Texture *loadTexture(std::string path);
 		
+		/**
+		 Gets the current resolution of the game window
+		*/
+		Vector2<int> getResolution();
+
 		// TODO: move functions like loadTexture to a public resource management header, and move these to a backend header (ie not visible to users)
 		bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
 		void renderAll(); // renders everything

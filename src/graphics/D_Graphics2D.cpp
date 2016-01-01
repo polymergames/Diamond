@@ -30,6 +30,10 @@ Diamond::Texture *Diamond::Graphics2D::loadTexture(std::string path) {
 	return renderer->loadTexture(path);
 }
 
+Diamond::Vector2<int> Diamond::Graphics2D::getResolution() {
+	return renderer->getResolution();
+}
+
 bool Diamond::Graphics2D::initRenderer(Renderer2D *renderer) {
 	Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
 	return renderer->init();

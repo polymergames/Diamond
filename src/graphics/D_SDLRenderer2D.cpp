@@ -89,6 +89,12 @@ void Diamond::SDLRenderer2D::renderAll() {
 	SDL_RenderPresent(renderer);
 }
 
+Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() {
+	SDL_DisplayMode mode;
+	SDL_GetCurrentDisplayMode(0, &mode);
+	return Vector2<int>(mode.w, mode.h);
+}
+
 Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
 	SDL_Surface* surface = IMG_Load(path.c_str());
 	if (surface == NULL) {

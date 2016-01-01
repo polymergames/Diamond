@@ -33,6 +33,7 @@ class Demo : public Game {
 	const float growspeed = 0.00075f;
 
 	Entity2D spike;
+	std::list<std::unique_ptr<Entity2D>> objects;
 
 	std::shared_ptr<Texture> spike_sprite;
 	std::shared_ptr<Texture> cloud_sprite;
@@ -41,8 +42,13 @@ class Demo : public Game {
 
 	std::unique_ptr<Sound2D> haha;
 	
+	Vector2<int> screen;
 	
 	void init() override {
+		screen = Graphics2D::getResolution();
+
+		std::cout << "Resolution: " << screen.x << " by " << screen.y << std::endl;
+
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
 		
@@ -127,7 +133,16 @@ class Demo : public Game {
 			haha->play();
 		}
 
-		std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
+
+		// Touch
+		if (Input::touch_down) {
+			Entity2D *spawn = new Entity2D();
+			spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
+			spawn->setTransform(Input::touch_pos.x * screen.x, Input::touch_pos.y * screen.y);
+			objects.push_back(std::unique_ptr<Entity2D>(spawn));
+		}
+
+		//std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
 	}
 
 	void quit() override {};
