@@ -7,12 +7,8 @@ C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\res\values\strings.xml
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\res\drawable-hdpi\ic_launcher.png \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\res\drawable-ldpi\ic_launcher.png \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\res\drawable-mdpi\ic_launcher.png \
-C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\53_extensions_and_changing_orientation \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\cloud.png \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\haha.wav \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\haha_credit.txt \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\spike.png \
-C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\53_extensions_and_changing_orientation\landscape.png \
-C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\53_extensions_and_changing_orientation\portrait.png \
-C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\assets\53_extensions_and_changing_orientation\readme.txt \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\AndroidManifest.xml \

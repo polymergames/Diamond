@@ -1,2 +1,6 @@
 *.o
+*.d
+*.class
+*.setup
+
 *.DS_Store

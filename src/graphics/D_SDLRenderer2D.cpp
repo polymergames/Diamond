@@ -47,8 +47,10 @@ bool Diamond::SDLRenderer2D::init() {
 
 	// Create window
 	window = SDL_CreateWindow(Launcher::config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-							  Launcher::config.window_width, Launcher::config.window_height, Launcher::config.window_width <= 0
-							  || Launcher::config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+							  Launcher::config.window_width, Launcher::config.window_height, 
+								Launcher::config.fullscreen 
+								|| Launcher::config.window_width <= 0
+								|| Launcher::config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 	if (window == nullptr) {
 		// TODO: Handle window creation failure and log
 		std::cout << "SDL failed to create window! SDL Error: " << SDL_GetError() << std::endl;

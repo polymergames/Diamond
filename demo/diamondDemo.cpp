@@ -46,7 +46,7 @@ class Demo : public Game {
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
 		
-		spike.addComponent(new RenderComponent2D(&spike, cloud_sprite, 0.1f));
+		spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
 		spike.setTransform(500, 400);
 		if (!spike.getComponent<RenderComponent2D>()) {
 			std::cout << "NULL!" << std::endl;

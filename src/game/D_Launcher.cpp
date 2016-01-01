@@ -52,14 +52,29 @@ namespace Diamond {
 			
 			Time::setTimer(new SDLTimer());
 		}
+
+		static void initMobile() {
+			config.fullscreen = true;
+
+			Log::setLogger(new DesktopLogger()); // temporary
+
+			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
+				// TODO: Handle renderer initialization failure
+			}
+
+			if (!AudioManager2D::initDj(new SDLDiskJockey2D())) {
+				// TODO: Handle audio initialization failure
+			}
+
+			Time::setTimer(new SDLTimer());
+		}
 	}
 }
 
 void Diamond::Launcher::launch(Game &game) {
-#if defined __ANDROID__
+#if defined __ANDROID__ || defined IOS // TODO: What is the IOS platform macro? Or define one manually!
 	// Android launcher
-#elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
-	// IOS launcher
+	initMobile();
 #elif defined _WIN32 || defined __APPLE__
 	initDesktop(); // Desktop launcher (windows/osx)
 #else

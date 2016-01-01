@@ -20,4 +20,3 @@ C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\classes\org\libsdl
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\classes\org\libsdl\app\SDLMain.class \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\classes\org\libsdl\app\SDLSurface$1.class \
 C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\classes\org\libsdl\app\SDLSurface.class \
-C:\Users\Ahnaf\DevJunk\Games\Diamond\demo_android-project\bin\dexedLibs\annotations-985621636375c7ccdad29bf2db8d7f62.jar \

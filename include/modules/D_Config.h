@@ -34,6 +34,7 @@ namespace Diamond {
 		int16_t window_width = 1280;
 		int16_t window_height = 720;
 		bool vsync = false;
+		bool fullscreen = false;
 		RGBA bg_color = RGBA{0, 0, 0, 100};
 
 		// Audio settings
