@@ -17,17 +17,20 @@
 #include "D_Launcher.h"
 
 #include <iostream>
+#include <memory>
 #include "D_typedefs.h"
 
 #include "D_Animatronics.h"
 #include "D_AudioManager2D.h"
 #include "D_DesktopLogger.h"
 #include "D_Graphics2D.h"
+#include "D_EventHandler.h"
 #include "D_Log.h"
 #include "D_Time.h"
 
 #if defined __ANDROID__ || defined IOS || _WIN32 || defined __APPLE__
 #include "D_SDLDiskJockey2D.h"
+#include "D_SDLEventHandler.h"
 #include "D_SDLRenderer2D.h"
 #include "D_SDLTimer.h"
 #endif
@@ -37,10 +40,14 @@ namespace Diamond {
 		bool is_open = true;
 		Config config = Config();
 		
+		static std::unique_ptr<EventHandler> events = nullptr;
+
 		static int nframes = 0;
 
 		static void initDesktop() {
 			Log::setLogger(new DesktopLogger());
+
+			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
 
 			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
 				// TODO: Handle renderer initialization failure
@@ -57,6 +64,8 @@ namespace Diamond {
 			config.fullscreen = true;
 
 			Log::setLogger(new DesktopLogger()); // temporary
+
+			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
 
 			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
 				// TODO: Handle renderer initialization failure
@@ -91,7 +100,7 @@ void Diamond::Launcher::launch(Game &game) {
 
 	// Update
 	while (Launcher::is_open) {
-		nframes++;
+		++nframes;
 		
 		time = Time::msElapsed();
 		delta = time - last_time;
@@ -99,6 +108,7 @@ void Diamond::Launcher::launch(Game &game) {
 		
 		Time::fps = nframes / (time / 1000.0);
 		
+		events->update();
 		game.update(delta);
 		Animatronics::update(delta);
 		Graphics2D::renderAll();

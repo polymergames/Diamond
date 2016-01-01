@@ -22,7 +22,7 @@ namespace Diamond {
 	 If using the SDL sound implementation, see D_SDLSound2D.h for an important note on the reliability of some functions.
 	*/
 	class Sound2D {
-		public:
+	public:
 		// TODO: bool is_playing()
 
 		virtual ~Sound2D() {};

@@ -21,13 +21,12 @@
 #include "Q_QuantumWorld2D.h"
 
 #include "D_Launcher.h"
-#include "D_SDLInput.h"
 #include "D_SDLTexture.h"
 
 namespace Diamond {
 	namespace SDLRenderSpace {
 		static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
-			Diamond::Transform2i transform = Quantum2D::QuantumWorld2D::transforms[obj.transform];
+			Diamond::Transform2<int, float> transform = Quantum2D::QuantumWorld2D::transforms[obj.transform];
 			SDL_Rect render_rect = {transform.position.x, transform.position.y, obj.size.x, obj.size.y};
 			SDL_RenderCopyEx(renderer, obj.texture->texture, NULL, &render_rect, transform.rotation, NULL, obj.flip);
 		}
@@ -78,13 +77,6 @@ bool Diamond::SDLRenderer2D::init() {
 }
 
 void Diamond::SDLRenderer2D::renderAll() {
-	// Handle SDL events
-	SDL_Event e;
-	Input::resetKeyup();
-	while (SDL_PollEvent(&e)) {
-		SDLInput::handle(e);
-	}
-
 	// Render all the graphics
 	//SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a); // reset color
 	SDL_RenderClear(renderer);

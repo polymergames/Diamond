@@ -28,7 +28,6 @@ namespace Diamond {
 	class Renderer2D;
 	
 	namespace Graphics2D {
-		
 		/**
 		 Loads an image file as a texture.
 		 Returns nullptr if texture failed to load.

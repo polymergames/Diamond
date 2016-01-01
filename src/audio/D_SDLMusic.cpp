@@ -16,7 +16,10 @@
 
 #include "D_SDLMusic.h"
 
-Diamond::SDLMusic::SDLMusic(Mix_Music *music) : music(music), loop(-1) {
+Diamond::SDLMusic::SDLMusic(Mix_Music *music) : music(music), loop(-1) {}
+
+Diamond::SDLMusic::~SDLMusic() {
+	Mix_FreeMusic(music);
 }
 
 void Diamond::SDLMusic::play() {
@@ -45,8 +48,4 @@ int Diamond::SDLMusic::getVolume() const {
 
 void Diamond::SDLMusic::setVolume(int volume) {
 	Mix_VolumeMusic(volume);
-}
-
-Diamond::SDLMusic::~SDLMusic() {
-	Mix_FreeMusic(music);
 }

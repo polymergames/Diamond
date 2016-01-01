@@ -22,6 +22,10 @@
 #include "D_SDLMusic.h"
 #include "D_SDLSound2D.h"
 
+Diamond::SDLDiskJockey2D::~SDLDiskJockey2D() {
+	Mix_Quit();
+}
+
 bool Diamond::SDLDiskJockey2D::init() {
 	if (Mix_OpenAudio(Launcher::config.audio_out_freq,
 			MIX_DEFAULT_FORMAT,
@@ -80,8 +84,4 @@ int Diamond::SDLDiskJockey2D::getMusicVolume() const {
 
 void Diamond::SDLDiskJockey2D::setMusicVolume(int volume) {
 	Mix_VolumeMusic(volume);
-}
-
-Diamond::SDLDiskJockey2D::~SDLDiskJockey2D() {
-	Mix_Quit();
 }

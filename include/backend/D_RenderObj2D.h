@@ -24,7 +24,7 @@
 
 namespace Diamond {
 	class RenderObj2D {
-		public:
+	public:
 		renderobj_id obj_id;
 		transform2_id transform;
 		

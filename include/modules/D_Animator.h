@@ -21,7 +21,7 @@
 
 namespace Diamond {
 	class Animator {
-		public:
+	public:
 		void update(tD_delta delta_ms) {};
 	};
 }

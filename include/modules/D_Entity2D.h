@@ -29,8 +29,7 @@ namespace Diamond {
 	// Special thanks to Chewy Gumball and vijoc on stackoverflow for addComponent() and getComponent() functions.
 	// http://gamedev.stackexchange.com/questions/55950/entity-component-systems-with-c-accessing-components
 	class Entity2D {
-		public:
-
+	public:
 		Entity2D();
 		virtual ~Entity2D();
 		
@@ -54,11 +53,11 @@ namespace Diamond {
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
 		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
 		*/
-		Transform2i &getTransform() const;
+		Transform2<int, float> &getTransform() const;
 		transform2_id getTransformID() const;
 		
-		void setTransform(Transform2i &new_transform);
-		void setTransform(Vector2i &position);
+		void setTransform(Transform2<int, float> &new_transform);
+		void setTransform(Vector2<int> &position);
 		void setTransform(int x, int y);
 		void setRotation(float rotation);
 		
@@ -69,14 +68,14 @@ namespace Diamond {
 
 		void updateComponents(tD_delta delta_ms);
 
-		protected:
+	protected:
 		transform2_id transform;
 		
 		Entity2D *parent;
 		std::vector<Entity2D*> children;
 		std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
 		
-		private:
+	private:
 		//tD_id id;
 
 		void freeTransform();
@@ -110,7 +109,7 @@ inline Diamond::Entity2D *Diamond::Entity2D::getParent() const {
 	return parent;
 }
 
-inline Diamond::Transform2i &Diamond::Entity2D::getTransform() const {
+inline Diamond::Transform2<int, float> &Diamond::Entity2D::getTransform() const {
 	return Quantum2D::QuantumWorld2D::getTransform(transform);
 }
 
@@ -118,11 +117,11 @@ inline transform2_id Diamond::Entity2D::getTransformID() const {
 	return transform;
 }
 
-inline void Diamond::Entity2D::setTransform(Transform2i &new_transform) {
+inline void Diamond::Entity2D::setTransform(Transform2<int, float> &new_transform) {
 	getTransform() = new_transform;
 }
 
-inline void Diamond::Entity2D::setTransform(Diamond::Vector2i &position) {
+inline void Diamond::Entity2D::setTransform(Diamond::Vector2<int> &position) {
 	Quantum2D::QuantumWorld2D::getTransform(transform).position = position;
 }
 

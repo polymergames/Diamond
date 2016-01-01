@@ -26,7 +26,7 @@
 
 namespace Diamond {
 	class SDLRenderer2D : public Renderer2D {
-		public:
+	public:
 		SDLRenderer2D();
 		
 		/**
@@ -63,7 +63,7 @@ namespace Diamond {
 		*/
 		void freeRenderObj(renderobj_id render_obj) override;
 
-		private:
+	private:
 		SDL_Window *window;
 		SDL_Renderer *renderer;
 

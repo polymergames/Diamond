@@ -25,10 +25,10 @@ namespace Diamond {
 	class SDLTexture;
 	
 	class SDLRenderObj2D : public RenderObj2D {
-		public:
+	public:
 		SDLTexture *texture;
 		SDL_RendererFlip flip;
-		Vector2i size;
+		Vector2<int> size;
 
 		SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform, float scale);
 

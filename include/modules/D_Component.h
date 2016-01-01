@@ -22,13 +22,13 @@
 namespace Diamond {
 	class Entity2D;
 	class Component {
-		public:
+	public:
 		Component(Entity2D *parent);
 		virtual ~Component() {};
 
 		Entity2D *getParent();
 
-		protected:
+	protected:
 		Entity2D *parent;
 	};
 }

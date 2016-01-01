@@ -19,7 +19,7 @@
 
 #include <vector>
 
-#include "D_Transform2i.h"
+#include "D_Transform2.h"
 
 #include "Q_RigidBody2D.h"
 #include "Q_typedefs.h"
@@ -27,7 +27,7 @@
 namespace Quantum2D {
 	namespace QuantumWorld2D {
 		
-		extern std::vector<Diamond::Transform2i> transforms;
+		extern std::vector<Diamond::Transform2<int, float>> transforms;
 		extern std::vector<Quantum2D::Rigidbody2D> bodies;
 
 		extern std::vector<tD_index> body_id_index_map;
@@ -37,7 +37,7 @@ namespace Quantum2D {
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
 		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
 		*/
-		inline Diamond::Transform2i &getTransform(transform2_id transform) {
+		inline Diamond::Transform2<int, float> &getTransform(transform2_id transform) {
 			return transforms[transform];
 		}
 		

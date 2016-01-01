@@ -24,7 +24,7 @@
 
 namespace Diamond {
 	class DiskJockey2D {
-		public:
+	public:
 		virtual ~DiskJockey2D() {};
 
 		virtual bool init() = 0;

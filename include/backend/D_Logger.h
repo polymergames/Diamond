@@ -19,7 +19,7 @@
 
 namespace Diamond {
 	class Logger {
-		public:
+	public:
 		virtual ~Logger() {};
 	};
 }

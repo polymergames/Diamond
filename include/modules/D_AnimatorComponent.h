@@ -23,7 +23,7 @@
 
 namespace Diamond {
 	class AnimatorComponent : public Component {
-		public:
+	public:
 	};
 }
 

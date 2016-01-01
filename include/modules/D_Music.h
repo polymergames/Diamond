@@ -26,7 +26,7 @@ namespace Diamond {
 	 To manipulate all/main music that is active, use the functions in AudioManager2D.
 	*/
 	class Music {
-		public:
+	public:
 		virtual ~Music() {};
 
 		virtual void play() = 0;

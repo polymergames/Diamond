@@ -20,12 +20,12 @@ Diamond::SDLTexture::SDLTexture(SDL_Texture *texture, int width, int height) : T
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 }
 
+Diamond::SDLTexture::~SDLTexture() {
+	SDL_DestroyTexture(texture);
+}
+
 void Diamond::SDLTexture::setColor(Diamond::RGBA color) {
 	Texture::setColor(color);
 	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 	SDL_SetTextureAlphaMod(texture, color.a);
-}
-
-Diamond::SDLTexture::~SDLTexture() {
-	SDL_DestroyTexture(texture);
 }

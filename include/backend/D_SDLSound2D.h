@@ -28,8 +28,10 @@ namespace Diamond {
 	 (ie if you call these functions, you might be affecting a completely different sound).
 	*/
 	class SDLSound2D : public Sound2D {
-		public:
+	public:
 		SDLSound2D(Mix_Chunk *sound);
+
+		~SDLSound2D();
 
 		void play() override;
 
@@ -42,10 +44,8 @@ namespace Diamond {
 		int getVolume() const override;
 
 		void setVolume(int volume) override;
-		
-		~SDLSound2D();
 
-		private:
+	private:
 		Mix_Chunk *sound;
 		int channel;
 	};

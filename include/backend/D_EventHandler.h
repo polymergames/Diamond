@@ -14,29 +14,17 @@
 	limitations under the License.
 */
 
-#ifndef D_TRANSFORM_2I_H
-#define D_TRANSFORM_2I_H
-
-#include "D_Vector2i.h"
+#ifndef D_EVENT_HANDLER_H
+#define D_EVENT_HANDLER_H
 
 namespace Diamond {
-	class Transform2i {
-		public:
-		Vector2i position;
-		float rotation;
-		
-		Transform2i() : position(), rotation(0) {}
-		
-		Transform2i(Vector2i position) : position(position), rotation(0) {}
-		
-		Transform2i(Vector2i position, float rotation) : position(position), rotation(rotation) {}
+	class EventHandler {
+	public:
+		virtual ~EventHandler() {};
 
-
-		void reset() {
-			position.set(0, 0);
-			rotation = 0;
-		}
+		virtual void update() = 0;
 	};
 }
 
-#endif // D_TRANSFORM_2I_H
+#endif // D_EVENT_HANDLER_H
+

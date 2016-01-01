@@ -14,37 +14,38 @@
 	limitations under the License.
 */
 
-#ifndef D_VECTOR_2I_H
-#define D_VECTOR_2I_H
+#ifndef D_VECTOR_2_H
+#define D_VECTOR_2_H
 
 namespace Diamond {
-	class Vector2i {
+	template <class T>
+	class Vector2 {
 		public:
-		int x, y;
+		T x, y;
 
-		Vector2i() : x(0), y(0) {}
+		Vector2() {}
 		
-		Vector2i(int x, int y) : x(x), y(y) {}
+		Vector2(T x, T y) : x(x), y(y) {}
 
-		inline void set(int x, int y) {
+		inline void set(T x, T y) {
 			this->x = x, this->y = y;
 		}
 
-		inline Vector2i &add(Vector2i b) {
+		inline Vector2 &add(Vector2 b) {
 			x += b.x, y += b.y;
 			return *this;
 		}
 		
-		inline Vector2i &sub(Vector2i b) {
+		inline Vector2 &sub(Vector2 b) {
 			x -= b.x, y -= b.y;
 			return *this;
 		}
 		
-		inline Vector2i &scalar(int scalar) {
+		inline Vector2 &scalar(float scalar) {
 			x *= scalar, y *= scalar;
 			return *this;
 		}
 	};
 }
 
-#endif // D_VECTOR_2I_H
+#endif // D_VECTOR_2_H

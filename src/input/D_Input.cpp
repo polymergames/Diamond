@@ -19,6 +19,10 @@
 std::vector<bool> Diamond::Input::keydown(NUMKEYS, 0);
 std::vector<bool> Diamond::Input::keyup(NUMKEYS, 0);
 
+bool Diamond::Input::touch_down = false;
+bool Diamond::Input::touch_drag = false;
+bool Diamond::Input::touch_up = false;
+
 void Diamond::Input::resetKeyup() {
 	std::fill(keyup.begin(), keyup.end(), 0);
 }

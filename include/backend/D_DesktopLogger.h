@@ -21,7 +21,7 @@
 
 namespace Diamond {
 	class DesktopLogger : public Logger {
-		public:
+	public:
 		DesktopLogger();
 		~DesktopLogger();
 	};

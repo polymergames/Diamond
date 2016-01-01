@@ -27,8 +27,10 @@ namespace Diamond {
 	 even if it is not this one.
 	*/
 	class SDLMusic : public Music {
-		public:
+	public:
 		SDLMusic(Mix_Music *music);
+
+		~SDLMusic();
 
 		void play() override;
 
@@ -44,9 +46,7 @@ namespace Diamond {
 
 		void setVolume(int volume) override;
 
-		~SDLMusic();
-
-		private:
+	private:
 		Mix_Music *music;
 		int loop; ///< -1 means that the music will loop; otherwise, should be 1.
 	};

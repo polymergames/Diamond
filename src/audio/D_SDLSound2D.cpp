@@ -16,7 +16,10 @@
 
 #include "D_SDLSound2D.h"
 
-Diamond::SDLSound2D::SDLSound2D(Mix_Chunk *sound) : sound(sound), channel(0) {
+Diamond::SDLSound2D::SDLSound2D(Mix_Chunk *sound) : sound(sound), channel(0) {}
+
+Diamond::SDLSound2D::~SDLSound2D() {
+	Mix_FreeChunk(sound);
 }
 
 void Diamond::SDLSound2D::play() {
@@ -41,8 +44,4 @@ int Diamond::SDLSound2D::getVolume() const {
 
 void Diamond::SDLSound2D::setVolume(int volume) {
 	Mix_VolumeChunk(sound, volume);
-}
-
-Diamond::SDLSound2D::~SDLSound2D() {
-	Mix_FreeChunk(sound);
 }

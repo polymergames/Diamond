@@ -21,7 +21,9 @@
 
 namespace Diamond {
 	class SDLDiskJockey2D : public DiskJockey2D {
-		public:
+	public:
+		~SDLDiskJockey2D();
+
 		bool init() override;
 
 		Sound2D *loadSound(std::string path) override;
@@ -41,8 +43,6 @@ namespace Diamond {
 		int getMusicVolume() const override;
 
 		void setMusicVolume(int volume) override;
-
-		~SDLDiskJockey2D();
 	};
 }
 

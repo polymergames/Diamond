@@ -22,7 +22,7 @@
 
 namespace Diamond {
 	namespace Graphics2D {
-		static std::unique_ptr<Diamond::Renderer2D> renderer = nullptr;
+		static std::unique_ptr<Renderer2D> renderer = nullptr;
 	}
 }
 

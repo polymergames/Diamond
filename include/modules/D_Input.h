@@ -18,6 +18,7 @@
 #define D_INPUT_H
 
 #include <vector>
+#include "D_Vector2.h"
 
 namespace Diamond {
 	namespace Input {
@@ -36,6 +37,10 @@ namespace Diamond {
 		extern std::vector<bool> keydown;
 		extern std::vector<bool> keyup;
 		
+		extern bool touch_down, touch_drag, touch_up;
+
+		// touch position vector
+
 		void resetKeyup();
 	}
 }
