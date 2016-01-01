@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+#include <list>
 #include <memory>
 
 #include "D_AudioManager2D.h"

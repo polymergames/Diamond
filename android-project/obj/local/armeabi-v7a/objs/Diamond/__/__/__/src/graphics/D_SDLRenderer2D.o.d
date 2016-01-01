@@ -77,10 +77,10 @@ obj/local/armeabi-v7a/objs/Diamond/__/__/__/src/graphics/D_SDLRenderer2D.o: \
  jni/Diamond/../../../extern/DiamondUtils/include/D_typedefs.h \
  jni/Diamond/../../../include/backend/D_RenderObj2D.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_QuantumWorld2D.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2i.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_RigidBody2D.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_typedefs.h \
  jni/Diamond/../../../include/modules/D_Texture.h \
  jni/Diamond/../../../include/modules/D_Config.h \
@@ -91,8 +91,6 @@ obj/local/armeabi-v7a/objs/Diamond/__/__/__/src/graphics/D_SDLRenderer2D.o: \
  jni/Diamond/../../../extern/SDL2-2.0.3/include/close_code.h \
  jni/Diamond/../../../include/modules/D_Launcher.h \
  jni/Diamond/../../../include/modules/D_Game.h \
- jni/Diamond/../../../include/backend/D_SDLInput.h \
- jni/Diamond/../../../include/modules/D_Input.h \
  jni/Diamond/../../../include/backend/D_SDLTexture.h
 
 jni/Diamond/../../../include/backend/D_SDLRenderer2D.h:
@@ -249,13 +247,13 @@ jni/Diamond/../../../include/backend/D_RenderObj2D.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_QuantumWorld2D.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_RigidBody2D.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_typedefs.h:
 
@@ -276,9 +274,5 @@ jni/Diamond/../../../extern/SDL2-2.0.3/include/close_code.h:
 jni/Diamond/../../../include/modules/D_Launcher.h:
 
 jni/Diamond/../../../include/modules/D_Game.h:
-
-jni/Diamond/../../../include/backend/D_SDLInput.h:
-
-jni/Diamond/../../../include/modules/D_Input.h:
 
 jni/Diamond/../../../include/backend/D_SDLTexture.h:

@@ -6,10 +6,10 @@ obj/local/armeabi-v7a/objs/Diamond/__/__/__/src/game/D_Entity2D.o: \
  C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map \
  jni/Diamond/../../../extern/Quantum2D/include/Q_QuantumWorld2D.h \
  C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2i.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_RigidBody2D.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_typedefs.h \
  jni/Diamond/../../../extern/DiamondUtils/include/D_typedefs.h \
  jni/Diamond/../../../include/modules/D_Component.h \
@@ -79,13 +79,13 @@ jni/Diamond/../../../extern/Quantum2D/include/Q_QuantumWorld2D.h:
 
 C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_RigidBody2D.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_typedefs.h:
 

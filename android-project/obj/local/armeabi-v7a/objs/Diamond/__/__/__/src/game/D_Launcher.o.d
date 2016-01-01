@@ -66,6 +66,7 @@ obj/local/armeabi-v7a/objs/Diamond/__/__/__/src/game/D_Launcher.o: \
  C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/string \
  jni/Diamond/../../../include/modules/D_Game.h \
  C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
+ C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/memory \
  jni/Diamond/../../../extern/DiamondUtils/include/D_typedefs.h \
  jni/Diamond/../../../include/backend/D_Animatronics.h \
  jni/Diamond/../../../include/modules/D_AudioManager2D.h \
@@ -78,19 +79,24 @@ obj/local/armeabi-v7a/objs/Diamond/__/__/__/src/game/D_Launcher.o: \
  jni/Diamond/../../../include/backend/D_RenderObj2D.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_QuantumWorld2D.h \
  C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2i.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_RigidBody2D.h \
- jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h \
+ jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h \
  jni/Diamond/../../../extern/Quantum2D/include/Q_typedefs.h \
  jni/Diamond/../../../include/modules/D_Texture.h \
  jni/Diamond/../../../include/modules/D_Texture.h \
+ jni/Diamond/../../../include/backend/D_EventHandler.h \
  jni/Diamond/../../../include/modules/D_Log.h \
  jni/Diamond/../../../include/modules/D_Time.h \
  jni/Diamond/../../../include/backend/D_SDLDiskJockey2D.h \
  jni/Diamond/../../../include/backend/D_DiskJockey2D.h \
  jni/Diamond/../../../include/modules/D_Sound2D.h \
  jni/Diamond/../../../include/modules/D_Music.h \
+ jni/Diamond/../../../include/backend/D_SDLEventHandler.h \
+ C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/map \
+ jni/Diamond/../../../include/backend/D_EventHandler.h \
+ jni/Diamond/../../../include/modules/D_Input.h \
  jni/Diamond/../../../include/backend/D_SDLRenderer2D.h \
  jni/Diamond/../../../include/modules/D_Config.h \
  jni/Diamond/../../../include/backend/D_Renderer2D.h \
@@ -231,6 +237,8 @@ jni/Diamond/../../../include/modules/D_Game.h:
 
 C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream:
 
+C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/memory:
+
 jni/Diamond/../../../extern/DiamondUtils/include/D_typedefs.h:
 
 jni/Diamond/../../../include/backend/D_Animatronics.h:
@@ -255,19 +263,21 @@ jni/Diamond/../../../extern/Quantum2D/include/Q_QuantumWorld2D.h:
 
 C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Transform2.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_RigidBody2D.h:
 
-jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2i.h:
+jni/Diamond/../../../extern/DiamondUtils/include/D_Vector2.h:
 
 jni/Diamond/../../../extern/Quantum2D/include/Q_typedefs.h:
 
 jni/Diamond/../../../include/modules/D_Texture.h:
 
 jni/Diamond/../../../include/modules/D_Texture.h:
+
+jni/Diamond/../../../include/backend/D_EventHandler.h:
 
 jni/Diamond/../../../include/modules/D_Log.h:
 
@@ -280,6 +290,14 @@ jni/Diamond/../../../include/backend/D_DiskJockey2D.h:
 jni/Diamond/../../../include/modules/D_Sound2D.h:
 
 jni/Diamond/../../../include/modules/D_Music.h:
+
+jni/Diamond/../../../include/backend/D_SDLEventHandler.h:
+
+C:/Dev/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.8/include/map:
+
+jni/Diamond/../../../include/backend/D_EventHandler.h:
+
+jni/Diamond/../../../include/modules/D_Input.h:
 
 jni/Diamond/../../../include/backend/D_SDLRenderer2D.h:
 
