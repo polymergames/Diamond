@@ -44,6 +44,15 @@ namespace Diamond {
 		//tD_id getID() const;
 
 		void addChild(Entity2D *child);
+		
+		/**
+		 Searches children for the given child and removes it from children.
+		 Returns true if child was found and removed, otherwise false.
+		*/
+		bool removeChild(Entity2D *child);
+
+		std::vector<Entity2D*> &getChildren();
+
 		Entity2D *getParent() const;
 
 		void addComponent(Component *component);
@@ -66,11 +75,6 @@ namespace Diamond {
 		void setTransform(Vector2<int> &position);
 		void setTransform(int x, int y);
 		void setRotation(float rotation);
-		
-		/**
-		 You should call addChild() on the parent instead, which then calls this.
-		*/
-		void setParent(Entity2D *parent);
 
 		void updateBehaviors(tD_delta delta_ms);
 
@@ -83,6 +87,8 @@ namespace Diamond {
 		std::map<std::type_index, std::unique_ptr<Behavior>> behaviors;  // a behavior should be self-contained, so main data manipulation happens within the behavior. 
 		// Unlike commponents, behaviors are iterated and updated directly from the entity.
 		
+		void setParent(Entity2D *parent);
+
 	private:
 		//tD_id id;
 
@@ -130,6 +136,10 @@ void Diamond::Entity2D::removeBehavior() {
 	if (b != behaviors.end()) {
 		behaviors.erase(b);
 	}
+}
+
+inline std::vector<Diamond::Entity2D*> &Diamond::Entity2D::getChildren() {
+	return children;
 }
 
 inline Diamond::Entity2D *Diamond::Entity2D::getParent() const {
