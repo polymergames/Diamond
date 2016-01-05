@@ -28,7 +28,7 @@
 namespace Diamond {
 	class Renderer2D {
 	public:
-		virtual ~Renderer2D() {};
+		virtual ~Renderer2D() {}
 
 		virtual bool init() = 0;
 		

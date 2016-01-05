@@ -14,38 +14,35 @@
 	limitations under the License.
 */
 
-#ifndef D_VECTOR_2_H
-#define D_VECTOR_2_H
+#ifndef D_ANIMATOR_2D_H
+#define D_ANIMATOR_2D_H
+
+#include "D_typedefs.h"
+#include "D_Behavior.h"
+#include "D_Animation2D.h"
 
 namespace Diamond {
-	template <class T>
-	class Vector2 {
-		public:
-		T x, y;
+	class RenderComponent2D;
+	class Animator2D : public Behavior {
+	public:
+		Animator2D(Entity2D *parent, Animation2D *anim);
 
-		Vector2() : x(), y() {}
-		
-		Vector2(T x, T y) : x(x), y(y) {}
-
-		inline void set(T x, T y) {
-			this->x = x, this->y = y;
+		inline void setAnimation(Animation2D *anim) {
+			this->anim = anim;
 		}
 
-		inline Vector2 &add(Vector2 b) {
-			x += b.x, y += b.y;
-			return *this;
+		inline Animation2D *getAnimation() {
+			return anim;
 		}
-		
-		inline Vector2 &sub(Vector2 b) {
-			x -= b.x, y -= b.y;
-			return *this;
-		}
-		
-		inline Vector2 &scalar(float scalar) {
-			x *= scalar, y *= scalar;
-			return *this;
-		}
+
+		void update(tD_delta delta) override;
+	private:
+		Animation2D *anim;
+		RenderComponent2D *renderer;
+		tD_index cur_frame;
+		tD_delta elapsed;
 	};
 }
 
-#endif // D_VECTOR_2_H
+#endif // D_ANIMATOR_2D_H
+

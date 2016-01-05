@@ -20,13 +20,13 @@
 #include <memory>
 #include "D_typedefs.h"
 
-#include "D_Animatronics.h"
 #include "D_AudioManager2D.h"
 #include "D_DesktopLogger.h"
 #include "D_Graphics2D.h"
 #include "D_EventHandler.h"
 #include "D_Log.h"
 #include "D_Time.h"
+#include "D_World2D.h"
 
 #if defined __ANDROID__ || defined IOS || _WIN32 || defined __APPLE__
 #include "D_SDLDiskJockey2D.h"
@@ -109,8 +109,8 @@ void Diamond::Launcher::launch(Game &game) {
 		Time::fps = nframes / (time / 1000.0);
 		
 		events->update();
+		World2D::root.updateBehaviors(delta);
 		game.update(delta);
-		Animatronics::update(delta);
 		Graphics2D::renderAll();
 	}
 

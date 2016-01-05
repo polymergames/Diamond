@@ -23,20 +23,16 @@ namespace Diamond {
 	class Entity2D;
 	class Component {
 	public:
-		Component(Entity2D *parent);
-		virtual ~Component() {};
+		Component(Entity2D *parent) : parent(parent) {}
+		virtual ~Component() {}
 
-		Entity2D *getParent();
+		inline Entity2D *getParent() {
+			return parent;
+		}
 
 	protected:
 		Entity2D *parent;
 	};
-}
-
-inline Diamond::Component::Component(Entity2D *parent) : parent(parent) {}
-
-inline Diamond::Entity2D *Diamond::Component::getParent() {
-	return parent;
 }
 
 #endif // D_COMPONENT_H

@@ -18,6 +18,7 @@
 #define D_GAME_H
 
 #include <stdint.h>
+#include "D_typedefs.h"
 
 namespace Diamond {
 	class Game {
@@ -32,7 +33,7 @@ namespace Diamond {
 		 Called once every frame, where delta is the time in seconds since the last frame.
 		 Update game logic here.
 		*/
-		virtual void update(uint32_t delta) = 0;
+		virtual void update(tD_delta delta) = 0;
 
 		/**
 		 Called when game ends.

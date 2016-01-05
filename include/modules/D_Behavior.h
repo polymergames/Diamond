@@ -14,38 +14,20 @@
 	limitations under the License.
 */
 
-#ifndef D_VECTOR_2_H
-#define D_VECTOR_2_H
+#ifndef D_BEHAVIOR_H
+#define D_BEHAVIOR_H
+
+#include "D_Component.h"
 
 namespace Diamond {
-	template <class T>
-	class Vector2 {
-		public:
-		T x, y;
+	class Entity2D;
+	class Behavior : public Component {
+	public:
+		Behavior(Entity2D *parent) : Component(parent) {}
+		virtual ~Behavior() {};
 
-		Vector2() : x(), y() {}
-		
-		Vector2(T x, T y) : x(x), y(y) {}
-
-		inline void set(T x, T y) {
-			this->x = x, this->y = y;
-		}
-
-		inline Vector2 &add(Vector2 b) {
-			x += b.x, y += b.y;
-			return *this;
-		}
-		
-		inline Vector2 &sub(Vector2 b) {
-			x -= b.x, y -= b.y;
-			return *this;
-		}
-		
-		inline Vector2 &scalar(float scalar) {
-			x *= scalar, y *= scalar;
-			return *this;
-		}
+		virtual void update(tD_delta delta) = 0;
 	};
 }
 
-#endif // D_VECTOR_2_H
+#endif // D_BEHAVIOR_H

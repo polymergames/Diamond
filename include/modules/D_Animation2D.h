@@ -14,38 +14,21 @@
 	limitations under the License.
 */
 
-#ifndef D_VECTOR_2_H
-#define D_VECTOR_2_H
+#ifndef D_ANIMATION2D_H
+#define D_ANIMATION2D_H
+
+#include <memory>
+#include <vector>
+
+#include "D_typedefs.h"
+#include "D_Texture.h"
 
 namespace Diamond {
-	template <class T>
-	class Vector2 {
-		public:
-		T x, y;
-
-		Vector2() : x(), y() {}
-		
-		Vector2(T x, T y) : x(x), y(y) {}
-
-		inline void set(T x, T y) {
-			this->x = x, this->y = y;
-		}
-
-		inline Vector2 &add(Vector2 b) {
-			x += b.x, y += b.y;
-			return *this;
-		}
-		
-		inline Vector2 &sub(Vector2 b) {
-			x -= b.x, y -= b.y;
-			return *this;
-		}
-		
-		inline Vector2 &scalar(float scalar) {
-			x *= scalar, y *= scalar;
-			return *this;
-		}
+	struct Animation2D {
+		std::vector<std::shared_ptr<Texture>> sprites;
+		tD_delta frame_length = 100; // the length of time in type of tD_delta (assumed milliseconds) of one animation frame
 	};
 }
 
-#endif // D_VECTOR_2_H
+#endif // D_ANIMATION2D_H
+

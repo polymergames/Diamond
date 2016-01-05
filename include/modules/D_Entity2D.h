@@ -17,13 +17,15 @@
 #ifndef D_ENTITY2D_H
 #define D_ENTITY2D_H
 
+#include <map>
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
 #include "Q_QuantumWorld2D.h"
 
-#include "D_Component.h"
 #include "D_typedefs.h"
+#include "D_Component.h"
+#include "D_Behavior.h"
 
 namespace Diamond {
 	// Special thanks to Chewy Gumball and vijoc on stackoverflow for addComponent() and getComponent() functions.
@@ -48,6 +50,10 @@ namespace Diamond {
 		template <class T> T *getComponent();
 		template <class T> void removeComponent();
 
+		void addBehavior(Behavior *behavior);
+		template <class T> T *getBehavior();
+		template <class T> void removeBehavior();
+
 		/**
 		 Returns a reference to this entity's transform.
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
@@ -66,14 +72,16 @@ namespace Diamond {
 		*/
 		void setParent(Entity2D *parent);
 
-		void updateComponents(tD_delta delta_ms);
+		void updateBehaviors(tD_delta delta_ms);
 
 	protected:
 		transform2_id transform;
 		
 		Entity2D *parent;
 		std::vector<Entity2D*> children;
-		std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
+		std::unordered_map<std::type_index, std::unique_ptr<Component>> components; // components interface with backend data, therefore each entity has its own unique copy
+		std::map<std::type_index, std::unique_ptr<Behavior>> behaviors;  // a behavior should be self-contained, so main data manipulation happens within the behavior. 
+		// Unlike commponents, behaviors are iterated and updated directly from the entity.
 		
 	private:
 		//tD_id id;
@@ -86,8 +94,8 @@ namespace Diamond {
 	return id;
 }*/
 
-template<class T>
-inline T *Diamond::Entity2D::getComponent() {
+template <class T>
+T *Diamond::Entity2D::getComponent() {
 	auto c = components.find(std::type_index(typeid(T)));
 	if (c != components.end()) {
 		return static_cast<T*>(c->second.get());
@@ -97,11 +105,30 @@ inline T *Diamond::Entity2D::getComponent() {
 	}
 }
 
-template<class T>
-inline void Diamond::Entity2D::removeComponent() {
+template <class T>
+void Diamond::Entity2D::removeComponent() {
 	auto c = components.find(std::type_index(typeid(T)));
 	if (c != components.end()) {
 		components.erase(c);
+	}
+}
+
+template <class T>
+T *Diamond::Entity2D::getBehavior() {
+	auto b = behaviors.find(std::type_index(typeid(T)));
+	if (b != behaviors.end()) {
+		return static_cast<T*>(b->second.get());
+	}
+	else {
+		return nullptr;
+	}
+}
+
+template <class T>
+void Diamond::Entity2D::removeBehavior() {
+	auto b = components.find(std::type_index(typeid(T)));
+	if (b != behaviors.end()) {
+		behaviors.erase(b);
 	}
 }
 

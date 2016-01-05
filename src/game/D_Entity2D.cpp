@@ -70,14 +70,21 @@ void Diamond::Entity2D::addComponent(Component *component) {
 	components[std::type_index(typeid(*component))] = std::unique_ptr<Component>(component);
 }
 
+void Diamond::Entity2D::addBehavior(Behavior *behavior) {
+	behaviors[std::type_index(typeid(*behavior))] = std::unique_ptr<Behavior>(behavior);
+}
+
 void Diamond::Entity2D::setParent(Entity2D *parent) {
 	this->parent = parent;
 }
 
-void Diamond::Entity2D::updateComponents(tD_delta delta_ms) {
-	// TODO: update this entity's components
+void Diamond::Entity2D::updateBehaviors(tD_delta delta_ms) {
+	for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
+		it->second->update(delta_ms);
+	}
+
 	for (Entity2D *child : children) {
-		child->updateComponents(delta_ms);
+		child->updateBehaviors(delta_ms);
 	}
 }
 

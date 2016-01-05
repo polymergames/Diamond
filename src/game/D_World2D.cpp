@@ -14,38 +14,6 @@
 	limitations under the License.
 */
 
-#ifndef D_VECTOR_2_H
-#define D_VECTOR_2_H
+#include "D_World2D.h"
 
-namespace Diamond {
-	template <class T>
-	class Vector2 {
-		public:
-		T x, y;
-
-		Vector2() : x(), y() {}
-		
-		Vector2(T x, T y) : x(x), y(y) {}
-
-		inline void set(T x, T y) {
-			this->x = x, this->y = y;
-		}
-
-		inline Vector2 &add(Vector2 b) {
-			x += b.x, y += b.y;
-			return *this;
-		}
-		
-		inline Vector2 &sub(Vector2 b) {
-			x -= b.x, y -= b.y;
-			return *this;
-		}
-		
-		inline Vector2 &scalar(float scalar) {
-			x *= scalar, y *= scalar;
-			return *this;
-		}
-	};
-}
-
-#endif // D_VECTOR_2_H
+Diamond::Entity2D Diamond::World2D::root;

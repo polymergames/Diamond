@@ -17,6 +17,7 @@
 #include <list>
 #include <memory>
 
+#include "D_Animator2D.h"
 #include "D_AudioManager2D.h"
 #include "D_Game.h"
 #include "D_Entity2D.h"
@@ -25,6 +26,7 @@
 #include "D_Launcher.h"
 #include "D_RenderComponent2D.h"
 #include "D_Time.h"
+#include "D_World2D.h"
 using namespace Diamond;
 
 class Demo : public Game {
@@ -34,10 +36,13 @@ class Demo : public Game {
 	const float growspeed = 0.00075f;
 
 	Entity2D spike;
+	Entity2D zapper;
 	std::list<std::unique_ptr<Entity2D>> objects;
 
 	std::shared_ptr<Texture> spike_sprite;
 	std::shared_ptr<Texture> cloud_sprite;
+
+	Animation2D zapper_anim;
 
 	RGBA spike_color = RGBA{255, 255, 255, 255};
 
@@ -60,11 +65,24 @@ class Demo : public Game {
 		if (!spike.getComponent<RenderComponent2D>()) {
 			std::cout << "NULL!" << std::endl;
 		}
+		World2D::root.addChild(&spike);
+
+		zapper_anim.sprites.push_back(std::shared_ptr<Texture>(Graphics2D::loadTexture("zapper1.png")));
+		zapper_anim.sprites.push_back(std::shared_ptr<Texture>(Graphics2D::loadTexture("zapper2.png")));
+		zapper_anim.sprites.push_back(std::shared_ptr<Texture>(Graphics2D::loadTexture("zapper3.png")));
+		zapper_anim.sprites.push_back(std::shared_ptr<Texture>(Graphics2D::loadTexture("zapper4.png")));
+
+		zapper.addBehavior(new Animator2D(&zapper, &zapper_anim));
+		zapper.getComponent<RenderComponent2D>()->setScale(0.5f);
+		zapper.setTransform(700, 300);
+		World2D::root.addChild(&zapper);
 
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
 	}
 
-	void update(uint32_t delta) override {
+	void update(tD_delta delta) override {
+		std::cout << zapper.getTransform().rotation << std::endl;
+
 		// Coloring
 		if (Input::keydown[Input::K_R]) {
 			spike_color = {255, 0, 0, 255};
@@ -90,45 +108,45 @@ class Demo : public Game {
 
 		// Visibility
 		if (Input::keyup[Input::K_SPACE]) {
-			spike.getComponent<RenderComponent2D>()->toggleVisibility();
+			zapper.getComponent<RenderComponent2D>()->toggleVisibility();
 		}
 
 		// Stretching
 		if (Input::keydown[Input::K_LSHIFT]) {
-			spike.getComponent<RenderComponent2D>()->setScale(spike.getComponent<RenderComponent2D>()->getScale() + growspeed * delta);
+			zapper.getComponent<RenderComponent2D>()->setScale(zapper.getComponent<RenderComponent2D>()->getScale() + growspeed * delta);
 		}
 		if (Input::keydown[Input::K_LCTRL]) {
-			spike.getComponent<RenderComponent2D>()->setScale(spike.getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
+			zapper.getComponent<RenderComponent2D>()->setScale(zapper.getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
 		}
 
 		// Flipping
 		if (Input::keyup[Input::K_DOWN]) {
-			spike.getComponent<RenderComponent2D>()->flipX();
+			zapper.getComponent<RenderComponent2D>()->flipX();
 		}
 		if (Input::keyup[Input::K_UP]) {
-			spike.getComponent<RenderComponent2D>()->flipY();
+			zapper.getComponent<RenderComponent2D>()->flipY();
 		}
 
 		// Movement
 		if (Input::keydown[Input::K_W]) {
-			spike.getTransform().position.y -= movespeed * delta;
+			zapper.getTransform().position.y -= movespeed * delta;
 		}
 		if (Input::keydown[Input::K_S]) {
-			spike.getTransform().position.y += movespeed * delta;
+			zapper.getTransform().position.y += movespeed * delta;
 		}
 		if (Input::keydown[Input::K_A]) {
-			spike.getTransform().position.x -= movespeed * delta;
+			zapper.getTransform().position.x -= movespeed * delta;
 		}
 		if (Input::keydown[Input::K_D]) {
-			spike.getTransform().position.x += movespeed * delta;
+			zapper.getTransform().position.x += movespeed * delta;
 		}
 
 		// Rotation
 		if (Input::keydown[Input::K_LEFT]) {
-			spike.setRotation(spike.getTransform().rotation - spinspeed * delta);
+			zapper.setRotation(zapper.getTransform().rotation - spinspeed * delta);
 		}
 		if (Input::keydown[Input::K_RIGHT]) {
-			spike.setRotation(spike.getTransform().rotation + spinspeed * delta);
+			zapper.setRotation(zapper.getTransform().rotation + spinspeed * delta);
 		}
 
 		// Sound
