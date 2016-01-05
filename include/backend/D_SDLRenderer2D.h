@@ -44,6 +44,8 @@ namespace Diamond {
 		
 		Vector2<int> getResolution() override;
 
+		Diamond::Vector2<int> getScreenResolution() override;
+
 		/**
 		 Loads an image file as an SDL texture. Caller is responsible for ownership!
 		 Returns nullptr if texture failed to load.

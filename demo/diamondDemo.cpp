@@ -43,12 +43,14 @@ class Demo : public Game {
 
 	std::unique_ptr<Sound2D> haha;
 	
-	Vector2<int> screen;
+	Vector2<int> window;
 	
 	void init() override {
-		screen = Graphics2D::getResolution();
+		window = Graphics2D::getResolution();
 
-		std::cout << "Resolution: " << screen.x << " by " << screen.y << std::endl;
+		Vector2<int> screen = Graphics2D::getScreenResolution();
+		std::cout << "Resolution: " << window.x << " by " << window.y << std::endl;
+		std::cout << "Screen resolution: " << screen.x << " by " << screen.y << std::endl;
 
 		spike_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("spike.png"));
 		cloud_sprite = std::shared_ptr<Texture>(Graphics2D::loadTexture("cloud.png"));
@@ -139,7 +141,7 @@ class Demo : public Game {
 		if (Input::touch_down) {
 			Entity2D *spawn = new Entity2D();
 			spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
-			spawn->setTransform(Input::touch_pos.x * screen.x, Input::touch_pos.y * screen.y);
+			spawn->setTransform(Input::touch_pos.x * window.x, Input::touch_pos.y * window.y);
 			objects.push_back(std::unique_ptr<Entity2D>(spawn));
 		}
 

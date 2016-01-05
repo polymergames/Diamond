@@ -34,6 +34,10 @@ Diamond::Vector2<int> Diamond::Graphics2D::getResolution() {
 	return renderer->getResolution();
 }
 
+Diamond::Vector2<int> Diamond::Graphics2D::getScreenResolution() {
+	return renderer->getScreenResolution();
+}
+
 bool Diamond::Graphics2D::initRenderer(Renderer2D *renderer) {
 	Graphics2D::renderer = std::unique_ptr<Renderer2D>(renderer);
 	return renderer->init();

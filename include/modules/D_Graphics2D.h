@@ -39,6 +39,8 @@ namespace Diamond {
 		*/
 		Vector2<int> getResolution();
 
+		Diamond::Vector2<int> getScreenResolution();
+
 		// TODO: move functions like loadTexture to a public resource management header, and move these to a backend header (ie not visible to users)
 		bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
 		void renderAll(); // renders everything

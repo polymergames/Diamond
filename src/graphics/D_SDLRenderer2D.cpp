@@ -89,10 +89,17 @@ void Diamond::SDLRenderer2D::renderAll() {
 	SDL_RenderPresent(renderer);
 }
 
-Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() {
+Diamond::Vector2<int> Diamond::SDLRenderer2D::getScreenResolution() {
 	SDL_DisplayMode mode;
 	SDL_GetCurrentDisplayMode(0, &mode);
 	return Vector2<int>(mode.w, mode.h);
+}
+
+Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() {
+	Vector2<int> r;
+	SDL_GL_GetDrawableSize(window, &(r.x), &(r.y));
+	return r;
+
 }
 
 Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {

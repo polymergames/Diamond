@@ -36,6 +36,8 @@ namespace Diamond {
 		
 		virtual Vector2<int> getResolution() = 0;
 
+		virtual Diamond::Vector2<int> getScreenResolution() = 0;
+
 		virtual Texture *loadTexture(std::string path) = 0;
 		
 		virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
