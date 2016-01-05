@@ -31,7 +31,7 @@ namespace Diamond {
 			this->anim = anim;
 		}
 
-		inline Animation2D *getAnimation() {
+		inline Animation2D *getAnimation() const {
 			return anim;
 		}
 

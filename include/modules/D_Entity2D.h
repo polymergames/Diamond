@@ -126,7 +126,7 @@ T *Diamond::Entity2D::getBehavior() {
 
 template <class T>
 void Diamond::Entity2D::removeBehavior() {
-	auto b = components.find(std::type_index(typeid(T)));
+	auto b = behaviors.find(std::type_index(typeid(T)));
 	if (b != behaviors.end()) {
 		behaviors.erase(b);
 	}
