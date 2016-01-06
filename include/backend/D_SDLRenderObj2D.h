@@ -28,9 +28,11 @@ namespace Diamond {
 	public:
 		SDLTexture *texture;
 		SDL_RendererFlip flip;
-		Vector2<int> size;
+		Vector2<int16_t> size;
+		SDL_Rect *clip;
 
 		SDLRenderObj2D(renderobj_id obj_id, Texture *texture, transform2_id transform, float scale);
+		~SDLRenderObj2D();
 
 		void setTexture(Texture *texture, float scale) override;
 		void applyScale(float scale) override;
@@ -40,6 +42,13 @@ namespace Diamond {
 
 		int isFlippedX() const override;
 		int isFlippedY() const override;
+
+		void initClip() override;
+
+		void setClip(int x, int y, int w, int h) override;
+		void setClip(int x, int y) override;
+
+		bool getClipDim(Vector2<int> &dim) const override;
 	};
 }
 

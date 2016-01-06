@@ -65,8 +65,13 @@ namespace Diamond {
 		*/
 		void toggleVisibility();
 
+		void initClip();
+		void setClip(int x, int y, int w, int h);
+		void setClip(int x, int y);
+
 	private:
 		std::shared_ptr<Texture> sprite;
+		Vector2<int> clip_dim;
 		renderobj_id render_obj;
 		float scale;
 
@@ -137,17 +142,41 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 inline void Diamond::RenderComponent2D::makeVisible() {
 	if ((tD_index)render_obj == Diamond::INVALID) {
 		render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID(), scale);
+		if (clip_dim.x != 0) { // check if any valid clip data has been stored
+			RenderObj2D *r = Graphics2D::getRenderObj(render_obj);
+			r->initClip();
+			r->setClip(0, 0, clip_dim.x, clip_dim.y);
+		}
 	}
 }
 
 inline void Diamond::RenderComponent2D::makeInvisible() {
 	if ((tD_index)render_obj != Diamond::INVALID) {
+		Graphics2D::getRenderObj(render_obj)->getClipDim(clip_dim);
 		freeRenderObj();
 	}
 }
 
 inline void Diamond::RenderComponent2D::toggleVisibility() {
 	render_obj == Diamond::INVALID ? makeVisible() : makeInvisible();
+}
+
+inline void Diamond::RenderComponent2D::initClip() {
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		Graphics2D::getRenderObj(render_obj)->initClip();
+	}
+}
+
+inline void Diamond::RenderComponent2D::setClip(int x, int y, int w, int h) {
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		Graphics2D::getRenderObj(render_obj)->setClip(x, y, w, h);
+	}
+}
+
+inline void Diamond::RenderComponent2D::setClip(int x, int y) {
+	if ((tD_index)render_obj != Diamond::INVALID) {
+		Graphics2D::getRenderObj(render_obj)->setClip(x, y);
+	}
 }
 
 #endif // D_RENDER_COMPONENT_2D_H

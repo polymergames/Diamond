@@ -26,8 +26,8 @@ namespace Diamond {
 	}
 }
 
-Diamond::Texture *Diamond::Graphics2D::loadTexture(std::string path) {
-	return renderer->loadTexture(path);
+std::shared_ptr<Diamond::Texture> Diamond::Graphics2D::loadTexture(std::string path) {
+	return std::shared_ptr<Texture>(renderer->loadTexture(path));
 }
 
 Diamond::Vector2<int> Diamond::Graphics2D::getResolution() {

@@ -18,6 +18,7 @@
 #define D_GRAPHICS_2D_H
 
 #include <iostream>
+#include <memory>
 #include "Q_typedefs.h"
 
 #include "D_RenderObj2D.h"
@@ -32,7 +33,7 @@ namespace Diamond {
 		 Loads an image file as a texture.
 		 Returns nullptr if texture failed to load.
 		*/
-		Texture *loadTexture(std::string path);
+		std::shared_ptr<Texture> loadTexture(std::string path);
 		
 		/**
 		 Gets the current resolution of the game window

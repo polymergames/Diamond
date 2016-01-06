@@ -22,9 +22,9 @@
 namespace Diamond {
 	class Texture {
 	public:
-		int width, height;
+		int16_t width, height;
 		
-		Texture(int width, int height);
+		Texture(int16_t width, int16_t height);
 		virtual ~Texture();
 		
 		virtual RGBA getColor() const;

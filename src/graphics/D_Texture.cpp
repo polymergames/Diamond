@@ -16,7 +16,7 @@
 
 #include "D_Texture.h"
 
-Diamond::Texture::Texture(int width, int height) : width(width), height(height), color({255, 255, 255, 255}) {}
+Diamond::Texture::Texture(int16_t width, int16_t height) : width(width), height(height), color({255, 255, 255, 255}) {}
 
 Diamond::Texture::~Texture() {}
 

@@ -14,32 +14,37 @@
 	limitations under the License.
 */
 
-#ifndef D_ANIMATOR_2D_H
-#define D_ANIMATOR_2D_H
+#ifndef D_ANIMATOR_SHEET_H
+#define D_ANIMATOR_SHEET_H
 
+#include <memory>
+
+#include "D_AnimationSheet.h"
 #include "D_Behavior.h"
-#include "D_Animation2D.h"
+
 
 namespace Diamond {
 	class RenderComponent2D;
-	class Animator2D : public Behavior {
+	class AnimatorSheet : public Behavior {
 	public:
-		Animator2D(Entity2D *parent, Animation2D *anim);
+		AnimatorSheet(Entity2D *parent, AnimationSheet *anim);
 
-		void setAnimation(Animation2D *anim);
+		void setAnimation(AnimationSheet *anim);
 
-		inline Animation2D *getAnimation() const {
+		inline AnimationSheet *getAnimation() const {
 			return anim;
 		}
 
 		void update(tD_delta delta) override;
 	private:
-		Animation2D *anim;
+		AnimationSheet *anim;
 		RenderComponent2D *renderer;
+		int16_t frame_width, frame_height;
 		tD_index cur_frame;
 		tD_delta elapsed;
+
+		void initClip();
 	};
 }
 
-#endif // D_ANIMATOR_2D_H
-
+#endif // D_ANIMATOR_SHEET_H

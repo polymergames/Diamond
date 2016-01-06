@@ -19,11 +19,27 @@
 #include "D_RenderComponent2D.h"
 
 Diamond::Animator2D::Animator2D(Entity2D *parent, Animation2D *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
+	if (anim->sprites.size() == 0) {
+		// TODO: throw exception or log error
+	}
 	renderer = parent->getComponent<RenderComponent2D>();
 	if (!renderer) {
 		renderer = new RenderComponent2D(parent, anim->sprites[0]);
 		parent->addComponent(renderer);
 	}
+	else {
+		renderer->setSprite(anim->sprites[0]);
+	}
+}
+
+void Diamond::Animator2D::setAnimation(Animation2D *anim) {
+	if (anim->sprites.size() == 0) {
+		// TODO: throw exception or log error
+	}
+	this->anim = anim;
+	renderer->setSprite(anim->sprites[0]);
+	cur_frame = 0;
+	elapsed = 0;
 }
 
 void Diamond::Animator2D::update(tD_delta delta) {

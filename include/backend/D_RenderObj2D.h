@@ -36,8 +36,22 @@ namespace Diamond {
 		
 		virtual void flipX() = 0;
 		virtual void flipY() = 0;
+
 		virtual int isFlippedX() const = 0;
 		virtual int isFlippedY() const = 0;
+
+		virtual void initClip() = 0;
+
+		/**
+		 Must call initClip() first!
+		*/
+		virtual void setClip(int x, int y, int w, int h) = 0;
+		virtual void setClip(int x, int y) = 0;
+
+		/**
+		 Returns whether there is a clip, and stores the clip dimensions in dim.
+		*/
+		virtual bool getClipDim(Vector2<int> &dim) const = 0;
 	};
 }
 

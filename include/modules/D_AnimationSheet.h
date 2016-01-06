@@ -14,32 +14,22 @@
 	limitations under the License.
 */
 
-#ifndef D_ANIMATOR_2D_H
-#define D_ANIMATOR_2D_H
+#ifndef D_ANIMATION_SHEET_H
+#define D_ANIMATION_SHEET_H
 
-#include "D_Behavior.h"
-#include "D_Animation2D.h"
+#include <memory>
+
+#include "D_typedefs.h"
+#include "D_Texture.h"
 
 namespace Diamond {
-	class RenderComponent2D;
-	class Animator2D : public Behavior {
-	public:
-		Animator2D(Entity2D *parent, Animation2D *anim);
-
-		void setAnimation(Animation2D *anim);
-
-		inline Animation2D *getAnimation() const {
-			return anim;
-		}
-
-		void update(tD_delta delta) override;
-	private:
-		Animation2D *anim;
-		RenderComponent2D *renderer;
-		tD_index cur_frame;
-		tD_delta elapsed;
+	struct AnimationSheet {
+		std::shared_ptr<Texture> sprite_sheet;
+		uint16_t num_frames = 1;
+		tD_delta frame_length = 100; // the length of time in type of tD_delta (assumed milliseconds) of one animation frame
+		uint8_t rows = 1, columns = 1;
 	};
 }
 
-#endif // D_ANIMATOR_2D_H
+#endif // D_ANIMATION_SHEET_H
 
