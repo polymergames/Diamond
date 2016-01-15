@@ -16,6 +16,7 @@
 
 #include "D_Entity2D.h"
 
+#include <algorithm>
 #include "D_Launcher.h"
 
 
