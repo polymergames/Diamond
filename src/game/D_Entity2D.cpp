@@ -57,9 +57,8 @@ Diamond::Entity2D::Entity2D(Entity2D &&other) : transform(other.transform) {
 }
 
 Diamond::Entity2D &Diamond::Entity2D::operator=(const Entity2D &other) {
-	if (this != &other) {
+	if (this != &other)
 		getTransform() = other.getTransform();
-	}
 	return *this;
 }
 
@@ -97,9 +96,8 @@ void Diamond::Entity2D::addBehavior(Behavior *behavior) {
 }
 
 void Diamond::Entity2D::setParent(Entity2D *parent) {
-	if (this->parent && this->parent != parent) {
+	if (this->parent && this->parent != parent)
 		this->parent->removeChild(this);
-	}
 	this->parent = parent;
 }
 

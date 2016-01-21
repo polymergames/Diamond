@@ -65,7 +65,8 @@ class Demo : public Game {
 		spike_sprite = Graphics2D::loadTexture("spike.png");
 		cloud_sprite = Graphics2D::loadTexture("cloud.png");
 		
-		spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
+		//spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
+		spike.addComponent<RenderComponent2D>(&spike, spike_sprite, 0.1f);
 		spike.setTransform(500, 400);
 		if (!spike.getComponent<RenderComponent2D>()) {
 			std::cout << "NULL!" << std::endl;
@@ -78,7 +79,7 @@ class Demo : public Game {
 		zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper3.png"));
 		zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper4.png"));
 
-		zapper.addBehavior(new Animator2D(&zapper, &zapper_anim));
+		zapper.addBehavior<Animator2D>(&zapper, &zapper_anim);
 		zapper.getComponent<RenderComponent2D>()->setScale(0.5f);
 		zapper.setTransform(700, 300);
 		World2D::root.addChild(&zapper);
