@@ -18,7 +18,7 @@
 #define D_VECTOR_2_H
 
 namespace Diamond {
-	template <class T>
+	template <typename T>
 	class Vector2 {
 		public:
 		T x, y;
@@ -27,23 +27,30 @@ namespace Diamond {
 		
 		Vector2(T x, T y) : x(x), y(y) {}
 
-		inline void set(T x, T y) {
+		void set(T x, T y) {
 			this->x = x, this->y = y;
 		}
 
-		inline Vector2 &add(Vector2 b) {
+		Vector2 &add(const Vector2 &b) {
 			x += b.x, y += b.y;
 			return *this;
 		}
 		
-		inline Vector2 &sub(Vector2 b) {
+		Vector2 &sub(const Vector2 &b) {
 			x -= b.x, y -= b.y;
 			return *this;
 		}
 		
-		inline Vector2 &scalar(float scalar) {
+		Vector2 &scalar(float scalar) {
 			x *= scalar, y *= scalar;
 			return *this;
+		}
+
+		// static functions
+
+		template <typename A>
+		static Vector2<T> scalar(const Vector2<A> &v, float scalar) {
+			return Vector2<T>(v.x * scalar, v.y * scalar);
 		}
 	};
 }

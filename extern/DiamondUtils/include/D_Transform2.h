@@ -20,7 +20,7 @@
 #include "D_Vector2.h"
 
 namespace Diamond {
-	template <class PTYPE, class RTYPE>
+	template <typename PTYPE, typename RTYPE>
 	class Transform2 {
 		public:
 		Vector2<PTYPE> position;

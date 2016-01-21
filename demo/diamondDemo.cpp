@@ -17,6 +17,8 @@
 #include <list>
 #include <memory>
 
+#include "Q_QuantumWorld2D.h"
+
 #include "D_Animator2D.h"
 #include "D_AnimatorSheet.h"
 #include "D_AudioManager2D.h"
@@ -50,6 +52,8 @@ class Demo : public Game {
 	std::unique_ptr<Sound2D> haha;
 	
 	Vector2<int> window;
+
+	// body2d_id body;
 	
 	void init() override {
 		window = Graphics2D::getResolution();
@@ -68,6 +72,7 @@ class Demo : public Game {
 		}
 		World2D::root.addChild(&spike);
 
+		// Animations
 		zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper1.png"));
 		zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper2.png"));
 		zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper3.png"));
@@ -89,9 +94,15 @@ class Demo : public Game {
 		World2D::root.addChild(&zapper2);
 
 		haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
+
+		// Physics
+		// body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getTransformID());
 	}
 
 	void update(tD_delta delta) override {
+		// Quantum2D::Rigidbody2D rbody = Quantum2D::QuantumWorld2D::getRigidbody(body);
+		// std::cout << "Velocity: " << rbody.velocity.x << ", " << rbody.velocity.y << std::endl;
+
 		// Coloring
 		if (Input::keydown[Input::K_R]) {
 			spike_color = {255, 0, 0, 255};
@@ -128,12 +139,14 @@ class Demo : public Game {
 			zapper2.getComponent<RenderComponent2D>()->setScale(zapper2.getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
 		}
 
-		// Flipping
+		// Flipping and velocity
 		if (Input::keyup[Input::K_DOWN]) {
 			zapper2.getComponent<RenderComponent2D>()->flipX();
+			// Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(0, -movespeed));
 		}
 		if (Input::keyup[Input::K_UP]) {
 			zapper2.getComponent<RenderComponent2D>()->flipY();
+			// Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(0, movespeed));
 		}
 
 		// Movement
@@ -150,12 +163,14 @@ class Demo : public Game {
 			zapper2.getTransform().position.x += movespeed * delta;
 		}
 
-		// Rotation
+		// Rotation and velocity
 		if (Input::keydown[Input::K_LEFT]) {
 			zapper2.setRotation(zapper2.getTransform().rotation - spinspeed * delta);
+			// Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(-movespeed, 0));
 		}
 		if (Input::keydown[Input::K_RIGHT]) {
 			zapper2.setRotation(zapper2.getTransform().rotation + spinspeed * delta);
+			// Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(movespeed, 0));
 		}
 
 		// Sound

@@ -108,6 +108,7 @@ void Diamond::Launcher::launch(Game &game) {
 		
 		Time::fps = nframes / (time / 1000.0);
 		
+		Quantum2D::QuantumWorld2D::step(delta);
 		events->update();
 		World2D::root.updateBehaviors(delta);
 		game.update(delta);
