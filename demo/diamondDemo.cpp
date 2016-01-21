@@ -28,6 +28,7 @@
 #include "D_Input.h"
 #include "D_Launcher.h"
 #include "D_RenderComponent2D.h"
+#include "D_RigidbodyComponent2D.h"
 #include "D_Time.h"
 #include "D_World2D.h"
 using namespace Diamond;
@@ -98,6 +99,7 @@ class Demo : public Game {
 
 		// Physics
 		// body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getTransformID());
+		spike.addComponent<RigidbodyComponent2D>(&spike);
 	}
 
 	void update(tD_delta delta) override {
@@ -172,6 +174,20 @@ class Demo : public Game {
 		if (Input::keydown[Input::K_RIGHT]) {
 			zapper2.setRotation(zapper2.getTransform().rotation + spinspeed * delta);
 			// Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(movespeed, 0));
+		}
+
+		// Velocity
+		if (Input::keyup[Input::K_P4]) {
+			spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(-movespeed, 0));
+		}
+		if (Input::keyup[Input::K_P6]) {
+			spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(movespeed, 0));
+		}
+		if (Input::keyup[Input::K_P2]) {
+			spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(0, movespeed));
+		}
+		if (Input::keyup[Input::K_P8]) {
+			spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(0, -movespeed));
 		}
 
 		// Sound
