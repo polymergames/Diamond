@@ -18,6 +18,7 @@
 #define D_INPUT_H
 
 #include <vector>
+#include "D_Graphics2D.h"
 #include "D_Vector2.h"
 
 namespace Diamond {
@@ -40,6 +41,11 @@ namespace Diamond {
 		extern bool touch_down, touch_drag, touch_up;
 		extern Vector2<float> touch_pos; // normalized touch position: x and y range from 0 to 1 out of screen dimensions
 
+		// get world coordinate position of touch
+		inline Vector2<int> TouchWorldPos() {
+			return Graphics2D::getResolution().scalar(touch_pos);
+		}
+		
 		void resetKeyup();
 	}
 }
