@@ -111,6 +111,14 @@ void Diamond::SDLEventHandler::update() {
 			Input::touch_up = true;
 			Input::touch_pos.set(e.tfinger.x, e.tfinger.y);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			Input::touch_down = true;
+			SDL_GetMouseState(&(Input::touch_pos.x), &(Input::touch_pos.y));
+			break;
+		case SDL_MOUSEBUTTONUP:
+			Input::touch_up = true;
+			SDL_GetMouseState(&(Input::touch_pos.x), &(Input::touch_pos.y));
+			break;
 		case SDL_QUIT:
 			Launcher::is_open = false;
 			break;

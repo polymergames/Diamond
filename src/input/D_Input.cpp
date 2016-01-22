@@ -23,7 +23,7 @@ bool Diamond::Input::touch_down = false;
 bool Diamond::Input::touch_drag = false;
 bool Diamond::Input::touch_up = false;
 
-Diamond::Vector2<float> Diamond::Input::touch_pos;
+Diamond::Vector2<int> Diamond::Input::touch_pos;
 
 void Diamond::Input::resetKeyup() {
 	std::fill(keyup.begin(), keyup.end(), 0);

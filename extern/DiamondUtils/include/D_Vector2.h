@@ -51,6 +51,12 @@ namespace Diamond {
 			return *this;
 		}
 
+		template <typename S>
+		Vector2 &scalar(const S s1, const S s2) {
+			x *= s1, y *= s2;
+			return *this;
+		}
+
 		template <typename V>
 		Vector2 &scalar(const Vector2<V> &b) {
 			x *= b.x, y *= b.y;
