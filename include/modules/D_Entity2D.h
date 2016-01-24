@@ -55,12 +55,12 @@ namespace Diamond {
 
 		Entity2D *getParent() const;
 
-		void addComponent(Component *component);
+		void addComponent(Component *component); // TODO: deprecate this, replace with the one below
 		template <class T, typename... Args> void addComponent(Args&&... args);
 		template <class T> T *getComponent();
 		template <class T> void removeComponent();
 
-		void addBehavior(Behavior *behavior);
+		void addBehavior(Behavior *behavior); // TODO: deprecate this, replace with the one below
 		template <class T, typename... Args> void addBehavior(Args&&... args);
 		template <class T> T *getBehavior();
 		template <class T> void removeBehavior();
@@ -104,7 +104,9 @@ namespace Diamond {
 
 template <class T, typename... Args>
 void Diamond::Entity2D::addComponent(Args&&... args) {
-	components[std::type_index(typeid(T))] = std::unique_ptr<Component>(new T(std::forward<Args>(args)...));
+	std::type_index index = typeid(T);
+	if (!components[index])
+		components[index] = std::unique_ptr<Component>(new T(std::forward<Args>(args)...));
 }
 
 template <class T>
@@ -125,7 +127,9 @@ void Diamond::Entity2D::removeComponent() {
 
 template <class T, typename... Args>
 void Diamond::Entity2D::addBehavior(Args&&... args) {
-	behaviors[std::type_index(typeid(T))] = std::unique_ptr<Behavior>(new T(std::forward<Args>(args)...));
+	std::type_index index = typeid(T);
+	if (!behaviors[index])
+		behaviors[index] = std::unique_ptr<Behavior>(new T(std::forward<Args>(args)...));
 }
 
 template <class T>
