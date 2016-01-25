@@ -18,7 +18,7 @@
 
 #include "D_Launcher.h"
 
-Diamond::SDLEventHandler::SDLEventHandler(){
+Diamond::SDLEventHandler::SDLEventHandler() : screen(Graphics2D::getScreenResolution()) {
 	keymap = {
 		{ SDLK_0, Input::K_0 },
 		{ SDLK_1, Input::K_1 },
@@ -101,15 +101,15 @@ void Diamond::SDLEventHandler::update() {
 			break;
 		case SDL_FINGERDOWN:
 			Input::touch_down = true;
-			Input::touch_pos.set(e.tfinger.x, e.tfinger.y);
+			Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
 			break;
 		case SDL_FINGERMOTION:
 			Input::touch_drag = true;
-			Input::touch_pos.set(e.tfinger.x, e.tfinger.y);
+			Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
 			break;
 		case SDL_FINGERUP:
 			Input::touch_up = true;
-			Input::touch_pos.set(e.tfinger.x, e.tfinger.y);
+			Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			Input::touch_down = true;

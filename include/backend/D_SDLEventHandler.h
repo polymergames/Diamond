@@ -17,7 +17,7 @@
 #ifndef D_SDL_EVENT_HANDLER_H
 #define D_SDL_EVENT_HANDLER_H
 
-#include <map>
+#include <unordered_map>
 #include "SDL.h"
 
 #include "D_EventHandler.h"
@@ -30,7 +30,8 @@ namespace Diamond {
 		void update() override;
 
 	private:
-		std::map<SDL_Keycode, Input::KEY> keymap;
+		std::unordered_map<SDL_Keycode, Input::KEY> keymap;
+		Vector2<int> screen;
 	};
 }
 

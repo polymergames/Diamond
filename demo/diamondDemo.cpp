@@ -200,7 +200,7 @@ class Demo : public Game {
 
 		// Touch
 		if (Input::touch_up) {
-			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
+//			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
 			Entity2D *spawn = new Entity2D();
 			spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
 			spawn->setTransform(Input::touch_pos.x * window.x, Input::touch_pos.y * window.y);
@@ -218,6 +218,8 @@ int main(int argc, char *argv[]) {
 	Demo demo;
 
 	Launcher::config.fullscreen = true;
+	Launcher::config.window_width = 600;
+	Launcher::config.window_height = 600;
 	Launcher::config.vsync = true;
 	Launcher::config.bg_color = {0, 128, 255, 255};
 	Launcher::launch(demo);

@@ -46,9 +46,7 @@ namespace Diamond {
 
 		static void initDesktop() {
 			Log::setLogger(new DesktopLogger());
-
-			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
-
+			
 			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
 				// TODO: Handle renderer initialization failure
 			}
@@ -58,15 +56,15 @@ namespace Diamond {
 			}
 			
 			Time::setTimer(new SDLTimer());
+			
+			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
 		}
 
 		static void initMobile() {
 			config.fullscreen = true;
 
 			Log::setLogger(new DesktopLogger()); // temporary
-
-			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
-
+			
 			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
 				// TODO: Handle renderer initialization failure
 			}
@@ -76,6 +74,8 @@ namespace Diamond {
 			}
 
 			Time::setTimer(new SDLTimer());
+			
+			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
 		}
 	}
 }
