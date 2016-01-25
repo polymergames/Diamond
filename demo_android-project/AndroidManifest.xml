@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Replace com.polymergames.polymer with the identifier of your game below, e.g.
+<!-- Replace com.polymergames.diamond with the identifier of your game below, e.g.
      com.gamemaker.game
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.polymergames.polymer"
+      package="com.polymergames.diamonddemo"
       android:versionCode="1"
       android:versionName="1.0"
       android:installLocation="auto">
@@ -12,7 +12,7 @@
          directory under src matching the package, e.g.
           src/com/gamemaker/game/MyGame.java
 
-         then replace "PolymerActivity" with the name of your class (e.g. "MyGame")
+         then replace "DiamondActivity" with the name of your class (e.g. "MyGame")
          in the XML below.
 
     -->
@@ -22,7 +22,7 @@
                  android:allowBackup="true"
                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                  android:hardwareAccelerated="true" >
-        <activity android:name="PolymerActivity"
+        <activity android:name="DiamondActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:configChanges="keyboardHidden|orientation|screenSize"

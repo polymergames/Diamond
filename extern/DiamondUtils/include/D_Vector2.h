@@ -18,6 +18,7 @@
 #define D_VECTOR_2_H
 
 #include <cmath>
+#include <iostream>
 
 namespace Diamond {
 	template <typename T>
@@ -31,6 +32,13 @@ namespace Diamond {
 
 		void set(T x, T y) {
 			this->x = x, this->y = y;
+		}
+
+		Vector2 &normalize() {
+			T m = magnitude();
+			if(m != 0)
+				x /= m, y /= m;
+			return *this;
 		}
 
 		template <typename V>
@@ -98,6 +106,12 @@ namespace Diamond {
 		Vector2 operator-(const Vector2<V> &other) const {
 			return Vector2(x - other.x, y - other.y);
 		}
+
+		// Conversion operator
+		template <typename V>
+		operator Vector2<V>() const {
+			return Vector2<V>(x, y);
+		}
 	};
 
 	template <typename V, typename S>
@@ -108,6 +122,12 @@ namespace Diamond {
 	template <typename V, typename S>
 	Vector2<V> operator*(const S scalar, const Vector2<V> &vec) {
 		return vec * scalar;
+	}
+
+	template <typename V>
+	std::ostream &operator<<(std::ostream &os, const Vector2<V> &vec) {
+		os << "{" << vec.x << ", " << vec.y << "}";
+		return os;
 	}
 }
 
