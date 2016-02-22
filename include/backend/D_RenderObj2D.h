@@ -30,7 +30,7 @@ namespace Diamond {
 		
 		RenderObj2D(renderobj_id obj_id, transform2_id transform);
 		virtual ~RenderObj2D();
-		
+
 		virtual void setTexture(Texture *texture, float scale) = 0;
 		virtual void applyScale(float scale) = 0;
 		

@@ -203,7 +203,7 @@ class Demo : public Game {
 //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
 			Entity2D *spawn = new Entity2D();
 			spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
-			spawn->setTransform(Input::touch_pos.x * window.x, Input::touch_pos.y * window.y);
+			spawn->setTransform(Input::touch_pos.x, Input::touch_pos.y);
 			objects.push_back(std::unique_ptr<Entity2D>(spawn));
 		}
 
@@ -217,9 +217,9 @@ class Demo : public Game {
 int main(int argc, char *argv[]) {
 	Demo demo;
 
-	Launcher::config.fullscreen = true;
-	Launcher::config.window_width = 600;
-	Launcher::config.window_height = 600;
+	// Launcher::config.fullscreen = true;
+	// Launcher::config.window_width = 600;
+	// Launcher::config.window_height = 600;
 	Launcher::config.vsync = true;
 	Launcher::config.bg_color = {0, 128, 255, 255};
 	Launcher::launch(demo);

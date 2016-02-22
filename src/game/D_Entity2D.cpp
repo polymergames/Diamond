@@ -20,7 +20,8 @@
 #include "D_Launcher.h"
 
 
-Diamond::Entity2D::Entity2D() : transform(Quantum2D::QuantumWorld2D::genTransform()) {}
+Diamond::Entity2D::Entity2D() 
+    : transform(Quantum2D::QuantumWorld2D::genTransform()) {}
 
 
 Diamond::Entity2D::~Entity2D() {
@@ -65,7 +66,7 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(const Entity2D &other) {
 
 Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
 	if (this != &other) {
-		// free transform
+        freeTransform();
 		transform = other.transform;
 		other.transform = Diamond::INVALID;
 	}

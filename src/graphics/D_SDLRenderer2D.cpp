@@ -138,7 +138,7 @@ renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_i
 		render_obj = renderobj_id_index_map.size();
 		renderobj_id_index_map.push_back(render_objects.size());
 	}
-	render_objects.push_back(SDLRenderObj2D(render_obj, texture, transform, scale));
+    render_objects.emplace_back(render_obj, texture, transform, scale);
 	return render_obj;
 }
 
