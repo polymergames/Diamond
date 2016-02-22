@@ -70,6 +70,7 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(SDLRenderObj2D &&oth
         texture = other.texture;
         flip = other.flip;
         size = other.size;
+        clip = other.clip;
 
         other.texture = nullptr;
         other.clip = nullptr;
