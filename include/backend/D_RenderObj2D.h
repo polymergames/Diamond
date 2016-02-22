@@ -25,10 +25,9 @@
 namespace Diamond {
 	class RenderObj2D {
 	public:
-		renderobj_id obj_id;
 		transform2_id transform;
 		
-		RenderObj2D(renderobj_id obj_id, transform2_id transform);
+		RenderObj2D(transform2_id transform);
 		virtual ~RenderObj2D();
 
 		virtual void setTexture(Texture *texture, float scale) = 0;

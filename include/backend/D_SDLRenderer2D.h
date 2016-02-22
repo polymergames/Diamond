@@ -23,6 +23,7 @@
 #include "D_Config.h"
 #include "D_Renderer2D.h"
 #include "D_SDLRenderObj2D.h"
+#include "D_swapvector.h"
 
 namespace Diamond {
 	class SDLRenderer2D : public Renderer2D {
@@ -42,9 +43,9 @@ namespace Diamond {
 		
 		void renderAll() override;
 		
-		Vector2<int> getResolution() override;
+		Vector2<int> getResolution() const override;
 
-		Diamond::Vector2<int> getScreenResolution() override;
+		Diamond::Vector2<int> getScreenResolution() const override;
 
 		/**
 		 Loads an image file as an SDL texture. Caller is responsible for ownership!
@@ -68,9 +69,7 @@ namespace Diamond {
 		SDL_Window *window;
 		SDL_Renderer *renderer;
 
-		std::vector<SDLRenderObj2D> render_objects;
-		std::vector<tD_index> renderobj_id_index_map;
-		std::vector<renderobj_id> renderobj_id_stack;
+        swapvector<SDLRenderObj2D> render_objects;
 	};
 }
 

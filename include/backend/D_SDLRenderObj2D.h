@@ -31,8 +31,7 @@ namespace Diamond {
 		Vector2<int16_t> size;
 		SDL_Rect *clip;
 
-		SDLRenderObj2D(renderobj_id obj_id, 
-                       Texture *texture, 
+		SDLRenderObj2D(Texture *texture, 
                        transform2_id transform, 
                        float scale);
 		~SDLRenderObj2D();

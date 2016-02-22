@@ -26,6 +26,7 @@
 namespace Diamond {
 	namespace SDLRenderSpace {
 		static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
+            // TODO: use QuantumWorld2D::getTransform()
 			Diamond::Transform2<int, float> transform = Quantum2D::QuantumWorld2D::transforms[obj.transform];
 			SDL_Rect render_rect = {transform.position.x, transform.position.y, obj.size.x, obj.size.y};
 			SDL_RenderCopyEx(renderer, obj.texture->texture, obj.clip, &render_rect, transform.rotation, NULL, obj.flip);
@@ -80,7 +81,7 @@ void Diamond::SDLRenderer2D::renderAll() {
 	// Render all the graphics
 	//SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a); // reset color
 	SDL_RenderClear(renderer);
-	for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); i++) {
+	for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
 		//std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG
 		SDLRenderSpace::render(*i, renderer);
 	}
@@ -89,17 +90,16 @@ void Diamond::SDLRenderer2D::renderAll() {
 	SDL_RenderPresent(renderer);
 }
 
-Diamond::Vector2<int> Diamond::SDLRenderer2D::getScreenResolution() {
+Diamond::Vector2<int> Diamond::SDLRenderer2D::getScreenResolution() const {
 	SDL_DisplayMode mode;
 	SDL_GetCurrentDisplayMode(0, &mode);
 	return Vector2<int>(mode.w, mode.h);
 }
 
-Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() {
+Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
 	Vector2<int> r;
 	SDL_GL_GetDrawableSize(window, &(r.x), &(r.y));
 	return r;
-
 }
 
 Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
@@ -124,32 +124,15 @@ Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
 }
 
 Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_obj) {
-	return &render_objects[renderobj_id_index_map[render_obj]];
+	return &render_objects[render_obj];
 }
 
 renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_id transform, float scale) {
-	renderobj_id render_obj;
-	if (renderobj_id_stack.size() > 0) {
-		render_obj = renderobj_id_stack.back();
-		renderobj_id_stack.pop_back();
-		renderobj_id_index_map[render_obj] = render_objects.size();
-	}
-	else {
-		render_obj = renderobj_id_index_map.size();
-		renderobj_id_index_map.push_back(render_objects.size());
-	}
-    render_objects.emplace_back(render_obj, texture, transform, scale);
-	return render_obj;
+    return render_objects.emplace_back(texture, transform, scale);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {
-	tD_index index = renderobj_id_index_map[render_obj];
-	if (index < render_objects.size() - 1) { // If in middle of vector, replace it with last element in vector
-		render_objects[index] = render_objects.back();
-		renderobj_id_index_map[render_objects[index].obj_id] = index;
-	}
-	render_objects.pop_back();
-	renderobj_id_stack.push_back(render_obj);
+    render_objects.erase(render_obj);
 }
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {

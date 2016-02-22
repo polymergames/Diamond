@@ -18,11 +18,10 @@
 
 #include "D_SDLTexture.h"
 
-Diamond::SDLRenderObj2D::SDLRenderObj2D(renderobj_id obj_id, 
-                                        Texture *texture, 
+Diamond::SDLRenderObj2D::SDLRenderObj2D(Texture *texture, 
                                         transform2_id transform, 
                                         float scale)
-    : RenderObj2D(obj_id, transform), flip(SDL_FLIP_NONE), clip(nullptr) {
+    : RenderObj2D(transform), flip(SDL_FLIP_NONE), clip(nullptr) {
 	setTexture(texture, scale);
 }
 
@@ -119,23 +118,19 @@ void Diamond::SDLRenderObj2D::initClip() {
 }
 
 void Diamond::SDLRenderObj2D::setClip(int x, int y, int w, int h) {
-    if (clip) {
-        clip->x = x;
-        clip->y = y;
+    clip->x = x;
+    clip->y = y;
 
-        size.x *= (float)w / clip->w;
-        size.y *= (float)h / clip->h;
+    size.x *= (float)w / clip->w;
+    size.y *= (float)h / clip->h;
 
-        clip->w = w;
-        clip->h = h;
-    }
+    clip->w = w;
+    clip->h = h;
 }
 
 void Diamond::SDLRenderObj2D::setClip(int x, int y) {
-    if (clip) {
-        clip->x = x;
-        clip->y = y;
-    }
+    clip->x = x;
+    clip->y = y;
 }
 
 bool Diamond::SDLRenderObj2D::getClipDim(Vector2<int> &dim) const {
