@@ -17,25 +17,28 @@
 #ifndef Q_QUANTUM_WORLD_2D_H
 #define Q_QUANTUM_WORLD_2D_H
 
-#include <vector>
+#include <memory>
 
 #include "D_Transform2.h"
+#include "D_sparsevector.h"
+#include "D_swapvector.h"
 
+#include "Q_Collider2D.h"
 #include "Q_RigidBody2D.h"
 #include "Q_typedefs.h"
 
 namespace Quantum2D {
 	namespace QuantumWorld2D {
 		
-		extern std::vector<Diamond::Transform2<int, float>> transforms;
-		extern std::vector<Quantum2D::Rigidbody2D> bodies;
-
-		extern std::vector<tD_index> body_id_index_map;
+		extern Diamond::sparsevector<Diamond::Transform2<int, float> > transforms;
+		extern Diamond::swapvector<Rigidbody2D> bodies;
+		extern Diamond::swapvector<std::unique_ptr<Collider2D> > colliders;
+		
 
 		/**
 		 Returns a reference to the transform with the given id.
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
-		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
+		 Only use this reference immediately after calling this function!
 		*/
 		inline Diamond::Transform2<int, float> &getTransform(transform2_id transform) {
 			return transforms[transform];
@@ -44,32 +47,69 @@ namespace Quantum2D {
 		/**
 		 Returns a reference to the rigidbody with the given id.
 		 Note: the reference returned is only guaranteed to be valid until the next time a new rigidbody is created.
-		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
+		 Only use this reference immediately after calling this function!
 		*/
 		inline Rigidbody2D &getRigidbody(body2d_id body) {
-			return bodies[body_id_index_map[body]];
+			return bodies[body];
 		}
 		
 		/**
-		 Creates a Transform2i object and returns its index in the transforms vector.
+		 Returns a pointer to the collider with the given id.
 		*/
-		transform2_id genTransform();
+		inline Collider2D *getCollider(collider2_id collider) {
+			return colliders[collider].get();
+		}
+		
+		
+		/**
+		 Creates a Transform2i object and returns its id.
+		 The returned id can be used to access the transform with getTransform(id).
+		*/
+		inline transform2_id genTransform() {
+			return transforms.emplace_back();
+		}
 		
 		/**
 		 Frees the given index in transforms as available for a new Transform2i
 		*/
-		void freeTransform(transform2_id transform);
+		inline void freeTransform(transform2_id transform) {
+			transforms.erase(transform);
+		}
+		
 		
 		/**
 		 Creates a Rigidbody2D object attached to the given transform and returns its id.
-		 The returned id can be used to access the rigidbody with getRigidbody().
+		 The returned id can be used to access the rigidbody with getRigidbody(id).
 		*/
-		body2d_id genRigidbody(transform2_id transform);
+		inline body2d_id genRigidbody(transform2_id transform) {
+			return bodies.emplace_back(transform);
+		}
 		
 		/**
-		 Marks the given id as available for a new Rigidbody2D, and removes its currently associated rigidbody.
+		 Marks the given id as available for a new Rigidbody2D, 
+		 and removes its currently associated rigidbody.
 		*/
-		void freeRigidbody(body2d_id body);
+		inline void freeRigidbody(body2d_id body) {
+			bodies.erase(body);
+		}
+		
+		
+		/**
+		 Creates a 2D collider object of the given type using the given constructor arguments.
+		 The returned id can be used to access the collider with getCollider(id).
+		*/
+		template <class T, typename... Args>
+		inline collider2_id genCollider(Args&&... args) {
+			return colliders.emplace_back(new T(std::forward<Args>(args)...));
+		}
+		
+		/**
+		 Marks the given id as available for a new Collider2D, 
+		 and destroys its currently associated collider.
+		*/
+		inline void freeCollider(collider2_id collider) {
+			colliders.erase(collider);
+		}
 		
 		
 		/**

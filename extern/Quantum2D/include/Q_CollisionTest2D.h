@@ -14,23 +14,15 @@
 	limitations under the License.
 */
 
-#ifndef Q_RIGIDBODY_2D_H
-#define Q_RIGIDBODY_2D_H
+#ifndef Q_COLLISION_TEST_2D_H
+#define Q_COLLISION_TEST_2D_H
 
-#include "D_Vector2.h"
-
-#include "Q_typedefs.h"
+#include "Q_AABBCollider2D.h"
 
 namespace Quantum2D {
-	class Rigidbody2D {
-	public:
-		transform2_id transform;
-		Diamond::Vector2<float> velocity;
-		
-		Rigidbody2D(transform2_id transform);
-		
-		void update(int16_t delta_ms);
-	};
+	namespace CollisionTest2D {
+		bool AABB2(AABBCollider2D *a, AABBCollider2D *b);
+	}
 }
 
-#endif // Q_RIGIDBODY_2D_H
+#endif // Q_COLLISION_TEST_2D_H
