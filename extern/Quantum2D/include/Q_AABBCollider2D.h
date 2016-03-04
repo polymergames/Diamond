@@ -27,7 +27,7 @@ namespace Quantum2D {
 		Diamond::Vector2<int> min;
 		Diamond::Vector2<int> max;
 		
-		AABBCollider2D(collider2_id my_id, body2d_id body, Diamond::Vector2<int> &min, Diamond::Vector2<int> &max);
+		AABBCollider2D(body2d_id body, Diamond::Vector2<int> &min, Diamond::Vector2<int> &max);
 	};
 }
 

@@ -22,16 +22,11 @@
 namespace Quantum2D {
 	class Collider2D {
 	public:
-		Collider2D(collider2_id my_id, body2d_id body) : my_id(my_id), body(body) {};
+		Collider2D(body2d_id body) : body(body) {};
 		virtual ~Collider2D() {};
-		
-		collider2_id ID() {
-			return my_id;
-		}
 		
 	private:
 		body2d_id body;
-		collider2_id my_id;
 	};
 }
 
