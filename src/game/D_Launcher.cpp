@@ -118,3 +118,7 @@ void Diamond::Launcher::launch(Game &game) {
 	// End game
 	game.quit();
 }
+
+void Diamond::Launcher::quit() {
+    is_open = false;
+}

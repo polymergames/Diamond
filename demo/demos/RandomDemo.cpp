@@ -17,6 +17,7 @@
 #include "RandomDemo.h"
 
 #include "D_Input.h"
+#include "D_Launcher.h"
 #include "D_RenderComponent2D.h"
 #include "D_RigidbodyComponent2D.h"
 #include "D_World2D.h"
@@ -35,6 +36,12 @@ void RandomDemo::init() {
 
     spike_sprite = Graphics2D::loadTexture("spike.png");
     cloud_sprite = Graphics2D::loadTexture("cloud.png");
+
+    if (!spike_sprite) {
+        std::cout << "Couldn't load sprites!" << std::endl;
+        Launcher::quit();
+        return;
+    }
 
     //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
     spike.addComponent<RenderComponent2D>(&spike, spike_sprite, 0.1f);

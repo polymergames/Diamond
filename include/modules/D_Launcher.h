@@ -26,14 +26,16 @@
 
 namespace Diamond {
 	namespace Launcher {
+        // TODO: make these private and add accessor functions
 		extern bool is_open;
-		
 		extern Config config;
 
 		/**
 		 Call only once, at beginning of game!
 		*/
 		void launch(Game &game);
+
+        void quit();
 	};
 }
 
