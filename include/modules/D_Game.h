@@ -23,6 +23,8 @@
 namespace Diamond {
 	class Game {
 	public:
+        virtual ~Game() {}
+
 		/**
 		 Called at beginning of game, after Diamond backend systems have initialized.
 		 Put game initialization code here.
