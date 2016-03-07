@@ -55,7 +55,7 @@ namespace Diamond {
 
         Entity2D *getParent() const { return parent; }
 
-		void addComponent(Component *component); // TODO: deprecate this, replace with the one below
+		void addComponent(Component *component);
 		template <class T, typename... Args> void addComponent(Args&&... args);
 		template <class T> T *getComponent();
 		template <class T> void removeComponent();
