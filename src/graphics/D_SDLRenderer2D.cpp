@@ -26,7 +26,7 @@
 namespace Diamond {
 	namespace SDLRenderSpace {
 		static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
-			Diamond::Transform2<int, float> &transform = Quantum2D::QuantumWorld2D::getTransform(obj.transform);
+			Diamond::Transform2<tD_pos, tD_rot> &transform = Quantum2D::QuantumWorld2D::getTransform(obj.transform);
 			SDL_Rect render_rect = {transform.position.x, transform.position.y, obj.size.x, obj.size.y};
 			SDL_RenderCopyEx(renderer, obj.texture->texture, obj.clip, &render_rect, transform.rotation, NULL, obj.flip);
 		}

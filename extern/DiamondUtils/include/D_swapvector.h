@@ -22,7 +22,8 @@
 
 namespace Diamond {
 	/**
-	 A contiguous vector data structure with O(1) deletion at any point.
+	 A contiguous vector data structure with O(1) deletion at any point and 
+     ID references that are guaranteed valid for the lifetime of a referred element.
 	 Access is O(1) but with higher constant factor than std::vector.
 	 Does not maintain order of elements, and uses O(n) auxiliary space.
 	*/

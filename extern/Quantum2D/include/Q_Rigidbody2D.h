@@ -18,18 +18,26 @@
 #define Q_RIGIDBODY_2D_H
 
 #include "D_Vector2.h"
-
 #include "Q_typedefs.h"
 
 namespace Quantum2D {
 	class Rigidbody2D {
 	public:
-		transform2_id transform;
-		Diamond::Vector2<float> velocity;
-		
-		Rigidbody2D(transform2_id transform);
-		
-		void update(int16_t delta_ms);
+        Rigidbody2D(transform2_id transform);
+
+        transform2_id getTransformID() const {
+            return transform;
+        }
+
+        Diamond::Vector2<float> &getVelocity() {
+            return velocity;
+        }
+
+		void update(tD_delta delta_ms);
+
+    private:
+        transform2_id transform;
+        Diamond::Vector2<float> velocity;
 	};
 }
 

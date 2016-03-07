@@ -101,11 +101,11 @@ void RandomDemo::update(tD_delta delta) {
     // Sprite switching
     if (Input::keyup[Input::K_1]) {
         spike.getComponent<RenderComponent2D>()->setSprite(spike_sprite);
-        spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(-movespeed, 0));
+        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keyup[Input::K_2]) {
         spike.getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
-        spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(movespeed, 0));
+        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(movespeed, 0));
     }
 
     // Visibility
@@ -157,16 +157,16 @@ void RandomDemo::update(tD_delta delta) {
 
     // Velocity
     if (Input::keyup[Input::K_P4]) {
-        spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(-movespeed, 0));
+        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keyup[Input::K_P6]) {
-        spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(movespeed, 0));
+        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(movespeed, 0));
     }
     if (Input::keyup[Input::K_P2]) {
-        spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(0, movespeed));
+        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(0, movespeed));
     }
     if (Input::keyup[Input::K_P8]) {
-        spike.getComponent<RigidbodyComponent2D>()->Velocity().add(Vector2<float>(0, -movespeed));
+        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(0, -movespeed));
     }
 
     // Sound

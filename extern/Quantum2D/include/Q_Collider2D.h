@@ -24,8 +24,14 @@ namespace Quantum2D {
 	public:
 		Collider2D(body2d_id body) : body(body) {};
 		virtual ~Collider2D() {};
+
+        body2d_id getBodyID() const {
+            return body;
+        }
 		
-	private:
+        virtual void update(tD_delta delta_ms) {}
+
+	protected:
 		body2d_id body;
 	};
 }

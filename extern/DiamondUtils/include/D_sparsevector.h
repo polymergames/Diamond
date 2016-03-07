@@ -22,9 +22,10 @@
 
 namespace Diamond {
     /**
-     A contiguous vector data structure with O(1) deletion at any point.
+     A contiguous vector data structure with O(1) deletion at any point and 
+     ID references that are guaranteed valid for the lifetime of a referred element.
      Access is O(1) and faster than swapvector by a constant factor (and same as std::vector).
-     Maintains order of elements but unlike swapvector, 
+     Unlike swapvector, maintains order of elements and uses O(1) amortized auxiliary space, but 
      leaves gaps of invalid data, and therefore should not be iterated directly.
     */
     template <class T>

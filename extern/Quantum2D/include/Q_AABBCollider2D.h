@@ -24,10 +24,47 @@
 namespace Quantum2D {
 	class AABBCollider2D : public Collider2D {
 	public:
-		Diamond::Vector2<int> min;
-		Diamond::Vector2<int> max;
-		
-		AABBCollider2D(body2d_id body, Diamond::Vector2<int> &min, Diamond::Vector2<int> &max);
+		AABBCollider2D(body2d_id body, Diamond::Vector2<tD_pos> &origin, Diamond::Vector2<tD_pos> &dims);
+
+        /**
+         Get the current coordinates of this AABB's bottom left corner in world space.
+        */
+        const Diamond::Vector2<tD_pos> &getMin() const {
+            return min;
+        }
+
+        /**
+         Get the current coordinates of this AABB's top right corner in world space.
+        */
+        const Diamond::Vector2<tD_pos> &getMax() const {
+            return max;
+        }
+
+        /**
+         Get the origin point of this AABB in the parent transform's local space.
+        */
+        Diamond::Vector2<tD_pos> &getOrigin() { 
+            return origin;
+        };
+
+        /**
+         Get the horizontal x vertical dimensions of this AABB.
+        */
+        Diamond::Vector2<tD_pos> &getDims() {
+            return dims;
+        }
+
+        /**
+         Update world coordinates once per frame.
+        */
+        void update(tD_delta delta_ms) override;
+
+    private:
+        Diamond::Vector2<tD_pos> origin;
+        Diamond::Vector2<tD_pos> dims;
+
+        Diamond::Vector2<tD_pos> min;
+        Diamond::Vector2<tD_pos> max;
 	};
 }
 

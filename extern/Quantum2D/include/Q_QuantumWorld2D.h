@@ -22,15 +22,15 @@
 #include "D_Transform2.h"
 #include "D_sparsevector.h"
 #include "D_swapvector.h"
-
 #include "Q_Collider2D.h"
-#include "Q_RigidBody2D.h"
+#include "Q_Rigidbody2D.h"
+
 #include "Q_typedefs.h"
 
 namespace Quantum2D {
 	namespace QuantumWorld2D {
 		
-		extern Diamond::sparsevector<Diamond::Transform2<int, float> > transforms;
+		extern Diamond::sparsevector<Diamond::Transform2<tD_pos, tD_rot> > transforms;
 		extern Diamond::swapvector<Rigidbody2D> bodies;
 		extern Diamond::swapvector<std::unique_ptr<Collider2D> > colliders;
 		
@@ -40,7 +40,7 @@ namespace Quantum2D {
 		 Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
 		 Only use this reference immediately after calling this function!
 		*/
-		inline Diamond::Transform2<int, float> &getTransform(transform2_id transform) {
+		inline Diamond::Transform2<tD_pos, tD_rot> &getTransform(transform2_id transform) {
 			return transforms[transform];
 		}
 		
@@ -115,7 +115,7 @@ namespace Quantum2D {
 		/**
 		 Steps the physics simulation by the number of milliseconds given.
 		*/
-		void step(int16_t delta_ms);
+		void step(tD_delta delta_ms);
 	}
 }
 

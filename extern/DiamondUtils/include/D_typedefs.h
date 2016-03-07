@@ -19,6 +19,10 @@
 
 #include <stdint.h>
 
+// transform typedefs
+typedef int16_t tD_pos; // position coordinate type
+typedef float tD_rot; // rotation value type
+
 // time typedefs
 typedef uint32_t tD_time; // time type
 typedef int16_t tD_delta; // delta time type
