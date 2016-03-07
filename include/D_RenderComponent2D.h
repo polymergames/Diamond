@@ -31,11 +31,11 @@ namespace Diamond {
 		RenderComponent2D(Entity2D *parent, std::shared_ptr<Texture> sprite, float scale = 1.0f);
 		~RenderComponent2D();
 		
-		std::shared_ptr<Texture> getSprite() const;
-		void setSprite(Texture *sprite);
+        std::shared_ptr<Texture> getSprite() const { return sprite; }
+        void setSprite(Texture *sprite) { setSprite(std::shared_ptr<Texture>(sprite)); }
 		void setSprite(std::shared_ptr<Texture> sprite);
 
-		float getScale() const;
+        float getScale() const { return scale; }
 		void setScale(float scale);
 
 		void flipX();
@@ -79,23 +79,11 @@ namespace Diamond {
 	};
 }
 
-inline std::shared_ptr<Diamond::Texture> Diamond::RenderComponent2D::getSprite() const {
-	return sprite;
-}
-
-inline void Diamond::RenderComponent2D::setSprite(Texture *sprite) {
-	setSprite(std::shared_ptr<Texture>(sprite));
-}
-
 inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<Texture> sprite) {
 	this->sprite = sprite;
 	if ((tD_index)render_obj != Diamond::INVALID) {
 		Graphics2D::getRenderObj(render_obj)->setTexture(sprite.get(), scale);
 	}
-}
-
-inline float Diamond::RenderComponent2D::getScale() const {
-	return scale;
 }
 
 inline void Diamond::RenderComponent2D::setScale(float scale) {

@@ -51,9 +51,9 @@ namespace Diamond {
 		*/
 		bool removeChild(Entity2D *child);
 
-		std::vector<Entity2D*> &getChildren();
+        std::vector<Entity2D*> &getChildren() { return children; }
 
-		Entity2D *getParent() const;
+        Entity2D *getParent() const { return parent; }
 
 		void addComponent(Component *component); // TODO: deprecate this, replace with the one below
 		template <class T, typename... Args> void addComponent(Args&&... args);
@@ -71,9 +71,9 @@ namespace Diamond {
 		 Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
 		*/
 		Transform2<tD_pos, tD_rot> &getTransform() const;
-		transform2_id getTransformID() const;
+		transform2_id getTransformID() const { return transform; }
 		
-		void setTransform(Transform2<tD_pos, tD_rot> &new_transform);
+		void setTransform(Transform2<tD_pos, tD_rot> &new_transform) { getTransform() = new_transform; }
 		void setTransform(Vector2<int> &position);
 		void setTransform(int x, int y);
 		void setRotation(float rotation);
@@ -148,24 +148,8 @@ void Diamond::Entity2D::removeBehavior() {
 		behaviors.erase(b);
 }
 
-inline std::vector<Diamond::Entity2D*> &Diamond::Entity2D::getChildren() {
-	return children;
-}
-
-inline Diamond::Entity2D *Diamond::Entity2D::getParent() const {
-	return parent;
-}
-
 inline Diamond::Transform2<tD_pos, tD_rot> &Diamond::Entity2D::getTransform() const {
 	return Quantum2D::QuantumWorld2D::getTransform(transform);
-}
-
-inline transform2_id Diamond::Entity2D::getTransformID() const {
-	return transform;
-}
-
-inline void Diamond::Entity2D::setTransform(Transform2<tD_pos, tD_rot> &new_transform) {
-	getTransform() = new_transform;
 }
 
 inline void Diamond::Entity2D::setTransform(Diamond::Vector2<int> &position) {
