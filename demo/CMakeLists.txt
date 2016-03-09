@@ -12,7 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Header includes
+include_directories(demos/)
+
+# Get source files
+file(GLOB_RECURSE SOURCES *.cpp)
+
 # Build demo
-add_executable(diamondDemo diamondDemo.cpp)
+add_executable(diamondDemo ${SOURCES})
 target_link_libraries(diamondDemo Diamond)
 install(TARGETS diamondDemo DESTINATION bin)
