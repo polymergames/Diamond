@@ -15,16 +15,11 @@
 */
 
 #include "D_Launcher.h"
+#include "CollideDemo.h"
 #include "RandomDemo.h"
 
 int main(int argc, char *argv[]) {
-	RandomDemo demo;
-
-	// Diamond::Launcher::config.fullscreen = true;
-	// Diamond::Launcher::config.window_width = 600;
-	// Diamond::Launcher::config.window_height = 600;
-	Diamond::Launcher::config.vsync = true;
-    Diamond::Launcher::config.bg_color = {0, 128, 255, 255};
+	CollideDemo demo;	
     Diamond::Launcher::launch(demo);
 
 	return 0;

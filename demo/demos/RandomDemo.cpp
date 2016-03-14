@@ -25,6 +25,11 @@ using namespace Diamond;
 
 RandomDemo::RandomDemo(float movespeed, float spinspeed, float growspeed) 
     : movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed) {
+    // Launcher::config.fullscreen = true;
+    // Launcher::config.window_width = 600;
+    // Launcher::config.window_height = 600;
+    Launcher::config.vsync = true;
+    Launcher::config.bg_color = { 0, 128, 255, 255 };
 }
 
 void RandomDemo::init() {
