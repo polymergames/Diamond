@@ -21,7 +21,11 @@
 
 namespace Diamond {
 	namespace World2D {
-		extern Entity2D root;
+        void addEntity(Entity2D *entity);
+
+        void update(tD_delta delta_ms);
+
+        Entity2D *getRoot();
 	}
 }
 

@@ -54,7 +54,7 @@ void RandomDemo::init() {
     if (!spike.getComponent<RenderComponent2D>()) {
         std::cout << "NULL!" << std::endl;
     }
-    World2D::root.addChild(&spike);
+    World2D::addEntity(&spike);
 
     // Animations
     zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper1.png"));
@@ -65,7 +65,7 @@ void RandomDemo::init() {
     zapper.addBehavior<Animator2D>(&zapper, &zapper_anim);
     zapper.getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper.setTransform(700, 300);
-    World2D::root.addChild(&zapper);
+    World2D::addEntity(&zapper);
 
     zapper2_anim.sprite_sheet = Graphics2D::loadTexture("zapper.png");
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
@@ -75,7 +75,7 @@ void RandomDemo::init() {
     zapper2.addBehavior(new AnimatorSheet(&zapper2, &zapper2_anim));
     zapper2.getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper2.setTransform(600, 100);
-    World2D::root.addChild(&zapper2);
+    World2D::addEntity(&zapper2);
 
     haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
 

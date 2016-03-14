@@ -16,4 +16,20 @@
 
 #include "D_World2D.h"
 
-Diamond::Entity2D Diamond::World2D::root;
+namespace Diamond {
+    namespace World2D {
+        Entity2D root;
+    }
+}
+
+void Diamond::World2D::addEntity(Diamond::Entity2D *entity) {
+    root.addChild(entity);
+}
+
+void Diamond::World2D::update(tD_delta delta_ms) {
+    root.updateBehaviors(delta_ms);
+}
+
+Diamond::Entity2D *Diamond::World2D::getRoot() {
+    return &root;
+}

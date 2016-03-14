@@ -37,7 +37,7 @@ void CollideDemo::init() {
 
     spike.addComponent<RenderComponent2D>(&spike, spike_sprite, 0.1f);
     spike.setTransform(500, 400);
-    World2D::root.addChild(&spike);
+    World2D::addEntity(&spike);
 
     zapper_anim.sprite_sheet = Graphics2D::loadTexture("zapper.png");
     zapper_anim.rows = 2;
@@ -47,12 +47,12 @@ void CollideDemo::init() {
     zapper1.addBehavior<AnimatorSheet>(&zapper1, &zapper_anim);
     zapper1.getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper1.setTransform(300, 100);
-    World2D::root.addChild(&zapper1);
+    World2D::addEntity(&zapper1);
 
     zapper2.addBehavior<AnimatorSheet>(&zapper2, &zapper_anim);
     zapper2.getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper2.setTransform(700, 300);
-    World2D::root.addChild(&zapper2);
+    World2D::addEntity(&zapper2);
 }
 
 void CollideDemo::update(tD_delta delta) {

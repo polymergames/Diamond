@@ -110,7 +110,7 @@ void Diamond::Launcher::launch(Game &game) {
 		
 		Quantum2D::QuantumWorld2D::step(delta);
 		events->update();
-		World2D::root.updateBehaviors(delta);
+		World2D::update(delta);
 		game.update(delta);
 		Graphics2D::renderAll();
 	}
