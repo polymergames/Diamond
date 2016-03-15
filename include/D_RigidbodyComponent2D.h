@@ -17,10 +17,9 @@
 #ifndef D_RIGIDBODY_COMPONENT_2D_H
 #define D_RIGIDBODY_COMPONENT_2D_H
 
+#include "D_Component.h"
 #include "Q_QuantumWorld2D.h"
 #include "Q_typedefs.h"
-
-#include "D_Component.h"
 
 namespace Diamond {
 	class RigidbodyComponent2D : public Component {

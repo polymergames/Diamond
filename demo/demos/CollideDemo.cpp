@@ -64,16 +64,17 @@ void CollideDemo::init() {
     spike_col = QuantumWorld2D::genCollider<AABBCollider2D>(spike.getComponent<RigidbodyComponent2D>()->getID(), 
         Vector2<tD_pos>(0, 0), Vector2<tD_pos>(spike_sprite->getWidth() * scale, spike_sprite->getHeight() * scale));
 
+    float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
     scale = zapper1.getComponent<RenderComponent2D>()->getScale();
     zapper1.addComponent<RigidbodyComponent2D>(&zapper1);
     zapper1_col = QuantumWorld2D::genCollider<AABBCollider2D>(zapper1.getComponent<RigidbodyComponent2D>()->getID(),
-        Vector2<tD_pos>(0, 0), Vector2<tD_pos>(zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns * scale, 
+        Vector2<tD_pos>(2 * partial_width * scale, 0), Vector2<tD_pos>(partial_width * scale, 
         zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
 
     scale = zapper2.getComponent<RenderComponent2D>()->getScale();
     zapper2.addComponent<RigidbodyComponent2D>(&zapper2);
     zapper2_col = QuantumWorld2D::genCollider<AABBCollider2D>(zapper2.getComponent<RigidbodyComponent2D>()->getID(),
-        Vector2<tD_pos>(0, 0), Vector2<tD_pos>(zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns * scale,
+        Vector2<tD_pos>(2 * partial_width * scale, 0), Vector2<tD_pos>(partial_width * scale,
         zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
 }
 
