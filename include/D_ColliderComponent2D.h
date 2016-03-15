@@ -22,22 +22,25 @@
 #include "Q_typedefs.h"
 
 namespace Diamond {
+    /**
+     An abstract base class for Collider components.
+     Do not try to instantiate. Use a derived shape collider component.
+    */
     class ColliderComponent2D : public Component {
     public:
-        ColliderComponent2D(Entity2D *parent, std::function<void(Entity2D *other)> &onCollision)
-            : Component(parent), onCollision(onCollision) {}
-
-        virtual ~ColliderComponent2D() {}
+        virtual ~ColliderComponent2D() = 0;
 
         collider2_id getID() const { return collider; }
 
-        virtual void onCollide(void *other) {
+        void onCollide(void *other) {
             onCollision(static_cast<Entity2D*>(other));
         }
-
-    private:
+    
+    protected:
         collider2_id collider;
         std::function<void(Entity2D *other)> onCollision;
+
+        ColliderComponent2D(Entity2D *parent, std::function<void(Entity2D *other)> &onCollision);
     };
 }
 

@@ -37,10 +37,10 @@ private:
     Diamond::Entity2D spike, zapper1, zapper2;
     Diamond::AnimationSheet zapper_anim;
 
-    body2d_id spike_body, zapper1_body, zapper2_body;
-    collider2_id spike_col, zapper1_col, zapper2_col;
+    // body2d_id spike_body, zapper1_body, zapper2_body;
+    // collider2_id spike_col, zapper1_col, zapper2_col;
 
-    void m_onCollision(void *other);
+    void m_onCollision(Diamond::Entity2D *other);
 };
 
 #endif // COLLIDE_DEMO_H

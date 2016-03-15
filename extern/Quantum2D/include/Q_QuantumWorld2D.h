@@ -107,6 +107,15 @@ namespace Quantum2D {
         inline collider2_id genCollider(Args&&... args) {
             return colliders.emplace_back(new T(std::forward<Args>(args)...));
         }
+                      
+        /**
+         Adds a collider to the collision detection system.
+         The owner of the given pointer should now be QuantumWorld2D!
+         The returned id can be used to access the collider with getCollider(id).
+        */
+        inline collider2_id addCollider(Collider2D *col) {
+            return colliders.emplace_back(col);
+        }
         
         /**
          Marks the given id as available for a new Collider2D, 
