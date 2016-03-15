@@ -19,29 +19,29 @@
 Diamond::SDLSound2D::SDLSound2D(Mix_Chunk *sound) : sound(sound), channel(0) {}
 
 Diamond::SDLSound2D::~SDLSound2D() {
-	Mix_FreeChunk(sound);
+    Mix_FreeChunk(sound);
 }
 
 void Diamond::SDLSound2D::play() {
-	channel = Mix_PlayChannel(-1, sound, 0);
+    channel = Mix_PlayChannel(-1, sound, 0);
 }
 
 void Diamond::SDLSound2D::pause() {
-	Mix_Pause(channel);
+    Mix_Pause(channel);
 }
 
 void Diamond::SDLSound2D::resume() {
-	Mix_Resume(channel);
+    Mix_Resume(channel);
 }
 
 void Diamond::SDLSound2D::stop() {
-	Mix_HaltChannel(channel);
+    Mix_HaltChannel(channel);
 }
 
 int Diamond::SDLSound2D::getVolume() const {
-	return Mix_VolumeChunk(sound, -1);
+    return Mix_VolumeChunk(sound, -1);
 }
 
 void Diamond::SDLSound2D::setVolume(int volume) {
-	Mix_VolumeChunk(sound, volume);
+    Mix_VolumeChunk(sound, volume);
 }

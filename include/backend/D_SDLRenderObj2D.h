@@ -22,19 +22,19 @@
 #include "D_RenderObj2D.h"
 
 namespace Diamond {
-	class SDLTexture;
-	
-	class SDLRenderObj2D : public RenderObj2D {
-	public:
-		SDLTexture *texture;
-		SDL_RendererFlip flip;
-		Vector2<int16_t> size;
-		SDL_Rect *clip;
+    class SDLTexture;
+    
+    class SDLRenderObj2D : public RenderObj2D {
+    public:
+        SDLTexture *texture;
+        SDL_RendererFlip flip;
+        Vector2<int16_t> size;
+        SDL_Rect *clip;
 
-		SDLRenderObj2D(Texture *texture, 
+        SDLRenderObj2D(Texture *texture, 
                        transform2_id transform, 
                        float scale);
-		~SDLRenderObj2D();
+        ~SDLRenderObj2D();
 
         SDLRenderObj2D(const SDLRenderObj2D &other);
         SDLRenderObj2D(SDLRenderObj2D &&other);
@@ -42,22 +42,22 @@ namespace Diamond {
         SDLRenderObj2D &operator=(const SDLRenderObj2D &other);
         SDLRenderObj2D &operator=(SDLRenderObj2D &&other);
 
-		void setTexture(Texture *texture, float scale) override;
-		void applyScale(float scale) override;
+        void setTexture(Texture *texture, float scale) override;
+        void applyScale(float scale) override;
 
-		void flipX() override;
-		void flipY() override;
+        void flipX() override;
+        void flipY() override;
 
-		int isFlippedX() const override;
-		int isFlippedY() const override;
+        int isFlippedX() const override;
+        int isFlippedY() const override;
 
-		void initClip() override;
+        void initClip() override;
 
-		void setClip(int x, int y, int w, int h) override;
-		void setClip(int x, int y) override;
+        void setClip(int x, int y, int w, int h) override;
+        void setClip(int x, int y) override;
 
-		bool getClipDim(Vector2<int> &dim) const override;
-	};
+        bool getClipDim(Vector2<int> &dim) const override;
+    };
 }
 
 #endif // D_SDL_RENDER_OBJ_2D_H

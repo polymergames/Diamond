@@ -23,35 +23,35 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
-	class RenderObj2D {
-	public:
-		transform2_id transform;
-		
-		RenderObj2D(transform2_id transform);
-		virtual ~RenderObj2D();
+    class RenderObj2D {
+    public:
+        transform2_id transform;
+        
+        RenderObj2D(transform2_id transform);
+        virtual ~RenderObj2D();
 
-		virtual void setTexture(Texture *texture, float scale) = 0;
-		virtual void applyScale(float scale) = 0;
-		
-		virtual void flipX() = 0;
-		virtual void flipY() = 0;
+        virtual void setTexture(Texture *texture, float scale) = 0;
+        virtual void applyScale(float scale) = 0;
+        
+        virtual void flipX() = 0;
+        virtual void flipY() = 0;
 
-		virtual int isFlippedX() const = 0;
-		virtual int isFlippedY() const = 0;
+        virtual int isFlippedX() const = 0;
+        virtual int isFlippedY() const = 0;
 
-		virtual void initClip() = 0;
+        virtual void initClip() = 0;
 
-		/**
-		 Must call initClip() first!
-		*/
-		virtual void setClip(int x, int y, int w, int h) = 0;
-		virtual void setClip(int x, int y) = 0;
+        /**
+         Must call initClip() first!
+        */
+        virtual void setClip(int x, int y, int w, int h) = 0;
+        virtual void setClip(int x, int y) = 0;
 
-		/**
-		 Returns whether there is a clip, and stores the clip dimensions in dim.
-		*/
-		virtual bool getClipDim(Vector2<int> &dim) const = 0;
-	};
+        /**
+         Returns whether there is a clip, and stores the clip dimensions in dim.
+        */
+        virtual bool getClipDim(Vector2<int> &dim) const = 0;
+    };
 }
 
 #endif // D_RENDER_OBJ_2D_H

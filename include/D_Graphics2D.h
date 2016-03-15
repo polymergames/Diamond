@@ -26,29 +26,29 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
-	class Renderer2D;
-	
-	namespace Graphics2D {
-		/**
-		 Loads an image file as a texture.
-		 Returns nullptr if texture failed to load.
-		*/
-		std::shared_ptr<Texture> loadTexture(std::string path);
-		
-		/**
-		 Gets the current resolution of the game window
-		*/
-		Vector2<int> getResolution();
+    class Renderer2D;
+    
+    namespace Graphics2D {
+        /**
+         Loads an image file as a texture.
+         Returns nullptr if texture failed to load.
+        */
+        std::shared_ptr<Texture> loadTexture(std::string path);
+        
+        /**
+         Gets the current resolution of the game window
+        */
+        Vector2<int> getResolution();
 
-		Diamond::Vector2<int> getScreenResolution();
+        Diamond::Vector2<int> getScreenResolution();
 
-		// TODO: move functions like loadTexture to a public resource management header, and move these to a backend header (ie not visible to users)
-		bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
-		void renderAll(); // renders everything
-		RenderObj2D *getRenderObj(renderobj_id render_obj); // returned pointer is only temporarily valid
-		renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale);
-		void freeRenderObj(renderobj_id render_obj);
-	}
+        // TODO: move functions like loadTexture to a public resource management header, and move these to a backend header (ie not visible to users)
+        bool initRenderer(Renderer2D *renderer); // returns whether initialization was successful
+        void renderAll(); // renders everything
+        RenderObj2D *getRenderObj(renderobj_id render_obj); // returned pointer is only temporarily valid
+        renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale);
+        void freeRenderObj(renderobj_id render_obj);
+    }
 }
 
 #endif // D_GRAPHICS_2D_H

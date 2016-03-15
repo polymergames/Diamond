@@ -22,16 +22,16 @@
 #include "D_Texture.h"
 
 namespace Diamond {
-	class SDLTexture : public Texture {
-	public:
-		SDLTexture(SDL_Texture *texture, int width, int height);
+    class SDLTexture : public Texture {
+    public:
+        SDLTexture(SDL_Texture *texture, int width, int height);
 
-		~SDLTexture();
+        ~SDLTexture();
 
-		void setColor(RGBA color);
+        void setColor(RGBA color);
 
-		SDL_Texture *texture;
-	};
+        SDL_Texture *texture;
+    };
 }
 
 #endif // D_SDL_TEXTURE_H

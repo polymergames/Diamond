@@ -26,5 +26,5 @@ bool Diamond::Input::touch_up = false;
 Diamond::Vector2<int> Diamond::Input::touch_pos;
 
 void Diamond::Input::resetKeyup() {
-	std::fill(keyup.begin(), keyup.end(), 0);
+    std::fill(keyup.begin(), keyup.end(), 0);
 }

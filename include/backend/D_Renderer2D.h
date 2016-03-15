@@ -26,24 +26,24 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
-	class Renderer2D {
-	public:
-		virtual ~Renderer2D() {}
+    class Renderer2D {
+    public:
+        virtual ~Renderer2D() {}
 
-		virtual bool init() = 0;
-		
-		virtual void renderAll() = 0;
-		
-		virtual Vector2<int> getResolution() const = 0;
+        virtual bool init() = 0;
+        
+        virtual void renderAll() = 0;
+        
+        virtual Vector2<int> getResolution() const = 0;
 
-		virtual Diamond::Vector2<int> getScreenResolution() const = 0;
+        virtual Diamond::Vector2<int> getScreenResolution() const = 0;
 
-		virtual Texture *loadTexture(std::string path) = 0;
-		
-		virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
-		virtual renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale) = 0;
-		virtual void freeRenderObj(renderobj_id render_obj) = 0;
-	};
+        virtual Texture *loadTexture(std::string path) = 0;
+        
+        virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
+        virtual renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale) = 0;
+        virtual void freeRenderObj(renderobj_id render_obj) = 0;
+    };
 }
 
 #endif // D_RENDERER_2D_H

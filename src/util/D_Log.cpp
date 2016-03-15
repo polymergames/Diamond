@@ -21,12 +21,12 @@
 #include "D_Logger.h"
 
 namespace Diamond {
-	namespace Log {
-		static std::unique_ptr<Logger> logger = nullptr;
-	}
+    namespace Log {
+        static std::unique_ptr<Logger> logger = nullptr;
+    }
 }
 
 void Diamond::Log::setLogger(Logger *logger) {
-	if (Log::logger == nullptr && logger != nullptr)
-		Log::logger = std::unique_ptr<Logger>(logger);
+    if (Log::logger == nullptr && logger != nullptr)
+        Log::logger = std::unique_ptr<Logger>(logger);
 }

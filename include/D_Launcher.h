@@ -25,18 +25,18 @@
 #include "D_Game.h"
 
 namespace Diamond {
-	namespace Launcher {
+    namespace Launcher {
         // TODO: make these private and add accessor functions
-		extern bool is_open;
-		extern Config config;
+        extern bool is_open;
+        extern Config config;
 
-		/**
-		 Call only once, at beginning of game!
-		*/
-		void launch(Game &game);
+        /**
+         Call only once, at beginning of game!
+        */
+        void launch(Game &game);
 
         void quit();
-	};
+    };
 }
 
 #endif // D_LAUNCHER_H

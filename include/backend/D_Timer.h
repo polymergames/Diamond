@@ -20,12 +20,12 @@
 #include <stdint.h>
 
 namespace Diamond {
-	class Timer {
-	public:
-		virtual ~Timer() {};
+    class Timer {
+    public:
+        virtual ~Timer() {};
 
-		virtual uint32_t msElapsed() = 0;
-	};
+        virtual uint32_t msElapsed() = 0;
+    };
 }
 
 #endif // D_TIMER_H

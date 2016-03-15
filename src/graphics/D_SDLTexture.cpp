@@ -17,15 +17,15 @@
 #include "D_SDLTexture.h"
 
 Diamond::SDLTexture::SDLTexture(SDL_Texture *texture, int width, int height) : Texture(width, height), texture(texture) {
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 }
 
 Diamond::SDLTexture::~SDLTexture() {
-	SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(texture);
 }
 
 void Diamond::SDLTexture::setColor(Diamond::RGBA color) {
-	Texture::setColor(color);
-	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
-	SDL_SetTextureAlphaMod(texture, color.a);
+    Texture::setColor(color);
+    SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+    SDL_SetTextureAlphaMod(texture, color.a);
 }

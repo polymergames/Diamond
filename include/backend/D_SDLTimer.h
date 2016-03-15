@@ -20,10 +20,10 @@
 #include "D_Timer.h"
 
 namespace Diamond {
-	class SDLTimer : public Timer {
-	public:
-		uint32_t msElapsed() override;
-	};
+    class SDLTimer : public Timer {
+    public:
+        uint32_t msElapsed() override;
+    };
 }
 
 #endif // D_SDL_TIMER_H

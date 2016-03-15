@@ -20,11 +20,11 @@
 #include "D_Logger.h"
 
 namespace Diamond {
-	class DesktopLogger : public Logger {
-	public:
-		DesktopLogger();
-		~DesktopLogger();
-	};
+    class DesktopLogger : public Logger {
+    public:
+        DesktopLogger();
+        ~DesktopLogger();
+    };
 }
 
 #endif // D_DESKTOP_LOGGER_H

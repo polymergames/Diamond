@@ -19,33 +19,33 @@
 Diamond::SDLMusic::SDLMusic(Mix_Music *music) : music(music), loop(-1) {}
 
 Diamond::SDLMusic::~SDLMusic() {
-	Mix_FreeMusic(music);
+    Mix_FreeMusic(music);
 }
 
 void Diamond::SDLMusic::play() {
-	Mix_PlayMusic(music, loop);
+    Mix_PlayMusic(music, loop);
 }
 
 void Diamond::SDLMusic::pause() {
-	Mix_PauseMusic();
+    Mix_PauseMusic();
 }
 
 void Diamond::SDLMusic::resume() {
-	Mix_ResumeMusic();
+    Mix_ResumeMusic();
 }
 
 void Diamond::SDLMusic::stop() {
-	Mix_HaltMusic();
+    Mix_HaltMusic();
 }
 
 void Diamond::SDLMusic::setLoop(bool loop) {
-	loop ? this->loop = -1 : this->loop = 1;
+    loop ? this->loop = -1 : this->loop = 1;
 }
 
 int Diamond::SDLMusic::getVolume() const {
-	return Mix_VolumeMusic(-1);
+    return Mix_VolumeMusic(-1);
 }
 
 void Diamond::SDLMusic::setVolume(int volume) {
-	Mix_VolumeMusic(volume);
+    Mix_VolumeMusic(volume);
 }

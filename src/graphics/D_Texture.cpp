@@ -21,9 +21,9 @@ Diamond::Texture::Texture(int16_t width, int16_t height) : width(width), height(
 Diamond::Texture::~Texture() {}
 
 Diamond::RGBA Diamond::Texture::getColor() const {
-	return color;
+    return color;
 }
 
 void Diamond::Texture::setColor(RGBA color) {
-	this->color = color;
+    this->color = color;
 }

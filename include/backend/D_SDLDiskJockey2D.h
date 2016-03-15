@@ -20,30 +20,30 @@
 #include "D_DiskJockey2D.h"
 
 namespace Diamond {
-	class SDLDiskJockey2D : public DiskJockey2D {
-	public:
-		~SDLDiskJockey2D();
+    class SDLDiskJockey2D : public DiskJockey2D {
+    public:
+        ~SDLDiskJockey2D();
 
-		bool init() override;
+        bool init() override;
 
-		Sound2D *loadSound(std::string path) override;
+        Sound2D *loadSound(std::string path) override;
 
-		Music *loadMusic(std::string path) override;
+        Music *loadMusic(std::string path) override;
 
-		int getMaxVolume() const override;
+        int getMaxVolume() const override;
 
-		void pauseMusic() override;
+        void pauseMusic() override;
 
-		void resumeMusic() override;
+        void resumeMusic() override;
 
-		void stopMusic() override;
+        void stopMusic() override;
 
-		bool isMusicPlaying() const override;
+        bool isMusicPlaying() const override;
 
-		int getMusicVolume() const override;
+        int getMusicVolume() const override;
 
-		void setMusicVolume(int volume) override;
-	};
+        void setMusicVolume(int volume) override;
+    };
 }
 
 #endif // D_SDL_DISK_JOCKEY_2D_H

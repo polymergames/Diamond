@@ -22,11 +22,11 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(Texture *texture,
                                         transform2_id transform, 
                                         float scale)
     : RenderObj2D(transform), flip(SDL_FLIP_NONE), clip(nullptr) {
-	setTexture(texture, scale);
+    setTexture(texture, scale);
 }
 
 Diamond::SDLRenderObj2D::~SDLRenderObj2D() {
-	if (clip)	delete clip;
+    if (clip)   delete clip;
 }
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
@@ -79,43 +79,43 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(SDLRenderObj2D &&oth
 }
 
 void Diamond::SDLRenderObj2D::setTexture(Texture *texture, float scale) {
-	this->texture = dynamic_cast<SDLTexture*>(texture);
-	applyScale(scale);
+    this->texture = dynamic_cast<SDLTexture*>(texture);
+    applyScale(scale);
 }
 
 void Diamond::SDLRenderObj2D::applyScale(float scale) {
-	if (clip) {
-		size.x = clip->w * scale;
-		size.y = clip->h * scale;
-	}
-	else {
-		size.x = texture->getWidth() * scale;
-		size.y = texture->getHeight() * scale;
-	}
+    if (clip) {
+        size.x = clip->w * scale;
+        size.y = clip->h * scale;
+    }
+    else {
+        size.x = texture->getWidth() * scale;
+        size.y = texture->getHeight() * scale;
+    }
 }
 
 void Diamond::SDLRenderObj2D::flipX() {
-	flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_HORIZONTAL);
+    flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_HORIZONTAL);
 }
 
 void Diamond::SDLRenderObj2D::flipY() {
-	flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_VERTICAL);
+    flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_VERTICAL);
 }
 
 int Diamond::SDLRenderObj2D::isFlippedX() const {
-	return flip & SDL_FLIP_HORIZONTAL;
+    return flip & SDL_FLIP_HORIZONTAL;
 }
 
 int Diamond::SDLRenderObj2D::isFlippedY() const {
-	return flip & SDL_FLIP_VERTICAL;
+    return flip & SDL_FLIP_VERTICAL;
 }
 
 void Diamond::SDLRenderObj2D::initClip() {
-	if (!clip)	clip = new SDL_Rect;
-	clip->x = 0;
-	clip->y = 0;
-	clip->w = texture->getWidth();
-	clip->h = texture->getHeight();
+    if (!clip)  clip = new SDL_Rect;
+    clip->x = 0;
+    clip->y = 0;
+    clip->w = texture->getWidth();
+    clip->h = texture->getHeight();
 }
 
 void Diamond::SDLRenderObj2D::setClip(int x, int y, int w, int h) {
@@ -135,8 +135,8 @@ void Diamond::SDLRenderObj2D::setClip(int x, int y) {
 }
 
 bool Diamond::SDLRenderObj2D::getClipDim(Vector2<int> &dim) const {
-	if (!clip)	return false;
-	dim.x = clip->w;
-	dim.y = clip->h;
-	return true;
+    if (!clip)  return false;
+    dim.x = clip->w;
+    dim.y = clip->h;
+    return true;
 }

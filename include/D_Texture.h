@@ -20,10 +20,10 @@
 #include "D_Config.h"
 
 namespace Diamond {
-	class Texture {
-	public:
-		Texture(int16_t width, int16_t height);
-		virtual ~Texture();
+    class Texture {
+    public:
+        Texture(int16_t width, int16_t height);
+        virtual ~Texture();
 
         int16_t getWidth() const {
             return width;
@@ -32,15 +32,15 @@ namespace Diamond {
         int16_t getHeight() const {
             return height;
         }
-		
-		virtual RGBA getColor() const;
+        
+        virtual RGBA getColor() const;
 
-		virtual void setColor(RGBA color);
-		
-	protected:
+        virtual void setColor(RGBA color);
+        
+    protected:
         int16_t width, height;
-		RGBA color;
-	};
+        RGBA color;
+    };
 }
 
 #endif // D_TEXTURE_H

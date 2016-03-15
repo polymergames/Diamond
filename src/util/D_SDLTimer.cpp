@@ -19,5 +19,5 @@
 #include "SDL.h"
 
 uint32_t Diamond::SDLTimer::msElapsed() {
-	return SDL_GetTicks();
+    return SDL_GetTicks();
 }

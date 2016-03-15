@@ -18,10 +18,10 @@
 #define D_LOGGER_H
 
 namespace Diamond {
-	class Logger {
-	public:
-		virtual ~Logger() {};
-	};
+    class Logger {
+    public:
+        virtual ~Logger() {};
+    };
 }
 
 #endif // D_LOGGER_H

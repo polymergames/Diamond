@@ -36,60 +36,60 @@
 #endif
 
 namespace Diamond {
-	namespace Launcher {
-		bool is_open = true;
-		Config config = Config();
-		
-		static std::unique_ptr<EventHandler> events = nullptr;
+    namespace Launcher {
+        bool is_open = true;
+        Config config = Config();
+        
+        static std::unique_ptr<EventHandler> events = nullptr;
 
-		static int nframes = 0;
+        static int nframes = 0;
 
-		static void initDesktop() {
-			Log::setLogger(new DesktopLogger());
-			
-			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
-				// TODO: Handle renderer initialization failure
-			}
+        static void initDesktop() {
+            Log::setLogger(new DesktopLogger());
+            
+            if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
+                // TODO: Handle renderer initialization failure
+            }
 
-			if (!AudioManager2D::initDj(new SDLDiskJockey2D())) {
-				// TODO: Handle audio initialization failure
-			}
-			
-			Time::setTimer(new SDLTimer());
-			
-			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
-		}
+            if (!AudioManager2D::initDj(new SDLDiskJockey2D())) {
+                // TODO: Handle audio initialization failure
+            }
+            
+            Time::setTimer(new SDLTimer());
+            
+            events = std::unique_ptr<EventHandler>(new SDLEventHandler());
+        }
 
-		static void initMobile() {
-			config.fullscreen = true;
+        static void initMobile() {
+            config.fullscreen = true;
 
-			Log::setLogger(new DesktopLogger()); // temporary
-			
-			if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
-				// TODO: Handle renderer initialization failure
-			}
+            Log::setLogger(new DesktopLogger()); // temporary
+            
+            if (!Graphics2D::initRenderer(new SDLRenderer2D())) {
+                // TODO: Handle renderer initialization failure
+            }
 
-			if (!AudioManager2D::initDj(new SDLDiskJockey2D())) {
-				// TODO: Handle audio initialization failure
-			}
+            if (!AudioManager2D::initDj(new SDLDiskJockey2D())) {
+                // TODO: Handle audio initialization failure
+            }
 
-			Time::setTimer(new SDLTimer());
-			
-			events = std::unique_ptr<EventHandler>(new SDLEventHandler());
-		}
-	}
+            Time::setTimer(new SDLTimer());
+            
+            events = std::unique_ptr<EventHandler>(new SDLEventHandler());
+        }
+    }
 }
 
 void Diamond::Launcher::launch(Game &game) {
 #if defined __ANDROID__ || defined IOS // TODO: What is the IOS platform macro? Or define one manually!
-	// Android launcher
-	initMobile();
+    // Android launcher
+    initMobile();
 #elif defined _WIN32 || defined __APPLE__
-	initDesktop(); // Desktop launcher (windows/osx)
+    initDesktop(); // Desktop launcher (windows/osx)
 #else
-	// TODO: Log this using logger, and use a better RAII-compliant exit method! (ex. exceptions)
-	std::cout << "Platform unsupported!" << std::endl;
-	std::exit();
+    // TODO: Log this using logger, and use a better RAII-compliant exit method! (ex. exceptions)
+    std::cout << "Platform unsupported!" << std::endl;
+    std::exit();
 #endif
 
     // Init physics
@@ -98,31 +98,31 @@ void Diamond::Launcher::launch(Game &game) {
     }
 
     // Init time
-	tD_time time, last_time = Time::msElapsed();
-	tD_delta delta;
-	
-	// Init game
-	game.init();
+    tD_time time, last_time = Time::msElapsed();
+    tD_delta delta;
+    
+    // Init game
+    game.init();
 
-	// Update
-	while (Launcher::is_open) {
-		++nframes;
-		
-		time = Time::msElapsed();
-		delta = time - last_time;
-		last_time = time;
-		
-		Time::fps = nframes / (time / 1000.0);
-		
-		Quantum2D::QuantumWorld2D::step(delta);
-		events->update();
-		World2D::update(delta);
-		game.update(delta);
-		Graphics2D::renderAll();
-	}
+    // Update
+    while (Launcher::is_open) {
+        ++nframes;
+        
+        time = Time::msElapsed();
+        delta = time - last_time;
+        last_time = time;
+        
+        Time::fps = nframes / (time / 1000.0);
+        
+        Quantum2D::QuantumWorld2D::step(delta);
+        events->update();
+        World2D::update(delta);
+        game.update(delta);
+        Graphics2D::renderAll();
+    }
 
-	// End game
-	game.quit();
+    // End game
+    game.quit();
 }
 
 void Diamond::Launcher::quit() {
