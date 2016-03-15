@@ -112,7 +112,8 @@ void Diamond::Launcher::launch(Game &game) {
         delta = time - last_time;
         last_time = time;
         
-        Time::fps = nframes / (time / 1000.0);
+        Time::setDelta(delta);
+        Time::setFPS(nframes / (time / 1000.0));
         
         Quantum2D::QuantumWorld2D::step(delta);
         events->update();

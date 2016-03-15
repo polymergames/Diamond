@@ -22,13 +22,14 @@
 
 namespace Diamond {
     namespace Time {
-        float fps;
+        float fps = 0;
+        tD_delta delta = 0;
         
         static std::unique_ptr<Timer> timer = nullptr;
     }
 }
 
-uint32_t Diamond::Time::msElapsed() {
+tD_time Diamond::Time::msElapsed() {
     return timer->msElapsed();
 }
 

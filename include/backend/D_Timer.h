@@ -17,14 +17,14 @@
 #ifndef D_TIMER_H
 #define D_TIMER_H
 
-#include <stdint.h>
+#include "D_typedefs.h"
 
 namespace Diamond {
     class Timer {
     public:
         virtual ~Timer() {};
 
-        virtual uint32_t msElapsed() = 0;
+        virtual tD_time msElapsed() = 0;
     };
 }
 

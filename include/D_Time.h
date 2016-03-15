@@ -17,18 +17,30 @@
 #ifndef D_TIME_H
 #define D_TIME_H
 
-#include <stdint.h>
+#include "D_typedefs.h"
 
 namespace Diamond {
     class Timer;
     namespace Time {
         
         extern float fps;
+        extern tD_delta delta;
 
         /**
          Returns the number of milliseconds elapsed since the game was launched.
         */
-        uint32_t msElapsed();
+        tD_time msElapsed();
+
+        /**
+        Get the time in milliseconds since the last frame.
+        */
+        inline tD_delta getDelta() { return delta; }
+
+        inline void setDelta(tD_delta d) { delta = d; }
+
+        inline float getFPS() { return fps; }
+
+        inline void setFPS(float f) { fps = f; }
 
         /**
          Called by Diamond launcher to set the platform-specific timing implementation.

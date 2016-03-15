@@ -24,18 +24,16 @@
 namespace Diamond {
     class ColliderComponent2D : public Component {
     public:
-        ColliderComponent2D(Entity2D *parent, std::function<void(Entity2D*)> callback)
-            : Component(parent), callback(callback) {}
+        ColliderComponent2D(Entity2D *parent, std::function<void(Entity2D *other)> onCollision)
+            : Component(parent), onCollision(onCollision) {}
 
         virtual ~ColliderComponent2D() {}
 
-        collider2_id getID() const {
-            return collider;
-        }
+        collider2_id getID() const { return collider; }
 
     private:
         collider2_id collider;
-        std::function<void(Entity2D*)> callback;
+        std::function<void(Entity2D *other)> onCollision;
     };
 }
 

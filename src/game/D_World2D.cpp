@@ -18,7 +18,7 @@
 
 namespace Diamond {
     namespace World2D {
-        Entity2D root;
+        Entity2D root("root");
     }
 }
 

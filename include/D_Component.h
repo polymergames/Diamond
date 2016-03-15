@@ -26,7 +26,7 @@ namespace Diamond {
         Component(Entity2D *parent) : parent(parent) {}
         virtual ~Component() {}
 
-        const Entity2D *getParent() const {
+        Entity2D *getParent() const {
             return parent;
         }
 

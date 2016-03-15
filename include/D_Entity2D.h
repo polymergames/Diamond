@@ -30,7 +30,7 @@
 namespace Diamond {
     class Entity2D {
     public:
-        Entity2D();
+        Entity2D(const std::string &name);
         virtual ~Entity2D();
         
         Entity2D(const Entity2D &other);
@@ -40,6 +40,8 @@ namespace Diamond {
         Entity2D &operator=(Entity2D &&other);
         
         //tD_id getID() const;
+
+        std::string getName() const { return name; }
 
         void addChild(Entity2D *child);
         
@@ -79,6 +81,7 @@ namespace Diamond {
         void updateBehaviors(tD_delta delta_ms);
 
     protected:
+        std::string name;
         transform2_id transform;
         
         Entity2D *parent;

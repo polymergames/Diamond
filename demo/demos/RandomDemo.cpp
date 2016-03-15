@@ -24,7 +24,8 @@
 using namespace Diamond;
 
 RandomDemo::RandomDemo(float movespeed, float spinspeed, float growspeed) 
-    : movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed) {
+    : movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
+      spike("spike"), zapper("zapper"), zapper2("zapper2") {
     // Launcher::config.fullscreen = true;
     // Launcher::config.window_width = 600;
     // Launcher::config.window_height = 600;
@@ -183,7 +184,7 @@ void RandomDemo::update(tD_delta delta) {
     // Touch
     if (Input::touch_up) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
-        Entity2D *spawn = new Entity2D();
+        Entity2D *spawn = new Entity2D("cloud");
         spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
         spawn->setTransform(Input::touch_pos.x, Input::touch_pos.y);
         objects.push_back(std::unique_ptr<Entity2D>(spawn));

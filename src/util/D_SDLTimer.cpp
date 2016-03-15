@@ -18,6 +18,6 @@
 
 #include "SDL.h"
 
-uint32_t Diamond::SDLTimer::msElapsed() {
+tD_time Diamond::SDLTimer::msElapsed() {
     return SDL_GetTicks();
 }
