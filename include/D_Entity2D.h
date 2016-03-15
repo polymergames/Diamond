@@ -85,8 +85,8 @@ namespace Diamond {
 		
 		Entity2D *parent;
 		std::vector<Entity2D*> children;
-		std::unordered_map<std::type_index, std::unique_ptr<Component>> components; // components interface with backend data, therefore each entity has its own unique copy
-		std::map<std::type_index, std::unique_ptr<Behavior>> behaviors;  // a behavior should be self-contained, so main data manipulation happens within the behavior. 
+		std::unordered_map<std::type_index, std::unique_ptr<Component> > components; // components interface with backend data, therefore each entity has its own unique copy
+		std::map<std::type_index, std::unique_ptr<Behavior> > behaviors;  // a behavior should be self-contained, so main data manipulation happens within the behavior. 
 		// Unlike commponents, behaviors are iterated and updated directly from the entity.
 		
 		void setParent(Entity2D *parent);

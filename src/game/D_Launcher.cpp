@@ -92,6 +92,12 @@ void Diamond::Launcher::launch(Game &game) {
 	std::exit();
 #endif
 
+    // Init physics
+    if (!Quantum2D::QuantumWorld2D::init()) {
+        // TODO: Handle physics initialization failure
+    }
+
+    // Init time
 	tD_time time, last_time = Time::msElapsed();
 	tD_delta delta;
 	

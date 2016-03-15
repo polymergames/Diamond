@@ -89,8 +89,8 @@ void Diamond::SDLRenderObj2D::applyScale(float scale) {
 		size.y = clip->h * scale;
 	}
 	else {
-		size.x = texture->width * scale;
-		size.y = texture->height * scale;
+		size.x = texture->getWidth() * scale;
+		size.y = texture->getHeight() * scale;
 	}
 }
 
@@ -114,8 +114,8 @@ void Diamond::SDLRenderObj2D::initClip() {
 	if (!clip)	clip = new SDL_Rect;
 	clip->x = 0;
 	clip->y = 0;
-	clip->w = texture->width;
-	clip->h = texture->height;
+	clip->w = texture->getWidth();
+	clip->h = texture->getHeight();
 }
 
 void Diamond::SDLRenderObj2D::setClip(int x, int y, int w, int h) {

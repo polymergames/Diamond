@@ -19,8 +19,11 @@
 #include "D_Input.h"
 #include "D_Launcher.h"
 #include "D_RenderComponent2D.h"
+#include "D_RigidbodyComponent2D.h"
 #include "D_World2D.h"
+#include "Q_AABBCollider2D.h"
 using namespace Diamond;
+using namespace Quantum2D;
 
 CollideDemo::CollideDemo(float movespeed) : movespeed(movespeed) {
     Launcher::config.vsync = true;
@@ -35,6 +38,7 @@ void CollideDemo::init() {
         return;
     }
 
+    // Setup entities
     spike.addComponent<RenderComponent2D>(&spike, spike_sprite, 0.1f);
     spike.setTransform(500, 400);
     World2D::addEntity(&spike);
@@ -53,6 +57,24 @@ void CollideDemo::init() {
     zapper2.getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper2.setTransform(700, 300);
     World2D::addEntity(&zapper2);
+
+    // Setup physics
+    float scale = spike.getComponent<RenderComponent2D>()->getScale();
+    spike.addComponent<RigidbodyComponent2D>(&spike);
+    spike_col = QuantumWorld2D::genCollider<AABBCollider2D>(spike.getComponent<RigidbodyComponent2D>()->getID(), 
+        Vector2<tD_pos>(0, 0), Vector2<tD_pos>(spike_sprite->getWidth() * scale, spike_sprite->getHeight() * scale));
+
+    scale = zapper1.getComponent<RenderComponent2D>()->getScale();
+    zapper1.addComponent<RigidbodyComponent2D>(&zapper1);
+    zapper1_col = QuantumWorld2D::genCollider<AABBCollider2D>(zapper1.getComponent<RigidbodyComponent2D>()->getID(),
+        Vector2<tD_pos>(0, 0), Vector2<tD_pos>(zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns * scale, 
+        zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
+
+    scale = zapper2.getComponent<RenderComponent2D>()->getScale();
+    zapper2.addComponent<RigidbodyComponent2D>(&zapper2);
+    zapper2_col = QuantumWorld2D::genCollider<AABBCollider2D>(zapper2.getComponent<RigidbodyComponent2D>()->getID(),
+        Vector2<tD_pos>(0, 0), Vector2<tD_pos>(zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns * scale,
+        zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
 }
 
 void CollideDemo::update(tD_delta delta) {
