@@ -39,6 +39,8 @@ private:
 
     body2d_id spike_body, zapper1_body, zapper2_body;
     collider2_id spike_col, zapper1_col, zapper2_col;
+
+    void m_onCollision(void *other);
 };
 
 #endif // COLLIDE_DEMO_H

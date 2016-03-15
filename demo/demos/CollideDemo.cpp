@@ -25,10 +25,6 @@
 using namespace Diamond;
 using namespace Quantum2D;
 
-void onCollision(void *other) {
-    std::cout << "Hit by " << static_cast<Entity2D*>(other)->getName() << "!" << std::endl;
-}
-
 CollideDemo::CollideDemo(float movespeed) 
     : movespeed(movespeed), spike("spike"), zapper1("zapper1"), zapper2("zapper2") {
     Launcher::config.vsync = true;
@@ -64,45 +60,27 @@ void CollideDemo::init() {
     World2D::addEntity(&zapper2);
 
     // Setup physics
-    // std::function<void(void*)> callback = std::bind(&onCollision, this, std::placeholders::_1);
-    std::function<void(void*)> callback = &onCollision;
+    std::function<void(void*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
 
     float scale = spike.getComponent<RenderComponent2D>()->getScale();
     spike.addComponent<RigidbodyComponent2D>(&spike);
-    /*
+    
     spike_col = QuantumWorld2D::genCollider<AABBCollider2D>(spike.getComponent<RigidbodyComponent2D>()->getID(), 
         &spike, callback, Vector2<tD_pos>(0, 0), 
         Vector2<tD_pos>(spike_sprite->getWidth() * scale, spike_sprite->getHeight() * scale));
-    */
-    Collider2D *col = new AABBCollider2D(spike.getComponent<RigidbodyComponent2D>()->getID(),
-        &spike, callback, Vector2<tD_pos>(0, 0),
-        Vector2<tD_pos>(spike_sprite->getWidth() * scale, spike_sprite->getHeight() * scale));
-    spike_col = Quantum2D::QuantumWorld2D::addCollider(col);
 
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
     scale = zapper1.getComponent<RenderComponent2D>()->getScale();
-    zapper1.addComponent<RigidbodyComponent2D>(&zapper1);
-    /*
+    zapper1.addComponent<RigidbodyComponent2D>(&zapper1);    
     zapper1_col = QuantumWorld2D::genCollider<AABBCollider2D>(zapper1.getComponent<RigidbodyComponent2D>()->getID(),
         &zapper1, callback, Vector2<tD_pos>(2 * partial_width * scale, 0), 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
-    */
-    col = new AABBCollider2D(zapper1.getComponent<RigidbodyComponent2D>()->getID(),
-        &zapper1, callback, Vector2<tD_pos>(2 * partial_width * scale, 0),
-        Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
-    zapper1_col = Quantum2D::QuantumWorld2D::addCollider(col);
 
     scale = zapper2.getComponent<RenderComponent2D>()->getScale();
-    zapper2.addComponent<RigidbodyComponent2D>(&zapper2);
-    /*
+    zapper2.addComponent<RigidbodyComponent2D>(&zapper2);    
     zapper2_col = QuantumWorld2D::genCollider<AABBCollider2D>(zapper2.getComponent<RigidbodyComponent2D>()->getID(),
         &zapper2, callback, Vector2<tD_pos>(2 * partial_width * scale, 0), 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
-    */
-    col = new AABBCollider2D(zapper2.getComponent<RigidbodyComponent2D>()->getID(),
-        &zapper2, callback, Vector2<tD_pos>(2 * partial_width * scale, 0),
-        Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
-    zapper2_col = Quantum2D::QuantumWorld2D::addCollider(col);
 }
 
 void CollideDemo::update(tD_delta delta) {
@@ -135,4 +113,8 @@ void CollideDemo::update(tD_delta delta) {
 
 void CollideDemo::quit() {
     //
+}
+
+void CollideDemo::m_onCollision(void *other) {
+    std::cout << "Hit by " << static_cast<Entity2D*>(other)->getName() << "!" << std::endl;
 }
