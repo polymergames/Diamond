@@ -16,6 +16,7 @@
 
 #include "D_AABBColliderComponent2D.h"
 #include "D_Entity2D.h"
+#include "Q_QuantumWorld2D.h"
 
 Diamond::AABBColliderComponent2D::AABBColliderComponent2D(Entity2D *parent,
                                                           std::function<void(Entity2D *other)> &onCollision,

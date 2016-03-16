@@ -21,12 +21,12 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
-	/**
-	 A contiguous vector data structure with O(1) deletion at any point and 
+    /**
+     A contiguous vector data structure with O(1) deletion at any point and 
      ID references that are guaranteed valid for the lifetime of a referred element.
-	 Access is O(1) but with higher constant factor than std::vector.
-	 Does not maintain order of elements, and uses O(n) auxiliary space.
-	*/
+     Access is O(1) but with higher constant factor than std::vector.
+     Does not maintain order of elements, and uses O(n) auxiliary space.
+    */
     template <class T>
     class swapvector {
     public:

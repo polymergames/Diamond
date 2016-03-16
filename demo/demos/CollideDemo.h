@@ -34,11 +34,8 @@ public:
 private:
     const float movespeed;
 
-    Diamond::Entity2D spike, zapper1, zapper2;
+    Diamond::Entity2D spike1, spike2, zapper1, zapper2;
     Diamond::AnimationSheet zapper_anim;
-
-    // body2d_id spike_body, zapper1_body, zapper2_body;
-    // collider2_id spike_col, zapper1_col, zapper2_col;
 
     void m_onCollision(Diamond::Entity2D *other);
 };

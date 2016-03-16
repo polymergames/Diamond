@@ -20,7 +20,6 @@
 #include "D_ColliderComponent2D.h"
 #include "D_Vector2.h"
 #include "Q_AABBCollider2D.h"
-#include "Q_QuantumWorld2D.h"
 
 namespace Diamond {
     class AABBColliderComponent2D : public ColliderComponent2D {
@@ -31,16 +30,6 @@ namespace Diamond {
                                 const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0));
 
         /**
-        Get the current coordinates of this AABB's bottom left corner in world space.
-        */
-        const Vector2<tD_pos> &getMin() const { return aabb->getMin(); }
-
-        /**
-        Get the current coordinates of this AABB's top right corner in world space.
-        */
-        const Vector2<tD_pos> &getMax() const { return aabb->getMax(); }
-
-        /**
         Get the origin point of this AABB in the parent transform's local space.
         */
         const Vector2<tD_pos> &getOrigin() { return aabb->getOrigin(); }
@@ -49,6 +38,16 @@ namespace Diamond {
         Get the horizontal x vertical dimensions of this AABB.
         */
         const Vector2<tD_pos> &getDims() { return aabb->getDims(); }
+
+        /**
+        Get the current coordinates of this AABB's bottom left corner in world space.
+        */
+        const Vector2<tD_pos> &getMin() const { return aabb->getMin(); }
+
+        /**
+        Get the current coordinates of this AABB's top right corner in world space.
+        */
+        const Vector2<tD_pos> &getMax() const { return aabb->getMax(); }
 
         void setOrigin(const Vector2<tD_pos> &origin) { aabb->setOrigin(origin); }
 

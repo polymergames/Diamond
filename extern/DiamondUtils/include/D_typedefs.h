@@ -20,7 +20,8 @@
 #include <stdint.h>
 
 // transform typedefs
-typedef int16_t tD_pos; // position coordinate type
+typedef int32_t tD_pos; // position coordinate type
+typedef int64_t tD_long_pos; // long position coordinate type
 typedef float tD_rot; // rotation value type
 
 // time typedefs

@@ -16,6 +16,7 @@
 
 #include "CollideDemo.h"
 #include "D_AABBColliderComponent2D.h"
+#include "D_CircleColliderComponent.h"
 #include "D_Graphics2D.h"
 #include "D_Input.h"
 #include "D_Launcher.h"
@@ -24,7 +25,7 @@
 using namespace Diamond;
 
 CollideDemo::CollideDemo(float movespeed) 
-    : movespeed(movespeed), spike("spike"), zapper1("zapper1"), zapper2("zapper2") {
+    : movespeed(movespeed), spike1("spike1"), spike2("spike2"), zapper1("zapper1"), zapper2("zapper2") {
     Launcher::config.vsync = true;
 }
 
@@ -38,9 +39,13 @@ void CollideDemo::init() {
     }
 
     // Setup entities
-    spike.addComponent<RenderComponent2D>(&spike, spike_sprite, 0.1f);
-    spike.setTransform(500, 400);
-    World2D::addEntity(&spike);
+    spike1.addComponent<RenderComponent2D>(&spike1, spike_sprite, 0.1f);
+    spike1.setTransform(500, 400);
+    World2D::addEntity(&spike1);
+
+    spike2.addComponent<RenderComponent2D>(&spike2, spike_sprite, 0.1f);
+    spike2.setTransform(900, 200);
+    World2D::addEntity(&spike2);
 
     zapper_anim.sprite_sheet = Graphics2D::loadTexture("zapper.png");
     zapper_anim.rows = 2;
@@ -60,9 +65,15 @@ void CollideDemo::init() {
     // Setup physics
     std::function<void(Entity2D*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
 
-    float scale = spike.getComponent<RenderComponent2D>()->getScale();
-    spike.addComponent<AABBColliderComponent2D>(&spike, callback,
-        Vector2<tD_pos>(spike_sprite->getWidth() * scale, spike_sprite->getHeight() * scale));
+    float scale = spike1.getComponent<RenderComponent2D>()->getScale();
+    tD_pos center = spike_sprite->getWidth() * scale / 2.0;
+    spike1.addComponent<CircleColliderComponent>(&spike1, callback,
+        center, Vector2<tD_pos>(center, center));
+
+    scale = spike2.getComponent<RenderComponent2D>()->getScale();
+    center = spike_sprite->getWidth() * scale / 2.0;
+    spike2.addComponent<CircleColliderComponent>(&spike2, callback, 
+        center, Vector2<tD_pos>(center, center));
 
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
     scale = zapper1.getComponent<RenderComponent2D>()->getScale();
@@ -77,6 +88,7 @@ void CollideDemo::init() {
 }
 
 void CollideDemo::update(tD_delta delta) {
+    // zapper1 controls
     if (Input::keydown[Input::K_W]) {
         zapper1.getTransform().position.y -= movespeed * delta;
     }
@@ -90,6 +102,7 @@ void CollideDemo::update(tD_delta delta) {
         zapper1.getTransform().position.x += movespeed * delta;
     }
 
+    // zapper2 controls
     if (Input::keydown[Input::K_UP]) {
         zapper2.getTransform().position.y -= movespeed * delta;
     }
@@ -101,6 +114,20 @@ void CollideDemo::update(tD_delta delta) {
     }
     if (Input::keydown[Input::K_RIGHT]) {
         zapper2.getTransform().position.x += movespeed * delta;
+    }
+
+    // spike2 controls
+    if (Input::keydown[Input::K_P8]) {
+        spike2.getTransform().position.y -= movespeed * delta;
+    }
+    if (Input::keydown[Input::K_P2]) {
+        spike2.getTransform().position.y += movespeed * delta;
+    }
+    if (Input::keydown[Input::K_P4]) {
+        spike2.getTransform().position.x -= movespeed * delta;
+    }
+    if (Input::keydown[Input::K_P6]) {
+        spike2.getTransform().position.x += movespeed * delta;
     }
 }
 
