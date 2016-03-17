@@ -81,6 +81,8 @@ namespace Diamond {
 }
 
 void Diamond::Launcher::launch(Game &game) {
+    Launcher::is_open = true;
+
 #if defined __ANDROID__ || defined IOS // TODO: What is the IOS platform macro? Or define one manually!
     // Android launcher
     initMobile();

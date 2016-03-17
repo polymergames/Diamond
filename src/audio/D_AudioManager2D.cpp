@@ -63,9 +63,6 @@ void Diamond::AudioManager2D::setMusicVolume(int volume) {
 }
 
 bool Diamond::AudioManager2D::initDj(DiskJockey2D *dj) {
-    if (AudioManager2D::dj == nullptr && dj != nullptr) {
-        AudioManager2D::dj = std::unique_ptr<DiskJockey2D>(dj);
-        return dj->init();
-    }
-    return false;
+    AudioManager2D::dj = std::unique_ptr<DiskJockey2D>(dj);
+    return dj->init();
 }
