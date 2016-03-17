@@ -74,9 +74,9 @@ namespace Diamond {
         transform2_id getTransformID() const { return transform; }
         
         void setTransform(Transform2<tD_pos, tD_rot> &new_transform) { getTransform() = new_transform; }
-        void setTransform(Vector2<int> &position);
-        void setTransform(int x, int y);
-        void setRotation(float rotation);
+        void setTransform(Vector2<tD_pos> &position);
+        void setTransform(tD_pos x, tD_pos y);
+        void setRotation(tD_rot rotation);
 
         void updateBehaviors(tD_delta delta_ms);
 
@@ -155,16 +155,16 @@ inline Diamond::Transform2<tD_pos, tD_rot> &Diamond::Entity2D::getTransform() co
     return Quantum2D::QuantumWorld2D::getTransform(transform);
 }
 
-inline void Diamond::Entity2D::setTransform(Diamond::Vector2<int> &position) {
+inline void Diamond::Entity2D::setTransform(Diamond::Vector2<tD_pos> &position) {
     Quantum2D::QuantumWorld2D::getTransform(transform).position = position;
 }
 
-inline void Diamond::Entity2D::setTransform(int x, int y) {
+inline void Diamond::Entity2D::setTransform(tD_pos x, tD_pos y) {
     Quantum2D::QuantumWorld2D::getTransform(transform).position.x = x;
     Quantum2D::QuantumWorld2D::getTransform(transform).position.y = y;
 }
 
-inline void Diamond::Entity2D::setRotation(float rotation) {
+inline void Diamond::Entity2D::setRotation(tD_rot rotation) {
     Quantum2D::QuantumWorld2D::getTransform(transform).rotation = rotation;
 }
 

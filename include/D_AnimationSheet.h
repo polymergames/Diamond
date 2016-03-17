@@ -25,8 +25,8 @@
 namespace Diamond {
     struct AnimationSheet {
         std::shared_ptr<Texture> sprite_sheet;
-        uint16_t num_frames = 1;
         tD_delta frame_length = 100; // the length of time in type of tD_delta (assumed milliseconds) of one animation frame
+        uint16_t num_frames = 1;
         uint8_t rows = 1, columns = 1;
     };
 }
