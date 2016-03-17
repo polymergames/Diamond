@@ -26,32 +26,32 @@ namespace Diamond {
     public:
         AABBColliderComponent2D(Entity2D *parent, 
                                 std::function<void(Entity2D *other)> &onCollision, 
-                                const Vector2<tD_pos> &dims, 
-                                const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0));
+                                const Vector2<tQ_pos> &dims,
+                                const Vector2<tQ_pos> &origin = Vector2<tQ_pos>(0, 0));
 
         /**
         Get the origin point of this AABB in the parent transform's local space.
         */
-        const Vector2<tD_pos> &getOrigin() { return aabb->getOrigin(); }
+        const Vector2<tQ_pos> &getOrigin() { return aabb->getOrigin(); }
 
         /**
         Get the horizontal x vertical dimensions of this AABB.
         */
-        const Vector2<tD_pos> &getDims() { return aabb->getDims(); }
+        const Vector2<tQ_pos> &getDims() { return aabb->getDims(); }
 
         /**
         Get the current coordinates of this AABB's bottom left corner in world space.
         */
-        const Vector2<tD_pos> &getMin() const { return aabb->getMin(); }
+        const Vector2<tQ_pos> &getMin() const { return aabb->getMin(); }
 
         /**
         Get the current coordinates of this AABB's top right corner in world space.
         */
-        const Vector2<tD_pos> &getMax() const { return aabb->getMax(); }
+        const Vector2<tQ_pos> &getMax() const { return aabb->getMax(); }
 
-        void setOrigin(const Vector2<tD_pos> &origin) { aabb->setOrigin(origin); }
+        void setOrigin(const Vector2<tQ_pos> &origin) { aabb->setOrigin(origin); }
 
-        void setDims(const Vector2<tD_pos> &dims) { aabb->setDims(dims); }
+        void setDims(const Vector2<tQ_pos> &dims) { aabb->setDims(dims); }
 
     private:
         Quantum2D::AABBCollider2D *aabb;

@@ -27,9 +27,7 @@ namespace Diamond {
         RTYPE rotation;
         
         Transform2() : position(), rotation() {}
-        
         Transform2(Vector2<PTYPE> position) : position(position), rotation() {}
-        
         Transform2(Vector2<PTYPE> position, RTYPE rotation) : position(position), rotation(rotation) {}
 
 

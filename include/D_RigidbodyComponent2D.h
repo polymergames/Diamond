@@ -27,13 +27,11 @@ namespace Diamond {
         RigidbodyComponent2D(Entity2D *parent);
         ~RigidbodyComponent2D();
 
-        Diamond::Vector2<float> &getVelocity() {
+        Diamond::Vector2<tQ_pos> &getVelocity() {
             return Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity();
         }
 
-        body2d_id getID() const {
-            return body;
-        }
+        body2d_id getID() const { return body; }
 
     private:
         body2d_id body;

@@ -26,7 +26,7 @@ typedef float tD_rot; // rotation value type
 
 // time typedefs
 typedef uint32_t tD_time; // time type
-typedef int16_t tD_delta; // delta time type
+typedef int32_t tD_delta; // delta time type
 
 // ID/index typedefs
 typedef uint16_t tD_index; // array index type

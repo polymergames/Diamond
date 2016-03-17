@@ -20,8 +20,8 @@
 
 Diamond::CircleColliderComponent::CircleColliderComponent(Entity2D *parent,
                                                           std::function<void(Entity2D *other)> &onCollision,
-                                                          tD_pos radius,
-                                                          const Vector2<tD_pos> &center)
+                                                          tQ_pos radius,
+                                                          const Vector2<tQ_pos> &center)
     : ColliderComponent2D(parent, onCollision) {
     std::function<void(void*)> callback = std::bind(&CircleColliderComponent::onCollide, this, std::placeholders::_1);
     circle = new Quantum2D::CircleCollider(parent->getTransformID(), parent, callback, radius, center);

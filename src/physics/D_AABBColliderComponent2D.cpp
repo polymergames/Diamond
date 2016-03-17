@@ -20,8 +20,8 @@
 
 Diamond::AABBColliderComponent2D::AABBColliderComponent2D(Entity2D *parent,
                                                           std::function<void(Entity2D *other)> &onCollision,
-                                                          const Vector2<tD_pos> &dims,
-                                                          const Vector2<tD_pos> &origin)
+                                                          const Vector2<tQ_pos> &dims,
+                                                          const Vector2<tQ_pos> &origin)
     : ColliderComponent2D(parent, onCollision) {
     std::function<void(void*)> callback = std::bind(&AABBColliderComponent2D::onCollide, this, std::placeholders::_1);
     aabb = new Quantum2D::AABBCollider2D(parent->getTransformID(), parent, callback, dims, origin);

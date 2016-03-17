@@ -27,12 +27,9 @@ namespace Diamond {
         T x, y;
 
         Vector2() : x(), y() {}
-        
         Vector2(T x, T y) : x(x), y(y) {}
 
-        void set(T x, T y) {
-            this->x = x, this->y = y;
-        }
+        void set(T x, T y) { this->x = x, this->y = y; }
 
         Vector2 &normalize() {
             T m = magnitude();
@@ -68,6 +65,16 @@ namespace Diamond {
         template <typename V>
         Vector2 &scalar(const Vector2<V> &b) {
             x *= b.x, y *= b.y;
+            return *this;
+        }
+
+        /**
+         Rotates this vector by the given angle in radians.
+        */
+        template <typename S>
+        Vector2 &rotate(const S radians) {
+            x = x * std::cos(radians) - y * std::sin(radians);
+            y = x * std::sin(radians) + y * std::cos(radians);
             return *this;
         }
 
