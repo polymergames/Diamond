@@ -18,7 +18,7 @@
 #define D_LAUNCHER_H
 
 #ifdef __ANDROID__
-#include "SDL.h"
+#include "SDL.h" // Has to be included with game's main function for SDL_main to work
 #endif
 
 #include "D_Config.h"
