@@ -14,16 +14,21 @@
     limitations under the License.
 */
 
-#ifndef D_GAME_H
-#define D_GAME_H
+#ifndef D_GAME_2D_H
+#define D_GAME_2D_H
 
-#include <stdint.h>
+#include "D_Engine.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
-    class Game {
+    class Game2D {
     public:
-        virtual ~Game() {}
+        virtual ~Game2D() {}
+
+        /**
+         Called by Diamond launcher to pass engine subsystems to the game.
+        */
+        void setEngine(Engine *engine) { this->engine = engine; }
 
         /**
          Called at beginning of game, after Diamond backend systems have initialized.
@@ -42,7 +47,10 @@ namespace Diamond {
          Put cleanup code here.
         */
         virtual void quit() = 0;
+
+    private:
+        Engine *engine;
     };
 }
 
-#endif // D_GAME_H
+#endif // D_GAME_2D_H

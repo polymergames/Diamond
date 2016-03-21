@@ -5,7 +5,7 @@
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,29 +14,19 @@
     limitations under the License.
 */
 
-#ifndef D_LAUNCHER_H
-#define D_LAUNCHER_H
+#ifndef D_ENGINE_H
+#define D_ENGINE_H
 
-#ifdef __ANDROID__
-#include "SDL.h"
-#endif
-
-#include "D_Config.h"
-#include "D_Game2D.h"
+#include "D_DiskJockey2D.h"
+#include "D_Logger.h"
+#include "D_Renderer2D.h"
 
 namespace Diamond {
-    namespace Launcher {
-        // TODO: make these private and add accessor functions
-        extern bool is_open;
-        extern Config config;
-
-        /**
-         Initializes an instance of the Diamond Engine for a given 2D game and launches the game.
-        */
-        void launch(Game2D &game);
-
-        void quit();
+    struct Engine {
+        Logger *logger;
+        Renderer2D *renderer;
+        DiskJockey2D *dj;
     };
 }
 
-#endif // D_LAUNCHER_H
+#endif // D_ENGINE_H
