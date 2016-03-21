@@ -73,8 +73,9 @@ namespace Diamond {
         */
         template <typename S>
         Vector2 &rotate(const S radians) {
-            x = x * std::cos(radians) - y * std::sin(radians);
+            T xp = x * std::cos(radians) - y * std::sin(radians);
             y = x * std::sin(radians) + y * std::cos(radians);
+            x = xp;
             return *this;
         }
 

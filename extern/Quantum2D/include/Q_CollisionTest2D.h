@@ -18,6 +18,7 @@
 #define Q_COLLISION_TEST_2D_H
 
 #include "Q_AABBCollider2D.h"
+#include "Q_CircleCollider.h"
 
 namespace Quantum2D {
     namespace CollisionTest2D {
@@ -30,6 +31,10 @@ namespace Quantum2D {
         bool collide(Collider2D *a, Collider2D *b);
 
         bool AABB2(AABBCollider2D *a, AABBCollider2D *b);
+
+        bool circle2(CircleCollider *a, CircleCollider *b);
+
+        bool circleAABB(CircleCollider *a, AABBCollider2D *b);
     }
 }
 

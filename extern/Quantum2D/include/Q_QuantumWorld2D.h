@@ -30,7 +30,7 @@
 namespace Quantum2D {
     namespace QuantumWorld2D {
         
-        extern Diamond::sparsevector<Diamond::Transform2<tD_pos, tD_rot> > transforms;
+        extern Diamond::sparsevector<Diamond::Transform2<tQ_pos, tQ_rot> > transforms;
         extern Diamond::swapvector<Rigidbody2D> bodies;
         extern Diamond::swapvector<std::unique_ptr<Collider2D> > colliders;
         
@@ -45,7 +45,7 @@ namespace Quantum2D {
          Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
          Only use this reference immediately after calling this function!
         */
-        inline Diamond::Transform2<tD_pos, tD_rot> &getTransform(transform2_id transform) {
+        inline Diamond::Transform2<tQ_pos, tQ_rot> &getTransform(transform2_id transform) {
             return transforms[transform];
         }
         
@@ -129,7 +129,7 @@ namespace Quantum2D {
         /**
          Steps the physics simulation by the number of milliseconds given.
         */
-        void step(tD_delta delta_ms);
+        void step(tQ_delta delta_ms);
     }
 }
 

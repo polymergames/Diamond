@@ -24,11 +24,11 @@ FILE_SRC_LIST := $(wildcard $(LOCAL_PATH)/src/audio/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/game/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/graphics/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/input/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/physics/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/util/*.cpp)
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include \
 	$(LOCAL_PATH)/../../../include/backend \
-	$(LOCAL_PATH)/../../../include/modules \
 	$(LOCAL_PATH)/../../../extern/DiamondUtils/include \
 	$(LOCAL_PATH)/../../../extern/Quantum2D/include \
 	$(LOCAL_PATH)/../../../extern/SDL2_image-2.0.0/include \
@@ -41,6 +41,7 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/../../../src/game/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/graphics/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/input/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/../../../src/physics/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/util/*.cpp))
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image SDL2_mixer

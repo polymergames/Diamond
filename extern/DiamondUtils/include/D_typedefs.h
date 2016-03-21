@@ -19,10 +19,13 @@
 
 #include <stdint.h>
 
+typedef float tD_real; // real number type
+
 // transform typedefs
-typedef int32_t tD_pos; // position coordinate type
-typedef int64_t tD_long_pos; // long position coordinate type
-typedef float tD_rot; // rotation value type
+typedef tD_real tD_pos; // position coordinate type
+typedef tD_real tD_rot; // rotation value type
+typedef int16_t tDrender_pos; // position coordinate type for rendering
+typedef float tDrender_rot; // rotation value type for rendering
 
 // time typedefs
 typedef uint32_t tD_time; // time type

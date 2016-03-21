@@ -27,13 +27,13 @@ namespace Quantum2D {
 
         transform2_id getTransformID() const { return transform; }
 
-        Diamond::Vector2<float> &getVelocity() { return velocity; }
+        Diamond::Vector2<tQ_pos> &getVelocity() { return velocity; }
 
-        void update(tD_delta delta_ms);
+        void update(tQ_delta delta_ms);
 
     private:
         transform2_id transform;
-        Diamond::Vector2<float> velocity;
+        Diamond::Vector2<tQ_pos> velocity;
     };
 }
 

@@ -17,6 +17,8 @@
 #ifndef D_MATH_H
 #define D_MATH_H
 
+#include "D_Vector2.h"
+
 namespace Diamond {
     namespace Math {
         const float PI = 3.14159265;
@@ -26,6 +28,11 @@ namespace Diamond {
         inline float rad2deg(float rad) { return rad * RAD2DEG; }
 
         inline float deg2rad(float deg) { return deg * DEG2RAD; }
+
+        template <typename A, typename B, typename C>
+        inline bool leftOf(Vector2<C> &x, Vector2<A> &ea, Vector2<B> &eb) {
+            return (eb.x - ea.x) * (x.y - ea.y) - (eb.y - ea.y) * (x.x - ea.x) > 0;
+        }
     }
 }
 

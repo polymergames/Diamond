@@ -20,6 +20,13 @@
 #include <stdint.h>
 #include "D_typedefs.h"
 
+// typedefs used in physics data and calculations
+typedef tD_real tQ_num;
+typedef tQ_num tQ_pos;
+typedef tQ_num tQ_rot;
+typedef tQ_num tQ_delta;
+
+// ID/index typedefs
 typedef tD_index transform2_id;
 typedef tD_index body2d_id;
 typedef tD_index collider2_id;

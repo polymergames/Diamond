@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef Q_COLLIDER2D_H
-#define Q_COLLIDER2D_H
+#ifndef Q_COLLIDER_2D_H
+#define Q_COLLIDER_2D_H
 
 #include <functional>
 #include "Q_typedefs.h"
@@ -45,7 +45,7 @@ namespace Quantum2D {
 
         void setColFunc(std::function<void(void *other)> &onCollision) { this->onCollision = onCollision; }
         
-        virtual void update(tD_delta delta_ms) = 0;
+        virtual void update(tQ_delta delta_ms) = 0;
 
     protected:
         Coltype type;
@@ -55,4 +55,4 @@ namespace Quantum2D {
     };
 }
 
-#endif // Q_COLLIDER2D_H
+#endif // Q_COLLIDER_2D_H
