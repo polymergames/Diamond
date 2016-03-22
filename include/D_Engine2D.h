@@ -22,23 +22,16 @@
 #endif
 
 #include "D_Config.h"
-/* // Don't include to avoid circular dependencies
+// Don't include to avoid circular dependencies
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
 #include "D_Logger.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
 #include "D_World2D.h"
-*/
 
 namespace Diamond {
     class Game2D;
-    class Logger;
-    class Renderer2D;
-    class DiskJockey2D;
-    class Timer;
-    class EventHandler;
-    class World2D;
 
     class Engine2D {
     public:

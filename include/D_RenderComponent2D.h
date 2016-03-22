@@ -27,8 +27,8 @@
 namespace Diamond {
     class RenderComponent2D : public Component {
     public:
-        RenderComponent2D(Entity2D *parent, Texture *sprite, float scale = 1.0f);
-        RenderComponent2D(Entity2D *parent, std::shared_ptr<Texture> sprite, float scale = 1.0f);
+        RenderComponent2D(Entity2D *parent, Renderer2D *renderer, Texture *sprite, float scale = 1.0f);
+        RenderComponent2D(Entity2D *parent, Renderer2D *renderer, std::shared_ptr<Texture> sprite, float scale = 1.0f);
         ~RenderComponent2D();
         
         std::shared_ptr<Texture> getSprite() const { return sprite; }

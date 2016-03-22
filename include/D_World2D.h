@@ -22,19 +22,32 @@
 namespace Diamond {
     class World2D {
     public:
-        World2D(Engine2D *engine);
+        World2D();
+
+        // TODO: implement custom allocator!
+        template <typename... Args>
+        Entity2D *createEntity(Args&&... args);
 
         void addEntity(Entity2D *entity);
 
         void kill(Entity2D *entity);
 
+        void killAll();
+
         void update(tD_delta delta_ms);
 
-        Entity2D *getRoot();
+        Entity2D *getRoot() const { return root; }
 
     private:
-        Entity2D root;
+        Entity2D *root;
+
+        void killTree(Entity2D *root);
     };
+}
+
+template <typename... Args>
+Diamond::Entity2D *Diamond::World2D::createEntity(Args&&... args) {
+    return new Entity2D(std::forward<Args>(args)...);
 }
 
 #endif // D_WORLD_2D_H

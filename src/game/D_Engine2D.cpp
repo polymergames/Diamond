@@ -71,7 +71,7 @@ bool Diamond::Engine2D::init(Config &config) {
         }
 
         // Init Entity world
-        world = new World2D(this);
+        world = new World2D();
     }
 
     return success;
@@ -109,6 +109,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
     }
 
     // End game
+    world->killAll();
     game.quit();
 }
 

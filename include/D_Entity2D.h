@@ -26,12 +26,11 @@
 #include "D_typedefs.h"
 #include "D_Component.h"
 #include "D_Behavior.h"
-#include "D_Engine2D.h"
 
 namespace Diamond {
     class Entity2D {
     public:
-        Entity2D(const std::string &name, Engine2D *engine);
+        Entity2D(const std::string &name);
         virtual ~Entity2D();
         
         Entity2D(const Entity2D &other);
@@ -44,8 +43,6 @@ namespace Diamond {
 
         std::string getName() const { return name; }
 
-        Engine2D *getEngine() const { return engine; }
-
         void addChild(Entity2D *child);
         
         /**
@@ -53,6 +50,11 @@ namespace Diamond {
          Returns true if child was found and removed, otherwise false.
         */
         bool removeChild(Entity2D *child);
+
+        /**
+         This entity removes itself from the entity tree.
+        */
+        void removeSelf();
 
         std::vector<Entity2D*> &getChildren() { return children; }
 
@@ -85,7 +87,6 @@ namespace Diamond {
 
     protected:
         std::string name;
-        Engine2D *engine;
         transform2_id transform;
         
         Entity2D *parent;

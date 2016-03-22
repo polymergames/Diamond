@@ -19,31 +19,12 @@
 #include <algorithm>
 
 
-Diamond::Entity2D::Entity2D(const std::string &name, Engine2D *engine) 
-    : name(name), engine(engine), parent(nullptr), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
+Diamond::Entity2D::Entity2D(const std::string &name) 
+    : name(name), parent(nullptr), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
 
 
 Diamond::Entity2D::~Entity2D() {
-    if (engine->isRunning()) {
-        if (parent) {
-            // Remove this entity from its parent's children
-            parent->removeChild(this);
-
-            // Transfer this entity's children to this entity's parent
-            // TODO: more efficient way to do this? Copy vector range and apply function to range to change each child's parent?
-            for (Entity2D *child : children) {
-                parent->children.push_back(child);
-                child->parent = parent;
-            }
-        }
-        else {
-            for (Entity2D *child : children) {
-                child->parent = nullptr;
-            }
-        }
-
-        freeTransform();
-    }
+    freeTransform();
 }
 
 
@@ -88,6 +69,25 @@ bool Diamond::Entity2D::removeChild(Entity2D *child) {
         return true;
     }
     return false;
+}
+
+void Diamond::Entity2D::removeSelf() {
+    if (parent) {
+        // Remove this entity from its parent's children
+        parent->removeChild(this);
+
+        // Transfer this entity's children to this entity's parent
+        // TODO: more efficient way to do this? Copy vector range and apply function to range to change each child's parent?
+        for (Entity2D *child : children) {
+            parent->children.push_back(child);
+            child->parent = parent;
+        }
+    }
+    else {
+        for (Entity2D *child : children) {
+            child->parent = nullptr;
+        }
+    }
 }
 
 void Diamond::Entity2D::addComponent(Component *component) {

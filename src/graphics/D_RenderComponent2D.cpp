@@ -16,20 +16,22 @@
 
 #include "D_RenderComponent2D.h"
 
-Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, Texture *sprite, float scale)
-    : RenderComponent2D(parent, std::shared_ptr<Texture>(sprite), scale) {}
+Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, 
+                                              Renderer2D *renderer, 
+                                              Texture *sprite, 
+                                              float scale)
+    : RenderComponent2D(parent, renderer, std::shared_ptr<Texture>(sprite), scale) {}
 
-Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, std::shared_ptr<Texture> sprite, float scale)
-    : Component(parent), sprite(sprite), clip_dim(), scale(scale) {
-    renderer = parent->getEngine()->getRenderer();
+Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, 
+                                              Renderer2D *renderer, 
+                                              std::shared_ptr<Texture> sprite, 
+                                              float scale)
+    : Component(parent), renderer(renderer), sprite(sprite), clip_dim(), scale(scale) {
     render_obj = renderer->genRenderObj(sprite.get(), parent->getTransformID(), scale);
 }
 
 Diamond::RenderComponent2D::~RenderComponent2D() {
-    // TODO: find exception-safer method of memory management. ie it's possible that render_obj has been destroyed/game has ended/crashed even if is_open = true
-    if (parent->getEngine()->isRunning()) {
-        freeRenderObj();
-    }
+    freeRenderObj();
 }
 
 void Diamond::RenderComponent2D::freeRenderObj() {

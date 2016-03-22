@@ -16,20 +16,30 @@
 
 #include "D_World2D.h"
 
-Diamond::World2D::World2D(Engine2D *engine) : root("root", engine) {}
+Diamond::World2D::World2D() : root(new Entity2D("root")) {}
 
 void Diamond::World2D::addEntity(Entity2D *entity) {
-    root.addChild(entity);
+    root->addChild(entity);
 }
 
 void Diamond::World2D::kill(Entity2D *entity) {
-    //
+    entity->removeSelf();
+    delete entity;
+}
+
+void Diamond::World2D::killAll() {
+    killTree(root);
 }
 
 void Diamond::World2D::update(tD_delta delta_ms) {
-    root.updateBehaviors(delta_ms);
+    root->updateBehaviors(delta_ms);
 }
 
-Diamond::Entity2D *Diamond::World2D::getRoot() {
-    return &root;
+void Diamond::World2D::killTree(Entity2D *root) {
+    if (root) {
+        for (Entity2D *child : root->getChildren()) {
+            killTree(child);
+        }
+        delete root;
+    }
 }

@@ -21,7 +21,7 @@
 
 #include "D_AnimationSheet.h"
 #include "D_Behavior.h"
-
+#include "D_RenderComponent2D.h"
 
 namespace Diamond {
     class RenderComponent2D;
@@ -38,7 +38,7 @@ namespace Diamond {
         void update(tD_delta delta) override;
     private:
         AnimationSheet *anim;
-        RenderComponent2D *renderer;
+        RenderComponent2D *rendercomp;
         int16_t frame_width, frame_height;
         tD_index cur_frame;
         tD_delta elapsed;

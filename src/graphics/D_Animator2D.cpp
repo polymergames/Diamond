@@ -16,20 +16,19 @@
 
 #include "D_Animator2D.h"
 
-#include "D_RenderComponent2D.h"
-
 Diamond::Animator2D::Animator2D(Entity2D *parent, Animation2D *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
     if (anim->sprites.size() == 0) {
         // TODO: throw exception or log error
     }
-    renderer = parent->getComponent<RenderComponent2D>();
-    if (!renderer) {
-        renderer = new RenderComponent2D(parent, anim->sprites[0]);
-        parent->addComponent(renderer);
+
+    rendercomp = parent->getComponent<RenderComponent2D>();
+
+    if (!rendercomp) {
+        // TODO: throw exception and log error
+        std::cout << "Animator2D: No render component found for parent " << parent->getName() << "!" << std::endl;
     }
-    else {
-        renderer->setSprite(anim->sprites[0]);
-    }
+
+    rendercomp->setSprite(anim->sprites[0]);
 }
 
 void Diamond::Animator2D::setAnimation(Animation2D *anim) {
@@ -37,7 +36,7 @@ void Diamond::Animator2D::setAnimation(Animation2D *anim) {
         // TODO: throw exception or log error
     }
     this->anim = anim;
-    renderer->setSprite(anim->sprites[0]);
+    rendercomp->setSprite(anim->sprites[0]);
     cur_frame = 0;
     elapsed = 0;
 }
@@ -46,7 +45,7 @@ void Diamond::Animator2D::update(tD_delta delta) {
     elapsed += delta;
     if (elapsed > anim->frame_length) {
         cur_frame = (cur_frame + elapsed / anim->frame_length) % anim->sprites.size();
-        renderer->setSprite(anim->sprites[cur_frame]);
+        rendercomp->setSprite(anim->sprites[cur_frame]);
         elapsed %= anim->frame_length;
     }
 }
