@@ -20,7 +20,7 @@
 
 
 Diamond::Entity2D::Entity2D(const std::string &name, Engine2D *engine) 
-    : name(name), engine(engine), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
+    : name(name), engine(engine), parent(nullptr), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
 
 
 Diamond::Entity2D::~Entity2D() {

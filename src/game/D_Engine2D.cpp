@@ -48,33 +48,38 @@ Diamond::Engine2D::~Engine2D() {
 
 bool Diamond::Engine2D::init(Config &config) {
     this->config = config;
+    bool success = false;
 
 #if defined _WIN32
-    return initWindows(config);
+    success = initWindows(config);
 #elif defined __APPLE__
-    return initMac(config);
+    success = initMac(config);
 #elif defined __ANDROID__
-    return initAndroid(config);
+    success = initAndroid(config);
 #elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
-    return initIOS(config);
+    success = initIOS(config);
 #else
     // TODO: Log this error somehow
     std::cout << "Platform unsupported!" << std::endl;
     return false;
 #endif
+
+    if (success) {
+        // Init physics TODO: create and init physics world object in init function
+        if (!Quantum2D::QuantumWorld2D::init()) {
+            // TODO: Handle physics initialization failure
+        }
+
+        // Init Entity world
+        world = new World2D(this);
+    }
+
+    return success;
 }
 
 void Diamond::Engine2D::launch(Game2D &game) {
     is_running = true;
     game.setEngine(this);
-
-    // Init physics TODO: create and init physics world object in init function
-    if (!Quantum2D::QuantumWorld2D::init()) {
-        // TODO: Handle physics initialization failure
-    }
-
-    // Init Entity world
-    world = new World2D(this);
 
     // Init time
     tD_time time, last_time = timer->msElapsed();

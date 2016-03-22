@@ -26,6 +26,8 @@ namespace Diamond {
 
         void addEntity(Entity2D *entity);
 
+        void kill(Entity2D *entity);
+
         void update(tD_delta delta_ms);
 
         Entity2D *getRoot();

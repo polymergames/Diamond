@@ -18,8 +18,12 @@
 
 Diamond::World2D::World2D(Engine2D *engine) : root("root", engine) {}
 
-void Diamond::World2D::addEntity(Diamond::Entity2D *entity) {
+void Diamond::World2D::addEntity(Entity2D *entity) {
     root.addChild(entity);
+}
+
+void Diamond::World2D::kill(Entity2D *entity) {
+    //
 }
 
 void Diamond::World2D::update(tD_delta delta_ms) {

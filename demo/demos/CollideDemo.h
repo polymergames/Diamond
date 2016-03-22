@@ -19,9 +19,9 @@
 
 #include "D_AnimatorSheet.h"
 #include "D_Entity2D.h"
-#include "D_Game.h"
+#include "D_Game2D.h"
 
-class CollideDemo : public Diamond::Game {
+class CollideDemo : public Diamond::Game2D {
 public:
     CollideDemo(float movespeed = 0.75f);
 

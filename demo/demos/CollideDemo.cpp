@@ -17,9 +17,7 @@
 #include "CollideDemo.h"
 #include "D_AABBColliderComponent2D.h"
 #include "D_CircleColliderComponent.h"
-#include "D_Graphics2D.h"
 #include "D_Input.h"
-#include "D_Launcher.h"
 #include "D_RenderComponent2D.h"
 #include "D_World2D.h"
 using namespace Diamond;
