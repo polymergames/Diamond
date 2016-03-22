@@ -16,11 +16,7 @@
 
 #include "D_World2D.h"
 
-namespace Diamond {
-    namespace World2D {
-        Entity2D root("root");
-    }
-}
+Diamond::World2D::World2D() : root("root") {}
 
 void Diamond::World2D::addEntity(Diamond::Entity2D *entity) {
     root.addChild(entity);

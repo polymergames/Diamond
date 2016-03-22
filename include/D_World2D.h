@@ -20,12 +20,18 @@
 #include "D_Entity2D.h"
 
 namespace Diamond {
-    namespace World2D {
+    class World2D {
+    public:
+        World2D();
+
         void addEntity(Entity2D *entity);
 
         void update(tD_delta delta_ms);
 
         Entity2D *getRoot();
+
+    private:
+        Entity2D root;
     }
 }
 

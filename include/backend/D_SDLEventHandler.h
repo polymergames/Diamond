@@ -22,16 +22,18 @@
 
 #include "D_EventHandler.h"
 #include "D_Input.h"
+#include "D_Engine2D.h"
 
 namespace Diamond {
     class SDLEventHandler : public EventHandler {
     public:
-        SDLEventHandler();
+        SDLEventHandler(Engine2D *engine);
         void update() override;
 
     private:
         std::unordered_map<SDL_Keycode, Input::KEY> keymap;
         Vector2<int> screen;
+        Engine2D *engine;
     };
 }
 

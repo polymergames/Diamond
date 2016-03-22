@@ -16,9 +16,8 @@
 
 #include "D_SDLDiskJockey2D.h"
 
+#include <string>
 #include "SDL_mixer.h"
-
-#include "D_Launcher.h"
 #include "D_SDLMusic.h"
 #include "D_SDLSound2D.h"
 
@@ -26,11 +25,11 @@ Diamond::SDLDiskJockey2D::~SDLDiskJockey2D() {
     Mix_Quit();
 }
 
-bool Diamond::SDLDiskJockey2D::init() {
-    if (Mix_OpenAudio(Launcher::config.audio_out_freq,
+bool Diamond::SDLDiskJockey2D::init(Config &config) {
+    if (Mix_OpenAudio(config.audio_out_freq,
             MIX_DEFAULT_FORMAT,
-            Launcher::config.audio_channels,
-            Launcher::config.audio_out_sample_size) < 0) {
+            config.audio_channels,
+            config.audio_out_sample_size) < 0) {
         // TODO: Log error
         std::cout << "SDL_mixer failed to initialize! SDL_mixer Error:" << Mix_GetError();
         return false;

@@ -16,26 +16,25 @@
 
 #include "D_RenderComponent2D.h"
 
-#include "D_Launcher.h"
-
 Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, Texture *sprite, float scale)
     : RenderComponent2D(parent, std::shared_ptr<Texture>(sprite), scale) {}
 
 Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, std::shared_ptr<Texture> sprite, float scale)
     : Component(parent), sprite(sprite), clip_dim(), scale(scale) {
-    render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID(), scale);
+    renderer = parent->getEngine()->getRenderer();
+    render_obj = renderer->genRenderObj(sprite.get(), parent->getTransformID(), scale);
 }
 
 Diamond::RenderComponent2D::~RenderComponent2D() {
     // TODO: find exception-safer method of memory management. ie it's possible that render_obj has been destroyed/game has ended/crashed even if is_open = true
-    if (Launcher::is_open) {
+    if (parent->getEngine()->isRunning()) {
         freeRenderObj();
     }
 }
 
 void Diamond::RenderComponent2D::freeRenderObj() {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::freeRenderObj(render_obj);
+        renderer->freeRenderObj(render_obj);
         render_obj = Diamond::INVALID;
     }
 }

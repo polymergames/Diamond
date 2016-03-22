@@ -21,7 +21,7 @@
 
 #include "D_Component.h"
 #include "D_Entity2D.h"
-#include "D_Graphics2D.h"
+#include "D_Renderer2D.h"
 #include "D_Texture.h"
 
 namespace Diamond {
@@ -74,6 +74,7 @@ namespace Diamond {
         Vector2<int> clip_dim;
         renderobj_id render_obj;
         float scale;
+        Renderer2D *renderer;
 
         void freeRenderObj();
     };
@@ -82,32 +83,32 @@ namespace Diamond {
 inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<Texture> sprite) {
     this->sprite = sprite;
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->setTexture(sprite.get(), scale);
+        renderer->getRenderObj(render_obj)->setTexture(sprite.get(), scale);
     }
 }
 
 inline void Diamond::RenderComponent2D::setScale(float scale) {
     this->scale = scale;
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->applyScale(scale);
+        renderer->getRenderObj(render_obj)->applyScale(scale);
     }
 }
 
 inline void Diamond::RenderComponent2D::flipX() {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->flipX();
+        renderer->getRenderObj(render_obj)->flipX();
     }
 }
 
 inline void Diamond::RenderComponent2D::flipY() {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->flipY();
+        renderer->getRenderObj(render_obj)->flipY();
     }
 }
 
 inline int Diamond::RenderComponent2D::isFlippedX() const {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        return Graphics2D::getRenderObj(render_obj)->isFlippedX();
+        return renderer->getRenderObj(render_obj)->isFlippedX();
     }
     else {
         return 0;
@@ -116,7 +117,7 @@ inline int Diamond::RenderComponent2D::isFlippedX() const {
 
 inline int Diamond::RenderComponent2D::isFlippedY() const {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        return Graphics2D::getRenderObj(render_obj)->isFlippedY();
+        return renderer->getRenderObj(render_obj)->isFlippedY();
     }
     else {
         return 0;
@@ -129,9 +130,9 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 
 inline void Diamond::RenderComponent2D::makeVisible() {
     if ((tD_index)render_obj == Diamond::INVALID) {
-        render_obj = Graphics2D::genRenderObj(sprite.get(), parent->getTransformID(), scale);
+        render_obj = renderer->genRenderObj(sprite.get(), parent->getTransformID(), scale);
         if (clip_dim.x != 0) { // check if any valid clip data has been stored
-            RenderObj2D *r = Graphics2D::getRenderObj(render_obj);
+            RenderObj2D *r = renderer->getRenderObj(render_obj);
             r->initClip();
             r->setClip(0, 0, clip_dim.x, clip_dim.y);
         }
@@ -140,7 +141,7 @@ inline void Diamond::RenderComponent2D::makeVisible() {
 
 inline void Diamond::RenderComponent2D::makeInvisible() {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->getClipDim(clip_dim);
+        renderer->getRenderObj(render_obj)->getClipDim(clip_dim);
         freeRenderObj();
     }
 }
@@ -151,19 +152,19 @@ inline void Diamond::RenderComponent2D::toggleVisibility() {
 
 inline void Diamond::RenderComponent2D::initClip() {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->initClip();
+        renderer->getRenderObj(render_obj)->initClip();
     }
 }
 
 inline void Diamond::RenderComponent2D::setClip(int x, int y, int w, int h) {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->setClip(x, y, w, h);
+        renderer->getRenderObj(render_obj)->setClip(x, y, w, h);
     }
 }
 
 inline void Diamond::RenderComponent2D::setClip(int x, int y) {
     if ((tD_index)render_obj != Diamond::INVALID) {
-        Graphics2D::getRenderObj(render_obj)->setClip(x, y);
+        renderer->getRenderObj(render_obj)->setClip(x, y);
     }
 }
 

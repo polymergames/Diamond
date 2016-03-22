@@ -18,10 +18,10 @@
 #define D_INPUT_H
 
 #include <vector>
-#include "D_Graphics2D.h"
 #include "D_Vector2.h"
 
 namespace Diamond {
+    // TODO: turn into class!
     namespace Input {
         
         enum KEY {

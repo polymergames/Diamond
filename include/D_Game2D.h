@@ -17,7 +17,7 @@
 #ifndef D_GAME_2D_H
 #define D_GAME_2D_H
 
-#include "D_Engine.h"
+#include "D_Engine2D.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
@@ -28,7 +28,7 @@ namespace Diamond {
         /**
          Called by Diamond launcher to pass engine subsystems to the game.
         */
-        void setEngine(Engine *engine) { this->engine = engine; }
+        void setEngine(Engine2D *engine) { this->engine = engine; }
 
         /**
          Called at beginning of game, after Diamond backend systems have initialized.
@@ -49,7 +49,7 @@ namespace Diamond {
         virtual void quit() = 0;
 
     private:
-        Engine *engine;
+        Engine2D *engine;
     };
 }
 

@@ -17,10 +17,9 @@
 #ifndef D_RENDER_OBJ_2D_H
 #define D_RENDER_OBJ_2D_H
 
-#include "Q_QuantumWorld2D.h"
-
 #include "D_Texture.h"
 #include "D_typedefs.h"
+#include "D_Vector2.h"
 
 namespace Diamond {
     class RenderObj2D {

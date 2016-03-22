@@ -26,11 +26,12 @@
 #include "D_typedefs.h"
 #include "D_Component.h"
 #include "D_Behavior.h"
+#include "D_Engine2D.h"
 
 namespace Diamond {
     class Entity2D {
     public:
-        Entity2D(const std::string &name);
+        Entity2D(const std::string &name, Engine2D *engine);
         virtual ~Entity2D();
         
         Entity2D(const Entity2D &other);
@@ -42,6 +43,8 @@ namespace Diamond {
         //tD_id getID() const;
 
         std::string getName() const { return name; }
+
+        Engine2D *getEngine() const { return engine; }
 
         void addChild(Entity2D *child);
         
@@ -70,7 +73,7 @@ namespace Diamond {
          Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
          Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
         */
-        Transform2<tD_pos, tD_rot> &getTransform() const;
+        Transform2<tD_pos, tD_rot> &getTransform() const { return Quantum2D::QuantumWorld2D::getTransform(transform); }
         transform2_id getTransformID() const { return transform; }
         
         void setTransform(Transform2<tD_pos, tD_rot> &new_transform) { getTransform() = new_transform; }
@@ -82,6 +85,7 @@ namespace Diamond {
 
     protected:
         std::string name;
+        Engine2D *engine;
         transform2_id transform;
         
         Entity2D *parent;
@@ -149,10 +153,6 @@ void Diamond::Entity2D::removeBehavior() {
     auto b = behaviors.find(std::type_index(typeid(T)));
     if (b != behaviors.end())
         behaviors.erase(b);
-}
-
-inline Diamond::Transform2<tD_pos, tD_rot> &Diamond::Entity2D::getTransform() const {
-    return Quantum2D::QuantumWorld2D::getTransform(transform);
 }
 
 inline void Diamond::Entity2D::setTransform(Diamond::Vector2<tD_pos> &position) {

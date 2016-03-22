@@ -14,11 +14,11 @@
     limitations under the License.
 */
 
+#include "D_Renderer2D.h"
 #include "D_SDLEventHandler.h"
 
-#include "D_Launcher.h"
-
-Diamond::SDLEventHandler::SDLEventHandler() : screen(Graphics2D::getScreenResolution()) {
+Diamond::SDLEventHandler::SDLEventHandler(Engine2D *engine) : engine(engine) {
+    screen = engine->getRenderer()->getScreenResolution();
     keymap = {
         { SDLK_0, Input::K_0 },
         { SDLK_1, Input::K_1 },
@@ -120,7 +120,7 @@ void Diamond::SDLEventHandler::update() {
             SDL_GetMouseState(&(Input::touch_pos.x), &(Input::touch_pos.y));
             break;
         case SDL_QUIT:
-            Launcher::is_open = false;
+            engine->shutDown();
             break;
         }
     }

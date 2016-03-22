@@ -19,6 +19,7 @@
 
 #include <iostream>
 
+#include "D_Config.h"
 #include "D_Sound2D.h"
 #include "D_Music.h"
 
@@ -27,7 +28,7 @@ namespace Diamond {
     public:
         virtual ~DiskJockey2D() {};
 
-        virtual bool init() = 0;
+        virtual bool init(Config &config) = 0;
 
         virtual Sound2D *loadSound(std::string path) = 0;
 

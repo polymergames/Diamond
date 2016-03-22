@@ -17,16 +17,14 @@
 #include "D_Entity2D.h"
 
 #include <algorithm>
-#include "D_Launcher.h"
 
 
-Diamond::Entity2D::Entity2D(const std::string &name) 
-    : name(name), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
+Diamond::Entity2D::Entity2D(const std::string &name, Engine2D *engine) 
+    : name(name), engine(engine), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
 
 
 Diamond::Entity2D::~Entity2D() {
-    // TODO: find exception-safer method of memory management. ie it's possible that transform has been destroyed/game has ended/crashed even if is_open = true
-    if (Launcher::is_open) {
+    if (engine->isRunning()) {
         if (parent) {
             // Remove this entity from its parent's children
             parent->removeChild(this);
