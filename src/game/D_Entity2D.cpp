@@ -21,7 +21,7 @@
 
 
 Diamond::Entity2D::Entity2D(const std::string &name) 
-    : name(name), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
+    : name(name), parent(nullptr), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
 
 
 Diamond::Entity2D::~Entity2D() {
