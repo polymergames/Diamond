@@ -16,7 +16,7 @@
 
 #include "D_World2D.h"
 
-Diamond::World2D::World2D() : root("root") {}
+Diamond::World2D::World2D(Engine2D *engine) : root("root", engine) {}
 
 void Diamond::World2D::addEntity(Diamond::Entity2D *entity) {
     root.addChild(entity);

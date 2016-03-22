@@ -25,6 +25,18 @@ namespace Diamond {
         virtual ~Timer() {};
 
         virtual tD_time msElapsed() = 0;
+
+        tD_delta getDelta() const { return delta; }
+
+        void setDelta(tD_delta delta) { this->delta = delta; }
+
+        float getFPS() const { return fps; }
+
+        void setFPS(float fps) { this->fps = fps; }
+
+    private:
+        float fps;
+        tD_delta delta;
     };
 }
 

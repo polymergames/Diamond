@@ -22,7 +22,7 @@
 namespace Diamond {
     class World2D {
     public:
-        World2D();
+        World2D(Engine2D *engine);
 
         void addEntity(Entity2D *entity);
 
@@ -32,7 +32,7 @@ namespace Diamond {
 
     private:
         Entity2D root;
-    }
+    };
 }
 
 #endif // D_WORLD_2D_H

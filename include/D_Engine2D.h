@@ -21,7 +21,6 @@
 #include "SDL.h" // Has to be included with game's main function for SDL_main to work
 #endif
 
-#include <memory>
 #include "D_Config.h"
 /* // Don't include to avoid circular dependencies
 #include "D_DiskJockey2D.h"

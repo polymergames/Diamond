@@ -20,7 +20,6 @@
 #include <vector>
 #include "SDL.h"
 
-#include "D_Config.h"
 #include "D_Renderer2D.h"
 #include "D_SDLRenderObj2D.h"
 #include "D_swapvector.h"
@@ -39,7 +38,7 @@ namespace Diamond {
          Initializes SDL, creates window, and initializes image loading.
          Returns whether all of the initialization was successful.
         */
-        bool init() override;
+        bool init(Config &config) override;
         
         void renderAll() override;
         

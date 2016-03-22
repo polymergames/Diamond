@@ -19,8 +19,6 @@
 #include <iostream>
 #include "SDL_image.h"
 #include "Q_QuantumWorld2D.h"
-
-#include "D_Launcher.h"
 #include "D_SDLTexture.h"
 
 namespace Diamond {
@@ -36,7 +34,7 @@ namespace Diamond {
 
 Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
 
-bool Diamond::SDLRenderer2D::init() {
+bool Diamond::SDLRenderer2D::init(Config &config) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         // TODO: Handle initialization failure and log
@@ -45,11 +43,11 @@ bool Diamond::SDLRenderer2D::init() {
     }
 
     // Create window
-    window = SDL_CreateWindow(Launcher::config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              Launcher::config.window_width, Launcher::config.window_height, 
-                                Launcher::config.fullscreen 
-                                || Launcher::config.window_width <= 0
-                                || Launcher::config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    window = SDL_CreateWindow(config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                              config.window_width, config.window_height, 
+                              config.fullscreen 
+                              || config.window_width <= 0
+                              || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (window == nullptr) {
         // TODO: Handle window creation failure and log
         std::cout << "SDL failed to create window! SDL Error: " << SDL_GetError() << std::endl;
@@ -57,13 +55,13 @@ bool Diamond::SDLRenderer2D::init() {
     }
 
     // Create renderer
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | (Launcher::config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
     if (renderer == nullptr) {
         // TODO: Handle renderer creation failure and log
         std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;
         return false;
     }
-    SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a);
+    SDL_SetRenderDrawColor(renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
 
     // Initialize image loading
     int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -78,7 +76,6 @@ bool Diamond::SDLRenderer2D::init() {
 
 void Diamond::SDLRenderer2D::renderAll() {
     // Render all the graphics
-    //SDL_SetRenderDrawColor(renderer, Launcher::config.bg_color.r, Launcher::config.bg_color.g, Launcher::config.bg_color.b, Launcher::config.bg_color.a); // reset color
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
         //std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG

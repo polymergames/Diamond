@@ -46,7 +46,7 @@ Diamond::Engine2D::~Engine2D() {
     delete world;
 }
 
-bool Diamond::Engine2D::init(Diamond::Config &config) {
+bool Diamond::Engine2D::init(Config &config) {
     this->config = config;
 
 #if defined _WIN32
@@ -64,7 +64,7 @@ bool Diamond::Engine2D::init(Diamond::Config &config) {
 #endif
 }
 
-void Diamond::Engine2D::launch(Diamond::Game2D &game) {
+void Diamond::Engine2D::launch(Game2D &game) {
     is_running = true;
     game.setEngine(this);
 
@@ -74,7 +74,7 @@ void Diamond::Engine2D::launch(Diamond::Game2D &game) {
     }
 
     // Init Entity world
-    world = new World2D();
+    world = new World2D(this);
 
     // Init time
     tD_time time, last_time = timer->msElapsed();
@@ -93,8 +93,8 @@ void Diamond::Engine2D::launch(Diamond::Game2D &game) {
         last_time = time;
 
         // TODO: replace with timer functions
-        // Time::setDelta(delta);
-        // Time::setFPS(nframes / (time / 1000.0));
+        timer->setDelta(delta);
+        timer->setFPS(nframes / (time / 1000.0));
 
         Quantum2D::QuantumWorld2D::step(delta); // TODO: replace with physics world object
         event_handler->update();
@@ -111,20 +111,20 @@ bool Diamond::Engine2D::initWindows(Config &config) {
     logger = new DesktopLogger();
 
     renderer = new SDLRenderer2D();
-    if (!renderer->init()) {
+    if (!renderer->init(config)) {
         // TODO: Handle renderer initialization failure
         return false;
     }
 
     dj = new SDLDiskJockey2D();
-    if (!dj->init()) {
+    if (!dj->init(config)) {
         // TODO: Handle audio initialization failure
         return false;
     }
 
     timer = new SDLTimer();
 
-    event_handler = new SDLEventHandler();
+    event_handler = new SDLEventHandler(this);
 
     return true;
 }

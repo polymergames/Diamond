@@ -18,9 +18,8 @@
 #define D_RENDERER_2D_H
 
 #include <iostream>
-
 #include "Q_typedefs.h"
-
+#include "D_Config.h"
 #include "D_RenderObj2D.h"
 #include "D_Texture.h"
 #include "D_typedefs.h"
@@ -30,7 +29,7 @@ namespace Diamond {
     public:
         virtual ~Renderer2D() {}
 
-        virtual bool init() = 0;
+        virtual bool init(Config &config) = 0;
         
         virtual void renderAll() = 0;
         
