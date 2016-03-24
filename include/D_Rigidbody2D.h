@@ -14,21 +14,21 @@
     limitations under the License.
 */
 
-#ifndef D_COMPONENT_H
-#define D_COMPONENT_H
+#ifndef D_RIGIDBODY_2D_H
+#define D_RIGIDBODY_2D_H
+
+#include "D_Component.h"
+#include "D_typedefs.h"
+#include "D_Vector2.h"
 
 namespace Diamond {
-    class Entity2D;
-    class Component {
+    class Rigidbody2D : public Component {
     public:
-        Component(Entity2D *parent) : parent(parent) {}
-        virtual ~Component() {}
+        Rigidbody2D(Entity2D *parent) : Component(parent) {}
+        virtual ~Rigidbody2D() {}
 
-        Entity2D *getParent() const { return parent; }
-
-    protected:
-        Entity2D *parent;
+        virtual Vector2<tD_pos> &getVelocity() = 0;
     };
 }
 
-#endif // D_COMPONENT_H
+#endif // D_RIGIDBODY_2D_H
