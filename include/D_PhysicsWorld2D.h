@@ -17,40 +17,56 @@
 #ifndef D_PHYSICS_WORLD_2D_H
 #define D_PHYSICS_WORLD_2D_H
 
+#include "D_Config.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
-#include "D_Vector2.h"
+#include "D_Transform2.h"
 
 namespace Diamond {
     class PhysicsWorld2D {
     public:
-        PhysicsWorld2D() {}
         virtual ~PhysicsWorld2D() {}
 
         /**
-         Returns the position of the given transform.
+         Creates and initializes the physics simulation world.
+         Returns true if initialization was successful.
         */
-        virtual Vector2<tD_pos> getPosition(transform2_id transform) = 0;
+        virtual bool init(Config &config) = 0;
+
+        /**
+         Creates a rigidbody object attached to the given transform.
+        */
+        virtual DRigidbody2D *genRigidbody(transform2_id transform) = 0;
+
+        /**
+         Frees the given rigidbody's memory.
+        */
+        virtual void freeRigidbody(DRigidbody2D *body) = 0;
+
+        /**
+         Returns the transform with the given id.
+        */
+        virtual Transform2<tD_pos, tD_rot> getTransform(transform2_id transform) = 0;
+
+        /**
+         Sets the transform with the given id.
+        */
+        virtual void setTransform(transform2_id transform, Transform2<tD_pos, tD_rot> &newtrans) = 0;
+
+        /**
+         Sets the transform with the given id.
+        */
+        virtual void setTransform(transform2_id transform, Vector2<tD_pos> &newpos, tD_rot newrot) = 0;
 
         /**
          Sets the position of the given transform.
         */
-        virtual void setPosition(transform2_id transform, Vector2<tD_pos> newpos) = 0;
-
-        /**
-         Returns the rotation of the given transform.
-        */
-        virtual tD_rot getRotation(transform2_id transform) = 0;
+        virtual void setPosition(transform2_id transform, Vector2<tD_pos> &newpos) = 0;
 
         /**
          Sets the rotation of the given transform.
         */
         virtual void setRotation(transform2_id transform, tD_rot newrot) = 0;
-
-        /**
-         Creates a Rigidbody2D object attached to the given transform.
-        */
-        virtual Rigidbody2D *genRigidbody(transform2_id transform) = 0;
     };
 }
 

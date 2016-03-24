@@ -18,23 +18,29 @@
 #define D_RIGIDBODY_COMPONENT_2D_H
 
 #include "D_Component.h"
-#include "Q_QuantumWorld2D.h"
-#include "Q_typedefs.h"
+#include "D_PhysicsWorld2D.h"
+#include "D_Rigidbody2D.h"
+#include "D_typedefs.h"
+#include "D_Vector2.h"
 
 namespace Diamond {
     class RigidbodyComponent2D : public Component {
     public:
-        RigidbodyComponent2D(Entity2D *parent);
-        ~RigidbodyComponent2D();
-
-        Diamond::Vector2<tQ_pos> &getVelocity() {
-            return Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity();
+        RigidbodyComponent2D(Entity2D *parent, PhysicsWorld2D *world) : Component(parent), world(world) {
+            body = world->genRigidbody(parent->getTransformID());
         }
 
-        body2d_id getID() const { return body; }
+        virtual ~RigidbodyComponent2D() {
+            world->freeRigidbody(body);
+        }
+
+        virtual Vector2<tD_pos> getVelocity() { return body->getVelocity(); }
+
+        virtual void setVelocity(Vector2<tD_pos> &newvel) { body->setVelocity(newvel); }
 
     private:
-        body2d_id body;
+        DRigidbody2D *body;
+        PhysicsWorld2D *world;
     };
 }
 
