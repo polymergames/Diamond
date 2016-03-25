@@ -21,16 +21,15 @@
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
-#include "Q_QuantumWorld2D.h"
-
 #include "D_typedefs.h"
-#include "D_Component.h"
 #include "D_Behavior.h"
+#include "D_Component.h"
+#include "D_PhysicsWorld2D.h"
 
 namespace Diamond {
     class Entity2D {
     public:
-        Entity2D(const std::string &name);
+        Entity2D(PhysicsWorld2D *phys_world, const std::string &name);
         virtual ~Entity2D();
         
         Entity2D(const Entity2D &other);
@@ -71,21 +70,20 @@ namespace Diamond {
         template <class T> void removeBehavior();
 
         /**
-         Returns a reference to this entity's transform.
-         Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
-         Only use this reference immediately after calling this function! (ie, call this function again every time you want access)
+         Returns this entity's current transform.
         */
-        Transform2<tD_pos, tD_rot> &getTransform() const { return Quantum2D::QuantumWorld2D::getTransform(transform); }
+        Transform2<tD_pos, tD_rot> getTransform() const { return phys_world->getTransform(transform); }
         transform2_id getTransformID() const { return transform; }
         
-        void setTransform(Transform2<tD_pos, tD_rot> &new_transform) { getTransform() = new_transform; }
-        void setTransform(Vector2<tD_pos> &position);
-        void setTransform(tD_pos x, tD_pos y);
-        void setRotation(tD_rot rotation);
+        void setTransform(Transform2<tD_pos, tD_rot> &newtrans) { phys_world->setTransform(transform, newtrans); }
+        void setPosition(Vector2<tD_pos> &newpos) { phys_world->setPosition(transform, newpos); }
+        void setRotation(tD_rot newrot) { phys_world->setRotation(transform, newrot); }
 
         void updateBehaviors(tD_delta delta_ms);
 
     protected:
+        PhysicsWorld2D *phys_world;
+        //tD_id id;
         std::string name;
         transform2_id transform;
         
@@ -96,9 +94,6 @@ namespace Diamond {
         // Unlike commponents, behaviors are iterated and updated directly from the entity.
         
         void setParent(Entity2D *parent);
-
-    private:
-        //tD_id id;
 
         void freeTransform();
     };
@@ -154,19 +149,6 @@ void Diamond::Entity2D::removeBehavior() {
     auto b = behaviors.find(std::type_index(typeid(T)));
     if (b != behaviors.end())
         behaviors.erase(b);
-}
-
-inline void Diamond::Entity2D::setTransform(Diamond::Vector2<tD_pos> &position) {
-    Quantum2D::QuantumWorld2D::getTransform(transform).position = position;
-}
-
-inline void Diamond::Entity2D::setTransform(tD_pos x, tD_pos y) {
-    Quantum2D::QuantumWorld2D::getTransform(transform).position.x = x;
-    Quantum2D::QuantumWorld2D::getTransform(transform).position.y = y;
-}
-
-inline void Diamond::Entity2D::setRotation(tD_rot rotation) {
-    Quantum2D::QuantumWorld2D::getTransform(transform).rotation = rotation;
 }
 
 

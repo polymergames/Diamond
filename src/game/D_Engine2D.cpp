@@ -27,6 +27,9 @@
 #include "D_SDLRenderer2D.h"
 #include "D_SDLTimer.h"
 
+// Quantum2D
+#include "D_QuantumWorld2D.h"
+
 Diamond::Engine2D::Engine2D() 
     : is_running(false), 
       logger(nullptr), 
@@ -34,6 +37,7 @@ Diamond::Engine2D::Engine2D()
       dj(nullptr), 
       timer(nullptr), 
       event_handler(nullptr), 
+      phys_world(nullptr), 
       world(nullptr) {}
 
 
@@ -43,6 +47,7 @@ Diamond::Engine2D::~Engine2D() {
     delete dj;
     delete timer;
     delete event_handler;
+    delete phys_world;
     delete world;
 }
 
@@ -65,13 +70,8 @@ bool Diamond::Engine2D::init(Config &config) {
 #endif
 
     if (success) {
-        // Init physics TODO: create and init physics world object in init function
-        if (!Quantum2D::QuantumWorld2D::init()) {
-            // TODO: Handle physics initialization failure
-        }
-
         // Init Entity world
-        world = new World2D();
+        world = new World2D(phys_world);
     }
 
     return success;
@@ -101,7 +101,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
         timer->setDelta(delta);
         timer->setFPS(nframes / (time / 1000.0));
 
-        Quantum2D::QuantumWorld2D::step(delta); // TODO: replace with physics world object
+        phys_world->step(delta);
         event_handler->update();
         world->update(delta);
         game.update(delta);
@@ -129,8 +129,13 @@ bool Diamond::Engine2D::initWindows(Config &config) {
     }
 
     timer = new SDLTimer();
-
     event_handler = new SDLEventHandler(this);
+
+    phys_world = new DQuantumWorld2D();
+    if (!phys_world->init(config)) {
+        // TODO: Handle physics initialization failure
+        return false;
+    }
 
     return true;
 }

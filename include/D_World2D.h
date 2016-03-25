@@ -22,11 +22,10 @@
 namespace Diamond {
     class World2D {
     public:
-        World2D();
+        World2D(PhysicsWorld2D *phys_world);
 
         // TODO: implement custom allocator!
-        template <typename... Args>
-        Entity2D *createEntity(Args&&... args);
+        Entity2D *createEntity(const std::string &name);
 
         void addEntity(Entity2D *entity);
 
@@ -39,15 +38,11 @@ namespace Diamond {
         Entity2D *getRoot() const { return root; }
 
     private:
+        PhysicsWorld2D *phys_world;
         Entity2D *root;
 
         void killTree(Entity2D *root);
     };
-}
-
-template <typename... Args>
-Diamond::Entity2D *Diamond::World2D::createEntity(Args&&... args) {
-    return new Entity2D(std::forward<Args>(args)...);
 }
 
 #endif // D_WORLD_2D_H

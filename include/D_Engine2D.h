@@ -26,6 +26,7 @@
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
 #include "D_Logger.h"
+#include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
 #include "D_World2D.h"
@@ -44,8 +45,6 @@ namespace Diamond {
 
         Config &getConfig() { return config; }
 
-        World2D *getWorld() const { return world; }
-
         Logger *getLogger() const { return logger; }
 
         Renderer2D *getRenderer() const { return renderer; }
@@ -55,6 +54,10 @@ namespace Diamond {
         Timer *getTimer() const { return timer; }
 
         EventHandler *getEventHandler() const { return event_handler; }
+
+        PhysicsWorld2D *getPhysWorld() const { return phys_world; }
+
+        World2D *getWorld() const { return world; }
 
         bool isRunning() const { return is_running; }
 
@@ -68,6 +71,7 @@ namespace Diamond {
         DiskJockey2D *dj;
         Timer *timer;
         EventHandler *event_handler;
+        PhysicsWorld2D *phys_world;
         World2D *world;
 
         virtual bool initWindows(Config &config);

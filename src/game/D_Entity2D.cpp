@@ -19,28 +19,30 @@
 #include <algorithm>
 
 
-Diamond::Entity2D::Entity2D(const std::string &name) 
-    : name(name), parent(nullptr), transform(Quantum2D::QuantumWorld2D::genTransform()) {}
+Diamond::Entity2D::Entity2D(PhysicsWorld2D *phys_world, const std::string &name)
+    : phys_world(phys_world), name(name), parent(nullptr), transform(phys_world->genTransform()) {}
 
 
 Diamond::Entity2D::~Entity2D() {
+    removeSelf();
     freeTransform();
 }
 
 
-Diamond::Entity2D::Entity2D(const Entity2D &other) : name(other.name) {
-    transform = Quantum2D::QuantumWorld2D::genTransform();
-    getTransform() = other.getTransform();
+Diamond::Entity2D::Entity2D(const Entity2D &other) : phys_world(other.phys_world), name(other.name) {
+    transform = phys_world->genTransform();
+    setTransform(other.getTransform());
 }
 
-Diamond::Entity2D::Entity2D(Entity2D &&other) : name(other.name), transform(other.transform) {
+Diamond::Entity2D::Entity2D(Entity2D &&other) 
+    : phys_world(other.phys_world), name(other.name), transform(other.transform) {
     other.transform = Diamond::INVALID;
 }
 
 Diamond::Entity2D &Diamond::Entity2D::operator=(const Entity2D &other) {
     if (this != &other) {
         name = other.name;
-        getTransform() = other.getTransform();
+        setTransform(other.getTransform());
     }
     return *this;
 }
@@ -120,7 +122,7 @@ void Diamond::Entity2D::updateBehaviors(tD_delta delta_ms) {
 
 void Diamond::Entity2D::freeTransform() {
     if ((tD_index)transform != Diamond::INVALID) {
-        Quantum2D::QuantumWorld2D::freeTransform(transform);
+        phys_world->freeTransform(transform);
         transform = Diamond::INVALID;
     }
 }

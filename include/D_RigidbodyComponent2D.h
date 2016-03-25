@@ -18,6 +18,7 @@
 #define D_RIGIDBODY_COMPONENT_2D_H
 
 #include "D_Component.h"
+#include "D_Entity2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"

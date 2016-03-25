@@ -23,6 +23,7 @@
 
 namespace Diamond {
     namespace SDLRenderSpace {
+        // TODO: use transform stored in renderobject instead of Quantum
         static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
             Diamond::Transform2<tD_pos, tD_rot> &transform = Quantum2D::QuantumWorld2D::getTransform(obj.transform);
             SDL_Rect render_rect = {transform.position.x, transform.position.y, obj.size.x, obj.size.y};

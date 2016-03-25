@@ -18,6 +18,7 @@
 #define D_BEHAVIOR_H
 
 #include "D_Component.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
     class Entity2D;

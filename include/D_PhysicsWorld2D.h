@@ -34,6 +34,21 @@ namespace Diamond {
         virtual bool init(Config &config) = 0;
 
         /**
+         Steps the physics simulation by the number of milliseconds given.
+        */
+        virtual void step(tD_delta delta_ms) = 0;
+
+        /**
+         Creates a transform object and returns its id.
+        */
+        virtual transform2_id genTransform() = 0;
+
+        /**
+         Frees the given transform's memory.
+        */
+        virtual void freeTransform(transform2_id transform) = 0;
+
+        /**
          Creates a rigidbody object attached to the given transform.
         */
         virtual DRigidbody2D *genRigidbody(transform2_id transform) = 0;

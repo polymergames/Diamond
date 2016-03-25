@@ -21,10 +21,29 @@
 #include "D_QuantumBody2D.h"
 
 namespace Diamond {
+    // TODO: use instanced QuantumWorld object
     class DQuantumWorld2D : public PhysicsWorld2D {
     public:
+        DQuantumWorld2D() {} // TODO: create QuantumWorld object or set to nullptr
+
+        ~DQuantumWorld2D() {
+            // TODO: free QuantumWorld instance
+        }
+
         bool init(Config &config) override {
-            Quantum2D::QuantumWorld2D::init();
+            return Quantum2D::QuantumWorld2D::init();
+        }
+
+        void step(tD_delta delta_ms) override {
+            Quantum2D::QuantumWorld2D::step(delta_ms);
+        }
+
+        transform2_id genTransform() override {
+            return Quantum2D::QuantumWorld2D::genTransform();
+        }
+
+        void freeTransform(transform2_id transform) override {
+            Quantum2D::QuantumWorld2D::freeTransform(transform);
         }
 
         DRigidbody2D *genRigidbody(transform2_id transform) override {
