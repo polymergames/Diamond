@@ -34,6 +34,8 @@ namespace Diamond {
         virtual ~RigidbodyComponent2D() {
             world->freeRigidbody(body);
         }
+        
+        DRigidbody2D *getBody() const { return body; }
 
         virtual Vector2<tD_pos> getVelocity() { return body->getVelocity(); }
 

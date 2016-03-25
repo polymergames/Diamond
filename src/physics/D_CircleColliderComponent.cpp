@@ -16,14 +16,13 @@
 
 #include "D_CircleColliderComponent.h"
 #include "D_Entity2D.h"
-#include "Q_QuantumWorld2D.h"
 
 Diamond::CircleColliderComponent::CircleColliderComponent(Entity2D *parent,
                                                           std::function<void(Entity2D *other)> &onCollision,
+                                                          PhysicsWorld2D *phys_world,
                                                           tQ_pos radius,
                                                           const Vector2<tQ_pos> &center)
-    : ColliderComponent2D(parent, onCollision) {
+    : ColliderComponent2D(parent, onCollision, phys_world) {
     std::function<void(void*)> callback = std::bind(&CircleColliderComponent::onCollide, this, std::placeholders::_1);
-    circle = new Quantum2D::CircleCollider(parent->getTransformID(), parent, callback, radius, center);
-    collider = Quantum2D::QuantumWorld2D::addCollider(circle);
+    circle = phys_world->genCircleCollider(body, parent, callback, radius, center);
 }

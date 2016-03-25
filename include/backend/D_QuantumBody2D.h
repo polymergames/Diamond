@@ -21,15 +21,17 @@
 #include "Q_QuantumWorld2D.h"
 
 namespace Diamond {
-    class DQuantumBody2D : public DRigidbody2D {
+    class QuantumBody2D : public DRigidbody2D {
     public:
-        DQuantumBody2D(transform2_id transform) {
+        QuantumBody2D(transform2_id transform) {
             body = Quantum2D::QuantumWorld2D::genRigidbody(transform);
         }
 
-        ~DQuantumBody2D() {
+        ~QuantumBody2D() {
             Quantum2D::QuantumWorld2D::freeRigidbody(body);
         }
+        
+        body2d_id getID() const { return body; }
 
         Vector2<tD_pos> getVelocity() override {
             return Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity();

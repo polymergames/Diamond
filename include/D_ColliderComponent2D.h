@@ -19,7 +19,8 @@
 
 #include <functional>
 #include "D_Component.h"
-#include "Q_typedefs.h"
+#include "D_PhysicsWorld2D.h"
+#include "D_Rigidbody2D.h"
 
 namespace Diamond {
     /**
@@ -30,17 +31,18 @@ namespace Diamond {
     public:
         virtual ~ColliderComponent2D() = 0;
 
-        collider2_id getID() const { return collider; }
-
         void onCollide(void *other) {
             onCollision(static_cast<Entity2D*>(other));
         }
     
     protected:
-        collider2_id collider;
         std::function<void(Entity2D *other)> onCollision;
+        PhysicsWorld2D *phys_world;
+        DRigidbody2D *body;
 
-        ColliderComponent2D(Entity2D *parent, std::function<void(Entity2D *other)> &onCollision);
+        ColliderComponent2D(Entity2D *parent,
+                            std::function<void(Entity2D *other)> &onCollision,
+                            PhysicsWorld2D *phys_world);
     };
 }
 

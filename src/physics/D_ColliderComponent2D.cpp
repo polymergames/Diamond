@@ -15,12 +15,21 @@
 */
 
 #include "D_ColliderComponent2D.h"
-#include "Q_QuantumWorld2D.h"
+#include "D_RigidbodyComponent2D.h"
+
 
 Diamond::ColliderComponent2D::ColliderComponent2D(Entity2D *parent, 
-                                                  std::function<void(Entity2D *other)> &onCollision)
-    : Component(parent), onCollision(onCollision) {}
-
-Diamond::ColliderComponent2D::~ColliderComponent2D() {
-    Quantum2D::QuantumWorld2D::freeCollider(collider);
+                                                  std::function<void(Entity2D *other)> &onCollision,
+                                                  PhysicsWorld2D *phys_world)
+    : Component(parent), onCollision(onCollision), phys_world(phys_world) {
+    
+    RigidbodyComponent2D *rbcomp = parent->getComponent<RigidbodyComponent2D>();
+    if (!rbcomp) {
+        // TODO: throw exception and log error
+        std::cout << "ColliderComponent2D: No rigidbody component found for parent " << parent->getName() << "!" << std::endl;
+    }
+        
+    body = rbcome->getBody();
 }
+
+Diamond::ColliderComponent2D::~ColliderComponent2D() {}

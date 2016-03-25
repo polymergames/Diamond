@@ -18,43 +18,44 @@
 #define D_CIRCLE_COLLIDER_COMPONENT_H
 
 #include "D_ColliderComponent2D.h"
+#include "D_CircleCollider.h"
 #include "D_Vector2.h"
-#include "Q_CircleCollider.h"
 
 namespace Diamond {
     class CircleColliderComponent : public ColliderComponent2D {
     public:
         CircleColliderComponent(Entity2D *parent,
                                 std::function<void(Entity2D *other)> &onCollision,
-                                tQ_pos radius,
-                                const Vector2<tQ_pos> &center = Vector2<tQ_pos>(0, 0));
+                                PhysicsWorld2D *phys_world,
+                                tD_pos radius,
+                                const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0));
 
         /**
          Get the radius of this circle.
         */
-        tQ_pos getRadius() const { return circle->getRadius(); }
+        tD_pos getRadius() const { return circle->getRadius(); }
 
         /**
          Get the radius squared of this circle.
         */
-        tQ_pos getRadiusSq() const { return circle->getRadiusSq(); }
+        tD_pos getRadiusSq() const { return circle->getRadiusSq(); }
 
         /**
          Get the center position of this circle in the parent transform's local space.
         */
-        Diamond::Vector2<tQ_pos> &getCenter() { return circle->getCenter(); }
+        Vector2<tD_pos> getCenter() { return circle->getCenter(); }
 
         /**
          Get the current coordinates of this circle's center in world space.
         */
-        const Diamond::Vector2<tQ_pos> &getWorldPos() const { return circle->getWorldPos(); }
+        Diamond::Vector2<tD_pos> getWorldPos() const { return circle->getWorldPos(); }
 
-        void setRadius(tQ_pos radius) { circle->setRadius(radius); }
+        void setRadius(tD_pos radius) { circle->setRadius(radius); }
 
-        void setCenter(const Diamond::Vector2<tQ_pos> &center) { circle->setCenter(center); }
+        void setCenter(const Vector2<tD_pos> &center) { circle->setCenter(center); }
 
     private:
-        Quantum2D::CircleCollider *circle;
+        CircleCollider *circle;
     };
 }
 
