@@ -28,7 +28,7 @@ namespace Diamond {
     public:
         virtual ~DiskJockey2D() {};
 
-        virtual bool init(Config &config) = 0;
+        virtual bool init(const Config &config) = 0;
 
         virtual Sound2D *loadSound(std::string path) = 0;
 

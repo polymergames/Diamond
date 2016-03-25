@@ -51,7 +51,7 @@ Diamond::Engine2D::~Engine2D() {
     delete world;
 }
 
-bool Diamond::Engine2D::init(Config &config) {
+bool Diamond::Engine2D::init(const Config &config) {
     this->config = config;
     bool success = false;
 
@@ -113,7 +113,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
     game.quit();
 }
 
-bool Diamond::Engine2D::initWindows(Config &config) {
+bool Diamond::Engine2D::initWindows(const Config &config) {
     logger = new DesktopLogger();
 
     renderer = new SDLRenderer2D();
@@ -140,17 +140,18 @@ bool Diamond::Engine2D::initWindows(Config &config) {
     return true;
 }
 
-bool Diamond::Engine2D::initMac(Config &config) {
+bool Diamond::Engine2D::initMac(const Config &config) {
     return initWindows(config);
 }
 
-bool Diamond::Engine2D::initAndroid(Config &config) {
-    config.fullscreen = true;
+bool Diamond::Engine2D::initAndroid(const Config &config) {
+    Config myconf = config;
+    myconf.fullscreen = true;
 
-    return initWindows(config); // temporary
+    return initWindows(myconf); // temporary
 }
 
-bool Diamond::Engine2D::initIOS(Config &config) {
+bool Diamond::Engine2D::initIOS(const Config &config) {
     return initAndroid(config);
 }
 

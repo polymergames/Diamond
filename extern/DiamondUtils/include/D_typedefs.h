@@ -35,6 +35,9 @@ typedef int32_t tD_delta; // delta time type
 typedef uint16_t tD_index; // array index type
 typedef tD_index tD_id; // general identification type (ex. Entity ID)
 typedef tD_id renderobj_id; // render object id type
+typedef tD_id transform2_id; // 2d transform object id type
+typedef tD_id body2d_id; // 2d rigidbody object id type
+typedef tD_id collider2_id; // 2d collider object id type
 
 namespace Diamond {
     const tD_index INVALID = 0xffff; // represents an invalid id or array index. can't use negative if tD_index is unsigned type

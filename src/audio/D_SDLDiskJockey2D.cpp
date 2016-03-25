@@ -25,7 +25,7 @@ Diamond::SDLDiskJockey2D::~SDLDiskJockey2D() {
     Mix_Quit();
 }
 
-bool Diamond::SDLDiskJockey2D::init(Config &config) {
+bool Diamond::SDLDiskJockey2D::init(const Config &config) {
     if (Mix_OpenAudio(config.audio_out_freq,
             MIX_DEFAULT_FORMAT,
             config.audio_channels,

@@ -21,6 +21,7 @@
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
+#include <vector>
 #include "D_typedefs.h"
 #include "D_Behavior.h"
 #include "D_Component.h"
@@ -75,8 +76,8 @@ namespace Diamond {
         Transform2<tD_pos, tD_rot> getTransform() const { return phys_world->getTransform(transform); }
         transform2_id getTransformID() const { return transform; }
         
-        void setTransform(Transform2<tD_pos, tD_rot> &newtrans) { phys_world->setTransform(transform, newtrans); }
-        void setPosition(Vector2<tD_pos> &newpos) { phys_world->setPosition(transform, newpos); }
+        void setTransform(const Transform2<tD_pos, tD_rot> &newtrans) { phys_world->setTransform(transform, newtrans); }
+        void setPosition(const Vector2<tD_pos> &newpos) { phys_world->setPosition(transform, newpos); }
         void setRotation(tD_rot newrot) { phys_world->setRotation(transform, newrot); }
 
         void updateBehaviors(tD_delta delta_ms);

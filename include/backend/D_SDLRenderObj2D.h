@@ -28,7 +28,7 @@ namespace Diamond {
     public:
         SDLTexture *texture;
         SDL_RendererFlip flip;
-        Vector2<tD_pos> size;
+        Vector2<tDrender_pos> size;
         SDL_Rect *clip;
 
         SDLRenderObj2D(Texture *texture, 

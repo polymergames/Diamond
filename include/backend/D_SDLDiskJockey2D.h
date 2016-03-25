@@ -24,7 +24,7 @@ namespace Diamond {
     public:
         ~SDLDiskJockey2D();
 
-        bool init(Config &config) override;
+        bool init(const Config &config) override;
 
         Sound2D *loadSound(std::string path) override;
 

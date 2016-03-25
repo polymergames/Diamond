@@ -31,7 +31,7 @@ namespace Diamond {
          Creates and initializes the physics simulation world.
          Returns true if initialization was successful.
         */
-        virtual bool init(Config &config) = 0;
+        virtual bool init(const Config &config) = 0;
 
         /**
          Steps the physics simulation by the number of milliseconds given.
@@ -66,17 +66,17 @@ namespace Diamond {
         /**
          Sets the transform with the given id.
         */
-        virtual void setTransform(transform2_id transform, Transform2<tD_pos, tD_rot> &newtrans) = 0;
+        virtual void setTransform(transform2_id transform, const Transform2<tD_pos, tD_rot> &newtrans) = 0;
 
         /**
          Sets the transform with the given id.
         */
-        virtual void setTransform(transform2_id transform, Vector2<tD_pos> &newpos, tD_rot newrot) = 0;
+        virtual void setTransform(transform2_id transform, const Vector2<tD_pos> &newpos, tD_rot newrot) = 0;
 
         /**
          Sets the position of the given transform.
         */
-        virtual void setPosition(transform2_id transform, Vector2<tD_pos> &newpos) = 0;
+        virtual void setPosition(transform2_id transform, const Vector2<tD_pos> &newpos) = 0;
 
         /**
          Sets the rotation of the given transform.

@@ -39,7 +39,7 @@ namespace Diamond {
         Engine2D();
         virtual ~Engine2D();
 
-        virtual bool init(Config &config);
+        virtual bool init(const Config &config);
 
         virtual void launch(Game2D &game);
 
@@ -74,10 +74,10 @@ namespace Diamond {
         PhysicsWorld2D *phys_world;
         World2D *world;
 
-        virtual bool initWindows(Config &config);
-        virtual bool initMac(Config &config);
-        virtual bool initAndroid(Config &config);
-        virtual bool initIOS(Config &config);
+        virtual bool initWindows(const Config &config);
+        virtual bool initMac(const Config &config);
+        virtual bool initAndroid(const Config &config);
+        virtual bool initIOS(const Config &config);
     };
 }
 

@@ -38,7 +38,7 @@ namespace Diamond {
          Initializes SDL, creates window, and initializes image loading.
          Returns whether all of the initialization was successful.
         */
-        bool init(Config &config) override;
+        bool init(const Config &config) override;
         
         void renderAll() override;
         

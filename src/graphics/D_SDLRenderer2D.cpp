@@ -35,7 +35,7 @@ namespace Diamond {
 
 Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
 
-bool Diamond::SDLRenderer2D::init(Config &config) {
+bool Diamond::SDLRenderer2D::init(const Config &config) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         // TODO: Handle initialization failure and log

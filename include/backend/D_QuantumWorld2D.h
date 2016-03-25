@@ -30,7 +30,7 @@ namespace Diamond {
             // TODO: free QuantumWorld instance
         }
 
-        bool init(Config &config) override {
+        bool init(const Config &config) override {
             return Quantum2D::QuantumWorld2D::init();
         }
 
@@ -58,17 +58,17 @@ namespace Diamond {
             return Quantum2D::QuantumWorld2D::getTransform(transform);
         }
 
-        void setTransform(transform2_id transform, Transform2<tD_pos, tD_rot> &newtrans) override {
+        void setTransform(transform2_id transform, const Transform2<tD_pos, tD_rot> &newtrans) override {
             Quantum2D::QuantumWorld2D::getTransform(transform) = newtrans;
         }
 
-        void setTransform(transform2_id transform, Vector2<tD_pos> &newpos, tD_rot newrot) override {
+        void setTransform(transform2_id transform, const Vector2<tD_pos> &newpos, tD_rot newrot) override {
             Transform2<tQ_pos, tQ_rot> &tr = Quantum2D::QuantumWorld2D::getTransform(transform);
             tr.position = newpos;
             tr.rotation = newrot;
         }
 
-        void setPosition(transform2_id transform, Vector2<tD_pos> &newpos) override {
+        void setPosition(transform2_id transform, const Vector2<tD_pos> &newpos) override {
             Quantum2D::QuantumWorld2D::getTransform(transform).position = newpos;
         }
 

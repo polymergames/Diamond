@@ -26,9 +26,4 @@ typedef tQ_num tQ_pos;
 typedef tQ_num tQ_rot;
 typedef tQ_num tQ_delta;
 
-// ID/index typedefs
-typedef tD_index transform2_id;
-typedef tD_index body2d_id;
-typedef tD_index collider2_id;
-
 #endif // Q_TYPEDEFS_H
