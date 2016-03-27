@@ -22,7 +22,6 @@
 Diamond::Entity2D::Entity2D(PhysicsWorld2D *phys_world, const std::string &name)
     : phys_world(phys_world), name(name), parent(nullptr), transform(phys_world->genTransform()) {}
 
-
 Diamond::Entity2D::~Entity2D() {
     removeSelf();
     freeTransform();
@@ -67,6 +66,7 @@ void Diamond::Entity2D::addChild(Entity2D *child){
 bool Diamond::Entity2D::removeChild(Entity2D *child) {
     auto it = std::find(children.begin(), children.end(), child);
     if (it != children.end()) {
+        (*it)->parent = nullptr;
         children.erase(it);
         return true;
     }
