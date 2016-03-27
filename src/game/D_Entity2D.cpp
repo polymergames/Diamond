@@ -75,21 +75,24 @@ bool Diamond::Entity2D::removeChild(Entity2D *child) {
 
 void Diamond::Entity2D::removeSelf() {
     if (parent) {
-        // Remove this entity from its parent's children
-        parent->removeChild(this);
-
-        // Transfer this entity's children to this entity's parent
+        // Give this entity's children away to their granddaddy
         // TODO: more efficient way to do this? Copy vector range and apply function to range to change each child's parent?
         for (Entity2D *child : children) {
             parent->children.push_back(child);
             child->parent = parent;
         }
+        
+        // Get disowned
+        parent->removeChild(this);
     }
     else {
+        // Turn this entity's children into poor little orphans
         for (Entity2D *child : children) {
             child->parent = nullptr;
         }
     }
+    // Free at last
+    children.clear();
 }
 
 void Diamond::Entity2D::addComponent(Component *component) {

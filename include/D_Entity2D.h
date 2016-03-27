@@ -53,6 +53,8 @@ namespace Diamond {
 
         /**
          This entity removes itself from the entity tree.
+         More specifically, this entity transfers all of its children to its parent
+         and removes itself from its parent's children list.
         */
         void removeSelf();
 
