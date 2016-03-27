@@ -86,6 +86,7 @@ void Diamond::Entity2D::addChild(Entity2D *child){
 bool Diamond::Entity2D::removeChild(Entity2D *child) {
     auto it = std::find(children.begin(), children.end(), child);
     if (it != children.end()) {
+        (*it)->parent = nullptr;
         children.erase(it);
         return true;
     }
