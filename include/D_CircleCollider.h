@@ -38,16 +38,16 @@ namespace Diamond {
         /**
          Get the center position of this circle in the parent transform's local space.
         */
-        Vector2<tD_pos> getCenter() const = 0;
+        virtual Vector2<tD_pos> getCenter() const = 0;
         
         /**
          Get the current coordinates of this circle's center in world space.
         */
-        Vector2<tD_pos> getWorldPos() const = 0;
+        virtual Vector2<tD_pos> getWorldPos() const = 0;
         
-        void setRadius(tD_pos radius) const = 0;
+        virtual void setRadius(tD_pos radius) const = 0;
         
-        void setCenter(const Vector2<tD_pos> &center) = 0;
+        virtual void setCenter(const Vector2<tD_pos> &center) = 0;
     };
 }
 

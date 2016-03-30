@@ -53,12 +53,7 @@ namespace Diamond {
          Creates a rigidbody object attached to the given transform.
         */
         virtual DRigidbody2D *genRigidbody(transform2_id transform) = 0;
-
-        /**
-         Frees the given rigidbody's memory.
-        */
-        virtual void freeRigidbody(DRigidbody2D *body) = 0;
-
+        
         /**
          Creates a circle collider attached to the given rigidbody.
          parent is a pointer to the entity owning the collider.

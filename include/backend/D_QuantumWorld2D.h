@@ -47,11 +47,7 @@ namespace Diamond {
         }
 
         DRigidbody2D *genRigidbody(transform2_id transform) override {
-            return new DQuantumBody2D(transform);
-        }
-
-        void freeRigidbody(DRigidbody2D *body) override {
-            delete body;
+            return new QuantumBody2D(transform);
         }
 
         Transform2<tD_pos, tD_rot> getTransform(transform2_id transform) override {
