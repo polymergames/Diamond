@@ -40,13 +40,13 @@ namespace Diamond {
         
         ~QuantumAABBCollider2D() { Quantum2D::QuantumWorld2D::freeCollider(collider); }
         
-        Vector2<tD_pos> getOrigin() const override { aabb->getOrigin(); }
+        Vector2<tD_pos> getOrigin() const override { return aabb->getOrigin(); }
         
-        Vector2<tD_pos> getDims() const override { aabb->getDims(); }
+        Vector2<tD_pos> getDims() const override { return aabb->getDims(); }
         
-        Vector2<tD_pos> getMin() const override { aabb->getMin(); }
+        Vector2<tD_pos> getMin() const override { return aabb->getMin(); }
         
-        Vector2<tD_pos> getMax() const override { aabb->getMax(); }
+        Vector2<tD_pos> getMax() const override { return aabb->getMax(); }
         
         void setOrigin(const Vector2<tD_pos> &origin) override { aabb->setOrigin(origin); }
         

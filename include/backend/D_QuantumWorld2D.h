@@ -19,6 +19,8 @@
 
 #include "D_PhysicsWorld2D.h"
 #include "D_QuantumBody2D.h"
+#include "D_QuantumAABBCollider2D.h"
+#include "D_QuantumCircleCollider.h"
 
 namespace Diamond {
     // TODO: use instanced QuantumWorld object
@@ -37,6 +39,7 @@ namespace Diamond {
         void step(tD_delta delta_ms) override {
             Quantum2D::QuantumWorld2D::step(delta_ms);
         }
+        
 
         transform2_id genTransform() override {
             return Quantum2D::QuantumWorld2D::genTransform();
@@ -45,10 +48,29 @@ namespace Diamond {
         void freeTransform(transform2_id transform) override {
             Quantum2D::QuantumWorld2D::freeTransform(transform);
         }
+        
 
         DRigidbody2D *genRigidbody(transform2_id transform) override {
             return new QuantumBody2D(transform);
         }
+        
+        
+        AABBCollider2D *genAABBCollider(DRigidbody2D *body,
+                                        void *parent,
+                                        std::function<void(void *other)> &onCollision,
+                                        const Vector2<tD_pos> &dims,
+                                        const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) override {
+            return new QuantumAABBCollider2D(dynamic_cast<QuantumBody2D*>(body), parent, onCollision, dims, origin);
+        }
+        
+        CircleCollider *genCircleCollider(DRigidbody2D *body,
+                                          void *parent,
+                                          std::function<void(void *other)> &onCollision,
+                                          tD_pos radius,
+                                          const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) override {
+            return new QuantumCircleCollider(dynamic_cast<QuantumBody2D*>(body), parent, onCollision, radius, center);
+        }
+        
 
         Transform2<tD_pos, tD_rot> getTransform(transform2_id transform) override {
             return Quantum2D::QuantumWorld2D::getTransform(transform);

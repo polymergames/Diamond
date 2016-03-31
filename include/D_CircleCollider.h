@@ -45,7 +45,7 @@ namespace Diamond {
         */
         virtual Vector2<tD_pos> getWorldPos() const = 0;
         
-        virtual void setRadius(tD_pos radius) const = 0;
+        virtual void setRadius(tD_pos radius) = 0;
         
         virtual void setCenter(const Vector2<tD_pos> &center) = 0;
     };

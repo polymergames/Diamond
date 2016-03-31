@@ -19,6 +19,7 @@
 
 #include "D_Config.h"
 #include "D_CircleCollider.h"
+#include "D_AABBCollider2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
 #include "D_Transform2.h"
@@ -49,10 +50,22 @@ namespace Diamond {
         */
         virtual void freeTransform(transform2_id transform) = 0;
 
+        
         /**
          Creates a rigidbody object attached to the given transform.
         */
         virtual DRigidbody2D *genRigidbody(transform2_id transform) = 0;
+        
+        
+        /**
+         Creates an AABB collider attached to the given rigidbody.
+         parent is a pointer to the entity owning the collider.
+         */
+        virtual AABBCollider2D *genAABBCollider(DRigidbody2D *body,
+                                                void *parent,
+                                                std::function<void(void *other)> &onCollision,
+                                                const Vector2<tD_pos> &dims,
+                                                const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) = 0;
         
         /**
          Creates a circle collider attached to the given rigidbody.
@@ -62,7 +75,8 @@ namespace Diamond {
                                                   void *parent,
                                                   std::function<void(void *other)> &onCollision,
                                                   tD_pos radius,
-                                                  const Vector2<tD_pos> &center) = 0;
+                                                  const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) = 0;
+        
         
         /**
          Returns the transform with the given id.
