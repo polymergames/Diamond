@@ -22,13 +22,11 @@
 
 #include "D_Animator2D.h"
 #include "D_AnimatorSheet.h"
-#include "D_AudioManager2D.h"
-#include "D_Game.h"
+#include "D_Game2D.h"
 #include "D_Entity2D.h"
-#include "D_Graphics2D.h"
 #include "D_typedefs.h"
 
-class RandomDemo : public Diamond::Game {
+class RandomDemo : public Diamond::Game2D {
 public:
     RandomDemo(float movespeed = 0.75f, float spinspeed = 0.75f, float growspeed = 0.00075f);
 
@@ -41,8 +39,8 @@ public:
 private:
     const float movespeed, spinspeed, growspeed;
 
-    Diamond::Entity2D spike, zapper, zapper2;
-    std::list<std::unique_ptr<Diamond::Entity2D>> objects;
+    Diamond::Entity2D *spike, *zapper, *zapper2;
+    std::list<Diamond::Entity2D*> objects;
 
     std::shared_ptr<Diamond::Texture> spike_sprite;
     std::shared_ptr<Diamond::Texture> cloud_sprite;

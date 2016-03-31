@@ -28,7 +28,7 @@ namespace Diamond {
 
         virtual Vector2<tD_pos> getVelocity() = 0;
 
-        virtual void setVelocity(Vector2<tD_pos> &newvel) = 0;
+        virtual void setVelocity(const Vector2<tD_pos> &newvel) = 0;
     };
 }
 

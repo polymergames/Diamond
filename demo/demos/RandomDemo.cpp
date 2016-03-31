@@ -17,7 +17,6 @@
 #include "RandomDemo.h"
 
 #include "D_Input.h"
-#include "D_Launcher.h"
 #include "D_RenderComponent2D.h"
 #include "D_RigidbodyComponent2D.h"
 #include "D_World2D.h"
@@ -25,15 +24,10 @@ using namespace Diamond;
 
 RandomDemo::RandomDemo(float movespeed, float spinspeed, float growspeed) 
     : movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
-      spike("spike"), zapper("zapper"), zapper2("zapper2") {
-    // Launcher::config.fullscreen = true;
-    // Launcher::config.window_width = 600;
-    // Launcher::config.window_height = 600;
-    Launcher::config.vsync = true;
-    Launcher::config.bg_color = { 0, 128, 255, 255 };
-}
+      spike(nullptr), zapper(nullptr), zapper2(nullptr) {}
 
 void RandomDemo::init() {
+    /**
     window = Graphics2D::getResolution();
 
     Vector2<int> screen = Graphics2D::getScreenResolution();
@@ -83,9 +77,11 @@ void RandomDemo::init() {
     // Physics
     // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getTransformID());
     spike.addComponent<RigidbodyComponent2D>(&spike);
+    **/
 }
 
 void RandomDemo::update(tD_delta delta) {
+    /**
     // Quantum2D::Rigidbody2D rbody = Quantum2D::QuantumWorld2D::getRigidbody(body);
     // std::cout << "Velocity: " << rbody.velocity.x << ", " << rbody.velocity.y << std::endl;
 
@@ -191,6 +187,7 @@ void RandomDemo::update(tD_delta delta) {
     }
 
     //std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
+    **/
 }
 
 void RandomDemo::quit() {};

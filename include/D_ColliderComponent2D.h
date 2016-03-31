@@ -19,6 +19,7 @@
 
 #include <functional>
 #include "D_Component.h"
+#include "D_Collider2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_RigidbodyComponent2D.h"
 #include "D_Rigidbody2D.h"
@@ -48,8 +49,7 @@ namespace Diamond {
             
             switch (type) {
                 case AABB:
-                    // TODO
-                    // collider = ;
+                    collider = phys_world->genAABBCollider(body, parent, callback, std::forward<Args>(args)...);
                     break;
                 case CIRCLE:
                     collider = phys_world->genCircleCollider(body, parent, callback, std::forward<Args>(args)...);
@@ -79,7 +79,7 @@ namespace Diamond {
     
     private:
         Coltype type;
-        void *collider;
+        Collider2D *collider;
         
         std::function<void(Entity2D *other)> onCollision;
     };

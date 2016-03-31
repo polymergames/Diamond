@@ -37,7 +37,7 @@ namespace Diamond {
             return Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity();
         }
 
-        void setVelocity(Vector2<tD_pos> &newvel) override {
+        void setVelocity(const Vector2<tD_pos> &newvel) override {
             Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity() = newvel;
         }
 

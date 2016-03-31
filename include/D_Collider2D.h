@@ -14,30 +14,14 @@
     limitations under the License.
 */
 
-#ifndef COLLIDE_DEMO_H
-#define COLLIDE_DEMO_H
+#ifndef D_COLLIDER_2D_H
+#define D_COLLIDER_2D_H
 
-#include "D_AnimatorSheet.h"
-#include "D_Entity2D.h"
-#include "D_Game2D.h"
+namespace Diamond {
+    class Collider2D {
+    public:
+        virtual ~Collider2D() {}
+    };
+}
 
-class CollideDemo : public Diamond::Game2D {
-public:
-    CollideDemo(float movespeed = 0.75f);
-
-    void init() override;
-
-    void update(tD_delta delta) override;
-
-    void quit() override;
-
-private:
-    const float movespeed;
-
-    Diamond::Entity2D *spike1, *spike2, *zapper1, *zapper2;
-    Diamond::AnimationSheet zapper_anim;
-
-    void m_onCollision(Diamond::Entity2D *other);
-};
-
-#endif // COLLIDE_DEMO_H
+#endif // D_COLLIDER_2D_H

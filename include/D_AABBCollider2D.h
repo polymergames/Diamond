@@ -17,11 +17,12 @@
 #ifndef D_AABB_COLLIDER_2D_H
 #define D_AABB_COLLIDER_2D_H
 
+#include "D_Collider2D.h"
 #include "D_typedefs.h"
 #include "D_Vector2.h"
 
 namespace Diamond {
-    class AABBCollider2D {
+    class AABBCollider2D : public Collider2D {
     public:
         virtual ~AABBCollider2D() {}
         

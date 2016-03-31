@@ -14,13 +14,21 @@
     limitations under the License.
 */
 
-#include "D_Launcher.h"
+#include "D_Engine2D.h"
 #include "CollideDemo.h"
 #include "RandomDemo.h"
 
 int main(int argc, char *argv[]) {
-	CollideDemo demo;	
-    Diamond::Launcher::launch(demo);
-
+    Diamond::Config config;
+    Diamond::Engine2D engine;
+	CollideDemo demo;
+    
+    config.vsync = true;
+    config.bg_color = { 0, 128, 255, 255 };
+    
+    if (engine.init(config)) {
+        engine.launch(demo);
+    }
+    
 	return 0;
 }

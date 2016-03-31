@@ -59,4 +59,4 @@ install(TARGETS Diamond DESTINATION lib)
 
 
 # Build subdirectories
-# add_subdirectory(demo)
+add_subdirectory(demo)

@@ -31,15 +31,13 @@ namespace Diamond {
             body = world->genRigidbody(parent->getTransformID());
         }
 
-        virtual ~RigidbodyComponent2D() {
-            world->freeRigidbody(body);
-        }
+        ~RigidbodyComponent2D() { delete body; }
         
         DRigidbody2D *getBody() const { return body; }
 
-        virtual Vector2<tD_pos> getVelocity() { return body->getVelocity(); }
+        Vector2<tD_pos> getVelocity() { return body->getVelocity(); }
 
-        virtual void setVelocity(Vector2<tD_pos> &newvel) { body->setVelocity(newvel); }
+        void setVelocity(const Vector2<tD_pos> &newvel) { body->setVelocity(newvel); }
 
     private:
         DRigidbody2D *body;

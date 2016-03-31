@@ -17,11 +17,12 @@
 #ifndef D_CIRCLE_COLLIDER_H
 #define D_CIRCLE_COLLIDER_H
 
+#include "D_Collider2D.h"
 #include "D_typedefs.h"
 #include "D_Vector2.h"
 
 namespace Diamond {
-    class CircleCollider {
+    class CircleCollider : public Collider2D {
     public:
         virtual ~CircleCollider() {}
         

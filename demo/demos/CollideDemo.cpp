@@ -15,19 +15,18 @@
 */
 
 #include "CollideDemo.h"
-#include "D_AABBColliderComponent2D.h"
-#include "D_CircleColliderComponent.h"
+#include "D_ColliderComponent2D.h"
 #include "D_Input.h"
 #include "D_RenderComponent2D.h"
 #include "D_World2D.h"
 using namespace Diamond;
 
 CollideDemo::CollideDemo(float movespeed) 
-    : movespeed(movespeed), spike1("spike1"), spike2("spike2"), zapper1("zapper1"), zapper2("zapper2") {
-    Launcher::config.vsync = true;
+    : movespeed(movespeed), spike1(nullptr), spike2(nullptr), zapper1(nullptr), zapper2(nullptr) {
 }
 
 void CollideDemo::init() {
+    /**
     std::shared_ptr<Texture> spike_sprite = Graphics2D::loadTexture("spike.png");
 
     if (!spike_sprite) {
@@ -83,9 +82,11 @@ void CollideDemo::init() {
     zapper2.addComponent<AABBColliderComponent2D>(&zapper2, callback,
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
         Vector2<tD_pos>(2 * partial_width * scale, 0));
+     **/
 }
 
 void CollideDemo::update(tD_delta delta) {
+    /**
     // zapper1 controls
     if (Input::keydown[Input::K_W]) {
         zapper1.getTransform().position.y -= movespeed * delta;
@@ -127,6 +128,7 @@ void CollideDemo::update(tD_delta delta) {
     if (Input::keydown[Input::K_P6]) {
         spike2.getTransform().position.x += movespeed * delta;
     }
+     **/
 }
 
 void CollideDemo::quit() {
