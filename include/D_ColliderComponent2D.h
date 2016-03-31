@@ -35,7 +35,8 @@ namespace Diamond {
                             std::function<void(Entity2D *other)> &onCollision,
                             PhysicsWorld2D *phys_world,
                             Coltype type,
-                            Args&&... args) : Component(parent), onCollision(onCollision), type(type) {
+                            Args&&... args)
+            : Component(parent), onCollision(onCollision), type(type) {
             RigidbodyComponent2D *rbcomp = parent->getComponent<RigidbodyComponent2D>();
             if (!rbcomp) {
                 // TODO: throw exception and log error

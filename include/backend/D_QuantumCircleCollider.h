@@ -38,21 +38,19 @@ namespace Diamond {
             collider = Quantum2D::QuantumWorld2D::addCollider(circle);
         }
         
-        ~QuantumCircleCollider() {
-            Quantum2D::QuantumWorld2D::freeCollider(collider);
-        }
+        ~QuantumCircleCollider() { Quantum2D::QuantumWorld2D::freeCollider(collider); }
         
-        tD_pos getRadius() const { return circle->getRadius(); }
+        tD_pos getRadius() const override { return circle->getRadius(); }
         
-        tD_pos getRadiusSq() const { return circle->getRadiusSq(); }
+        tD_pos getRadiusSq() const override { return circle->getRadiusSq(); }
         
-        Vector2<tD_pos> getCenter() const { return circle->getCenter(); }
+        Vector2<tD_pos> getCenter() const override { return circle->getCenter(); }
         
-        Vector2<tD_pos> getWorldPos() const { return circle->getWorldPos(); }
+        Vector2<tD_pos> getWorldPos() const override { return circle->getWorldPos(); }
         
-        void setRadius(tD_pos radius) { circle->setRadius(radius); }
+        void setRadius(tD_pos radius) override { circle->setRadius(radius); }
         
-        void setCenter(const Vector2<tD_pos> &center) { circle->setCenter(center); }
+        void setCenter(const Vector2<tD_pos> &center) override { circle->setCenter(center); }
         
     private:
         collider2_id collider;
