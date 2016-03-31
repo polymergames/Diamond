@@ -17,6 +17,7 @@
 #ifndef D_PHYSICS_WORLD_2D_H
 #define D_PHYSICS_WORLD_2D_H
 
+#include <functional>
 #include "D_Config.h"
 #include "D_CircleCollider.h"
 #include "D_AABBCollider2D.h"
