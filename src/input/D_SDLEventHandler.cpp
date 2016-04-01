@@ -120,7 +120,7 @@ void Diamond::SDLEventHandler::update() {
             SDL_GetMouseState(&(Input::touch_pos.x), &(Input::touch_pos.y));
             break;
         case SDL_QUIT:
-            engine->shutDown();
+            engine->quit();
             break;
         }
     }

@@ -48,7 +48,7 @@ namespace Diamond {
         */
         virtual void quit() = 0;
 
-    private:
+    protected:
         Engine2D *engine;
     };
 }

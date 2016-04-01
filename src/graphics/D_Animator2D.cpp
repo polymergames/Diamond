@@ -16,19 +16,21 @@
 
 #include "D_Animator2D.h"
 
-Diamond::Animator2D::Animator2D(Entity2D *parent, Animation2D *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
+Diamond::Animator2D::Animator2D(Entity2D *parent, Renderer2D *renderer, Animation2D *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
     if (anim->sprites.size() == 0) {
         // TODO: throw exception or log error
+        std::cout << "Animator2D: The given animation for parent " << parent->getName() << " is empty!" << std::endl;
     }
 
     rendercomp = parent->getComponent<RenderComponent2D>();
-
     if (!rendercomp) {
-        // TODO: throw exception and log error
-        std::cout << "Animator2D: No render component found for parent " << parent->getName() << "!" << std::endl;
+        rendercomp = new RenderComponent2D(parent, renderer, anim->sprites[0]);
+        parent->addComponent(rendercomp);
     }
-
-    rendercomp->setSprite(anim->sprites[0]);
+    else {
+        rendercomp->setSprite(anim->sprites[0]);
+    }
+    
 }
 
 void Diamond::Animator2D::setAnimation(Animation2D *anim) {

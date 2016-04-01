@@ -27,57 +27,62 @@ RandomDemo::RandomDemo(float movespeed, float spinspeed, float growspeed)
       spike(nullptr), zapper(nullptr), zapper2(nullptr) {}
 
 void RandomDemo::init() {
-    /**
-    window = Graphics2D::getResolution();
+    World2D *world = engine->getWorld();
+    Renderer2D *renderer = engine->getRenderer();
+    
+    spike = world->createEntity("spike");
+    zapper = world->createEntity("zapper");
+    zapper2 = world->createEntity("zapper2");
+    
+    window = renderer->getResolution();
 
-    Vector2<int> screen = Graphics2D::getScreenResolution();
+    Vector2<int> screen = renderer->getScreenResolution();
     std::cout << "Resolution: " << window.x << " by " << window.y << std::endl;
     std::cout << "Screen resolution: " << screen.x << " by " << screen.y << std::endl;
 
-    spike_sprite = Graphics2D::loadTexture("spike.png");
-    cloud_sprite = Graphics2D::loadTexture("cloud.png");
+    spike_sprite = std::shared_ptr<Texture>(renderer->loadTexture("spike.png"));
+    cloud_sprite = std::shared_ptr<Texture>(renderer->loadTexture("cloud.png"));
 
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;
-        Launcher::quit();
+        engine->quit();
         return;
     }
 
     //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
-    spike.addComponent<RenderComponent2D>(&spike, spike_sprite, 0.1f);
-    spike.setTransform(500, 400);
-    if (!spike.getComponent<RenderComponent2D>()) {
+    spike->addComponent<RenderComponent2D>(spike, renderer, spike_sprite, 0.1f);
+    spike->setPosition(Vector2<int>(500, 400));
+    if (!spike->getComponent<RenderComponent2D>()) {
         std::cout << "NULL!" << std::endl;
     }
-    World2D::addEntity(&spike);
+    world->addEntity(spike);
 
     // Animations
-    zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper1.png"));
-    zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper2.png"));
-    zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper3.png"));
-    zapper_anim.sprites.push_back(Graphics2D::loadTexture("zapper4.png"));
+    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper1.png")));
+    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper2.png")));
+    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
+    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
 
-    zapper.addBehavior<Animator2D>(&zapper, &zapper_anim);
-    zapper.getComponent<RenderComponent2D>()->setScale(0.5f);
-    zapper.setTransform(700, 300);
-    World2D::addEntity(&zapper);
+    zapper->addBehavior<Animator2D>(zapper, renderer, &zapper_anim);
+    zapper->getComponent<RenderComponent2D>()->setScale(0.5f);
+    zapper->setPosition(Vector2<int>(700, 300));
+    world->addEntity(zapper);
 
-    zapper2_anim.sprite_sheet = Graphics2D::loadTexture("zapper.png");
+    zapper2_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
     zapper2_anim.rows = 2;
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
-    zapper2.addBehavior(new AnimatorSheet(&zapper2, &zapper2_anim));
-    zapper2.getComponent<RenderComponent2D>()->setScale(0.5f);
-    zapper2.setTransform(600, 100);
-    World2D::addEntity(&zapper2);
+    zapper2->addBehavior(new AnimatorSheet(zapper2, renderer, &zapper2_anim));
+    zapper2->getComponent<RenderComponent2D>()->setScale(0.5f);
+    zapper2->setPosition(Vector2<int>(600, 100));
+    world->addEntity(zapper2);
 
-    haha = std::unique_ptr<Sound2D>(AudioManager2D::loadSound("haha.wav"));
+    haha = std::unique_ptr<Sound2D>(engine->getDJ()->loadSound("haha.wav"));
 
     // Physics
     // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getTransformID());
-    spike.addComponent<RigidbodyComponent2D>(&spike);
-    **/
+    spike->addComponent<RigidbodyComponent2D>(spike, engine->getPhysWorld());
 }
 
 void RandomDemo::update(tD_delta delta) {
@@ -182,7 +187,7 @@ void RandomDemo::update(tD_delta delta) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
         Entity2D *spawn = new Entity2D("cloud");
         spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
-        spawn->setTransform(Input::touch_pos.x, Input::touch_pos.y);
+        spawn->setPosition(Input::touch_pos.x, Input::touch_pos.y);
         objects.push_back(std::unique_ptr<Entity2D>(spawn));
     }
 

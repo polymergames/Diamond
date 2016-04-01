@@ -25,7 +25,7 @@ namespace Diamond {
     class RenderComponent2D;
     class Animator2D : public Behavior {
     public:
-        Animator2D(Entity2D *parent, Animation2D *anim);
+        Animator2D(Entity2D *parent, Renderer2D *renderer, Animation2D *anim);
 
         void setAnimation(Animation2D *anim);
 

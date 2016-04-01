@@ -17,12 +17,11 @@
 #ifndef D_ENGINE_H
 #define D_ENGINE_H
 
-#ifdef __ANDROID__
-#include "SDL.h" // Has to be included with game's main function for SDL_main to work
+#if defined __ANDROID__ || defined IOS
+#include "SDL.h" // Has to be included with game's main function for SDL_main to work. TODO: include for iOS as well?
 #endif
 
 #include "D_Config.h"
-// Don't include to avoid circular dependencies
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
 #include "D_Logger.h"
@@ -61,7 +60,7 @@ namespace Diamond {
 
         bool isRunning() const { return is_running; }
 
-        void shutDown() { is_running = false; }
+        void quit() { is_running = false; }
 
     protected:
         bool is_running;
@@ -78,6 +77,8 @@ namespace Diamond {
         virtual bool initMac(const Config &config);
         virtual bool initAndroid(const Config &config);
         virtual bool initIOS(const Config &config);
+        
+        void shutDown();
     };
 }
 

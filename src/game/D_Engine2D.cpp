@@ -113,6 +113,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
     game.quit();
 }
 
+
 bool Diamond::Engine2D::initWindows(const Config &config) {
     logger = new DesktopLogger();
 
@@ -155,4 +156,14 @@ bool Diamond::Engine2D::initIOS(const Config &config) {
     return initAndroid(config);
 }
 
+
+void Diamond::Engine2D::shutDown() {
+    delete logger;
+    delete renderer;
+    delete dj;
+    delete timer;
+    delete event_handler;
+    delete phys_world;
+    delete world;
+}
 

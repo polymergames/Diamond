@@ -16,16 +16,16 @@
 
 #include "D_AnimatorSheet.h"
 
-Diamond::AnimatorSheet::AnimatorSheet(Entity2D *parent, AnimationSheet *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
+Diamond::AnimatorSheet::AnimatorSheet(Entity2D *parent, Renderer2D *renderer, AnimationSheet *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
     if (!(anim->sprite_sheet) || anim->num_frames == 0) {
         // TODO: throw exception or log error
+        std::cout << "AnimatorSheet2D: The given animation for parent " << parent->getName() << " is empty!" << std::endl;
     }
 
     rendercomp = parent->getComponent<RenderComponent2D>();
-
     if (!rendercomp) {
-        // TODO: throw exception and log error
-        std::cout << "AnimatorSheet: No render component found for parent " << parent->getName() << "!" << std::endl;
+        rendercomp = new RenderComponent2D(parent, renderer, anim->sprite_sheet);
+        parent->addComponent(rendercomp);
     }
 
     rendercomp->setSprite(anim->sprite_sheet);

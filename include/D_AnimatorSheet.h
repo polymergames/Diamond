@@ -27,7 +27,7 @@ namespace Diamond {
     class RenderComponent2D;
     class AnimatorSheet : public Behavior {
     public:
-        AnimatorSheet(Entity2D *parent, AnimationSheet *anim);
+        AnimatorSheet(Entity2D *parent, Renderer2D *renderer, AnimationSheet *anim);
 
         void setAnimation(AnimationSheet *anim);
 
