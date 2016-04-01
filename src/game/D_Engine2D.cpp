@@ -41,16 +41,6 @@ Diamond::Engine2D::Engine2D()
       world(nullptr) {}
 
 
-Diamond::Engine2D::~Engine2D() {
-    delete logger;
-    delete renderer;
-    delete dj;
-    delete timer;
-    delete event_handler;
-    delete phys_world;
-    delete world;
-}
-
 bool Diamond::Engine2D::init(const Config &config) {
     this->config = config;
     bool success = false;
@@ -109,8 +99,9 @@ void Diamond::Engine2D::launch(Game2D &game) {
     }
 
     // End game
-    world->killAll();
     game.quit();
+    world->killAll();
+    shutDown();
 }
 
 

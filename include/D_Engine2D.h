@@ -36,7 +36,6 @@ namespace Diamond {
     class Engine2D {
     public:
         Engine2D();
-        virtual ~Engine2D();
 
         virtual bool init(const Config &config);
 
