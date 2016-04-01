@@ -17,7 +17,7 @@
 #include "D_World2D.h"
 
 Diamond::World2D::World2D(PhysicsWorld2D *phys_world) 
-    : phys_world(phys_world), root(new Entity2D(phys_world, "root")) {}
+    : phys_world(phys_world), root(createEntity("root")) {}
 
 
 Diamond::Entity2D *Diamond::World2D::createEntity(const std::string &name) {
@@ -29,6 +29,7 @@ void Diamond::World2D::addEntity(Entity2D *entity) {
 }
 
 void Diamond::World2D::kill(Entity2D *entity) {
+    entity->removeSelf();
     delete entity;
 }
 

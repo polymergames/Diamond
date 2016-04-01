@@ -40,7 +40,6 @@ private:
     const float movespeed, spinspeed, growspeed;
 
     Diamond::Entity2D *spike, *zapper, *zapper2;
-    std::list<Diamond::Entity2D*> objects;
 
     std::shared_ptr<Diamond::Texture> spike_sprite;
     std::shared_ptr<Diamond::Texture> cloud_sprite;

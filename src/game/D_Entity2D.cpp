@@ -23,7 +23,6 @@ Diamond::Entity2D::Entity2D(PhysicsWorld2D *phys_world, const std::string &name)
     : phys_world(phys_world), name(name), parent(nullptr), transform(phys_world->genTransform()) {}
 
 Diamond::Entity2D::~Entity2D() {
-    removeSelf();
     freeTransform();
 }
 

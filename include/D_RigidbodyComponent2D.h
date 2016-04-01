@@ -35,7 +35,7 @@ namespace Diamond {
         
         DRigidbody2D *getBody() const { return body; }
 
-        Vector2<tD_pos> getVelocity() { return body->getVelocity(); }
+        Vector2<tD_pos> getVelocity() const { return body->getVelocity(); }
 
         void setVelocity(const Vector2<tD_pos> &newvel) { body->setVelocity(newvel); }
 

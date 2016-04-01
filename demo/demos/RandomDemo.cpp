@@ -86,94 +86,98 @@ void RandomDemo::init() {
 }
 
 void RandomDemo::update(tD_delta delta) {
-    /**
     // Quantum2D::Rigidbody2D rbody = Quantum2D::QuantumWorld2D::getRigidbody(body);
     // std::cout << "Velocity: " << rbody.velocity.x << ", " << rbody.velocity.y << std::endl;
 
     // Coloring
     if (Input::keydown[Input::K_R]) {
         spike_color = { 255, 0, 0, 255 };
-        spike.getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
+        spike->getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
     }
     if (Input::keydown[Input::K_T]) {
         spike_color = { 255, 255, 255, 255 };
-        spike.getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
+        spike->getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
     }
     if (Input::keyup[Input::K_Y]) {
-        RGBA sc = spike.getComponent<RenderComponent2D>()->getSprite()->getColor();
+        RGBA sc = spike->getComponent<RenderComponent2D>()->getSprite()->getColor();
         sc.a -= 32;
-        spike.getComponent<RenderComponent2D>()->getSprite()->setColor(sc);
+        spike->getComponent<RenderComponent2D>()->getSprite()->setColor(sc);
     }
 
     // Sprite switching
     if (Input::keyup[Input::K_1]) {
-        spike.getComponent<RenderComponent2D>()->setSprite(spike_sprite);
-        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(-movespeed, 0));
+        spike->getComponent<RenderComponent2D>()->setSprite(spike_sprite);
+        spike->getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keyup[Input::K_2]) {
-        spike.getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
-        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(movespeed, 0));
+        spike->getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
+        spike->getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(movespeed, 0));
     }
 
     // Visibility
     if (Input::keyup[Input::K_SPACE]) {
-        zapper2.getComponent<RenderComponent2D>()->toggleVisibility();
+        zapper2->getComponent<RenderComponent2D>()->toggleVisibility();
     }
 
     // Stretching
     if (Input::keydown[Input::K_LSHIFT]) {
-        zapper2.getComponent<RenderComponent2D>()->setScale(zapper2.getComponent<RenderComponent2D>()->getScale() + growspeed * delta);
+        zapper2->getComponent<RenderComponent2D>()->setScale(zapper2->getComponent<RenderComponent2D>()->getScale() + growspeed * delta);
     }
     if (Input::keydown[Input::K_LCTRL]) {
-        zapper2.getComponent<RenderComponent2D>()->setScale(zapper2.getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
+        zapper2->getComponent<RenderComponent2D>()->setScale(zapper2->getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
     }
 
     // Flipping and velocity
     if (Input::keyup[Input::K_DOWN]) {
-        zapper2.getComponent<RenderComponent2D>()->flipX();
+        zapper2->getComponent<RenderComponent2D>()->flipX();
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(0, -movespeed));
     }
     if (Input::keyup[Input::K_UP]) {
-        zapper2.getComponent<RenderComponent2D>()->flipY();
+        zapper2->getComponent<RenderComponent2D>()->flipY();
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(0, movespeed));
     }
 
     // Movement
     if (Input::keydown[Input::K_W]) {
-        zapper2.getTransform().position.y -= movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_S]) {
-        zapper2.getTransform().position.y += movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_A]) {
-        zapper2.getTransform().position.x -= movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_D]) {
-        zapper2.getTransform().position.x += movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
     // Rotation and velocity
     if (Input::keydown[Input::K_LEFT]) {
-        zapper2.setRotation(zapper2.getTransform().rotation - spinspeed * delta);
+        zapper2->setRotation(zapper2->getTransform().rotation - spinspeed * delta);
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        zapper2.setRotation(zapper2.getTransform().rotation + spinspeed * delta);
+        zapper2->setRotation(zapper2->getTransform().rotation + spinspeed * delta);
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(movespeed, 0));
     }
 
     // Velocity
+    // TODO: use setVelocity
     if (Input::keyup[Input::K_P4]) {
-        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(-movespeed, 0));
+        spike->getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keyup[Input::K_P6]) {
-        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(movespeed, 0));
+        spike->getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(movespeed, 0));
     }
     if (Input::keyup[Input::K_P2]) {
-        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(0, movespeed));
+        spike->getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(0, movespeed));
     }
     if (Input::keyup[Input::K_P8]) {
-        spike.getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(0, -movespeed));
+        spike->getComponent<RigidbodyComponent2D>()->getVelocity().add(Vector2<float>(0, -movespeed));
     }
 
     // Sound
@@ -185,14 +189,13 @@ void RandomDemo::update(tD_delta delta) {
     // Touch
     if (Input::touch_up) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
-        Entity2D *spawn = new Entity2D("cloud");
-        spawn->addComponent(new RenderComponent2D(spawn, cloud_sprite, 0.1f));
-        spawn->setPosition(Input::touch_pos.x, Input::touch_pos.y);
-        objects.push_back(std::unique_ptr<Entity2D>(spawn));
+        Entity2D *spawn = engine->getWorld()->createEntity("cloud");
+        spawn->addComponent(new RenderComponent2D(spawn, engine->getRenderer(), cloud_sprite, 0.1f));
+        spawn->setPosition(Input::touch_pos);
+        engine->getWorld()->addEntity(spawn);
     }
 
     //std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
-    **/
 }
 
 void RandomDemo::quit() {};
