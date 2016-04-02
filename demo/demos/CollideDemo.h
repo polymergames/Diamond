@@ -37,7 +37,7 @@ private:
     Diamond::Entity2D *spike1, *spike2, *zapper1, *zapper2;
     Diamond::AnimationSheet zapper_anim;
 
-    void m_onCollision(Diamond::Entity2D *other);
+    void m_onCollision(void *other);
 };
 
 #endif // COLLIDE_DEMO_H

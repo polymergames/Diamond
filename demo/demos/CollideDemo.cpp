@@ -26,116 +26,143 @@ CollideDemo::CollideDemo(float movespeed)
 }
 
 void CollideDemo::init() {
-    /**
-    std::shared_ptr<Texture> spike_sprite = Graphics2D::loadTexture("spike.png");
+    World2D *world = engine->getWorld();
+    Renderer2D *renderer = engine->getRenderer();
 
+    spike1 = world->createEntity("spike1");
+    spike2 = world->createEntity("spike2");
+    zapper1 = world->createEntity("zapper1");
+    zapper2 = world->createEntity("zapper2");
+
+    world->addEntity(spike1);
+    world->addEntity(spike2);
+    world->addEntity(zapper1);
+    world->addEntity(zapper2);
+
+    std::shared_ptr<Texture> spike_sprite = std::shared_ptr<Texture>(renderer->loadTexture("spike.png"));
+    
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;
-        Launcher::quit();
+        engine->quit();
         return;
     }
 
-    // Setup entities
-    spike1.addComponent<RenderComponent2D>(&spike1, spike_sprite, 0.1f);
-    spike1.setTransform(500, 400);
-    World2D::addEntity(&spike1);
+    spike1->addComponent<RenderComponent2D>(spike1, renderer, spike_sprite, 0.1f);
+    spike1->setPosition(Vector2<int>(500, 400));
 
-    spike2.addComponent<RenderComponent2D>(&spike2, spike_sprite, 0.1f);
-    spike2.setTransform(900, 200);
-    World2D::addEntity(&spike2);
+    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite, 0.1f);
+    spike2->setPosition(Vector2<int>(900, 200));
 
-    zapper_anim.sprite_sheet = Graphics2D::loadTexture("zapper.png");
+    zapper_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     zapper_anim.rows = 2;
     zapper_anim.columns = 2;
     zapper_anim.num_frames = 4;
 
-    zapper1.addBehavior<AnimatorSheet>(&zapper1, &zapper_anim);
-    zapper1.getComponent<RenderComponent2D>()->setScale(0.5f);
-    zapper1.setTransform(300, 100);
-    World2D::addEntity(&zapper1);
+    zapper1->addBehavior<AnimatorSheet>(zapper1, renderer, &zapper_anim);
+    zapper1->getComponent<RenderComponent2D>()->setScale(0.5f);
+    zapper1->setPosition(Vector2<int>(300, 100));
 
-    zapper2.addBehavior<AnimatorSheet>(&zapper2, &zapper_anim);
-    zapper2.getComponent<RenderComponent2D>()->setScale(0.5f);
-    zapper2.setTransform(700, 300);
-    World2D::addEntity(&zapper2);
+    zapper2->addBehavior<AnimatorSheet>(zapper2, renderer, &zapper_anim);
+    zapper2->getComponent<RenderComponent2D>()->setScale(0.5f);
+    zapper2->setPosition(Vector2<int>(700, 300));
 
     // Setup physics
-    std::function<void(Entity2D*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
+    PhysicsWorld2D *physworld = engine->getPhysWorld();
+    std::function<void(void*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
 
-    float scale = spike1.getComponent<RenderComponent2D>()->getScale();
-    tD_pos center = spike_sprite->getWidth() * scale / 2.0;
-    spike1.addComponent<CircleColliderComponent>(&spike1, callback,
-        center, Vector2<tD_pos>(center, center));
+    spike1->addComponent<RigidbodyComponent2D>(spike1, physworld);
+    Rigidbody2D *rbody = spike1->getComponent<RigidbodyComponent2D>()->getBody();
+    float scale = spike1->getComponent<RenderComponent2D>()->getScale();
+    tD_pos radius = spike_sprite->getWidth() * scale / 2.0;
+    spike1->addComponent<ColliderComponent2D>(spike1, physworld->genCircleCollider(rbody, spike1, 
+        callback, radius, Vector2<tD_pos>(radius, radius)));
 
-    scale = spike2.getComponent<RenderComponent2D>()->getScale();
-    center = spike_sprite->getWidth() * scale / 2.0;
-    spike2.addComponent<CircleColliderComponent>(&spike2, callback, 
-        center, Vector2<tD_pos>(center, center));
+    spike2->addComponent<RigidbodyComponent2D>(spike2, physworld);
+    rbody = spike2->getComponent<RigidbodyComponent2D>()->getBody();
+    scale = spike2->getComponent<RenderComponent2D>()->getScale();
+    radius = spike_sprite->getWidth() * scale / 2.0;
+    spike2->addComponent<ColliderComponent2D>(spike2, physworld->genCircleCollider(rbody, spike2, 
+        callback, radius, Vector2<tD_pos>(radius, radius)));
 
+    zapper1->addComponent<RigidbodyComponent2D>(zapper1, physworld);
+    rbody = zapper1->getComponent<RigidbodyComponent2D>()->getBody();
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
-    scale = zapper1.getComponent<RenderComponent2D>()->getScale();
-    zapper1.addComponent<AABBColliderComponent2D>(&zapper1, callback,
+    scale = zapper1->getComponent<RenderComponent2D>()->getScale();
+    zapper1->addComponent<ColliderComponent2D>(zapper1, physworld->genAABBCollider(rbody, zapper1, 
+        callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
-        Vector2<tD_pos>(2 * partial_width * scale, 0));
+        Vector2<tD_pos>(2 * partial_width * scale, 0)));
 
-    scale = zapper2.getComponent<RenderComponent2D>()->getScale();
-    zapper2.addComponent<AABBColliderComponent2D>(&zapper2, callback,
+    zapper2->addComponent<RigidbodyComponent2D>(zapper2, physworld);
+    rbody = zapper2->getComponent<RigidbodyComponent2D>()->getBody();
+    scale = zapper2->getComponent<RenderComponent2D>()->getScale();
+    zapper2->addComponent<ColliderComponent2D>(zapper2, physworld->genAABBCollider(rbody, zapper2, 
+        callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
-        Vector2<tD_pos>(2 * partial_width * scale, 0));
-     **/
+        Vector2<tD_pos>(2 * partial_width * scale, 0)));
 }
 
 void CollideDemo::update(tD_delta delta) {
-    /**
     // zapper1 controls
     if (Input::keydown[Input::K_W]) {
-        zapper1.getTransform().position.y -= movespeed * delta;
+        Vector2<float> pos = zapper1->getTransform().position;
+        zapper1->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_S]) {
-        zapper1.getTransform().position.y += movespeed * delta;
+        Vector2<float> pos = zapper1->getTransform().position;
+        zapper1->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_A]) {
-        zapper1.getTransform().position.x -= movespeed * delta;
+        Vector2<float> pos = zapper1->getTransform().position;
+        zapper1->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_D]) {
-        zapper1.getTransform().position.x += movespeed * delta;
+        Vector2<float> pos = zapper1->getTransform().position;
+        zapper1->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
     // zapper2 controls
     if (Input::keydown[Input::K_UP]) {
-        zapper2.getTransform().position.y -= movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_DOWN]) {
-        zapper2.getTransform().position.y += movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_LEFT]) {
-        zapper2.getTransform().position.x -= movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        zapper2.getTransform().position.x += movespeed * delta;
+        Vector2<float> pos = zapper2->getTransform().position;
+        zapper2->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
     // spike2 controls
     if (Input::keydown[Input::K_P8]) {
-        spike2.getTransform().position.y -= movespeed * delta;
+        Vector2<float> pos = spike2->getTransform().position;
+        spike2->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_P2]) {
-        spike2.getTransform().position.y += movespeed * delta;
+        Vector2<float> pos = spike2->getTransform().position;
+        spike2->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_P4]) {
-        spike2.getTransform().position.x -= movespeed * delta;
+        Vector2<float> pos = spike2->getTransform().position;
+        spike2->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_P6]) {
-        spike2.getTransform().position.x += movespeed * delta;
+        Vector2<float> pos = spike2->getTransform().position;
+        spike2->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
-     **/
 }
 
 void CollideDemo::quit() {
     //
 }
 
-void CollideDemo::m_onCollision(Entity2D *other) {
-    std::cout << "Hit by " << other->getName() << "!" << std::endl;
+void CollideDemo::m_onCollision(void *other) {
+    std::cout << "Hit by " << ((Entity2D*)other)->getName() << "!" << std::endl;
 }
 

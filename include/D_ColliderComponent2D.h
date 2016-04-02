@@ -27,61 +27,18 @@
 namespace Diamond {
     class ColliderComponent2D : public Component {
     public:
-        enum Coltype {
-            AABB, CIRCLE, POLY, NUMCOLTYPES
-        };
-        
         template <typename... Args>
-        ColliderComponent2D(Entity2D *parent,
-                            std::function<void(Entity2D *other)> &onCollision,
-                            PhysicsWorld2D *phys_world,
-                            Coltype type,
-                            Args&&... args)
-            : Component(parent), onCollision(onCollision), type(type) {
-            RigidbodyComponent2D *rbcomp = parent->getComponent<RigidbodyComponent2D>();
-            if (!rbcomp) {
-                // TODO: throw exception and log error
-                std::cout << "ColliderComponent2D: No rigidbody component found for parent " << parent->getName() << "!" << std::endl;
-            }
-            
-            Rigidbody2D body = rbcomp->getBody();
-            std::function<void(void*)> callback = std::bind(&ColliderComponent2D::onCollide, this, std::placeholders::_1);
-            
-            switch (type) {
-                case AABB:
-                    collider = phys_world->genAABBCollider(body, parent, callback, std::forward<Args>(args)...);
-                    break;
-                case CIRCLE:
-                    collider = phys_world->genCircleCollider(body, parent, callback, std::forward<Args>(args)...);
-                    break;
-                case POLY:
-                    // TODO
-                    // collider = ;
-                    break;
-                default:
-                    // TODO: throw exception and log error
-                    std::cout << "ColliderComponent2D: invalid collider type " << type << std::endl;
-                    break;
-            }
-        }
-                            
+        ColliderComponent2D(Entity2D *parent, Collider2D *collider) : Component(parent), collider(collider) {}
         
         ~ColliderComponent2D() {
             // TODO: should be managed by physics world?
             delete collider;
         }
         
-        Coltype getType() const { return type; }
-        
         void *getCollider() const { return collider; }
-
-        void onCollide(void *other) { onCollision(static_cast<Entity2D*>(other)); }
     
     private:
-        Coltype type;
         Collider2D *collider;
-        
-        std::function<void(Entity2D *other)> onCollision;
     };
 }
 

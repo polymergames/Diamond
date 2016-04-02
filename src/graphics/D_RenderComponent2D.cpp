@@ -18,12 +18,6 @@
 
 Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, 
                                               Renderer2D *renderer, 
-                                              Texture *sprite, 
-                                              float scale)
-    : RenderComponent2D(parent, renderer, std::shared_ptr<Texture>(sprite), scale) {}
-
-Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, 
-                                              Renderer2D *renderer, 
                                               std::shared_ptr<Texture> sprite, 
                                               float scale)
     : Component(parent), renderer(renderer), sprite(sprite), clip_dim(), scale(scale) {
