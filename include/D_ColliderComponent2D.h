@@ -44,7 +44,7 @@ namespace Diamond {
                 std::cout << "ColliderComponent2D: No rigidbody component found for parent " << parent->getName() << "!" << std::endl;
             }
             
-            DRigidbody2D body = rbcomp->getBody();
+            Rigidbody2D body = rbcomp->getBody();
             std::function<void(void*)> callback = std::bind(&ColliderComponent2D::onCollide, this, std::placeholders::_1);
             
             switch (type) {

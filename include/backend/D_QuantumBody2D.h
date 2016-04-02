@@ -21,7 +21,7 @@
 #include "Q_QuantumWorld2D.h"
 
 namespace Diamond {
-    class QuantumBody2D : public DRigidbody2D {
+    class QuantumBody2D : public Rigidbody2D {
     public:
         QuantumBody2D(transform2_id transform) {
             body = Quantum2D::QuantumWorld2D::genRigidbody(transform);

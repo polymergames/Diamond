@@ -55,14 +55,14 @@ namespace Diamond {
         /**
          Creates a rigidbody object attached to the given transform.
         */
-        virtual DRigidbody2D *genRigidbody(transform2_id transform) = 0;
+        virtual Rigidbody2D *genRigidbody(transform2_id transform) = 0;
         
         
         /**
          Creates an AABB collider attached to the given rigidbody.
          parent is a pointer to the entity owning the collider.
          */
-        virtual AABBCollider2D *genAABBCollider(DRigidbody2D *body,
+        virtual AABBCollider2D *genAABBCollider(Rigidbody2D *body,
                                                 void *parent,
                                                 std::function<void(void *other)> &onCollision,
                                                 const Vector2<tD_pos> &dims,
@@ -72,7 +72,7 @@ namespace Diamond {
          Creates a circle collider attached to the given rigidbody.
          parent is a pointer to the entity owning the collider.
         */
-        virtual CircleCollider *genCircleCollider(DRigidbody2D *body,
+        virtual CircleCollider *genCircleCollider(Rigidbody2D *body,
                                                   void *parent,
                                                   std::function<void(void *other)> &onCollision,
                                                   tD_pos radius,

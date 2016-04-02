@@ -27,23 +27,18 @@
 namespace Diamond {
     class RigidbodyComponent2D : public Component {
     public:
-        RigidbodyComponent2D(Entity2D *parent, PhysicsWorld2D *world) : Component(parent), world(world) {
+        RigidbodyComponent2D(Entity2D *parent, PhysicsWorld2D *world) : Component(parent) {
             body = world->genRigidbody(parent->getTransformID());
         }
 
         ~RigidbodyComponent2D() { delete body; }
         
-        DRigidbody2D *getBody() const { return body; }
-
-        Vector2<tD_pos> getVelocity() const { return body->getVelocity(); }
-
-        void setVelocity(const Vector2<tD_pos> &newvel) { body->setVelocity(newvel); }
+        Rigidbody2D *getBody() const { return body; }
 
     private:
-        DRigidbody2D *body;
-        PhysicsWorld2D *world;
+        Rigidbody2D *body;
     };
 }
 
-#endif // D_DRIGIDBODY_2D_H
+#endif // D_RIGIDBODY_COMPONENT_2D_H
 

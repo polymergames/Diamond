@@ -22,9 +22,9 @@
 #include "D_Vector2.h"
 
 namespace Diamond {
-    class DRigidbody2D {
+    class Rigidbody2D {
     public:
-        virtual ~DRigidbody2D() {}
+        virtual ~Rigidbody2D() {}
 
         virtual Vector2<tD_pos> getVelocity() = 0;
 

@@ -50,12 +50,12 @@ namespace Diamond {
         }
         
 
-        DRigidbody2D *genRigidbody(transform2_id transform) override {
+        Rigidbody2D *genRigidbody(transform2_id transform) override {
             return new QuantumBody2D(transform);
         }
         
         
-        AABBCollider2D *genAABBCollider(DRigidbody2D *body,
+        AABBCollider2D *genAABBCollider(Rigidbody2D *body,
                                         void *parent,
                                         std::function<void(void *other)> &onCollision,
                                         const Vector2<tD_pos> &dims,
@@ -63,7 +63,7 @@ namespace Diamond {
             return new QuantumAABBCollider2D(dynamic_cast<QuantumBody2D*>(body), parent, onCollision, dims, origin);
         }
         
-        CircleCollider *genCircleCollider(DRigidbody2D *body,
+        CircleCollider *genCircleCollider(Rigidbody2D *body,
                                           void *parent,
                                           std::function<void(void *other)> &onCollision,
                                           tD_pos radius,
