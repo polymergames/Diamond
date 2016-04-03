@@ -18,31 +18,32 @@
 #define D_QUANTUM_BODY_2D_H
 
 #include "D_Rigidbody2D.h"
-#include "Q_QuantumWorld2D.h"
+#include "Q_DynamicWorld2D.h"
 
 namespace Diamond {
     class QuantumBody2D : public Rigidbody2D {
     public:
-        QuantumBody2D(transform2_id transform) {
-            body = Quantum2D::QuantumWorld2D::genRigidbody(transform);
+        QuantumBody2D(transform2_id transform, Quantum2D::DynamicWorld2D *world) : world(world) {
+            body = world->genRigidbody(transform);
         }
 
         ~QuantumBody2D() {
-            Quantum2D::QuantumWorld2D::freeRigidbody(body);
+            world->freeRigidbody(body);
         }
         
         body2d_id getID() const { return body; }
 
         Vector2<tD_pos> getVelocity() override {
-            return Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity();
+            return world->getRigidbody(body).getVelocity();
         }
 
         void setVelocity(const Vector2<tD_pos> &newvel) override {
-            Quantum2D::QuantumWorld2D::getRigidbody(body).getVelocity() = newvel;
+            world->getRigidbody(body).getVelocity() = newvel;
         }
 
     private:
         body2d_id body;
+        Quantum2D::DynamicWorld2D *world;
     };
 }
 

@@ -123,7 +123,7 @@ bool Diamond::Engine2D::initWindows(const Config &config) {
     timer = new SDLTimer();
     event_handler = new SDLEventHandler(this);
 
-    phys_world = new DQuantumWorld2D();
+    phys_world = new QuantumWorld2D();
     if (!phys_world->init(config)) {
         // TODO: Handle physics initialization failure
         return false;

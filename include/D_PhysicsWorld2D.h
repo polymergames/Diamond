@@ -90,11 +90,6 @@ namespace Diamond {
         virtual void setTransform(transform2_id transform, const Transform2<tD_pos, tD_rot> &newtrans) = 0;
 
         /**
-         Sets the transform with the given id.
-        */
-        virtual void setTransform(transform2_id transform, const Vector2<tD_pos> &newpos, tD_rot newrot) = 0;
-
-        /**
          Sets the position of the given transform.
         */
         virtual void setPosition(transform2_id transform, const Vector2<tD_pos> &newpos) = 0;

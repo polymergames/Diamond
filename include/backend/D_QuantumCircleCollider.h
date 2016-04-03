@@ -21,24 +21,22 @@
 #include "D_CircleCollider.h"
 #include "D_QuantumBody2D.h"
 #include "D_typedefs.h"
-#include "Q_QuantumWorld2D.h"
 #include "Q_CircleCollider.h"
 
 namespace Diamond {
     class QuantumCircleCollider : public CircleCollider {
     public:
         QuantumCircleCollider(QuantumBody2D *body,
-                              void *parent,
+                              void *parent, 
+                              Quantum2D::DynamicWorld2D *world, 
                               std::function<void(void *other)> &onCollision,
                               tQ_pos radius,
-                              const Vector2<tQ_pos> &center = Vector2<tQ_pos>(0, 0)) {
-            // TODO: use rigidbody instead of transform to construct collider
-            transform2_id transform = Quantum2D::QuantumWorld2D::getRigidbody(body->getID()).getTransformID();
-            circle = new Quantum2D::CircleCollider(transform, parent, onCollision, radius, center);
-            collider = Quantum2D::QuantumWorld2D::addCollider(circle);
+                              const Vector2<tQ_pos> &center = Vector2<tQ_pos>(0, 0)) : world(world) {
+            circle = new Quantum2D::CircleCollider(body->getID(), parent, onCollision, radius, center);
+            collider = world->addCollider(circle);
         }
         
-        ~QuantumCircleCollider() { Quantum2D::QuantumWorld2D::freeCollider(collider); }
+        ~QuantumCircleCollider() { world->freeCollider(collider); }
         
         tD_pos getRadius() const override { return circle->getRadius(); }
         
@@ -55,6 +53,7 @@ namespace Diamond {
     private:
         collider2_id collider;
         Quantum2D::CircleCollider *circle;
+        Quantum2D::DynamicWorld2D *world;
     };
 }
 
