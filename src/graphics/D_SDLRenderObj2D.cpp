@@ -18,10 +18,10 @@
 
 #include "D_SDLTexture.h"
 
-Diamond::SDLRenderObj2D::SDLRenderObj2D(Texture *texture, 
-                                        transform2_id transform, 
+Diamond::SDLRenderObj2D::SDLRenderObj2D(Entity2D *parent, 
+                                        Texture *texture, 
                                         float scale)
-    : RenderObj2D(transform), flip(SDL_FLIP_NONE), clip(nullptr) {
+    : parent(parent), flip(SDL_FLIP_NONE), clip(nullptr) {
     setTexture(texture, scale);
 }
 
@@ -30,7 +30,7 @@ Diamond::SDLRenderObj2D::~SDLRenderObj2D() {
 }
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
-    : RenderObj2D(other), texture(other.texture), flip(other.flip), clip(nullptr) {
+    : RenderObj2D(other), parent(other.parent), texture(other.texture), flip(other.flip), clip(nullptr) {
     if (other.clip) {
         clip = new SDL_Rect;
         *clip = *(other.clip);
@@ -40,9 +40,8 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
 }
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(SDLRenderObj2D &&other)
-    : RenderObj2D(other), texture(other.texture), flip(other.flip), size(other.size) {
-    clip = other.clip;
-    
+    : RenderObj2D(other), 
+      parent(other.parent), texture(other.texture), flip(other.flip), size(other.size), clip(other.clip) {
     other.texture = nullptr;
     other.clip = nullptr;
 }
@@ -50,6 +49,7 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(SDLRenderObj2D &&other)
 Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(const SDLRenderObj2D &other) {
     RenderObj2D::operator=(other);
     if (this != &other) {
+        parent = other.parent;
         texture = other.texture;
         flip = other.flip;
         size = other.size;
@@ -67,6 +67,7 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(const SDLRenderObj2D
 Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(SDLRenderObj2D &&other) {
     RenderObj2D::operator=(other);
     if (this != &other) {
+        parent = other.parent;
         texture = other.texture;
         flip = other.flip;
         size = other.size;
@@ -92,22 +93,6 @@ void Diamond::SDLRenderObj2D::applyScale(float scale) {
         size.x = texture->getWidth() * scale;
         size.y = texture->getHeight() * scale;
     }
-}
-
-void Diamond::SDLRenderObj2D::flipX() {
-    flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_HORIZONTAL);
-}
-
-void Diamond::SDLRenderObj2D::flipY() {
-    flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_VERTICAL);
-}
-
-int Diamond::SDLRenderObj2D::isFlippedX() const {
-    return flip & SDL_FLIP_HORIZONTAL;
-}
-
-int Diamond::SDLRenderObj2D::isFlippedY() const {
-    return flip & SDL_FLIP_VERTICAL;
 }
 
 void Diamond::SDLRenderObj2D::initClip() {

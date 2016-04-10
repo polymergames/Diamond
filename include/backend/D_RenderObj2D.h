@@ -18,16 +18,12 @@
 #define D_RENDER_OBJ_2D_H
 
 #include "D_Texture.h"
-#include "D_typedefs.h"
 #include "D_Vector2.h"
 
 namespace Diamond {
     class RenderObj2D {
     public:
-        transform2_id transform;
-        
-        RenderObj2D(transform2_id transform);
-        virtual ~RenderObj2D();
+        virtual ~RenderObj2D() {}
 
         virtual void setTexture(Texture *texture, float scale) = 0;
         virtual void applyScale(float scale) = 0;

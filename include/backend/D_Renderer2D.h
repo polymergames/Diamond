@@ -25,6 +25,7 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
+    class Entity2D;
     class Renderer2D {
     public:
         virtual ~Renderer2D() {}
@@ -40,7 +41,7 @@ namespace Diamond {
         virtual Texture *loadTexture(std::string path) = 0;
         
         virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
-        virtual renderobj_id genRenderObj(Texture *texture, transform2_id transform, float scale) = 0;
+        virtual renderobj_id genRenderObj(Entity2D *parent, Texture *texture, float scale) = 0;
         virtual void freeRenderObj(renderobj_id render_obj) = 0;
     };
 }

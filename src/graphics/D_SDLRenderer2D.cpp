@@ -18,16 +18,21 @@
 
 #include <iostream>
 #include "SDL_image.h"
-#include "Q_QuantumWorld2D.h"
 #include "D_SDLTexture.h"
 
 namespace Diamond {
     namespace SDLRenderSpace {
-        // TODO: use transform stored in renderobject instead of Quantum
         static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
-            Diamond::Transform2<tD_pos, tD_rot> &transform = Quantum2D::QuantumWorld2D::getTransform(obj.transform);
-            SDL_Rect render_rect = {transform.position.x, transform.position.y, obj.size.x, obj.size.y};
-            SDL_RenderCopyEx(renderer, obj.texture->texture, obj.clip, &render_rect, transform.rotation, NULL, obj.flip);
+            Diamond::Transform2<tDrender_pos, tDrender_rot> transform = obj.getTransform();
+            Vector2<tDrender_pos> size = obj.getSize();
+            SDL_Rect render_rect = {transform.position.x, transform.position.y, size.x, size.y};
+            SDL_RenderCopyEx(renderer, 
+                             obj.getTexture()->texture, 
+                             obj.getClip(), // source rect
+                             &render_rect, // destination rect
+                             transform.rotation, 
+                             NULL, // TODO: rotation pivot
+                             obj.getFlip());
         }
     }
 }
@@ -124,8 +129,8 @@ Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_o
     return &render_objects[render_obj];
 }
 
-renderobj_id Diamond::SDLRenderer2D::genRenderObj(Texture *texture, transform2_id transform, float scale) {
-    return render_objects.emplace_back(texture, transform, scale);
+renderobj_id Diamond::SDLRenderer2D::genRenderObj(Entity2D *parent, Texture *texture, float scale) {
+    return render_objects.emplace_back(parent, texture, scale);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {

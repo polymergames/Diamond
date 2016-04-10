@@ -117,6 +117,8 @@ bool Diamond::Engine2D::initWindows(const Config &config) {
     dj = new SDLDiskJockey2D();
     if (!dj->init(config)) {
         // TODO: Handle audio initialization failure
+        // Perhaps make audio non-critical, ie return success even if audio initialization failed
+        // Or return a bitflag indicating which systems initialized successfully and which ones didn't
         return false;
     }
 

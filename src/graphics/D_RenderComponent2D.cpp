@@ -21,7 +21,7 @@ Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent,
                                               std::shared_ptr<Texture> sprite, 
                                               float scale)
     : Component(parent), renderer(renderer), sprite(sprite), clip_dim(), scale(scale) {
-    render_obj = renderer->genRenderObj(sprite.get(), parent->getTransformID(), scale);
+    render_obj = renderer->genRenderObj(parent, sprite.get(), scale);
 }
 
 Diamond::RenderComponent2D::~RenderComponent2D() {

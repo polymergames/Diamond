@@ -21,7 +21,7 @@
 int main(int argc, char *argv[]) {
     Diamond::Config config;
     Diamond::Engine2D engine;
-	CollideDemo demo;
+	RandomDemo demo;
     
     config.vsync = true;
     config.bg_color = { 0, 128, 255, 255 };
