@@ -26,12 +26,13 @@ namespace Diamond {
             Diamond::Transform2<tDrender_pos, tDrender_rot> transform = obj.getTransform();
             Vector2<tDrender_pos> size = obj.getSize();
             SDL_Rect render_rect = {transform.position.x, transform.position.y, size.x, size.y};
+            SDL_Point pivot = obj.getSDLPivot();
             SDL_RenderCopyEx(renderer, 
                              obj.getTexture()->texture, 
                              obj.getClip(), // source rect
                              &render_rect, // destination rect
                              transform.rotation, 
-                             NULL, // TODO: rotation pivot
+                             &pivot, // rotation pivot
                              obj.getFlip());
         }
     }

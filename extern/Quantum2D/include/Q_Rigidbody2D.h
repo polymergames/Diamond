@@ -23,13 +23,11 @@
 namespace Quantum2D {
     class Rigidbody2D {
     public:
-        Rigidbody2D(transform2_id transform);
+        Rigidbody2D(transform2_id transform) : velocity(), transform(transform) {}
 
         transform2_id getTransformID() const { return transform; }
 
         Diamond::Vector2<tQ_pos> &getVelocity() { return velocity; }
-
-        void update(tQ_delta delta_ms);
 
     private:
         transform2_id transform;

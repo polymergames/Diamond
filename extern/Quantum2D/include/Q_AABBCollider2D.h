@@ -23,7 +23,7 @@
 namespace Quantum2D {
     class AABBCollider2D : public Collider2D {
     public:
-        AABBCollider2D(transform2_id transform,
+        AABBCollider2D(body2d_id body,
                        void *parent,
                        std::function<void(void *other)> &onCollision,
                        const Diamond::Vector2<tQ_num> &dims, 
@@ -56,7 +56,7 @@ namespace Quantum2D {
         /**
          Update world coordinates, should call this once per frame.
         */
-        void update(tQ_delta delta_ms) override;
+        void update(tQ_delta delta_ms, Diamond::Transform2<tQ_pos, tQ_rot> &trans) override;
 
     private:
         Diamond::Vector2<tQ_num> origin;

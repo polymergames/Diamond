@@ -38,7 +38,13 @@ namespace Diamond {
         SDLRenderObj2D &operator=(const SDLRenderObj2D &other);
         SDLRenderObj2D &operator=(SDLRenderObj2D &&other);
 
-        Transform2<tDrender_pos, tDrender_rot> getTransform() const { return parent->getTransform(); };
+        Transform2<tDrender_pos, tDrender_rot> getTransform() const {
+            Transform2<tDrender_pos, tDrender_pos> trans = parent->getTransform();
+            trans.position.x -= pivot.x;
+            trans.position.y -= pivot.y;
+            return trans;
+        };
+        
         SDLTexture *getTexture() const { return texture; }
         SDL_RendererFlip getFlip() const { return flip; }
         const Vector2<tDrender_pos> getSize() const { return size; }
@@ -53,6 +59,10 @@ namespace Diamond {
         int isFlippedX() const override { return flip & SDL_FLIP_HORIZONTAL; }
         int isFlippedY() const override { return flip & SDL_FLIP_VERTICAL; }
 
+        Vector2<tDrender_pos> getPivot() const override { return Vector2<tDrender_pos>(pivot.x, pivot.y); }
+        void setPivot(const Vector2<tDrender_pos> &newpivot) override { pivot.x = newpivot.x; pivot.y = newpivot.y; }
+        const SDL_Point getSDLPivot() const { return pivot; }
+        
         void initClip() override;
 
         void setClip(int x, int y, int w, int h) override;
@@ -62,10 +72,11 @@ namespace Diamond {
 
     private:
         Entity2D *parent;
-        SDLTexture *texture;
-        SDL_RendererFlip flip;
         Vector2<tDrender_pos> size;
+        SDLTexture *texture;
         SDL_Rect *clip;
+        SDL_Point pivot;
+        SDL_RendererFlip flip;
     };
 }
 

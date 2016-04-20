@@ -23,14 +23,16 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(Entity2D *parent,
                                         float scale)
     : parent(parent), flip(SDL_FLIP_NONE), clip(nullptr) {
     setTexture(texture, scale);
+    pivot.x = 0;
+    pivot.y = 0;
 }
 
 Diamond::SDLRenderObj2D::~SDLRenderObj2D() {
-    if (clip)   delete clip;
+    delete clip;
 }
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
-    : RenderObj2D(other), parent(other.parent), texture(other.texture), flip(other.flip), clip(nullptr) {
+    : RenderObj2D(other), parent(other.parent), texture(other.texture), flip(other.flip), clip(nullptr), pivot(other.pivot) {
     if (other.clip) {
         clip = new SDL_Rect;
         *clip = *(other.clip);
@@ -41,7 +43,7 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(SDLRenderObj2D &&other)
     : RenderObj2D(other), 
-      parent(other.parent), texture(other.texture), flip(other.flip), size(other.size), clip(other.clip) {
+      parent(other.parent), texture(other.texture), flip(other.flip), size(other.size), clip(other.clip), pivot(other.pivot) {
     other.texture = nullptr;
     other.clip = nullptr;
 }
@@ -53,6 +55,7 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(const SDLRenderObj2D
         texture = other.texture;
         flip = other.flip;
         size = other.size;
+        pivot = other.pivot;
 
         if (other.clip) {
             if (!clip)   clip = new SDL_Rect;
@@ -72,6 +75,7 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(SDLRenderObj2D &&oth
         flip = other.flip;
         size = other.size;
         clip = other.clip;
+        pivot = other.pivot;
 
         other.texture = nullptr;
         other.clip = nullptr;

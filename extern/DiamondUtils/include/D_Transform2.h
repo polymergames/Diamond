@@ -27,13 +27,21 @@ namespace Diamond {
         RTYPE rotation;
         
         Transform2() : position(), rotation() {}
-        Transform2(Vector2<PTYPE> position) : position(position), rotation() {}
-        Transform2(Vector2<PTYPE> position, RTYPE rotation) : position(position), rotation(rotation) {}
+        Transform2(Vector2<PTYPE> position) 
+            : position(position), rotation() {}
+        Transform2(Vector2<PTYPE> position, RTYPE rotation) 
+            : position(position), rotation(rotation) {}
 
 
         void reset() {
             position = Vector2<PTYPE>();
             rotation = RTYPE();
+        }
+
+        // Conversion operator
+        template <typename P, typename R>
+        operator Transform2<P, R>() const { 
+            return Transform2<P, R>(position, rotation);
         }
     };
 }

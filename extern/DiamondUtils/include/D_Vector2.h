@@ -115,6 +115,20 @@ namespace Diamond {
             return Vector2(x - other.x, y - other.y);
         }
 
+        template <typename V>
+        Vector2 &operator+=(const Vector2<V> &other) {
+            x += other.x;
+            y += other.y;
+            return *this;
+        }
+
+        template <typename V>
+        Vector2 &operator-=(const Vector2<V> &other) {
+            x -= other.x;
+            y -= other.y;
+            return *this;
+        }
+
         // Conversion operator
         template <typename V>
         operator Vector2<V>() const {
@@ -123,12 +137,12 @@ namespace Diamond {
     };
 
     template <typename V, typename S>
-    Vector2<V> operator*(const Vector2<V> &vec, const S scalar) {
+    inline Vector2<V> operator*(const Vector2<V> &vec, const S scalar) {
         return Vector2<V>(vec.x * scalar, vec.y * scalar);
     }
 
     template <typename V, typename S>
-    Vector2<V> operator*(const S scalar, const Vector2<V> &vec) {
+    inline Vector2<V> operator*(const S scalar, const Vector2<V> &vec) {
         return vec * scalar;
     }
 

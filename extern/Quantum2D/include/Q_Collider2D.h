@@ -18,6 +18,7 @@
 #define Q_COLLIDER_2D_H
 
 #include <functional>
+#include "D_Transform2.h"
 #include "Q_typedefs.h"
 
 namespace Quantum2D {
@@ -28,16 +29,16 @@ namespace Quantum2D {
     class Collider2D {
     public:
         Collider2D(Coltype type, 
-                   transform2_id transform, 
+                   body2d_id body,
                    void *parent, 
                    std::function<void(void *other)> &onCollision) 
-            : type(type), transform(transform), parent(parent), onCollision(onCollision) {};
+            : type(type), body(body), parent(parent), onCollision(onCollision) {};
         
         virtual ~Collider2D() {};
 
         Coltype getType() const { return type; }
         
-        transform2_id getTransformID() const { return transform; }
+        transform2_id getBodyID() const { return body; }
 
         void *getParent() const { return parent; }
 
@@ -45,11 +46,11 @@ namespace Quantum2D {
 
         void setColFunc(std::function<void(void *other)> &onCollision) { this->onCollision = onCollision; }
         
-        virtual void update(tQ_delta delta_ms) = 0;
+        virtual void update(tQ_delta delta_ms, Diamond::Transform2<tQ_pos, tQ_rot> &trans) = 0;
 
     protected:
         Coltype type;
-        transform2_id transform;
+        body2d_id body;
         void *parent;
         std::function<void(void *other)> onCollision;
     };

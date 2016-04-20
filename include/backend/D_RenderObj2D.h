@@ -19,6 +19,7 @@
 
 #include "D_Texture.h"
 #include "D_Vector2.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
     class RenderObj2D {
@@ -33,6 +34,9 @@ namespace Diamond {
 
         virtual int isFlippedX() const = 0;
         virtual int isFlippedY() const = 0;
+        
+        virtual Vector2<tDrender_pos> getPivot() const = 0;
+        virtual void setPivot(const Vector2<tDrender_pos> &newpivot) = 0;
 
         virtual void initClip() = 0;
 
