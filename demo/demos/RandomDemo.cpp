@@ -74,7 +74,10 @@ void RandomDemo::init() {
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
     zapper2->addBehavior(new AnimatorSheet(zapper2, renderer, &zapper2_anim));
-    zapper2->getComponent<RenderComponent2D>()->setScale(0.5f);
+    float z2scale = 0.5f;
+    zapper2->getComponent<RenderComponent2D>()->setScale(z2scale);
+    zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
+        zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
     zapper2->setPosition(Vector2<int>(600, 100));
     world->addEntity(zapper2);
 
@@ -184,7 +187,7 @@ void RandomDemo::update(tD_delta delta) {
         haha->play();
     }
 
-
+    
     // Touch
     if (Input::touch_up) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;

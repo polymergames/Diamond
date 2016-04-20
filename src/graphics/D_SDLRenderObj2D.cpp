@@ -20,11 +20,12 @@
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(Entity2D *parent, 
                                         Texture *texture, 
-                                        float scale)
-    : parent(parent), flip(SDL_FLIP_NONE), clip(nullptr) {
+                                        float scale, 
+                                        const Vector2<tDrender_pos> &pivot)
+    : parent(parent), clip(nullptr), flip(SDL_FLIP_NONE) {
     setTexture(texture, scale);
-    pivot.x = 0;
-    pivot.y = 0;
+    this->pivot.x = pivot.x;
+    this->pivot.y = pivot.y;
 }
 
 Diamond::SDLRenderObj2D::~SDLRenderObj2D() {

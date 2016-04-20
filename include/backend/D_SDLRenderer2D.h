@@ -57,7 +57,10 @@ namespace Diamond {
         /**
          Creates and returns id of an SDLRenderObj2D, which is a rendering unit for the render loop.
         */
-        renderobj_id genRenderObj(Entity2D *parent, Texture *texture, float scale) override;
+        renderobj_id genRenderObj(Entity2D *parent, 
+                                  Texture *texture, 
+                                  float scale, 
+                                  const Vector2<tDrender_pos> &pivot) override;
         
         /**
          Marks the given id as available for a new SDLRenderObj2D, and removes its currently associated renderobj.

@@ -27,7 +27,10 @@
 namespace Diamond {
     class RenderComponent2D : public Component {
     public:
-        RenderComponent2D(Entity2D *parent, Renderer2D *renderer, std::shared_ptr<Texture> sprite, float scale = 1.0f);
+        RenderComponent2D(Entity2D *parent, 
+                          Renderer2D *renderer, 
+                          std::shared_ptr<Texture> sprite, 
+                          float scale = 1.0f);
         ~RenderComponent2D();
         
         std::shared_ptr<Texture> getSprite() const { return sprite; }
@@ -64,16 +67,20 @@ namespace Diamond {
         */
         void toggleVisibility();
 
+        Vector2<tDrender_pos> getPivot() const { return pivot; }
+        void setPivot(const Vector2<tDrender_pos> &pivot);
+
         void initClip();
         void setClip(int x, int y, int w, int h);
         void setClip(int x, int y);
 
     private:
+        Renderer2D *renderer;
+        renderobj_id render_obj;
         std::shared_ptr<Texture> sprite;
         Vector2<int> clip_dim;
-        renderobj_id render_obj;
+        Vector2<tDrender_pos> pivot;
         float scale;
-        Renderer2D *renderer;
 
         void freeRenderObj();
     };
@@ -129,7 +136,7 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 
 inline void Diamond::RenderComponent2D::makeVisible() {
     if ((tD_index)render_obj == Diamond::INVALID) {
-        render_obj = renderer->genRenderObj(parent, sprite.get(), scale);
+        render_obj = renderer->genRenderObj(parent, sprite.get(), scale, pivot);
         if (clip_dim.x != 0) { // check if any valid clip data has been stored
             RenderObj2D *r = renderer->getRenderObj(render_obj);
             r->initClip();
@@ -147,6 +154,13 @@ inline void Diamond::RenderComponent2D::makeInvisible() {
 
 inline void Diamond::RenderComponent2D::toggleVisibility() {
     render_obj == Diamond::INVALID ? makeVisible() : makeInvisible();
+}
+
+inline void Diamond::RenderComponent2D::setPivot(const Vector2<tDrender_pos> &pivot) {
+    this->pivot = pivot;
+    if ((tD_index)render_obj != Diamond::INVALID) {
+        renderer->getRenderObj(render_obj)->setPivot(pivot);
+    }
 }
 
 inline void Diamond::RenderComponent2D::initClip() {

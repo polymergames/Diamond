@@ -21,15 +21,15 @@
 
 #include "D_RenderObj2D.h"
 #include "D_Entity2D.h"
+#include "D_SDLTexture.h"
 
 namespace Diamond {
-    class SDLTexture;
-    
     class SDLRenderObj2D : public RenderObj2D {
     public:
         SDLRenderObj2D(Entity2D *parent, 
                        Texture *texture,  
-                       float scale);
+                       float scale, 
+                       const Vector2<tDrender_pos> &pivot);
         ~SDLRenderObj2D();
 
         SDLRenderObj2D(const SDLRenderObj2D &other);
@@ -61,7 +61,7 @@ namespace Diamond {
 
         Vector2<tDrender_pos> getPivot() const override { return Vector2<tDrender_pos>(pivot.x, pivot.y); }
         void setPivot(const Vector2<tDrender_pos> &newpivot) override { pivot.x = newpivot.x; pivot.y = newpivot.y; }
-        const SDL_Point getSDLPivot() const { return pivot; }
+        const SDL_Point &getSDLPivot() const { return pivot; }
         
         void initClip() override;
 
