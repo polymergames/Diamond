@@ -23,6 +23,7 @@ LOCAL_MODULE := DiamondDemo
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include \
 	$(LOCAL_PATH)/../../../include/backend \
 	$(LOCAL_PATH)/../../../include/modules \
+	$(LOCAL_PATH)/../../../demo/demos \
 	$(LOCAL_PATH)/../../../extern/Quantum2D/include \
 	$(LOCAL_PATH)/../../../extern/DiamondUtils/include \
 	$(LOCAL_PATH)/../../../extern/SDL2-2.0.3/include \
@@ -30,7 +31,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include \
 
 LOCAL_SRC_FILES := ../SDL2/src/main/android/SDL_android_main.c \
 	$(subst $(LOCAL_PATH)/,, \
-	$(wildcard $(LOCAL_PATH)/../../../demo/*.cpp))
+	$(wildcard $(LOCAL_PATH)/../../../demo/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/../../../demo/demos/*.cpp))
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image SDL2_mixer
 
