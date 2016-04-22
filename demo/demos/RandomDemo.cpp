@@ -183,7 +183,7 @@ void RandomDemo::update(tD_delta delta) {
     }
 
     // Sound
-    if (Input::keyup[Input::K_F]) {
+    if (Input::keyup[Input::K_F] && haha) {
         haha->play();
     }
 

@@ -17,6 +17,7 @@
 #include "D_SDLDiskJockey2D.h"
 
 #include <string>
+#include "D_Log.h"
 #include "SDL_mixer.h"
 #include "D_SDLMusic.h"
 #include "D_SDLSound2D.h"
@@ -30,8 +31,7 @@ bool Diamond::SDLDiskJockey2D::init(const Config &config) {
             MIX_DEFAULT_FORMAT,
             config.audio_channels,
             config.audio_out_sample_size) < 0) {
-        // TODO: Log error
-        std::cout << "SDL_mixer failed to initialize! SDL_mixer Error:" << Mix_GetError();
+        Log::log("SDL_mixer failed to initialize! SDL_mixer Error:" + std::string(Mix_GetError()));
         return false;
     }
     return true;
@@ -40,8 +40,7 @@ bool Diamond::SDLDiskJockey2D::init(const Config &config) {
 Diamond::Sound2D *Diamond::SDLDiskJockey2D::loadSound(std::string path) {
     Mix_Chunk *sound = Mix_LoadWAV(path.c_str());
     if (sound == NULL) {
-        // TODO: Log error
-        std::cout << "Failed to load sound " << path << "! SDL_mixer Error: " << Mix_GetError();
+        Log::log("Failed to load sound " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
     return new SDLSound2D(sound);
@@ -50,8 +49,7 @@ Diamond::Sound2D *Diamond::SDLDiskJockey2D::loadSound(std::string path) {
 Diamond::Music *Diamond::SDLDiskJockey2D::loadMusic(std::string path) {
     Mix_Music *music = Mix_LoadMUS(path.c_str());
     if (music == NULL) {
-        // TODO: Log error
-        std::cout << "Failed to load music " << path << "! SDL_mixer Error: " << Mix_GetError();
+        Log::log("Failed to load music " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
     return new SDLMusic(music);

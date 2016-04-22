@@ -15,11 +15,12 @@
 */
 
 #include "D_Animator2D.h"
+#include "D_Log.h"
 
 Diamond::Animator2D::Animator2D(Entity2D *parent, Renderer2D *renderer, Animation2D *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
     if (anim->sprites.size() == 0) {
-        // TODO: throw exception or log error
-        std::cout << "Animator2D: The given animation for parent " << parent->getName() << " is empty!" << std::endl;
+        // TODO: throw exception?
+        Log::log("Animator2D ERROR: The given animation for parent " + parent->getName() + " is empty!");
     }
 
     rendercomp = parent->getComponent<RenderComponent2D>();
@@ -35,7 +36,8 @@ Diamond::Animator2D::Animator2D(Entity2D *parent, Renderer2D *renderer, Animatio
 
 void Diamond::Animator2D::setAnimation(Animation2D *anim) {
     if (anim->sprites.size() == 0) {
-        // TODO: throw exception or log error
+        // TODO: throw exception?
+        Log::log("Animator2D ERROR: Tried to set an empty animation for parent " + parent->getName() + "!");
     }
     this->anim = anim;
     rendercomp->setSprite(anim->sprites[0]);

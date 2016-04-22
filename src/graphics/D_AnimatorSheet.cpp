@@ -15,11 +15,12 @@
 */
 
 #include "D_AnimatorSheet.h"
+#include "D_Log.h"
 
 Diamond::AnimatorSheet::AnimatorSheet(Entity2D *parent, Renderer2D *renderer, AnimationSheet *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
     if (!(anim->sprite_sheet) || anim->num_frames == 0) {
-        // TODO: throw exception or log error
-        std::cout << "AnimatorSheet2D: The given animation for parent " << parent->getName() << " is empty!" << std::endl;
+        // TODO: throw exception?
+        Log::log("AnimatorSheet2D ERROR: The given animation for parent " + parent->getName() + " is empty!");
     }
 
     rendercomp = parent->getComponent<RenderComponent2D>();
@@ -34,7 +35,8 @@ Diamond::AnimatorSheet::AnimatorSheet(Entity2D *parent, Renderer2D *renderer, An
 
 void Diamond::AnimatorSheet::setAnimation(AnimationSheet *anim) {
     if (!(anim->sprite_sheet) || anim->num_frames == 0) {
-        // TODO: throw exception or log error
+        // TODO: throw exception?
+        Log::log("AnimatorSheet2D ERROR: Tried to set empty animation for parent " + parent->getName() + "!");
     }
     this->anim = anim;
     rendercomp->setSprite(anim->sprite_sheet);

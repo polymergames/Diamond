@@ -17,10 +17,14 @@
 #ifndef D_LOGGER_H
 #define D_LOGGER_H
 
+#include <string>
+
 namespace Diamond {
     class Logger {
     public:
         virtual ~Logger() {};
+
+        virtual void log(const std::string &message) = 0;
     };
 }
 

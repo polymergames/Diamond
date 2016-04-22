@@ -24,7 +24,6 @@
 #include "D_Config.h"
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
-#include "D_Logger.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
@@ -42,8 +41,6 @@ namespace Diamond {
         virtual void launch(Game2D &game);
 
         Config &getConfig() { return config; }
-
-        Logger *getLogger() const { return logger; }
 
         Renderer2D *getRenderer() const { return renderer; }
 
@@ -64,7 +61,6 @@ namespace Diamond {
     protected:
         bool is_running;
         Config config;
-        Logger *logger;
         Renderer2D *renderer;
         DiskJockey2D *dj;
         Timer *timer;

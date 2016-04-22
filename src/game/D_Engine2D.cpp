@@ -18,7 +18,8 @@
 
 #include <iostream>
 #include "D_Game2D.h"
-#include "D_DesktopLogger.h"
+#include "D_Log.h"
+#include "D_FileLogger.h"
 #include "D_World2D.h"
 
 // SDL subsystems
@@ -32,7 +33,6 @@
 
 Diamond::Engine2D::Engine2D() 
     : is_running(false), 
-      logger(nullptr), 
       renderer(nullptr), 
       dj(nullptr), 
       timer(nullptr), 
@@ -54,14 +54,17 @@ bool Diamond::Engine2D::init(const Config &config) {
 #elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
     success = initIOS(config);
 #else
-    // TODO: Log this error somehow
     std::cout << "Platform unsupported!" << std::endl;
     return false;
 #endif
 
     if (success) {
+        Log::log("Diamond systems are online and ready to roll.");
         // Init Entity world
         world = new World2D(phys_world);
+    }
+    else {
+        shutDown();
     }
 
     return success;
@@ -77,6 +80,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
     int nframes = 0;
 
     // Init game
+    Log::log("Launching " + config.game_name);
     game.init();
 
     // Game loop
@@ -101,12 +105,13 @@ void Diamond::Engine2D::launch(Game2D &game) {
     // End game
     game.quit();
     world->killAll();
+    Log::log("Game ended, Diamond systems shutting down...");
     shutDown();
 }
 
 
 bool Diamond::Engine2D::initWindows(const Config &config) {
-    logger = new DesktopLogger();
+    Log::setLogger(new FileLogger(config.game_name + ".log"));
 
     renderer = new SDLRenderer2D();
     if (!renderer->init(config)) {
@@ -142,7 +147,7 @@ bool Diamond::Engine2D::initAndroid(const Config &config) {
     Config myconf = config;
     myconf.fullscreen = true;
 
-    return initWindows(myconf); // temporary
+    return initWindows(myconf); // TODO: temporary
 }
 
 bool Diamond::Engine2D::initIOS(const Config &config) {
@@ -151,7 +156,6 @@ bool Diamond::Engine2D::initIOS(const Config &config) {
 
 
 void Diamond::Engine2D::shutDown() {
-    delete logger;
     delete renderer;
     delete dj;
     delete timer;

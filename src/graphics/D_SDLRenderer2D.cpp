@@ -17,6 +17,7 @@
 #include "D_SDLRenderer2D.h"
 
 #include <iostream>
+#include "D_Log.h"
 #include "SDL_image.h"
 #include "D_SDLTexture.h"
 
@@ -44,28 +45,29 @@ Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
 bool Diamond::SDLRenderer2D::init(const Config &config) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-        // TODO: Handle initialization failure and log
-        std::cout << "SDL failed to initialize! SDL Error: " << SDL_GetError() << std::endl;
+        Log::log("SDL failed to initialize! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
 
     // Create window
-    window = SDL_CreateWindow(config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              config.window_width, config.window_height, 
+    window = SDL_CreateWindow(config.game_name.c_str(), 
+                              SDL_WINDOWPOS_UNDEFINED, 
+                              SDL_WINDOWPOS_UNDEFINED,
+                              config.window_width, 
+                              config.window_height, 
                               config.fullscreen 
                               || config.window_width <= 0
                               || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (window == nullptr) {
-        // TODO: Handle window creation failure and log
-        std::cout << "SDL failed to create window! SDL Error: " << SDL_GetError() << std::endl;
+        Log::log("SDL failed to create window! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
 
     // Create renderer
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED 
+                                              | (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
     if (renderer == nullptr) {
-        // TODO: Handle renderer creation failure and log
-        std::cout << "SDL failed to create renderer! SDL Error: " << SDL_GetError() << std::endl;
+        Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
     SDL_SetRenderDrawColor(renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
@@ -73,9 +75,8 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
     // Initialize image loading
     int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
     if (IMG_Init(img_flags) != img_flags) {
-        // TODO: Handle image-loader initialization failure and log
-        std::cout << "SDL_image failed to initialize! SDL_image Error: " << IMG_GetError() << std::endl;
-        return false;
+        Log::log("SDL_image failed to initialize! SDL_image Error: " + std::string(IMG_GetError()));
+        // return false; // TODO: what's wrong with SDL Image init on Android?
     }
 
     return true;
@@ -85,7 +86,7 @@ void Diamond::SDLRenderer2D::renderAll() {
     // Render all the graphics
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
-        //std::cout << i->transform.position.x << " and " << i->transform.position.y << " and " << i->transform.scale << std::endl; // DEBUG
+        //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
         SDLRenderSpace::render(*i, renderer);
     }
 
@@ -108,15 +109,15 @@ Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
 Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (surface == NULL) {
-        // TODO: Handle image loading failure and log
-        std::cout << "Failed to load image " << path << "! SDL_image Error: " << IMG_GetError() << std::endl;
+        // TODO: Handle image loading failure
+        Log::log("Failed to load image " + path + "! SDL_image Error: " + std::string(IMG_GetError()));
         return nullptr;
     }
     
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (texture == NULL) {
-        // TODO: Handle texture creation failure and log
-        std::cout << "Failed to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
+        // TODO: Handle texture creation failure
+        Log::log("Failed to create texture from " + path + "! SDL Error: " + std::string(SDL_GetError()));
         return nullptr;
     }
     int width = surface->w;
