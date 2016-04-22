@@ -16,6 +16,7 @@
 
 #include "D_Log.h"
 
+#include <iostream>
 #include <memory>
 
 namespace Diamond {
@@ -31,4 +32,6 @@ void Diamond::Log::setLogger(Logger *logger) {
 void Diamond::Log::log(const std::string &message) {
     if (logger)
         logger->log(message);
+    else
+        std::cout << message << std::endl;
 }
