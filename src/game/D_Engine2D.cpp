@@ -147,7 +147,32 @@ bool Diamond::Engine2D::initAndroid(const Config &config) {
     Config myconf = config;
     myconf.fullscreen = true;
 
-    return initWindows(myconf); // TODO: temporary
+    // Log::setLogger(new FileLogger(config.game_name + ".log")); // TODO: Android logger
+
+    renderer = new SDLRenderer2D();
+    if (!renderer->init(myconf)) {
+        // TODO: Handle renderer initialization failure
+        return false;
+    }
+
+    dj = new SDLDiskJockey2D();
+    if (!dj->init(myconf)) {
+        // TODO: Handle audio initialization failure
+        // Perhaps make audio non-critical, ie return success even if audio initialization failed
+        // Or return a bitflag indicating which systems initialized successfully and which ones didn't
+        return false;
+    }
+
+    timer = new SDLTimer();
+    event_handler = new SDLEventHandler(this);
+
+    phys_world = new QuantumWorld2D();
+    if (!phys_world->init(myconf)) {
+        // TODO: Handle physics initialization failure
+        return false;
+    }
+
+    return true;
 }
 
 bool Diamond::Engine2D::initIOS(const Config &config) {

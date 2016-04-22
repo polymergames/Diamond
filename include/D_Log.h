@@ -20,6 +20,7 @@
 #include <ctime>
 #include <string>
 #include <iomanip>
+#include <iostream>
 #include "D_Logger.h"
 
 namespace Diamond {
