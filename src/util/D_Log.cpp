@@ -21,17 +21,15 @@
 
 namespace Diamond {
     namespace Log {
-        static std::unique_ptr<Logger> logger = nullptr;
+        static std::unique_ptr<Logger> logger = std::unique_ptr<Logger>(new Logger);
     }
 }
 
 void Diamond::Log::setLogger(Logger *logger) {
-    Log::logger = std::unique_ptr<Logger>(logger);
+    if (logger)
+        Log::logger = std::unique_ptr<Logger>(logger);
 }
 
 void Diamond::Log::log(const std::string &message) {
-    if (logger)
-        logger->log(message);
-    else
-        std::cout << message << std::endl;
+    logger->log(message);
 }
