@@ -17,18 +17,13 @@
 #ifndef D_COLLIDER_COMPONENT_2D_H
 #define D_COLLIDER_COMPONENT_2D_H
 
-#include <functional>
 #include "D_Component.h"
 #include "D_Collider2D.h"
-#include "D_PhysicsWorld2D.h"
-#include "D_RigidbodyComponent2D.h"
-#include "D_Rigidbody2D.h"
 
 namespace Diamond {
     class ColliderComponent2D : public Component {
     public:
-        template <typename... Args>
-        ColliderComponent2D(Entity2D *parent, Collider2D *collider) : Component(parent), collider(collider) {}
+        ColliderComponent2D(Collider2D *collider) : collider(collider) {}
         
         ~ColliderComponent2D() {
             // TODO: should be managed by physics world?

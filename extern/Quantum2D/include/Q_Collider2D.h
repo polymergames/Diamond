@@ -18,7 +18,7 @@
 #define Q_COLLIDER_2D_H
 
 #include <functional>
-#include "D_Transform2.h"
+#include "Q_Rigidbody2D.h"
 #include "Q_typedefs.h"
 
 namespace Quantum2D {
@@ -46,7 +46,11 @@ namespace Quantum2D {
 
         void setColFunc(std::function<void(void *other)> &onCollision) { this->onCollision = onCollision; }
         
-        virtual void update(tQ_delta delta_ms, Diamond::Transform2<tQ_pos, tQ_rot> &trans) = 0;
+        /**
+         Called by a physics world once per frame to update this collider.
+         The provided rigidbody should correspond to this collider's body id from getBodyID().
+        */
+        virtual void update(tQ_delta delta_ms, const Rigidbody2D &body) = 0;
 
     protected:
         Coltype type;

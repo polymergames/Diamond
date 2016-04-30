@@ -20,16 +20,31 @@
 #include "D_Entity2D.h"
 
 namespace Diamond {
+    /**
+     This is the World Tree, the Tree of Life.
+     The purpose of this class is to connect the heavens, the earth, and the underworld.
+    */
     class World2D {
     public:
-        World2D(PhysicsWorld2D *phys_world);
+        World2D(DataCenter *data) : data(data), root(createEntity("root")) {}
 
         // TODO: implement custom allocator!
-        Entity2D *createEntity(const std::string &name);
+        /**
+         Allocates memory for and constructs an Entity with the given name.
+        */
+        Entity2D *createEntity(const std::string &name) { return new Entity2D(name, data); }
 
-        void addEntity(Entity2D *entity);
+        /**
+         Adds the given entity to the world tree.
+        */
+        void addEntity(Entity2D *entity) { root->addChild(entity); }
 
-        void kill(Entity2D *entity);
+        /**
+        */
+        void kill(Entity2D *entity) {
+            entity->removeSelf();
+            delete entity;
+        }
 
         void killAll();
 
@@ -38,7 +53,7 @@ namespace Diamond {
         Entity2D *getRoot() const { return root; }
 
     private:
-        PhysicsWorld2D *phys_world;
+        DataCenter *data;
         Entity2D *root;
 
         void killTree(Entity2D *root);

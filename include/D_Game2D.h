@@ -34,19 +34,19 @@ namespace Diamond {
          Called at beginning of game, after Diamond backend systems have initialized.
          Put game initialization code here.
         */
-        virtual void init() = 0;
+        virtual void init() {};
 
         /**
          Called once every frame, where delta is the time in seconds since the last frame.
          Update game logic here.
         */
-        virtual void update(tD_delta delta) = 0;
+        virtual void update(tD_delta delta) {};
 
         /**
          Called when game ends.
          Put cleanup code here.
         */
-        virtual void quit() = 0;
+        virtual void quit() {};
 
     protected:
         Engine2D *engine;

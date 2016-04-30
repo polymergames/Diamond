@@ -18,7 +18,6 @@
 #define Q_DYNAMIC_WORLD_2D_H
 
 #include <memory>
-#include "D_Transform2.h"
 #include "D_sparsevector.h"
 #include "D_swapvector.h"
 #include "Q_Collider2D.h"
@@ -36,25 +35,6 @@ namespace Quantum2D {
 
 
         /**
-         Returns a reference to the transform with the given id.
-         Note: the reference returned is only guaranteed to be valid until the next time a new transform is created.
-         Only use this reference immediately after calling this function!
-        */
-        Diamond::Transform2<tQ_pos, tQ_rot> &getTransform(transform2_id transform) { return transforms[transform]; }
-
-        /**
-         Creates a transform object and returns its id.
-         The returned id can be used to access the transform with getTransform(id).
-        */
-        transform2_id genTransform() { return transforms.emplace_back(); }
-
-        /**
-         Frees the given transform's memory.
-        */
-        void freeTransform(transform2_id transform) { transforms.erase(transform); }
-
-
-        /**
          Returns a reference to the rigidbody with the given id.
          Note: the reference returned is only guaranteed to be valid until the next time a new rigidbody is created.
          Only use this reference immediately after calling this function!
@@ -65,7 +45,7 @@ namespace Quantum2D {
          Creates a rigidbody object attached to the given transform and returns its id.
          The returned id can be used to access the rigidbody with getRigidbody(id).
         */
-        body2d_id genRigidbody(transform2_id transform) { return bodies.emplace_back(transform); }
+        body2d_id genRigidbody() { return bodies.emplace_back(); }
 
         /**
          Frees the given rigidbody's memory.
@@ -102,12 +82,11 @@ namespace Quantum2D {
 
 
         /**
-        Steps the physics simulation by the number of milliseconds given.
+         Steps the physics simulation by the number of milliseconds given.
         */
         void step(tQ_delta delta_ms);
 
     private:
-        Diamond::sparsevector<Diamond::Transform2<tQ_pos, tQ_rot> > transforms;
         Diamond::swapvector<Rigidbody2D> bodies;
         Diamond::swapvector<std::unique_ptr<Collider2D> > colliders;
     };

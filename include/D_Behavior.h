@@ -24,7 +24,7 @@ namespace Diamond {
     class Entity2D;
     class Behavior : public Component {
     public:
-        Behavior(Entity2D *parent) : Component(parent) {}
+        Behavior(Entity2D *parent) {}
         virtual ~Behavior() {};
 
         virtual void update(tD_delta delta) = 0;

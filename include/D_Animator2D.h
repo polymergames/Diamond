@@ -17,21 +17,19 @@
 #ifndef D_ANIMATOR_2D_H
 #define D_ANIMATOR_2D_H
 
-#include "D_Behavior.h"
+#include "D_Component.h"
 #include "D_Animation2D.h"
 #include "D_RenderComponent2D.h"
 
 namespace Diamond {
     class RenderComponent2D;
-    class Animator2D : public Behavior {
+    class Animator2D : public Component {
     public:
-        Animator2D(Entity2D *parent, Renderer2D *renderer, Animation2D *anim);
+        Animator2D(RenderComponent2D *rendercomp, Animation2D *anim);
 
         void setAnimation(Animation2D *anim);
 
-        const Animation2D *getAnimation() const {
-            return anim;
-        }
+        const Animation2D *getAnimation() const { return anim; }
 
         void update(tD_delta delta) override;
     private:

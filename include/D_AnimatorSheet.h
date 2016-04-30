@@ -18,22 +18,19 @@
 #define D_ANIMATOR_SHEET_H
 
 #include <memory>
-
 #include "D_AnimationSheet.h"
-#include "D_Behavior.h"
+#include "D_Component.h"
 #include "D_RenderComponent2D.h"
 
 namespace Diamond {
     class RenderComponent2D;
-    class AnimatorSheet : public Behavior {
+    class AnimatorSheet : public Component {
     public:
-        AnimatorSheet(Entity2D *parent, Renderer2D *renderer, AnimationSheet *anim);
+        AnimatorSheet(RenderComponent2D *rendercomp, AnimationSheet *anim);
 
         void setAnimation(AnimationSheet *anim);
 
-        const AnimationSheet *getAnimation() const {
-            return anim;
-        }
+        const AnimationSheet *getAnimation() const { return anim; }
 
         void update(tD_delta delta) override;
     private:

@@ -16,29 +16,13 @@
 
 #include "D_World2D.h"
 
-Diamond::World2D::World2D(PhysicsWorld2D *phys_world) 
-    : phys_world(phys_world), root(createEntity("root")) {}
-
-
-Diamond::Entity2D *Diamond::World2D::createEntity(const std::string &name) {
-    return new Entity2D(phys_world, name);
-}
-
-void Diamond::World2D::addEntity(Entity2D *entity) {
-    root->addChild(entity);
-}
-
-void Diamond::World2D::kill(Entity2D *entity) {
-    entity->removeSelf();
-    delete entity;
-}
 
 void Diamond::World2D::killAll() {
     killTree(root);
 }
 
 void Diamond::World2D::update(tD_delta delta_ms) {
-    root->updateBehaviors(delta_ms);
+    root->updateComponents(delta_ms);
 }
 
 void Diamond::World2D::killTree(Entity2D *root) {

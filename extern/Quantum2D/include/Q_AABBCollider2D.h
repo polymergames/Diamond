@@ -32,12 +32,12 @@ namespace Quantum2D {
         /**
          Get the origin point of this AABB in the parent transform's local space.
         */
-        Diamond::Vector2<tQ_num> &getOrigin() { return origin; }
+        const Diamond::Vector2<tQ_num> &getOrigin() const { return origin; }
 
         /**
          Get the horizontal x vertical dimensions of this AABB.
         */
-        Diamond::Vector2<tQ_num> &getDims() { return dims; }
+        const Diamond::Vector2<tQ_num> &getDims() const { return dims; }
 
         /**
         Get the current coordinates of this AABB's bottom left corner in world space.
@@ -54,9 +54,9 @@ namespace Quantum2D {
         void setDims(const Diamond::Vector2<tQ_num> &dims) { this->dims = dims; }
 
         /**
-         Update world coordinates, should call this once per frame.
+         Update world coordinates, physics world calls this once per frame.
         */
-        void update(tQ_delta delta_ms, Diamond::Transform2<tQ_pos, tQ_rot> &trans) override;
+        void update(tQ_delta delta_ms, const Rigidbody2D &body) override;
 
     private:
         Diamond::Vector2<tQ_num> origin;

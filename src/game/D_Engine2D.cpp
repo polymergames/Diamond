@@ -61,7 +61,7 @@ bool Diamond::Engine2D::init(const Config &config) {
     if (success) {
         Log::log("Diamond systems are online and ready to roll.");
         // Init Entity world
-        world = new World2D(phys_world);
+        world = new World2D(&data);
     }
     else {
         shutDown();

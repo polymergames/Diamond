@@ -129,6 +129,19 @@ namespace Diamond {
             return *this;
         }
 
+        /*
+        // Comparison operators
+        template <typename V>
+        bool operator==(const Vector2<V> &other) {
+            return x == other.x && y == other.y;
+        }
+
+        template <typename V>
+        bool operator!=(const Vector2<V> &other) {
+            return !(*this == other);
+        }
+        */
+
         // Conversion operator
         template <typename V>
         operator Vector2<V>() const {
@@ -136,6 +149,7 @@ namespace Diamond {
         }
     };
 
+    // Multiplication operators
     template <typename V, typename S>
     inline Vector2<V> operator*(const Vector2<V> &vec, const S scalar) {
         return Vector2<V>(vec.x * scalar, vec.y * scalar);
@@ -146,10 +160,22 @@ namespace Diamond {
         return vec * scalar;
     }
 
+    // Stream operator
     template <typename V>
     std::ostream &operator<<(std::ostream &os, const Vector2<V> &vec) {
         os << "{" << vec.x << ", " << vec.y << "}";
         return os;
+    }
+
+    // Comparison operators
+    template <typename V1, typename V2>
+    bool operator==(const Vector2<V1> &vec1, const Vector2<V2> &vec2) {
+        return vec1.x == vec2.x && vec1.y == vec2.y;
+    }
+
+    template <typename V1, typename V2>
+    bool operator!=(const Vector2<V1> &vec1, const Vector2<V2> &vec2) {
+        return !(vec1 == vec2);
     }
 }
 

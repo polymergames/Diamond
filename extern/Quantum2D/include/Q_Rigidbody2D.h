@@ -23,14 +23,20 @@
 namespace Quantum2D {
     class Rigidbody2D {
     public:
-        Rigidbody2D(transform2_id transform) : velocity(), transform(transform) {}
+        Rigidbody2D() : rotation(0) {}
 
-        transform2_id getTransformID() const { return transform; }
+        const Diamond::Vector2<tQ_pos> &getPosition() const { return position; }
+        void setPosition(const Diamond::Vector2<tQ_pos> &newpos) { position = newpos; }
 
-        Diamond::Vector2<tQ_pos> &getVelocity() { return velocity; }
+        tQ_rot getRotation() const { return rotation; }
+        void setRotation(tQ_rot newrot) { rotation = newrot; }
+
+        const Diamond::Vector2<tQ_pos> &getVelocity() const { return velocity; }
+        void setVelocity(const Diamond::Vector2<tQ_pos> &newvel) { velocity = newvel; }
 
     private:
-        transform2_id transform;
+        Diamond::Vector2<tQ_pos> position;
+        tQ_rot rotation;
         Diamond::Vector2<tQ_pos> velocity;
     };
 }

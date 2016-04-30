@@ -17,26 +17,26 @@
 #include "D_AnimatorSheet.h"
 #include "D_Log.h"
 
-Diamond::AnimatorSheet::AnimatorSheet(Entity2D *parent, Renderer2D *renderer, AnimationSheet *anim) : Behavior(parent), anim(anim), cur_frame(0), elapsed(0) {
-    if (!(anim->sprite_sheet) || anim->num_frames == 0) {
-        // TODO: throw exception?
-        Log::log("AnimatorSheet2D ERROR: The given animation for parent " + parent->getName() + " is empty!");
-    }
-
-    rendercomp = parent->getComponent<RenderComponent2D>();
+Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rendercomp, AnimationSheet *anim) 
+    : rendercomp(rendercomp), anim(anim), cur_frame(0), elapsed(0) {
     if (!rendercomp) {
-        rendercomp = new RenderComponent2D(parent, renderer, anim->sprite_sheet);
-        parent->addComponent(rendercomp);
+        Log::log("AnimatorSheet ERROR: The given render component is nulL!");
     }
-
-    rendercomp->setSprite(anim->sprite_sheet);
-    initClip();
+    else if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
+        // TODO: throw exception?
+        Log::log("AnimatorSheet ERROR: The given animation is empty!");
+    }
+    else {
+        rendercomp->setSprite(anim->sprite_sheet);
+        initClip();
+    }
 }
 
 void Diamond::AnimatorSheet::setAnimation(AnimationSheet *anim) {
-    if (!(anim->sprite_sheet) || anim->num_frames == 0) {
+    if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
         // TODO: throw exception?
-        Log::log("AnimatorSheet2D ERROR: Tried to set empty animation for parent " + parent->getName() + "!");
+        Log::log("AnimatorSheet ERROR: Tried to set an empty animation!");
+        return;
     }
     this->anim = anim;
     rendercomp->setSprite(anim->sprite_sheet);

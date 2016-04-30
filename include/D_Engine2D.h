@@ -22,6 +22,7 @@
 #endif
 
 #include "D_Config.h"
+#include "D_DataCenter.h"
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
 #include "D_PhysicsWorld2D.h"
@@ -60,6 +61,7 @@ namespace Diamond {
 
     protected:
         bool is_running;
+        DataCenter data;
         Config config;
         Renderer2D *renderer;
         DiskJockey2D *dj;

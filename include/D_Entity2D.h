@@ -25,12 +25,12 @@
 #include "D_typedefs.h"
 #include "D_Behavior.h"
 #include "D_Component.h"
-#include "D_PhysicsWorld2D.h"
+#include "D_DataCenter.h"
 
 namespace Diamond {
     class Entity2D {
     public:
-        Entity2D(PhysicsWorld2D *phys_world, const std::string &name);
+        Entity2D(const std::string &name, DataCenter *data);
         virtual ~Entity2D();
         
         Entity2D(const Entity2D &other);
@@ -40,11 +40,27 @@ namespace Diamond {
         Entity2D &operator=(Entity2D &&other);
         
         //tD_id getID() const;
+        const std::string &getName() const { return name; }
 
-        std::string getName() const { return name; }
+
+        // Get this entity's current transform.
+
+        const Transform2<tD_pos, tD_rot> &getTransform() const { return data->getTransform(transform); }
+        Transform2<tD_pos, tD_rot> &getTransform() { return data->getTransform(transform); }
+        transform2_id getTransformID() const { return transform; }
+        
+
+        // Modify this entity's transform.
+
+        void setTransform(const Transform2<tD_pos, tD_rot> &newtrans) { data->getTransform(transform) = newtrans; }
+        void setPosition(const Vector2<tD_pos> &newpos) { data->getTransform(transform).position = newpos; }
+        void setRotation(tD_rot newrot) { data->getTransform(transform).rotation = newrot; }
+
+
+        // Manage entity tree.
 
         void addChild(Entity2D *child);
-        
+
         /**
          Searches children for the given child and removes it from children.
          Returns true if child was found and removed, otherwise false.
@@ -59,42 +75,41 @@ namespace Diamond {
         void removeSelf();
 
         std::vector<Entity2D*> &getChildren() { return children; }
+        const std::vector<Entity2D*> &getChildren() const { return children; }
 
         Entity2D *getParent() const { return parent; }
 
+
+        // Manage this entity's components.
+
         void addComponent(Component *component);
         template <class T, typename... Args> void addComponent(Args&&... args);
-        template <class T> T *getComponent();
+        template <class T> T *getComponent() const;
         template <class T> void removeComponent();
 
         void addBehavior(Behavior *behavior);
         template <class T, typename... Args> void addBehavior(Args&&... args);
-        template <class T> T *getBehavior();
+        template <class T> T *getBehavior() const;
         template <class T> void removeBehavior();
 
-        /**
-         Returns this entity's current transform.
-        */
-        Transform2<tD_pos, tD_rot> getTransform() const { return phys_world->getTransform(transform); }
-        transform2_id getTransformID() const { return transform; }
-        
-        void setTransform(const Transform2<tD_pos, tD_rot> &newtrans) { phys_world->setTransform(transform, newtrans); }
-        void setPosition(const Vector2<tD_pos> &newpos) { phys_world->setPosition(transform, newpos); }
-        void setRotation(tD_rot newrot) { phys_world->setRotation(transform, newrot); }
-
+        void updateComponents(tD_delta delta_ms);
         void updateBehaviors(tD_delta delta_ms);
 
     protected:
-        PhysicsWorld2D *phys_world;
         //tD_id id;
         std::string name;
         transform2_id transform;
+        DataCenter *data;
         
         Entity2D *parent;
         std::vector<Entity2D*> children;
-        std::unordered_map<std::type_index, std::unique_ptr<Component> > components; // components interface with backend data, therefore each entity has its own unique copy
-        std::map<std::type_index, std::unique_ptr<Behavior> > behaviors;  // a behavior should be self-contained, so main data manipulation happens within the behavior. 
+
+        // Components interface with backend data, therefore each entity has its own unique copy.
+        std::unordered_map<std::type_index, std::unique_ptr<Component> > components;
+
+        // A behavior should be self-contained, so main data manipulation happens within the behavior.
         // Unlike commponents, behaviors are iterated and updated directly from the entity.
+        std::map<std::type_index, std::unique_ptr<Behavior> > behaviors;
         
         void setParent(Entity2D *parent);
 

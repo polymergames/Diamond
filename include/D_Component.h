@@ -17,17 +17,15 @@
 #ifndef D_COMPONENT_H
 #define D_COMPONENT_H
 
+#include "D_typedefs.h"
+
 namespace Diamond {
-    class Entity2D;
     class Component {
     public:
-        Component(Entity2D *parent) : parent(parent) {}
+        Component() {}
         virtual ~Component() {}
 
-        Entity2D *getParent() const { return parent; }
-
-    protected:
-        Entity2D *parent;
+        virtual void update(tD_delta delta) {}
     };
 }
 

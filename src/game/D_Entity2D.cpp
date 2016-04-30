@@ -19,21 +19,21 @@
 #include <algorithm>
 
 
-Diamond::Entity2D::Entity2D(PhysicsWorld2D *phys_world, const std::string &name)
-    : phys_world(phys_world), name(name), parent(nullptr), transform(phys_world->genTransform()) {}
+Diamond::Entity2D::Entity2D(const std::string &name, DataCenter *data)
+    : name(name), data(data), parent(nullptr), transform(data->genTransform()) {}
 
 Diamond::Entity2D::~Entity2D() {
     freeTransform();
 }
 
 
-Diamond::Entity2D::Entity2D(const Entity2D &other) : phys_world(other.phys_world), name(other.name) {
-    transform = phys_world->genTransform();
+Diamond::Entity2D::Entity2D(const Entity2D &other) : data(other.data), name(other.name) {
+    transform = data->genTransform();
     setTransform(other.getTransform());
 }
 
 Diamond::Entity2D::Entity2D(Entity2D &&other) 
-    : phys_world(other.phys_world), name(other.name), transform(other.transform) {
+    : data(other.data), name(other.name), transform(other.transform) {
     other.transform = Diamond::INVALID;
 }
 
@@ -112,6 +112,16 @@ void Diamond::Entity2D::setParent(Entity2D *parent) {
     this->parent = parent;
 }
 
+void Diamond::Entity2D::updateComponents(tD_delta delta_ms) {
+    for (auto it = components.begin(); it != components.end(); ++it) {
+        it->second->update(delta_ms);
+    }
+
+    for (Entity2D *child : children) {
+        child->updateComponents(delta_ms);
+    }
+}
+
 void Diamond::Entity2D::updateBehaviors(tD_delta delta_ms) {
     for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
         it->second->update(delta_ms);
@@ -124,7 +134,7 @@ void Diamond::Entity2D::updateBehaviors(tD_delta delta_ms) {
 
 void Diamond::Entity2D::freeTransform() {
     if ((tD_index)transform != Diamond::INVALID) {
-        phys_world->freeTransform(transform);
+        data->freeTransform(transform);
         transform = Diamond::INVALID;
     }
 }
