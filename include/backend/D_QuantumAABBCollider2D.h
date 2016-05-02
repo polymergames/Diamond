@@ -19,24 +19,16 @@
 
 #include <functional>
 #include "D_AABBCollider2D.h"
-#include "D_QuantumBody2D.h"
-#include "D_typedefs.h"
 #include "Q_AABBCollider2D.h"
 
 namespace Diamond {
     class QuantumAABBCollider2D : public AABBCollider2D {
     public:
-        QuantumAABBCollider2D(QuantumBody2D* body,
-                              void *parent, 
-                              Quantum2D::DynamicWorld2D *world, 
-                              std::function<void(void *other)> &onCollision, 
-                              const Vector2<tD_pos> &dims,
-                              const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) : world(world) {
-            aabb = new Quantum2D::AABBCollider2D(body->getID(), parent, onCollision, dims, origin);
-            collider = world->addCollider(aabb);
-        }
-        
-        ~QuantumAABBCollider2D() { world->freeCollider(collider); }
+        QuantumAABBCollider2D(collider2_id collider, Quantum2D::AABBCollider2D *aabb) 
+            : collider(collider), aabb(aabb) {}
+        ~QuantumAABBCollider2D() {}
+
+        collider2_id getColliderID() const { return collider; }
         
         Vector2<tD_pos> getOrigin() const override { return aabb->getOrigin(); }
         
@@ -53,7 +45,6 @@ namespace Diamond {
     private:
         collider2_id collider;
         Quantum2D::AABBCollider2D *aabb;
-        Quantum2D::DynamicWorld2D *world;
     };
 }
 

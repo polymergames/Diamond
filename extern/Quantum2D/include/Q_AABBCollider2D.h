@@ -25,7 +25,7 @@ namespace Quantum2D {
     public:
         AABBCollider2D(body2d_id body,
                        void *parent,
-                       std::function<void(void *other)> &onCollision,
+                       const std::function<void(void *other)> &onCollision,
                        const Diamond::Vector2<tQ_num> &dims, 
                        const Diamond::Vector2<tQ_num> &origin = Diamond::Vector2<tQ_num>(0, 0));
 

@@ -26,58 +26,74 @@
 namespace Diamond {
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
-        QuantumWorld2D() {}
+        QuantumWorld2D() : data(nullptr) {}
 
-        bool init(const Config &config) override { return world.init(); }
+        bool init(const Config &config, DataCenter *data) override {
+            this->data = data;
+            return world.init(); 
+        }
 
         void step(tD_delta delta_ms) override { world.step(delta_ms); }
-        
-
-        transform2_id genTransform() override { return world.genTransform(); }
-
-        void freeTransform(transform2_id transform) override { world.freeTransform(transform); }
         
 
         Rigidbody2D *genRigidbody(transform2_id transform) override {
             return new QuantumBody2D(transform, &world);
         }
+
+        void freeRigidbody(Rigidbody2D *body) override {
+            // TODO
+        }
         
         
-        AABBCollider2D *genAABBCollider(Rigidbody2D *body,
+        AABBCollider2D *genAABBCollider(const Rigidbody2D *body,
                                         void *parent,
-                                        std::function<void(void *other)> &onCollision,
+                                        const std::function<void(void *other)> &onCollision,
                                         const Vector2<tD_pos> &dims,
                                         const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) override {
-            return new QuantumAABBCollider2D(dynamic_cast<QuantumBody2D*>(body), parent, &world, onCollision, dims, origin);
+            const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body);
+            if (qbody) {
+                collider2_id col = world.genCollider<Quantum2D::AABBCollider2D>(qbody->getID(), parent, onCollision, dims, origin);
+                Quantum2D::AABBCollider2D *aabb = dynamic_cast<Quantum2D::AABBCollider2D*>(world.getCollider(col));
+                if (aabb)
+                    return new QuantumAABBCollider2D(col, aabb);
+            }
+            return nullptr;
         }
         
-        CircleCollider *genCircleCollider(Rigidbody2D *body,
+        CircleCollider *genCircleCollider(const Rigidbody2D *body,
                                           void *parent,
-                                          std::function<void(void *other)> &onCollision,
+                                          const std::function<void(void *other)> &onCollision,
                                           tD_pos radius,
                                           const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) override {
-            return new QuantumCircleCollider(dynamic_cast<QuantumBody2D*>(body), parent, &world, onCollision, radius, center);
-        }
-        
-
-        Transform2<tD_pos, tD_rot> getTransform(transform2_id transform) override { 
-            return world.getTransform(transform); 
-        }
-
-        void setTransform(transform2_id transform, const Transform2<tD_pos, tD_rot> &newtrans) override {
-            world.getTransform(transform) = newtrans;
+            const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body);
+            if (qbody) {
+                collider2_id col = world.genCollider<Quantum2D::CircleCollider>(qbody->getID(), parent, onCollision, radius, center);
+                Quantum2D::CircleCollider *circle = dynamic_cast<Quantum2D::CircleCollider*>(world.getCollider(col));
+                if (circle)
+                    return new QuantumCircleCollider(col, circle);
+            }
+            return nullptr;
         }
 
-        void setPosition(transform2_id transform, const Vector2<tD_pos> &newpos) override {
-            world.getTransform(transform).position = newpos;
-        }
+        void freeCollider(Collider2D *collider)override {
+            // Try aabb
+            QuantumAABBCollider2D *qaabb = dynamic_cast<QuantumAABBCollider2D*>(collider);
+            if (qaabb) {
+                world.freeCollider(qaabb->getColliderID());
+                return;
+            }
 
-        void setRotation(transform2_id transform, tD_rot newrot) override {
-            world.getTransform(transform).rotation = newrot;
+            // try circle
+            QuantumCircleCollider *qcircle = dynamic_cast<QuantumCircleCollider*>(collider);
+            if (qcircle) {
+                world.freeCollider(qcircle->getColliderID());
+                return;
+            }
         }
 
     private:
         Quantum2D::DynamicWorld2D world;
+        DataCenter *data;
     };
 }
 

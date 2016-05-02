@@ -19,21 +19,21 @@
 
 #include "D_Component.h"
 #include "D_Collider2D.h"
+#include "D_PhysicsWorld2D.h"
 
 namespace Diamond {
     class ColliderComponent2D : public Component {
     public:
-        ColliderComponent2D(Collider2D *collider) : collider(collider) {}
+        ColliderComponent2D(Collider2D *collider, PhysicsWorld2D *phys_world) 
+            : collider(collider), phys_world(phys_world) {}
         
-        ~ColliderComponent2D() {
-            // TODO: should be managed by physics world?
-            delete collider;
-        }
+        ~ColliderComponent2D() { phys_world->freeCollider(collider); }
         
-        void *getCollider() const { return collider; }
+        Collider2D *getCollider() const { return collider; }
     
     private:
         Collider2D *collider;
+        PhysicsWorld2D *phys_world;
     };
 }
 

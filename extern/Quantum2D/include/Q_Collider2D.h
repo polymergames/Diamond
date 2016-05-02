@@ -31,7 +31,7 @@ namespace Quantum2D {
         Collider2D(Coltype type, 
                    body2d_id body,
                    void *parent, 
-                   std::function<void(void *other)> &onCollision) 
+                   const std::function<void(void *other)> &onCollision) 
             : type(type), body(body), parent(parent), onCollision(onCollision) {};
         
         virtual ~Collider2D() {};
@@ -42,9 +42,9 @@ namespace Quantum2D {
 
         void *getParent() const { return parent; }
 
-        void onCollide(Collider2D *other) { onCollision(other->getParent()); }
+        void onCollide(const Collider2D *other) { onCollision(other->getParent()); }
 
-        void setColFunc(std::function<void(void *other)> &onCollision) { this->onCollision = onCollision; }
+        void setColFunc(const std::function<void(void *other)> &onCollision) { this->onCollision = onCollision; }
         
         /**
          Called by a physics world once per frame to update this collider.

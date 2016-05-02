@@ -25,7 +25,7 @@ namespace Quantum2D {
     public:
         CircleCollider(body2d_id body,
                        void *parent,
-                       std::function<void(void *other)> &onCollision,
+                       const std::function<void(void *other)> &onCollision,
                        tQ_pos radius,
                        const Diamond::Vector2<tQ_pos> &center = Diamond::Vector2<tQ_pos>(0, 0));
 

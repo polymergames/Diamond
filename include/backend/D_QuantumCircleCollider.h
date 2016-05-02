@@ -19,25 +19,17 @@
 
 #include <functional>
 #include "D_CircleCollider.h"
-#include "D_QuantumBody2D.h"
-#include "D_typedefs.h"
 #include "Q_CircleCollider.h"
 
 namespace Diamond {
     class QuantumCircleCollider : public CircleCollider {
     public:
-        QuantumCircleCollider(QuantumBody2D *body,
-                              void *parent, 
-                              Quantum2D::DynamicWorld2D *world, 
-                              std::function<void(void *other)> &onCollision,
-                              tQ_pos radius,
-                              const Vector2<tQ_pos> &center = Vector2<tQ_pos>(0, 0)) : world(world) {
-            circle = new Quantum2D::CircleCollider(body->getID(), parent, onCollision, radius, center);
-            collider = world->addCollider(circle);
-        }
+        QuantumCircleCollider(collider2_id collider, Quantum2D::CircleCollider *circle) 
+            : collider(collider), circle(circle) {}
+        ~QuantumCircleCollider() {}
         
-        ~QuantumCircleCollider() { world->freeCollider(collider); }
-        
+        collider2_id getColliderID() const { return collider; }
+
         tD_pos getRadius() const override { return circle->getRadius(); }
         
         tD_pos getRadiusSq() const override { return circle->getRadiusSq(); }
@@ -53,7 +45,6 @@ namespace Diamond {
     private:
         collider2_id collider;
         Quantum2D::CircleCollider *circle;
-        Quantum2D::DynamicWorld2D *world;
     };
 }
 

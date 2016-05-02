@@ -28,13 +28,13 @@ namespace Quantum2D {
         */
         bool init();
 
-        bool collide(Collider2D *a, Collider2D *b);
+        bool collide(const Collider2D *a, const Collider2D *b);
 
-        bool AABB2(AABBCollider2D *a, AABBCollider2D *b);
+        bool AABB2(const AABBCollider2D *a, const AABBCollider2D *b);
 
-        bool circle2(CircleCollider *a, CircleCollider *b);
+        bool circle2(const CircleCollider *a, const CircleCollider *b);
 
-        bool circleAABB(CircleCollider *a, AABBCollider2D *b);
+        bool circleAABB(const CircleCollider *a, const AABBCollider2D *b);
 
         extern bool initialized;
     }
