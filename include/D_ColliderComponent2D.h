@@ -24,7 +24,7 @@
 namespace Diamond {
     class ColliderComponent2D : public Component {
     public:
-        ColliderComponent2D(Collider2D *collider, PhysicsWorld2D *phys_world) 
+        ColliderComponent2D(Collider2D *collider, PhysicsWorld2D *phys_world)
             : collider(collider), phys_world(phys_world) {}
         
         ~ColliderComponent2D() { phys_world->freeCollider(collider); }

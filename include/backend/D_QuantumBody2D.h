@@ -23,8 +23,8 @@
 namespace Diamond {
     class QuantumBody2D : public Rigidbody2D {
     public:
-        QuantumBody2D(transform2_id transform, Quantum2D::DynamicWorld2D *world) : world(world) {
-            body = world->genRigidbody(transform);
+        QuantumBody2D(Quantum2D::DynamicWorld2D *world) : world(world) {
+            body = world->genRigidbody();
         }
 
         ~QuantumBody2D() {
@@ -33,13 +33,9 @@ namespace Diamond {
         
         body2d_id getID() const { return body; }
 
-        Vector2<tD_pos> getVelocity() override {
-            return world->getRigidbody(body).getVelocity();
-        }
+        Vector2<tD_pos> getVelocity() override { return world->getRigidbody(body).getVelocity(); }
 
-        void setVelocity(const Vector2<tD_pos> &newvel) override {
-            world->getRigidbody(body).getVelocity() = newvel;
-        }
+        void setVelocity(const Vector2<tD_pos> &newvel) override { world->getRigidbody(body).setVelocity(newvel); }
 
     private:
         body2d_id body;

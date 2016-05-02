@@ -37,11 +37,12 @@ namespace Diamond {
         
 
         Rigidbody2D *genRigidbody(transform2_id transform) override {
-            return new QuantumBody2D(transform, &world);
+            // TODO: associate transform with this rigidbody
+            return new QuantumBody2D(&world);
         }
 
         void freeRigidbody(Rigidbody2D *body) override {
-            // TODO
+            delete body;
         }
         
         
@@ -75,7 +76,7 @@ namespace Diamond {
             return nullptr;
         }
 
-        void freeCollider(Collider2D *collider)override {
+        void freeCollider(Collider2D *collider) override {
             // Try aabb
             QuantumAABBCollider2D *qaabb = dynamic_cast<QuantumAABBCollider2D*>(collider);
             if (qaabb) {
