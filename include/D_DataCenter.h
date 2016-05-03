@@ -36,6 +36,7 @@ namespace Diamond {
          Only use this reference immediately after calling this function!
         */
         Transform2<tD_pos, tD_rot> &getTransform(transform2_id tid) { return transforms[tid]; }
+        const Transform2<tD_pos, tD_rot> &getTransform(transform2_id tid) const { return transforms[tid]; }
 
         /**
          Frees the given transform's memory.

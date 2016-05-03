@@ -20,13 +20,12 @@
 #include "SDL.h"
 
 #include "D_RenderObj2D.h"
-#include "D_Entity2D.h"
 #include "D_SDLTexture.h"
 
 namespace Diamond {
     class SDLRenderObj2D : public RenderObj2D {
     public:
-        SDLRenderObj2D(const Entity2D *parent,
+        SDLRenderObj2D(transform2_id transform,
                        const Texture *texture,
                        float scale, 
                        const Vector2<tDrender_pos> &pivot);
@@ -38,12 +37,11 @@ namespace Diamond {
         SDLRenderObj2D &operator=(const SDLRenderObj2D &other);
         SDLRenderObj2D &operator=(SDLRenderObj2D &&other);
 
-        Transform2<tDrender_pos, tDrender_rot> getTransform() const {
-            Transform2<tDrender_pos, tDrender_pos> trans = parent->getTransform();
-            trans.position.x -= pivot.x;
-            trans.position.y -= pivot.y;
-            return trans;
-        };
+        transform2_id getTransformID() const { return transform; }
+
+        Vector2<tDrender_pos> getPivot() const override { return Vector2<tDrender_pos>(pivot.x, pivot.y); }
+        void setPivot(const Vector2<tDrender_pos> &newpivot) override { pivot.x = newpivot.x; pivot.y = newpivot.y; }
+        const SDL_Point &getSDLPivot() const { return pivot; }
         
         const SDLTexture *getTexture() const { return texture; }
         SDL_RendererFlip getFlip() const { return flip; }
@@ -58,10 +56,6 @@ namespace Diamond {
 
         int isFlippedX() const override { return flip & SDL_FLIP_HORIZONTAL; }
         int isFlippedY() const override { return flip & SDL_FLIP_VERTICAL; }
-
-        Vector2<tDrender_pos> getPivot() const override { return Vector2<tDrender_pos>(pivot.x, pivot.y); }
-        void setPivot(const Vector2<tDrender_pos> &newpivot) override { pivot.x = newpivot.x; pivot.y = newpivot.y; }
-        const SDL_Point &getSDLPivot() const { return pivot; }
         
         void initClip() override;
 
@@ -71,11 +65,11 @@ namespace Diamond {
         bool getClipDim(Vector2<int> &dim) const override;
 
     private:
-        const Entity2D *parent;
+        transform2_id transform;
+        SDL_Point pivot;
         Vector2<tDrender_pos> size;
         const SDLTexture *texture;
         SDL_Rect *clip;
-        SDL_Point pivot;
         SDL_RendererFlip flip;
     };
 }

@@ -18,11 +18,11 @@
 
 #include "D_SDLTexture.h"
 
-Diamond::SDLRenderObj2D::SDLRenderObj2D(const Entity2D *parent,
+Diamond::SDLRenderObj2D::SDLRenderObj2D(transform2_id transform,
                                         const Texture *texture,
                                         float scale, 
                                         const Vector2<tDrender_pos> &pivot)
-    : parent(parent), clip(nullptr), flip(SDL_FLIP_NONE) {
+    : transform(transform), clip(nullptr), flip(SDL_FLIP_NONE) {
     setTexture(texture, scale);
     this->pivot.x = pivot.x;
     this->pivot.y = pivot.y;
@@ -33,7 +33,7 @@ Diamond::SDLRenderObj2D::~SDLRenderObj2D() {
 }
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
-    : RenderObj2D(other), parent(other.parent), texture(other.texture), flip(other.flip), clip(nullptr), pivot(other.pivot) {
+    : RenderObj2D(other), transform(other.transform), texture(other.texture), flip(other.flip), clip(nullptr), pivot(other.pivot) {
     if (other.clip) {
         clip = new SDL_Rect;
         *clip = *(other.clip);
@@ -44,7 +44,7 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(const SDLRenderObj2D &other)
 
 Diamond::SDLRenderObj2D::SDLRenderObj2D(SDLRenderObj2D &&other)
     : RenderObj2D(other), 
-      parent(other.parent), texture(other.texture), flip(other.flip), size(other.size), clip(other.clip), pivot(other.pivot) {
+      transform(other.transform), texture(other.texture), flip(other.flip), size(other.size), clip(other.clip), pivot(other.pivot) {
     other.texture = nullptr;
     other.clip = nullptr;
 }
@@ -52,7 +52,7 @@ Diamond::SDLRenderObj2D::SDLRenderObj2D(SDLRenderObj2D &&other)
 Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(const SDLRenderObj2D &other) {
     RenderObj2D::operator=(other);
     if (this != &other) {
-        parent = other.parent;
+        transform = other.transform;
         texture = other.texture;
         flip = other.flip;
         size = other.size;
@@ -71,7 +71,7 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(const SDLRenderObj2D
 Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(SDLRenderObj2D &&other) {
     RenderObj2D::operator=(other);
     if (this != &other) {
-        parent = other.parent;
+        transform = other.transform;
         texture = other.texture;
         flip = other.flip;
         size = other.size;

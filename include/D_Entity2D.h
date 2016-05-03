@@ -83,14 +83,26 @@ namespace Diamond {
         // Manage this entity's components.
 
         void addComponent(Component *component);
-        template <class T, typename... Args> void addComponent(Args&&... args);
-        template <class T> T *getComponent() const;
-        template <class T> void removeComponent();
+
+        template <class T, typename... Args>
+        void addComponent(Args&&... args);
+
+        template <class T>
+        T *getComponent() const;
+
+        template <class T>
+        void removeComponent();
 
         void addBehavior(Behavior *behavior);
-        template <class T, typename... Args> void addBehavior(Args&&... args);
-        template <class T> T *getBehavior() const;
-        template <class T> void removeBehavior();
+
+        template <class T, typename... Args>
+        void addBehavior(Args&&... args);
+
+        template <class T>
+        T *getBehavior() const;
+
+        template <class T>
+        void removeBehavior();
 
         void updateComponents(tD_delta delta_ms);
         void updateBehaviors(tD_delta delta_ms);

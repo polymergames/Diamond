@@ -21,28 +21,12 @@
 #include "SDL_image.h"
 #include "D_SDLTexture.h"
 
-namespace Diamond {
-    namespace SDLRenderSpace {
-        static inline void render(Diamond::SDLRenderObj2D &obj, SDL_Renderer *renderer) {
-            Diamond::Transform2<tDrender_pos, tDrender_rot> transform = obj.getTransform();
-            Vector2<tDrender_pos> size = obj.getSize();
-            SDL_Rect render_rect = {transform.position.x, transform.position.y, size.x, size.y};
-            SDL_Point pivot = obj.getSDLPivot();
-            SDL_RenderCopyEx(renderer, 
-                             obj.getTexture()->texture, 
-                             obj.getClip(), // source rect
-                             &render_rect, // destination rect
-                             transform.rotation, 
-                             &pivot, // rotation pivot
-                             obj.getFlip());
-        }
-    }
-}
-
 
 Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
 
-bool Diamond::SDLRenderer2D::init(const Config &config) {
+bool Diamond::SDLRenderer2D::init(const Config &config, const DataCenter *data) {
+    this->data = data;
+
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         Log::log("SDL failed to initialize! SDL Error: " + std::string(SDL_GetError()));
@@ -87,7 +71,19 @@ void Diamond::SDLRenderer2D::renderAll() {
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
         //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
-        SDLRenderSpace::render(*i, renderer);
+        Transform2<tDrender_pos, tDrender_rot> transform = data->getTransform((*i).getTransformID());
+        SDL_Point pivot = (*i).getSDLPivot();
+        transform.position.x -= pivot.x;
+        transform.position.y -= pivot.y;
+        Vector2<tDrender_pos> size = (*i).getSize();
+        SDL_Rect render_rect = { transform.position.x, transform.position.y, size.x, size.y };
+        SDL_RenderCopyEx(renderer,
+            (*i).getTexture()->texture,
+            (*i).getClip(), // source rect
+            &render_rect, // destination rect
+            transform.rotation,
+            &pivot, // rotation pivot
+            (*i).getFlip());
     }
 
     // Update screen
@@ -135,7 +131,7 @@ renderobj_id Diamond::SDLRenderer2D::genRenderObj(const Entity2D *parent,
                                                   const Texture *texture,
                                                   float scale, 
                                                   const Vector2<tDrender_pos> &pivot) {
-    return render_objects.emplace_back(parent, texture, scale, pivot);
+    return render_objects.emplace_back(parent->getTransformID(), texture, scale, pivot);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {

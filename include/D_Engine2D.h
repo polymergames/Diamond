@@ -42,6 +42,7 @@ namespace Diamond {
         virtual void launch(Game2D &game);
 
         Config &getConfig() { return config; }
+        const Config &getConfig() const { return config; }
 
         Renderer2D *getRenderer() const { return renderer; }
 
