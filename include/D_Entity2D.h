@@ -39,7 +39,7 @@ namespace Diamond {
         Entity2D &operator=(const Entity2D &other);
         Entity2D &operator=(Entity2D &&other);
         
-        //tD_id getID() const;
+        //tD_id getID() const { return id; }
         const std::string &getName() const { return name; }
 
 
@@ -84,25 +84,55 @@ namespace Diamond {
 
         void addComponent(Component *component);
 
+        // Special thanks to Chewy Gumball and vijoc on stackoverflow for addComponent() and getComponent() functions.
+        // http://gamedev.stackexchange.com/questions/55950/entity-component-systems-with-c-accessing-components
         template <class T, typename... Args>
-        void addComponent(Args&&... args);
+        void addComponent(Args&&... args) {
+            std::type_index index = typeid(T);
+            if (!components[index])
+                components[index] = std::unique_ptr<Component>(new T(std::forward<Args>(args)...));
+        }
 
         template <class T>
-        T *getComponent() const;
+        T *getComponent() const {
+            auto c = components.find(std::type_index(typeid(T)));
+            if (c != components.end())
+                return static_cast<T*>(c->second.get());
+            else
+                return nullptr;
+        }
 
         template <class T>
-        void removeComponent();
+        void removeComponent() {
+            auto c = components.find(std::type_index(typeid(T)));
+            if (c != components.end())
+                components.erase(c);
+        }
 
         void addBehavior(Behavior *behavior);
 
         template <class T, typename... Args>
-        void addBehavior(Args&&... args);
+        void addBehavior(Args&&... args) {
+            std::type_index index = typeid(T);
+            if (!behaviors[index])
+                behaviors[index] = std::unique_ptr<Behavior>(new T(std::forward<Args>(args)...));
+        }
 
         template <class T>
-        T *getBehavior() const;
+        T *getBehavior() const {
+            auto b = behaviors.find(std::type_index(typeid(T)));
+            if (b != behaviors.end())
+                return static_cast<T*>(b->second.get());
+            else
+                return nullptr;
+        }
 
         template <class T>
-        void removeBehavior();
+        void removeBehavior() {
+            auto b = behaviors.find(std::type_index(typeid(T)));
+            if (b != behaviors.end())
+                behaviors.erase(b);
+        }
 
         void updateComponents(tD_delta delta_ms);
         void updateBehaviors(tD_delta delta_ms);
@@ -127,58 +157,6 @@ namespace Diamond {
 
         void freeTransform();
     };
-}
-
-/*inline tD_id Diamond::Entity2D::getID() const {
-    return id;
-}*/
-
-// Special thanks to Chewy Gumball and vijoc on stackoverflow for addComponent() and getComponent() functions.
-// http://gamedev.stackexchange.com/questions/55950/entity-component-systems-with-c-accessing-components
-template <class T, typename... Args>
-void Diamond::Entity2D::addComponent(Args&&... args) {
-    std::type_index index = typeid(T);
-    if (!components[index])
-        components[index] = std::unique_ptr<Component>(new T(std::forward<Args>(args)...));
-}
-
-template <class T>
-T *Diamond::Entity2D::getComponent() {
-    auto c = components.find(std::type_index(typeid(T)));
-    if (c != components.end())
-        return static_cast<T*>(c->second.get());
-    else
-        return nullptr;
-}
-
-template <class T>
-void Diamond::Entity2D::removeComponent() {
-    auto c = components.find(std::type_index(typeid(T)));
-    if (c != components.end())
-        components.erase(c);
-}
-
-template <class T, typename... Args>
-void Diamond::Entity2D::addBehavior(Args&&... args) {
-    std::type_index index = typeid(T);
-    if (!behaviors[index])
-        behaviors[index] = std::unique_ptr<Behavior>(new T(std::forward<Args>(args)...));
-}
-
-template <class T>
-T *Diamond::Entity2D::getBehavior() {
-    auto b = behaviors.find(std::type_index(typeid(T)));
-    if (b != behaviors.end())
-        return static_cast<T*>(b->second.get());
-    else
-        return nullptr;
-}
-
-template <class T>
-void Diamond::Entity2D::removeBehavior() {
-    auto b = behaviors.find(std::type_index(typeid(T)));
-    if (b != behaviors.end())
-        behaviors.erase(b);
 }
 
 

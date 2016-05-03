@@ -46,13 +46,13 @@ bool Diamond::Engine2D::init(const Config &config) {
     bool success = false;
 
 #if defined _WIN32
-    success = initWindows(config);
+    success = initWindows();
 #elif defined __APPLE__
-    success = initMac(config);
+    success = initMac();
 #elif defined __ANDROID__
-    success = initAndroid(config);
+    success = initAndroid();
 #elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
-    success = initIOS(config);
+    success = initIOS();
 #else
     std::cout << "Platform unsupported!" << std::endl;
     return false;
@@ -110,11 +110,9 @@ void Diamond::Engine2D::launch(Game2D &game) {
 }
 
 
-bool Diamond::Engine2D::initWindows(const Config &config) {
-    Log::setLogger(new FileLogger(config.game_name + ".log"));
-
+bool Diamond::Engine2D::initSDL() {
     renderer = new SDLRenderer2D();
-    if (!renderer->init(config)) {
+    if (!renderer->init(config, &data)) {
         // TODO: Handle renderer initialization failure
         return false;
     }
@@ -130,8 +128,12 @@ bool Diamond::Engine2D::initWindows(const Config &config) {
     timer = new SDLTimer();
     event_handler = new SDLEventHandler(this);
 
+    return true;
+}
+
+bool Diamond::Engine2D::initQuantum() {
     phys_world = new QuantumWorld2D();
-    if (!phys_world->init(config)) {
+    if (!phys_world->init(config, &data)) {
         // TODO: Handle physics initialization failure
         return false;
     }
@@ -139,44 +141,23 @@ bool Diamond::Engine2D::initWindows(const Config &config) {
     return true;
 }
 
-bool Diamond::Engine2D::initMac(const Config &config) {
-    return initWindows(config);
+bool Diamond::Engine2D::initWindows() {
+    Log::setLogger(new FileLogger(config.game_name + ".log"));
+    return initSDL() && initQuantum();
 }
 
-bool Diamond::Engine2D::initAndroid(const Config &config) {
-    Config myconf = config;
-    myconf.fullscreen = true;
+bool Diamond::Engine2D::initMac() {
+    return initWindows();
+}
 
+bool Diamond::Engine2D::initAndroid() {
+    config.fullscreen = true;
     // Log::setLogger(new FileLogger(config.game_name + ".log")); // TODO: Android logger
-
-    renderer = new SDLRenderer2D();
-    if (!renderer->init(myconf)) {
-        // TODO: Handle renderer initialization failure
-        return false;
-    }
-
-    dj = new SDLDiskJockey2D();
-    if (!dj->init(myconf)) {
-        // TODO: Handle audio initialization failure
-        // Perhaps make audio non-critical, ie return success even if audio initialization failed
-        // Or return a bitflag indicating which systems initialized successfully and which ones didn't
-        return false;
-    }
-
-    timer = new SDLTimer();
-    event_handler = new SDLEventHandler(this);
-
-    phys_world = new QuantumWorld2D();
-    if (!phys_world->init(myconf)) {
-        // TODO: Handle physics initialization failure
-        return false;
-    }
-
-    return true;
+    return initSDL() && initQuantum();
 }
 
-bool Diamond::Engine2D::initIOS(const Config &config) {
-    return initAndroid(config);
+bool Diamond::Engine2D::initIOS() {
+    return initAndroid();
 }
 
 

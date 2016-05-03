@@ -41,6 +41,15 @@ namespace Diamond {
         */
         virtual void step(tD_delta delta_ms) = 0;
 
+        /**
+         Updates the game's transforms with the data from the physics engine's rigidbodies.
+        */
+        virtual void updateTransforms() = 0;
+
+        /**
+         Updates the physics engine's rigidbodies with the data from the game's transforms.
+        */
+        virtual void updateBodies() = 0;
         
         /**
          Creates a rigidbody object attached to the given transform.

@@ -17,6 +17,7 @@
 #ifndef D_QUANTUM_WORLD_2D_H
 #define D_QUANTUM_WORLD_2D_H
 
+#include <map>
 #include "D_PhysicsWorld2D.h"
 #include "D_QuantumBody2D.h"
 #include "D_QuantumAABBCollider2D.h"
@@ -35,14 +36,36 @@ namespace Diamond {
 
         void step(tD_delta delta_ms) override { world.step(delta_ms); }
         
+        void updateTransforms() override {
+            for (auto i = pairs.begin(); i != pairs.end(); ++i) {
+                Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
+                Transform2<tD_pos, tD_rot> &trans = data->getTransform(i->second);
+                trans.position = rbody.getPosition();
+                trans.rotation = rbody.getRotation();
+            }
+        }
+
+        void updateBodies() override {
+            for (auto i = pairs.begin(); i != pairs.end(); ++i) {
+                Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
+                Transform2<tD_pos, tD_rot> &trans = data->getTransform(i->second);
+                rbody.setPosition(trans.position);
+                rbody.setRotation(trans.rotation);
+            }
+        }
 
         Rigidbody2D *genRigidbody(transform2_id transform) override {
-            // TODO: associate transform with this rigidbody
-            return new QuantumBody2D(&world);
+            QuantumBody2D *body = new QuantumBody2D(&world);
+            pairs[body->getID()] = transform;
+            return body;
         }
 
         void freeRigidbody(Rigidbody2D *body) override {
-            delete body;
+            QuantumBody2D *qbody = dynamic_cast<QuantumBody2D*>(body);
+            if (qbody) {
+                pairs.erase(qbody->getID());
+                delete qbody;
+            }
         }
         
         
@@ -95,6 +118,7 @@ namespace Diamond {
     private:
         Quantum2D::DynamicWorld2D world;
         DataCenter *data;
+        std::map<body2d_id, transform2_id> pairs;
     };
 }
 

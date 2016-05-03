@@ -56,9 +56,9 @@ namespace Diamond {
 
         World2D *getWorld() const { return world; }
 
-        bool isRunning() const { return is_running; }
+        virtual bool isRunning() const { return is_running; }
 
-        void quit() { is_running = false; }
+        virtual void quit() { is_running = false; }
 
     protected:
         bool is_running;
@@ -71,10 +71,13 @@ namespace Diamond {
         PhysicsWorld2D *phys_world;
         World2D *world;
 
-        virtual bool initWindows(const Config &config);
-        virtual bool initMac(const Config &config);
-        virtual bool initAndroid(const Config &config);
-        virtual bool initIOS(const Config &config);
+        virtual bool initSDL();
+        virtual bool initQuantum();
+
+        virtual bool initWindows();
+        virtual bool initMac();
+        virtual bool initAndroid();
+        virtual bool initIOS();
         
         void shutDown();
     };
