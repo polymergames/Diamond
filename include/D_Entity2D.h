@@ -20,12 +20,10 @@
 #include <map>
 #include <memory>
 #include <typeindex>
-#include <unordered_map>
 #include <vector>
-#include "D_typedefs.h"
-#include "D_Behavior.h"
 #include "D_Component.h"
 #include "D_DataCenter.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
     class Entity2D {
@@ -59,6 +57,9 @@ namespace Diamond {
 
         // Manage entity tree.
 
+        /**
+         Adds the given entity to this entity's children and sets the child's parent as this entity.
+        */
         void addChild(Entity2D *child);
 
         /**
@@ -109,33 +110,8 @@ namespace Diamond {
                 components.erase(c);
         }
 
-        void addBehavior(Behavior *behavior);
-
-        template <class T, typename... Args>
-        void addBehavior(Args&&... args) {
-            std::type_index index = typeid(T);
-            if (!behaviors[index])
-                behaviors[index] = std::unique_ptr<Behavior>(new T(std::forward<Args>(args)...));
-        }
-
-        template <class T>
-        T *getBehavior() const {
-            auto b = behaviors.find(std::type_index(typeid(T)));
-            if (b != behaviors.end())
-                return static_cast<T*>(b->second.get());
-            else
-                return nullptr;
-        }
-
-        template <class T>
-        void removeBehavior() {
-            auto b = behaviors.find(std::type_index(typeid(T)));
-            if (b != behaviors.end())
-                behaviors.erase(b);
-        }
 
         void updateComponents(tD_delta delta_ms);
-        void updateBehaviors(tD_delta delta_ms);
 
     protected:
         //tD_id id;
@@ -147,11 +123,8 @@ namespace Diamond {
         std::vector<Entity2D*> children;
 
         // Components interface with backend data, therefore each entity has its own unique copy.
-        std::unordered_map<std::type_index, std::unique_ptr<Component> > components;
-
-        // A behavior should be self-contained, so main data manipulation happens within the behavior.
-        // Unlike commponents, behaviors are iterated and updated directly from the entity.
-        std::map<std::type_index, std::unique_ptr<Behavior> > behaviors;
+        // All components are updated once every frame.
+        std::map<std::type_index, std::unique_ptr<Component> > components;
         
         void setParent(Entity2D *parent);
 

@@ -100,12 +100,6 @@ void Diamond::Entity2D::addComponent(Component *component) {
         components[index] = std::unique_ptr<Component>(component);
 }
 
-void Diamond::Entity2D::addBehavior(Behavior *behavior) {
-    std::type_index index = typeid(*behavior);
-    if (!behaviors[index])
-        behaviors[index] = std::unique_ptr<Behavior>(behavior);
-}
-
 void Diamond::Entity2D::setParent(Entity2D *parent) {
     if (this->parent && this->parent != parent)
         this->parent->removeChild(this);
@@ -119,16 +113,6 @@ void Diamond::Entity2D::updateComponents(tD_delta delta_ms) {
 
     for (Entity2D *child : children) {
         child->updateComponents(delta_ms);
-    }
-}
-
-void Diamond::Entity2D::updateBehaviors(tD_delta delta_ms) {
-    for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
-        it->second->update(delta_ms);
-    }
-
-    for (Entity2D *child : children) {
-        child->updateBehaviors(delta_ms);
     }
 }
 
