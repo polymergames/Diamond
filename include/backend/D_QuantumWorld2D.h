@@ -57,6 +57,10 @@ namespace Diamond {
         Rigidbody2D *genRigidbody(transform2_id transform) override {
             QuantumBody2D *body = new QuantumBody2D(&world);
             pairs[body->getID()] = transform;
+            Quantum2D::Rigidbody2D &rbody = world.getRigidbody(body->getID());
+            Transform2<tD_pos, tD_rot> &trans = data->getTransform(transform);
+            rbody.setPosition(trans.position);
+            rbody.setRotation(trans.rotation);
             return body;
         }
 

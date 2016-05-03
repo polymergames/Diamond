@@ -71,19 +71,25 @@ void Diamond::SDLRenderer2D::renderAll() {
     SDL_RenderClear(renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
         //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
-        Transform2<tDrender_pos, tDrender_rot> transform = data->getTransform((*i).getTransformID());
+        const Transform2<tDrender_pos, tDrender_rot> &transform = data->getTransform((*i).getTransformID());
         SDL_Point pivot = (*i).getSDLPivot();
-        transform.position.x -= pivot.x;
-        transform.position.y -= pivot.y;
-        Vector2<tDrender_pos> size = (*i).getSize();
-        SDL_Rect render_rect = { transform.position.x, transform.position.y, size.x, size.y };
-        SDL_RenderCopyEx(renderer,
-            (*i).getTexture()->texture,
+
+        SDL_Rect render_rect = { 
+            transform.position.x - pivot.x, // render position x
+            transform.position.y - pivot.y, // render position y
+            (*i).getSize().x, // render width
+            (*i).getSize().y // render height
+        };
+
+        SDL_RenderCopyEx(
+            renderer, // The SDL backend renderer for this SDL instance.
+            (*i).getTexture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
             (*i).getClip(), // source rect
             &render_rect, // destination rect
-            transform.rotation,
-            &pivot, // rotation pivot
-            (*i).getFlip());
+            transform.rotation, // rotation for destination rect in degrees
+            &pivot, // rotation pivot location in local space
+            (*i).getFlip() // current flip status
+        );
     }
 
     // Update screen
