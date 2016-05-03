@@ -25,15 +25,15 @@ namespace Diamond {
     class RenderComponent2D;
     class Animator2D : public Component {
     public:
-        Animator2D(RenderComponent2D *rendercomp, Animation2D *anim);
+        Animator2D(RenderComponent2D *rendercomp, const Animation2D *anim);
 
-        void setAnimation(Animation2D *anim);
+        void setAnimation(const Animation2D *anim);
 
         const Animation2D *getAnimation() const { return anim; }
 
         void update(tD_delta delta) override;
     private:
-        Animation2D *anim;
+        const Animation2D *anim;
         RenderComponent2D *rendercomp;
         tD_index cur_frame;
         tD_delta elapsed;

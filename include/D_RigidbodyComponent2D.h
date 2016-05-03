@@ -22,12 +22,13 @@
 #include "D_PhysicsWorld2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
-#include "D_Vector2.h"
 
 namespace Diamond {
     class RigidbodyComponent2D : public Component {
     public:
-        RigidbodyComponent2D(Rigidbody2D *body, PhysicsWorld2D *world) : body(body), world(world) {}
+        RigidbodyComponent2D(const Entity2D *parent, PhysicsWorld2D *world) : world(world) {
+            body = world->genRigidbody(parent->getTransformID());
+        }
 
         ~RigidbodyComponent2D() { world->freeRigidbody(body); }
         

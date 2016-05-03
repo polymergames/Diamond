@@ -42,8 +42,8 @@ namespace Diamond {
         
         virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
 
-        virtual renderobj_id genRenderObj(Entity2D *parent, 
-                                          Texture *texture, 
+        virtual renderobj_id genRenderObj(const Entity2D *parent, 
+                                          const Texture *texture, 
                                           float scale, 
                                           const Vector2<tDrender_pos> &pivot = Vector2<tDrender_pos>(0, 0)) = 0;
 

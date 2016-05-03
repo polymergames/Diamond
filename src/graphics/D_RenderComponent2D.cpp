@@ -16,11 +16,11 @@
 
 #include "D_RenderComponent2D.h"
 
-Diamond::RenderComponent2D::RenderComponent2D(Entity2D *parent, 
+Diamond::RenderComponent2D::RenderComponent2D(const Entity2D *parent,
                                               Renderer2D *renderer, 
-                                              std::shared_ptr<Texture> sprite, 
+                                              std::shared_ptr<const Texture> sprite,
                                               float scale)
-    : Component(parent), renderer(renderer), sprite(sprite), clip_dim(), scale(scale) {
+    : parent(parent), renderer(renderer), sprite(sprite), clip_dim(), scale(scale) {
     render_obj = renderer->genRenderObj(parent, sprite.get(), scale);
 }
 

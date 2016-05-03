@@ -26,8 +26,8 @@
 namespace Diamond {
     class SDLRenderObj2D : public RenderObj2D {
     public:
-        SDLRenderObj2D(Entity2D *parent, 
-                       Texture *texture,  
+        SDLRenderObj2D(const Entity2D *parent,
+                       const Texture *texture,
                        float scale, 
                        const Vector2<tDrender_pos> &pivot);
         ~SDLRenderObj2D();
@@ -45,12 +45,12 @@ namespace Diamond {
             return trans;
         };
         
-        SDLTexture *getTexture() const { return texture; }
+        const SDLTexture *getTexture() const { return texture; }
         SDL_RendererFlip getFlip() const { return flip; }
         const Vector2<tDrender_pos> getSize() const { return size; }
         const SDL_Rect *getClip() const { return clip; }
 
-        void setTexture(Texture *texture, float scale) override;
+        void setTexture(const Texture *texture, float scale) override;
         void applyScale(float scale) override;
 
         void flipX() override { flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_HORIZONTAL); }
@@ -71,9 +71,9 @@ namespace Diamond {
         bool getClipDim(Vector2<int> &dim) const override;
 
     private:
-        Entity2D *parent;
+        const Entity2D *parent;
         Vector2<tDrender_pos> size;
-        SDLTexture *texture;
+        const SDLTexture *texture;
         SDL_Rect *clip;
         SDL_Point pivot;
         SDL_RendererFlip flip;

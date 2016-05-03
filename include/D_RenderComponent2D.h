@@ -27,15 +27,15 @@
 namespace Diamond {
     class RenderComponent2D : public Component {
     public:
-        RenderComponent2D(Entity2D *parent, 
+        RenderComponent2D(const Entity2D *parent, 
                           Renderer2D *renderer, 
-                          std::shared_ptr<Texture> sprite, 
+                          std::shared_ptr<const Texture> sprite,
                           float scale = 1.0f);
         ~RenderComponent2D();
         
-        std::shared_ptr<Texture> getSprite() const { return sprite; }
-        void setSprite(Texture *sprite) { setSprite(std::shared_ptr<Texture>(sprite)); }
-        void setSprite(std::shared_ptr<Texture> sprite);
+        std::shared_ptr<const Texture> getSprite() const { return sprite; }
+        void setSprite(const Texture *sprite) { setSprite(std::shared_ptr<const Texture>(sprite)); }
+        void setSprite(std::shared_ptr<const Texture> sprite);
 
         float getScale() const { return scale; }
         void setScale(float scale);
@@ -47,27 +47,27 @@ namespace Diamond {
         int isFlippedY() const;
 
         /**
-        Returns whether this game object's sprite is currently being rendered.
+         Returns whether this game object's sprite is currently being rendered.
         */
         bool isVisible() const;
 
         /**
-        Causes this game object to be rendered.
-        This game object must have a sprite (use setSprite() if needed) before calling this function.
+         Causes this game object to be rendered.
+         This game object must have a sprite (use setSprite() if needed) before calling this function.
         */
         void makeVisible();
 
         /**
-        Causes this game object to stop being rendered.
+         Causes this game object to stop being rendered.
         */
         void makeInvisible();
 
         /**
-        If this game object is currently visible, makes it invisible (ie not rendered), and vice versa.
+         If this game object is currently visible, makes it invisible (ie not rendered), and vice versa.
         */
         void toggleVisibility();
 
-        Vector2<tDrender_pos> getPivot() const { return pivot; }
+        const Vector2<tDrender_pos> &getPivot() const { return pivot; }
         void setPivot(const Vector2<tDrender_pos> &pivot);
 
         void initClip();
@@ -75,9 +75,10 @@ namespace Diamond {
         void setClip(int x, int y);
 
     private:
+        const Entity2D *parent;
         Renderer2D *renderer;
         renderobj_id render_obj;
-        std::shared_ptr<Texture> sprite;
+        std::shared_ptr<const Texture> sprite;
         Vector2<int> clip_dim;
         Vector2<tDrender_pos> pivot;
         float scale;
@@ -86,7 +87,7 @@ namespace Diamond {
     };
 }
 
-inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<Texture> sprite) {
+inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<const Texture> sprite) {
     this->sprite = sprite;
     if ((tD_index)render_obj != Diamond::INVALID) {
         renderer->getRenderObj(render_obj)->setTexture(sprite.get(), scale);

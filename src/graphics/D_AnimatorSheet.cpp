@@ -17,7 +17,7 @@
 #include "D_AnimatorSheet.h"
 #include "D_Log.h"
 
-Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rendercomp, AnimationSheet *anim) 
+Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rendercomp, const AnimationSheet *anim)
     : rendercomp(rendercomp), anim(anim), cur_frame(0), elapsed(0) {
     if (!rendercomp) {
         Log::log("AnimatorSheet ERROR: The given render component is nulL!");
@@ -32,7 +32,7 @@ Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rendercomp, AnimationSh
     }
 }
 
-void Diamond::AnimatorSheet::setAnimation(AnimationSheet *anim) {
+void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {
     if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
         // TODO: throw exception?
         Log::log("AnimatorSheet ERROR: Tried to set an empty animation!");

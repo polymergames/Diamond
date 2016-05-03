@@ -26,7 +26,7 @@ namespace Diamond {
     public:
         virtual ~RenderObj2D() {}
 
-        virtual void setTexture(Texture *texture, float scale) = 0;
+        virtual void setTexture(const Texture *texture, float scale) = 0;
         virtual void applyScale(float scale) = 0;
         
         virtual void flipX() = 0;

@@ -18,8 +18,8 @@
 
 #include "D_SDLTexture.h"
 
-Diamond::SDLRenderObj2D::SDLRenderObj2D(Entity2D *parent, 
-                                        Texture *texture, 
+Diamond::SDLRenderObj2D::SDLRenderObj2D(const Entity2D *parent,
+                                        const Texture *texture,
                                         float scale, 
                                         const Vector2<tDrender_pos> &pivot)
     : parent(parent), clip(nullptr), flip(SDL_FLIP_NONE) {
@@ -84,8 +84,8 @@ Diamond::SDLRenderObj2D &Diamond::SDLRenderObj2D::operator=(SDLRenderObj2D &&oth
     return *this;
 }
 
-void Diamond::SDLRenderObj2D::setTexture(Texture *texture, float scale) {
-    this->texture = dynamic_cast<SDLTexture*>(texture);
+void Diamond::SDLRenderObj2D::setTexture(const Texture *texture, float scale) {
+    this->texture = dynamic_cast<const SDLTexture*>(texture);
     applyScale(scale);
 }
 

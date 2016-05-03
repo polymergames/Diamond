@@ -131,8 +131,8 @@ Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_o
     return &render_objects[render_obj];
 }
 
-renderobj_id Diamond::SDLRenderer2D::genRenderObj(Entity2D *parent, 
-                                                  Texture *texture, 
+renderobj_id Diamond::SDLRenderer2D::genRenderObj(const Entity2D *parent,
+                                                  const Texture *texture,
                                                   float scale, 
                                                   const Vector2<tDrender_pos> &pivot) {
     return render_objects.emplace_back(parent, texture, scale, pivot);

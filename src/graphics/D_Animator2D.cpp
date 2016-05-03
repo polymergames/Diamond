@@ -17,7 +17,7 @@
 #include "D_Animator2D.h"
 #include "D_Log.h"
 
-Diamond::Animator2D::Animator2D(RenderComponent2D *rendercomp, Animation2D *anim) 
+Diamond::Animator2D::Animator2D(RenderComponent2D *rendercomp, const Animation2D *anim) 
     : rendercomp(rendercomp), anim(anim), cur_frame(0), elapsed(0) {
     if (!rendercomp) {
         Log::log("Animator2D ERROR: The given render component is nulL!");
@@ -31,7 +31,7 @@ Diamond::Animator2D::Animator2D(RenderComponent2D *rendercomp, Animation2D *anim
     }
 }
 
-void Diamond::Animator2D::setAnimation(Animation2D *anim) {
+void Diamond::Animator2D::setAnimation(const Animation2D *anim) {
     if (!anim || anim->sprites.size() == 0) {
         // TODO: throw exception?
         Log::log("Animator2D ERROR: Tried to set an empty animation!");
