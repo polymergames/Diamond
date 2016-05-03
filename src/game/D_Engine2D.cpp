@@ -85,20 +85,31 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
     // Game loop
     while (is_running) {
+        // Update time junk
         ++nframes;
 
         time = timer->msElapsed();
         delta = time - last_time;
         last_time = time;
 
-        // TODO: replace with timer functions
+        // TODO: replace with timer functions, timer calculates and stores its own values
+        // then I just have to go get those values ya know?
         timer->setDelta(delta);
         timer->setFPS(nframes / (time / 1000.0));
 
-        phys_world->step(delta);
+        // Catch up on events
         event_handler->update();
-        world->update(delta);
+        
+        // Update game logic and entities
         game.update(delta);
+        world->update(delta);
+
+        // Update physics
+        phys_world->updateBodies();
+        phys_world->step(delta);
+        phys_world->updateTransforms();
+
+        // Draw pictures!
         renderer->renderAll();
     }
 
