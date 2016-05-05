@@ -63,8 +63,8 @@ void RandomDemo::init() {
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
 
+    zapper->addComponent<RenderComponent2D>(zapper, renderer, zapper_anim.sprites[0], 0.5f);
     zapper->addComponent<Animator2D>(zapper->getComponent<RenderComponent2D>(), &zapper_anim);
-    zapper->getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper->setPosition(Vector2<int>(700, 300));
     world->addEntity(zapper);
 
@@ -73,9 +73,9 @@ void RandomDemo::init() {
     zapper2_anim.rows = 2;
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
-    zapper2->addComponent(new AnimatorSheet(zapper2->getComponent<RenderComponent2D>(), &zapper2_anim));
     float z2scale = 0.5f;
-    zapper2->getComponent<RenderComponent2D>()->setScale(z2scale);
+    zapper2->addComponent<RenderComponent2D>(zapper2, renderer, zapper2_anim.sprite_sheet, z2scale);
+    zapper2->addComponent(new AnimatorSheet(zapper2->getComponent<RenderComponent2D>(), &zapper2_anim));
     zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
         zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
     zapper2->setPosition(Vector2<int>(600, 100));
@@ -96,16 +96,16 @@ void RandomDemo::update(tD_delta delta) {
     // Coloring
     if (Input::keydown[Input::K_R]) {
         spike_color = { 255, 0, 0, 255 };
-        spike->getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
+        spike_sprite->setColor(spike_color);
     }
     if (Input::keydown[Input::K_T]) {
         spike_color = { 255, 255, 255, 255 };
-        spike->getComponent<RenderComponent2D>()->getSprite()->setColor(spike_color);
+        spike_sprite->setColor(spike_color);
     }
     if (Input::keyup[Input::K_Y]) {
         RGBA sc = spike->getComponent<RenderComponent2D>()->getSprite()->getColor();
         sc.a -= 32;
-        spike->getComponent<RenderComponent2D>()->getSprite()->setColor(sc);
+        spike_sprite->setColor(sc);
     }
 
     // Sprite switching
