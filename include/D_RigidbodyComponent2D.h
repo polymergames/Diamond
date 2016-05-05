@@ -34,6 +34,8 @@ namespace Diamond {
         
         Rigidbody2D *getBody() const { return body; }
 
+        Rigidbody2D *operator->() const { return body; }
+
     private:
         Rigidbody2D *body;
         PhysicsWorld2D *world;

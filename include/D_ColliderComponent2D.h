@@ -30,6 +30,8 @@ namespace Diamond {
         ~ColliderComponent2D() { phys_world->freeCollider(collider); }
         
         Collider2D *getCollider() const { return collider; }
+
+        Collider2D *operator->() const { return collider; }
     
     private:
         Collider2D *collider;

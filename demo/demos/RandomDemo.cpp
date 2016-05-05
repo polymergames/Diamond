@@ -63,7 +63,7 @@ void RandomDemo::init() {
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
 
-    zapper->addBehavior<Animator2D>(zapper, renderer, &zapper_anim);
+    zapper->addComponent<Animator2D>(zapper->getComponent<RenderComponent2D>(), &zapper_anim);
     zapper->getComponent<RenderComponent2D>()->setScale(0.5f);
     zapper->setPosition(Vector2<int>(700, 300));
     world->addEntity(zapper);
@@ -73,7 +73,7 @@ void RandomDemo::init() {
     zapper2_anim.rows = 2;
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
-    zapper2->addBehavior(new AnimatorSheet(zapper2, renderer, &zapper2_anim));
+    zapper2->addComponent(new AnimatorSheet(zapper2->getComponent<RenderComponent2D>(), &zapper2_anim));
     float z2scale = 0.5f;
     zapper2->getComponent<RenderComponent2D>()->setScale(z2scale);
     zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
