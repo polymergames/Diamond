@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include "D_Config.h"
-#include "D_Entity2D.h"
+#include "D_DataCenter.h"
 #include "D_RenderObj2D.h"
 #include "D_Texture.h"
 #include "D_typedefs.h"
@@ -41,7 +41,7 @@ namespace Diamond {
         
         virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
 
-        virtual renderobj_id genRenderObj(const Entity2D *parent, 
+        virtual renderobj_id genRenderObj(transform2_id trans, 
                                           const Texture *texture, 
                                           float scale, 
                                           const Vector2<tDrender_pos> &pivot = Vector2<tDrender_pos>(0, 0)) = 0;

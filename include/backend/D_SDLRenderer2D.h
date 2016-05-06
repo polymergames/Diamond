@@ -20,7 +20,6 @@
 #include <vector>
 #include "SDL.h"
 
-#include "D_DataCenter.h"
 #include "D_Renderer2D.h"
 #include "D_SDLRenderObj2D.h"
 #include "D_swapvector.h"
@@ -58,7 +57,7 @@ namespace Diamond {
         /**
          Creates and returns id of an SDLRenderObj2D, which is a rendering unit for the render loop.
         */
-        renderobj_id genRenderObj(const Entity2D *parent,
+        renderobj_id genRenderObj(transform2_id trans,
                                   const Texture *texture,
                                   float scale, 
                                   const Vector2<tDrender_pos> &pivot) override;

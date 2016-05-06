@@ -133,11 +133,11 @@ Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_o
     return &render_objects[render_obj];
 }
 
-renderobj_id Diamond::SDLRenderer2D::genRenderObj(const Entity2D *parent,
+renderobj_id Diamond::SDLRenderer2D::genRenderObj(transform2_id trans,
                                                   const Texture *texture,
                                                   float scale, 
                                                   const Vector2<tDrender_pos> &pivot) {
-    return render_objects.emplace_back(parent->getTransformID(), texture, scale, pivot);
+    return render_objects.emplace_back(trans, texture, scale, pivot);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {

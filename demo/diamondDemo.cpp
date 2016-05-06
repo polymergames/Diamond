@@ -29,6 +29,12 @@ int main(int argc, char *argv[]) {
     if (engine.init(config)) {
         engine.launch(demo);
     }
+
+    RandomDemo demo2;
+
+    if (engine.init(config)) {
+        engine.launch(demo2);
+    }
     
 	return 0;
 }

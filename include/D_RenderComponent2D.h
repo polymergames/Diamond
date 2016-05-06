@@ -137,7 +137,7 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 
 inline void Diamond::RenderComponent2D::makeVisible() {
     if ((tD_index)render_obj == Diamond::INVALID) {
-        render_obj = renderer->genRenderObj(parent, sprite.get(), scale, pivot);
+        render_obj = renderer->genRenderObj(parent->getTransformID(), sprite.get(), scale, pivot);
         if (clip_dim.x != 0) { // check if any valid clip data has been stored
             RenderObj2D *r = renderer->getRenderObj(render_obj);
             r->initClip();
