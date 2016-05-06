@@ -28,6 +28,7 @@ namespace Quantum2D {
                        const std::function<void(void *other)> &onCollision,
                        tQ_pos radius,
                        const Diamond::Vector2<tQ_pos> &center = Diamond::Vector2<tQ_pos>(0, 0));
+        //~CircleCollider() {}
 
         /**
          Get the radius of this circle.

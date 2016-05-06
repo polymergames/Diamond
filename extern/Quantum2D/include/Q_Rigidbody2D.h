@@ -26,12 +26,15 @@ namespace Quantum2D {
         Rigidbody2D() : rotation(0) {}
 
         const Diamond::Vector2<tQ_pos> &getPosition() const { return position; }
+        Diamond::Vector2<tQ_pos> &getPosition() { return position; }
         void setPosition(const Diamond::Vector2<tQ_pos> &newpos) { position = newpos; }
 
         tQ_rot getRotation() const { return rotation; }
+        tQ_rot &getRotation() { return rotation; }
         void setRotation(tQ_rot newrot) { rotation = newrot; }
 
         const Diamond::Vector2<tQ_pos> &getVelocity() const { return velocity; }
+        Diamond::Vector2<tQ_pos> &getVelocity() { return velocity; }
         void setVelocity(const Diamond::Vector2<tQ_pos> &newvel) { velocity = newvel; }
 
     private:

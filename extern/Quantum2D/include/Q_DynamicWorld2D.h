@@ -40,6 +40,7 @@ namespace Quantum2D {
          Only use this reference immediately after calling this function!
         */
         Rigidbody2D &getRigidbody(body2d_id body) { return bodies[body]; }
+        const Rigidbody2D &getRigidbody(body2d_id body) const { return bodies[body]; }
 
         /**
          Creates a rigidbody object attached to the given transform and returns its id.
@@ -57,6 +58,7 @@ namespace Quantum2D {
          Returns a pointer to the collider with the given id.
         */
         Collider2D *getCollider(collider2_id collider) { return colliders[collider].get(); }
+        const Collider2D *getCollider(collider2_id collider) const { return colliders[collider].get(); }
 
         /**
          Creates a 2D collider object of the given type using the given constructor arguments 

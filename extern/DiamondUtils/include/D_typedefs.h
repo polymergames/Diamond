@@ -40,7 +40,7 @@ typedef tD_id body2d_id; // 2d rigidbody object id type
 typedef tD_id collider2_id; // 2d collider object id type
 
 namespace Diamond {
-    const tD_index INVALID = 0xffff; // represents an invalid id or array index. can't use negative if tD_index is unsigned type
+    const tD_index INVALID = ~0; // represents an invalid id or array index.
 }
 
 #endif // D_TYPEDEFS_H

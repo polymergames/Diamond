@@ -28,6 +28,7 @@ namespace Quantum2D {
                        const std::function<void(void *other)> &onCollision,
                        const Diamond::Vector2<tQ_num> &dims, 
                        const Diamond::Vector2<tQ_num> &origin = Diamond::Vector2<tQ_num>(0, 0));
+        // ~AABBCollider2D() {}
 
         /**
          Get the origin point of this AABB in the parent transform's local space.
