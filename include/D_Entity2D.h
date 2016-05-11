@@ -116,7 +116,7 @@ namespace Diamond {
 
 
         // Tree update functions
-        void update(tD_delta delta, Vector2<tD_pos> parent_translation);
+        void update(tD_delta delta, Vector2<tD_pos> parent_translation, tD_rot parent_rot);
         void update(tD_delta delta);
         void updateComponents(tD_delta delta);
         void updateChildren(tD_delta delta);

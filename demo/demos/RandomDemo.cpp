@@ -165,11 +165,11 @@ void RandomDemo::update(tD_delta delta) {
 
     // Rotation and velocity
     if (Input::keydown[Input::K_LEFT]) {
-        zapper2->setWorldRotation(zapper2->getWorldTransform().rotation - spinspeed * delta);
+        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation - spinspeed * delta);
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        zapper2->setWorldRotation(zapper2->getWorldTransform().rotation + spinspeed * delta);
+        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation + spinspeed * delta);
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(movespeed, 0));
     }
 

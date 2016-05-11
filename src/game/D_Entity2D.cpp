@@ -114,9 +114,10 @@ void Diamond::Entity2D::setParent(Entity2D *parent) {
     this->parent = parent;
 }
 
-void Diamond::Entity2D::update(tD_delta delta, Vector2<tD_pos> parent_translation) {
+void Diamond::Entity2D::update(tD_delta delta, Vector2<tD_pos> parent_translation, tD_rot parent_rot) {
     Transform2<tD_pos, tD_rot> &wtrans = getWorldTransform();
     wtrans.position = local_transform.position + parent_translation;
+    wtrans.rotation = local_transform.rotation + parent_rot;
 
     updateComponents(delta);
 
@@ -136,8 +137,9 @@ void Diamond::Entity2D::updateComponents(tD_delta delta) {
 }
 
 void Diamond::Entity2D::updateChildren(tD_delta delta) {
+    Transform2<tD_pos, tD_rot> wtrans = getWorldTransform();
     for (Entity2D *child : children) {
-        child->update(delta, getWorldTransform().position);
+        child->update(delta, wtrans.position, wtrans.rotation);
     }
 }
 
