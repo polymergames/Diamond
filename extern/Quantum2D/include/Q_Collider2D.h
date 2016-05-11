@@ -38,7 +38,7 @@ namespace Quantum2D {
 
         Coltype getType() const { return type; }
         
-        transform2_id getBodyID() const { return body; }
+        body2d_id getBodyID() const { return body; }
 
         void *getParent() const { return parent; }
 
