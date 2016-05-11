@@ -20,27 +20,34 @@
 
 
 Diamond::Entity2D::Entity2D(const std::string &name, DataCenter *data)
-    : name(name), data(data), parent(nullptr), transform(data->genTransform()) {}
+    : name(name), 
+      local_transform(Vector2<tD_pos>(0,0), 0), 
+      data(data), 
+      parent(nullptr), 
+      world_transform(data->genTransform()) {}
 
 Diamond::Entity2D::~Entity2D() {
     freeTransform();
 }
 
 
-Diamond::Entity2D::Entity2D(const Entity2D &other) : data(other.data), name(other.name) {
-    transform = data->genTransform();
-    setTransform(other.getTransform());
+Diamond::Entity2D::Entity2D(const Entity2D &other) 
+    : data(other.data), name(other.name), local_transform(other.local_transform) {
+    world_transform = data->genTransform();
+    setWorldTransform(other.getWorldTransform());
 }
 
 Diamond::Entity2D::Entity2D(Entity2D &&other) 
-    : data(other.data), name(other.name), transform(other.transform) {
-    other.transform = Diamond::INVALID;
+    : data(other.data), name(other.name), 
+      local_transform(other.local_transform), world_transform(other.world_transform) {
+    other.world_transform = Diamond::INVALID;
 }
 
 Diamond::Entity2D &Diamond::Entity2D::operator=(const Entity2D &other) {
     if (this != &other) {
         name = other.name;
-        setTransform(other.getTransform());
+        local_transform = other.local_transform;
+        setWorldTransform(other.getWorldTransform());
     }
     return *this;
 }
@@ -48,9 +55,10 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(const Entity2D &other) {
 Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
     if (this != &other) {
         name = other.name;
+        local_transform = other.local_transform;
         freeTransform();
-        transform = other.transform;
-        other.transform = Diamond::INVALID;
+        world_transform = other.world_transform;
+        other.world_transform = Diamond::INVALID;
     }
     return *this;
 }
@@ -106,19 +114,36 @@ void Diamond::Entity2D::setParent(Entity2D *parent) {
     this->parent = parent;
 }
 
-void Diamond::Entity2D::updateComponents(tD_delta delta_ms) {
-    for (auto it = components.begin(); it != components.end(); ++it) {
-        it->second->update(delta_ms);
-    }
+void Diamond::Entity2D::update(tD_delta delta, Vector2<tD_pos> parent_translation) {
+    Transform2<tD_pos, tD_rot> &wtrans = getWorldTransform();
+    wtrans.position = local_transform.position + parent_translation;
 
+    updateComponents(delta);
+
+    updateChildren(delta);
+}
+
+void Diamond::Entity2D::update(tD_delta delta) {
+    updateComponents(delta);
+
+    updateChildren(delta);
+}
+
+void Diamond::Entity2D::updateComponents(tD_delta delta) {
+    for (auto it = components.begin(); it != components.end(); ++it) {
+        it->second->update(delta);
+    }
+}
+
+void Diamond::Entity2D::updateChildren(tD_delta delta) {
     for (Entity2D *child : children) {
-        child->updateComponents(delta_ms);
+        child->update(delta, getWorldTransform().position);
     }
 }
 
 void Diamond::Entity2D::freeTransform() {
-    if ((tD_index)transform != Diamond::INVALID) {
-        data->freeTransform(transform);
-        transform = Diamond::INVALID;
+    if ((tD_index)world_transform != Diamond::INVALID) {
+        data->freeTransform(world_transform);
+        world_transform = Diamond::INVALID;
     }
 }

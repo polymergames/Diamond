@@ -24,15 +24,21 @@ using namespace Diamond;
 
 RandomDemo::RandomDemo(float movespeed, float spinspeed, float growspeed) 
     : movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
-      spike(nullptr), zapper(nullptr), zapper2(nullptr) {}
+      spike(nullptr), spike2(nullptr), zapper(nullptr), zapper2(nullptr) {}
 
 void RandomDemo::init() {
     World2D *world = engine->getWorld();
     Renderer2D *renderer = engine->getRenderer();
     
     spike = world->createEntity("spike");
+    spike2 = world->createEntity("spike2");
     zapper = world->createEntity("zapper");
     zapper2 = world->createEntity("zapper2");
+
+    world->addEntity(spike2);
+    world->addEntity(zapper2);
+    zapper2->addChild(zapper);
+    zapper2->addChild(spike);
     
     window = renderer->getResolution();
 
@@ -51,11 +57,13 @@ void RandomDemo::init() {
 
     //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
     spike->addComponent<RenderComponent2D>(spike, renderer, spike_sprite, 0.1f);
-    spike->setPosition(Vector2<int>(500, 400));
+    spike->setLocalPosition(Vector2<int>(-150, 200));
     if (!spike->getComponent<RenderComponent2D>()) {
         std::cout << "NULL!" << std::endl;
     }
-    world->addEntity(spike);
+
+    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite, 0.1f);
+    spike2->setLocalPosition(Vector2<int>(100, 100));
 
     // Animations
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper1.png")));
@@ -65,8 +73,7 @@ void RandomDemo::init() {
 
     zapper->addComponent<RenderComponent2D>(zapper, renderer, zapper_anim.sprites[0], 0.5f);
     zapper->addComponent<Animator2D>(zapper->getComponent<RenderComponent2D>(), &zapper_anim);
-    zapper->setPosition(Vector2<int>(700, 300));
-    world->addEntity(zapper);
+    zapper->setLocalPosition(Vector2<int>(50, 100));
 
     zapper2_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
@@ -78,8 +85,7 @@ void RandomDemo::init() {
     zapper2->addComponent(new AnimatorSheet(zapper2->getComponent<RenderComponent2D>(), &zapper2_anim));
     zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
         zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
-    zapper2->setPosition(Vector2<int>(600, 100));
-    world->addEntity(zapper2);
+    zapper2->setLocalPosition(Vector2<int>(650, 200));
 
     haha = std::unique_ptr<Sound2D>(engine->getDJ()->loadSound("haha.wav"));
 
@@ -141,29 +147,29 @@ void RandomDemo::update(tD_delta delta) {
 
     // Movement
     if (Input::keydown[Input::K_W]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_S]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_A]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_D]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
     // Rotation and velocity
     if (Input::keydown[Input::K_LEFT]) {
-        zapper2->setRotation(zapper2->getTransform().rotation - spinspeed * delta);
+        zapper2->setWorldRotation(zapper2->getWorldTransform().rotation - spinspeed * delta);
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(-movespeed, 0));
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        zapper2->setRotation(zapper2->getTransform().rotation + spinspeed * delta);
+        zapper2->setWorldRotation(zapper2->getWorldTransform().rotation + spinspeed * delta);
         // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(movespeed, 0));
     }
 
@@ -193,8 +199,9 @@ void RandomDemo::update(tD_delta delta) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
         Entity2D *spawn = engine->getWorld()->createEntity("cloud");
         spawn->addComponent(new RenderComponent2D(spawn, engine->getRenderer(), cloud_sprite, 0.1f));
-        spawn->setPosition(Input::touch_pos);
-        engine->getWorld()->addEntity(spawn);
+        spawn->setLocalPosition(Input::touch_pos - spike->getWorldTransform().position);
+        //engine->getWorld()->addEntity(spawn);
+        spike->addChild(spawn);
     }
 
     //std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;

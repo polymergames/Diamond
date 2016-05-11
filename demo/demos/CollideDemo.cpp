@@ -49,10 +49,10 @@ void CollideDemo::init() {
     }
 
     spike1->addComponent<RenderComponent2D>(spike1, renderer, spike_sprite, 0.1f);
-    spike1->setPosition(Vector2<int>(500, 400));
+    spike1->setLocalPosition(Vector2<int>(500, 400));
 
     spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite, 0.1f);
-    spike2->setPosition(Vector2<int>(900, 200));
+    spike2->setLocalPosition(Vector2<int>(900, 200));
 
     zapper_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     zapper_anim.rows = 2;
@@ -61,11 +61,11 @@ void CollideDemo::init() {
 
     zapper1->addComponent<RenderComponent2D>(zapper1, renderer, spike_sprite, 0.5f);
     zapper1->addComponent<AnimatorSheet>(zapper1->getComponent<RenderComponent2D>(), &zapper_anim);
-    zapper1->setPosition(Vector2<int>(300, 100));
+    zapper1->setLocalPosition(Vector2<int>(300, 100));
 
     zapper2->addComponent<RenderComponent2D>(zapper2, renderer, spike_sprite, 0.5f);
     zapper2->addComponent<AnimatorSheet>(zapper2->getComponent<RenderComponent2D>(), &zapper_anim);
-    zapper2->setPosition(Vector2<int>(700, 300));
+    zapper2->setLocalPosition(Vector2<int>(700, 300));
 
     // Setup physics
     PhysicsWorld2D *physworld = engine->getPhysWorld();
@@ -106,56 +106,56 @@ void CollideDemo::init() {
 void CollideDemo::update(tD_delta delta) {
     // zapper1 controls
     if (Input::keydown[Input::K_W]) {
-        Vector2<float> pos = zapper1->getTransform().position;
-        zapper1->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
+        Vector2<float> pos = zapper1->getLocalTransform().position;
+        zapper1->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_S]) {
-        Vector2<float> pos = zapper1->getTransform().position;
-        zapper1->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+        Vector2<float> pos = zapper1->getLocalTransform().position;
+        zapper1->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_A]) {
-        Vector2<float> pos = zapper1->getTransform().position;
-        zapper1->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+        Vector2<float> pos = zapper1->getLocalTransform().position;
+        zapper1->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_D]) {
-        Vector2<float> pos = zapper1->getTransform().position;
-        zapper1->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+        Vector2<float> pos = zapper1->getLocalTransform().position;
+        zapper1->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
     // zapper2 controls
     if (Input::keydown[Input::K_UP]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_DOWN]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_LEFT]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        Vector2<float> pos = zapper2->getTransform().position;
-        zapper2->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+        Vector2<float> pos = zapper2->getLocalTransform().position;
+        zapper2->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
     // spike2 controls
     if (Input::keydown[Input::K_P8]) {
-        Vector2<float> pos = spike2->getTransform().position;
-        spike2->setPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
+        Vector2<float> pos = spike2->getLocalTransform().position;
+        spike2->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
     if (Input::keydown[Input::K_P2]) {
-        Vector2<float> pos = spike2->getTransform().position;
-        spike2->setPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+        Vector2<float> pos = spike2->getLocalTransform().position;
+        spike2->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
     }
     if (Input::keydown[Input::K_P4]) {
-        Vector2<float> pos = spike2->getTransform().position;
-        spike2->setPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+        Vector2<float> pos = spike2->getLocalTransform().position;
+        spike2->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
     }
     if (Input::keydown[Input::K_P6]) {
-        Vector2<float> pos = spike2->getTransform().position;
-        spike2->setPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+        Vector2<float> pos = spike2->getLocalTransform().position;
+        spike2->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 }
 

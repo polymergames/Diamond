@@ -40,19 +40,23 @@ namespace Diamond {
         //tD_id getID() const { return id; }
         const std::string &getName() const { return name; }
 
+        // Local transform functions.
+        const Transform2<tD_pos, tD_rot> &getLocalTransform() const { return local_transform; }
+        Transform2<tD_pos, tD_rot> &getLocalTransform() { return local_transform; }
 
-        // Get this entity's current transform.
+        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { local_transform = newtrans; }
+        void setLocalPosition(const Vector2<tD_pos> &newpos) { local_transform.position = newpos; }
+        void setLocalRotation(tD_rot newrot) { local_transform.rotation = newrot; }
 
-        const Transform2<tD_pos, tD_rot> &getTransform() const { return data->getTransform(transform); }
-        Transform2<tD_pos, tD_rot> &getTransform() { return data->getTransform(transform); }
-        transform2_id getTransformID() const { return transform; }
-        
 
-        // Modify this entity's transform.
+        // World transform functions.
+        const Transform2<tD_pos, tD_rot> &getWorldTransform() const { return data->getTransform(world_transform); }
+        Transform2<tD_pos, tD_rot> &getWorldTransform() { return data->getTransform(world_transform); }
+        transform2_id getTransformID() const { return world_transform; }
 
-        void setTransform(const Transform2<tD_pos, tD_rot> &newtrans) { data->getTransform(transform) = newtrans; }
-        void setPosition(const Vector2<tD_pos> &newpos) { data->getTransform(transform).position = newpos; }
-        void setRotation(tD_rot newrot) { data->getTransform(transform).rotation = newrot; }
+        void setWorldTransform(const Transform2<tD_pos, tD_rot> &newtrans) { data->getTransform(world_transform) = newtrans; }
+        void setWorldPosition(const Vector2<tD_pos> &newpos) { data->getTransform(world_transform).position = newpos; }
+        void setWorldRotation(tD_rot newrot) { data->getTransform(world_transform).rotation = newrot; }
 
 
         // Manage entity tree.
@@ -111,12 +115,17 @@ namespace Diamond {
         }
 
 
-        void updateComponents(tD_delta delta_ms);
+        // Tree update functions
+        void update(tD_delta delta, Vector2<tD_pos> parent_translation);
+        void update(tD_delta delta);
+        void updateComponents(tD_delta delta);
+        void updateChildren(tD_delta delta);
 
     protected:
         //tD_id id;
         std::string name;
-        transform2_id transform;
+        Transform2<tD_pos, tD_rot> local_transform;
+        transform2_id world_transform;
         DataCenter *data;
         
         Entity2D *parent;
