@@ -24,7 +24,10 @@ int main(int argc, char *argv[]) {
 	RandomDemo demo;
     
     config.vsync = true;
-    // config.bg_color = { 0, 128, 255, 255 };
+    //config.bg_color = { 0, 128, 255, 255 };
+
+    // Thank you Joey de Vries for this color :P
+    config.bg_color = { 50, 76, 76, 255 };
     
     if (engine.init(config)) {
         engine.launch(demo);

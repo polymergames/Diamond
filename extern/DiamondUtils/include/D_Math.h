@@ -29,6 +29,7 @@ namespace Diamond {
 
         inline float deg2rad(float deg) { return deg * DEG2RAD; }
 
+        // TODO: move this to vector header!
         template <typename A, typename B, typename C>
         inline bool leftOf(Vector2<C> &x, Vector2<A> &ea, Vector2<B> &eb) {
             return (eb.x - ea.x) * (x.y - ea.y) - (eb.y - ea.y) * (x.x - ea.x) > 0;

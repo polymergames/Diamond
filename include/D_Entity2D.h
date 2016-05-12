@@ -21,6 +21,7 @@
 #include <memory>
 #include <typeindex>
 #include <vector>
+#include "D_Matrix.h"
 #include "D_Component.h"
 #include "D_DataCenter.h"
 #include "D_typedefs.h"
@@ -40,8 +41,13 @@ namespace Diamond {
         //tD_id getID() const { return id; }
         const std::string &getName() const { return name; }
 
+
+
         // Local transform functions.
-        
+        // NOTE: If you want to set this entity's world transform, you will have to first convert the world
+        // transform to this entity's PARENT's coordinate system using parent->worldToLocalSpace,
+        // then set that result to this entity's local transform.
+
         const Transform2<tD_pos, tD_rot> &getLocalTransform() const { return local_transform; }
         Transform2<tD_pos, tD_rot> &getLocalTransform() { return local_transform; }
 
@@ -50,24 +56,36 @@ namespace Diamond {
         void setLocalRotation(tD_rot newrot) { local_transform.rotation = newrot; }
 
 
-        // World transform functions.
+
+        // Transform conversion functions.
+
+        // Get this entity's world transform matrix.
+        const Matrix<tD_real, 2, 2> &getTransMat() const { return world_trans_mat; }
+
+        /**
+         Transforms a given point from this entity's coordinate system to world space.
+         TODO: test
+        */
+        template <typename V>
+        Vector2<V> localToWorldSpace(const Vector2<V> &local_coords) {
+            return local_coords.mul(world_trans_mat.m) + getWorldTransform().position;
+        }
+
+        /**
+         Transforms a given point from world space to this entity's coordinate system.
+         TODO: test
+        */
+        template <typename V>
+        Vector2<V> worldToLocalSpace(const Vector2<V> &world_coords) {
+            return (world_coords - getWorldTransform().position).mul(world_trans_mat.inv().m);
+        }
+
+
         
+        // World transform functions.
         Transform2<tD_pos, tD_rot> getWorldTransform() const { return data->getTransform(world_transform); }
         transform2_id getTransformID() const { return world_transform; }
 
-        // TODO: update local transform appropriately!
-        void setWorldTransform(const Transform2<tD_pos, tD_rot> &newtrans) { data->getTransform(world_transform) = newtrans; }
-        void setWorldPosition(const Vector2<tD_pos> &newpos) {
-            /*
-            Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
-            local_transform.position += newpos - wtrans.position;
-            wtrans.position = newpos;*/
-        }
-        void setWorldRotation(tD_rot newrot) {
-            Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
-            local_transform.rotation += newrot - wtrans.rotation;
-            wtrans.rotation = newrot; 
-        }
 
 
         // Manage entity tree.
@@ -94,6 +112,7 @@ namespace Diamond {
         const std::vector<Entity2D*> &getChildren() const { return children; }
 
         Entity2D *getParent() const { return parent; }
+
 
 
         // Manage this entity's components.
@@ -126,12 +145,12 @@ namespace Diamond {
         }
 
 
+
         // Tree update functions
         void update(tD_delta delta, 
-                    tD_real trans_mat[2][2], 
-                    Vector2<tD_pos> translation, 
-                    tD_rot parent_rot);
-        void update(tD_delta delta);
+                    const Matrix<tD_real, 2, 2> &transform_mat, 
+                    const Vector2<tD_pos> &translation, 
+                    tD_rot deg_rot);
         void updateComponents(tD_delta delta);
         void updateChildren(tD_delta delta);
 
@@ -140,8 +159,9 @@ namespace Diamond {
         std::string name;
         Transform2<tD_pos, tD_rot> local_transform;
         transform2_id world_transform;
+        Matrix<tD_real, 2, 2> world_trans_mat;
         DataCenter *data;
-        
+
         Entity2D *parent;
         std::vector<Entity2D*> children;
 
