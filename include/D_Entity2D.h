@@ -41,6 +41,7 @@ namespace Diamond {
         const std::string &getName() const { return name; }
 
         // Local transform functions.
+        
         const Transform2<tD_pos, tD_rot> &getLocalTransform() const { return local_transform; }
         Transform2<tD_pos, tD_rot> &getLocalTransform() { return local_transform; }
 
@@ -50,13 +51,23 @@ namespace Diamond {
 
 
         // World transform functions.
-        const Transform2<tD_pos, tD_rot> &getWorldTransform() const { return data->getTransform(world_transform); }
-        Transform2<tD_pos, tD_rot> &getWorldTransform() { return data->getTransform(world_transform); }
+        
+        Transform2<tD_pos, tD_rot> getWorldTransform() const { return data->getTransform(world_transform); }
         transform2_id getTransformID() const { return world_transform; }
 
+        // TODO: update local transform appropriately!
         void setWorldTransform(const Transform2<tD_pos, tD_rot> &newtrans) { data->getTransform(world_transform) = newtrans; }
-        void setWorldPosition(const Vector2<tD_pos> &newpos) { data->getTransform(world_transform).position = newpos; }
-        void setWorldRotation(tD_rot newrot) { data->getTransform(world_transform).rotation = newrot; }
+        void setWorldPosition(const Vector2<tD_pos> &newpos) {
+            /*
+            Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
+            local_transform.position += newpos - wtrans.position;
+            wtrans.position = newpos;*/
+        }
+        void setWorldRotation(tD_rot newrot) {
+            Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
+            local_transform.rotation += newrot - wtrans.rotation;
+            wtrans.rotation = newrot; 
+        }
 
 
         // Manage entity tree.
@@ -116,7 +127,10 @@ namespace Diamond {
 
 
         // Tree update functions
-        void update(tD_delta delta, Vector2<tD_pos> parent_translation, tD_rot parent_rot);
+        void update(tD_delta delta, 
+                    tD_real trans_mat[2][2], 
+                    Vector2<tD_pos> translation, 
+                    tD_rot parent_rot);
         void update(tD_delta delta);
         void updateComponents(tD_delta delta);
         void updateChildren(tD_delta delta);
