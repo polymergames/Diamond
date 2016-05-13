@@ -26,8 +26,7 @@ namespace Diamond {
     public:
         virtual ~RenderObj2D() {}
 
-        virtual void setTexture(const Texture *texture, float scale) = 0;
-        virtual void applyScale(float scale) = 0;
+        virtual void setTexture(const Texture *texture) = 0;
         
         virtual void flipX() = 0;
         virtual void flipY() = 0;
@@ -37,19 +36,14 @@ namespace Diamond {
         
         virtual Vector2<tDrender_pos> getPivot() const = 0;
         virtual void setPivot(const Vector2<tDrender_pos> &newpivot) = 0;
-
-        virtual void initClip() = 0;
-
-        /**
-         Must call initClip() first!
-        */
+        
         virtual void setClip(int x, int y, int w, int h) = 0;
         virtual void setClip(int x, int y) = 0;
 
         /**
-         Returns whether there is a clip, and stores the clip dimensions in dim.
+         Stores the clip dimensions in dim.
         */
-        virtual bool getClipDim(Vector2<int> &dim) const = 0;
+        virtual void getClipDim(Vector2<int> &dim) const = 0;
     };
 }
 

@@ -57,6 +57,5 @@ void Diamond::AnimatorSheet::update(tD_delta delta) {
 void Diamond::AnimatorSheet::initClip() {
     frame_width = anim->sprite_sheet->getWidth() / anim->columns;
     frame_height = anim->sprite_sheet->getHeight() / anim->rows;
-    rendercomp->initClip();
     rendercomp->setClip(0, 0, frame_width, frame_height);
 }

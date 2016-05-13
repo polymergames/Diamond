@@ -48,24 +48,28 @@ void CollideDemo::init() {
         return;
     }
 
-    spike1->addComponent<RenderComponent2D>(spike1, renderer, spike_sprite, 0.1f);
+    spike1->addComponent<RenderComponent2D>(spike1, renderer, spike_sprite);
     spike1->setLocalPosition(Vector2<int>(500, 400));
+    spike1->setLocalScale(Vector2<float>(0.1f, 0.1f));
 
-    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite, 0.1f);
+    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite);
     spike2->setLocalPosition(Vector2<int>(900, 200));
+    spike2->setLocalScale(Vector2<float>(0.1f, 0.1f));
 
     zapper_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     zapper_anim.rows = 2;
     zapper_anim.columns = 2;
     zapper_anim.num_frames = 4;
 
-    zapper1->addComponent<RenderComponent2D>(zapper1, renderer, spike_sprite, 0.5f);
+    zapper1->addComponent<RenderComponent2D>(zapper1, renderer, spike_sprite);
     zapper1->addComponent<AnimatorSheet>(zapper1->getComponent<RenderComponent2D>(), &zapper_anim);
     zapper1->setLocalPosition(Vector2<int>(300, 100));
+    zapper1->setLocalScale(Vector2<float>(0.5f, 0.5f));
 
-    zapper2->addComponent<RenderComponent2D>(zapper2, renderer, spike_sprite, 0.5f);
+    zapper2->addComponent<RenderComponent2D>(zapper2, renderer, spike_sprite);
     zapper2->addComponent<AnimatorSheet>(zapper2->getComponent<RenderComponent2D>(), &zapper_anim);
     zapper2->setLocalPosition(Vector2<int>(700, 300));
+    zapper2->setLocalScale(Vector2<float>(0.5f, 0.5f));
 
     // Setup physics
     PhysicsWorld2D *physworld = engine->getPhysWorld();
@@ -73,14 +77,14 @@ void CollideDemo::init() {
 
     spike1->addComponent<RigidbodyComponent2D>(spike1, physworld);
     Rigidbody2D *rbody = spike1->getComponent<RigidbodyComponent2D>()->getBody();
-    float scale = spike1->getComponent<RenderComponent2D>()->getScale();
+    float scale = spike1->getLocalTransform().scale.x;
     tD_pos radius = spike_sprite->getWidth() * scale / 2.0;
     spike1->addComponent<ColliderComponent2D>(physworld->genCircleCollider(rbody, spike1, 
         callback, radius, Vector2<tD_pos>(radius, radius)), physworld);
 
     spike2->addComponent<RigidbodyComponent2D>(spike2, physworld);
     rbody = spike2->getComponent<RigidbodyComponent2D>()->getBody();
-    scale = spike2->getComponent<RenderComponent2D>()->getScale();
+    scale = spike2->getLocalTransform().scale.x;
     radius = spike_sprite->getWidth() * scale / 2.0;
     spike2->addComponent<ColliderComponent2D>(physworld->genCircleCollider(rbody, spike2, 
         callback, radius, Vector2<tD_pos>(radius, radius)), physworld);
@@ -88,7 +92,7 @@ void CollideDemo::init() {
     zapper1->addComponent<RigidbodyComponent2D>(zapper1, physworld);
     rbody = zapper1->getComponent<RigidbodyComponent2D>()->getBody();
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
-    scale = zapper1->getComponent<RenderComponent2D>()->getScale();
+    scale = zapper1->getLocalTransform().scale.x;
     zapper1->addComponent<ColliderComponent2D>(physworld->genAABBCollider(rbody, zapper1, 
         callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
@@ -96,7 +100,7 @@ void CollideDemo::init() {
 
     zapper2->addComponent<RigidbodyComponent2D>(zapper2, physworld);
     rbody = zapper2->getComponent<RigidbodyComponent2D>()->getBody();
-    scale = zapper2->getComponent<RenderComponent2D>()->getScale();
+    scale = zapper2->getLocalTransform().scale.x;
     zapper2->addComponent<ColliderComponent2D>(physworld->genAABBCollider(rbody, zapper2, 
         callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),

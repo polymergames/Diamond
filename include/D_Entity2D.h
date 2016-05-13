@@ -17,6 +17,7 @@
 #ifndef D_ENTITY2D_H
 #define D_ENTITY2D_H
 
+#include <cmath> // for sin, cos
 #include <map>
 #include <memory>
 #include <typeindex>
@@ -24,6 +25,7 @@
 #include "D_Matrix.h"
 #include "D_Component.h"
 #include "D_DataCenter.h"
+#include "D_Math.h" // for deg2rad
 #include "D_typedefs.h"
 
 namespace Diamond {
@@ -45,33 +47,20 @@ namespace Diamond {
 
         // Local transform functions.
 
+        Transform2<tD_pos, tD_rot> &getLocalTransform() { return local_transform; }
         const Transform2<tD_pos, tD_rot> &getLocalTransform() const { return local_transform; }
 
-        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { 
-            local_transform = newtrans; 
-            /*
-            Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
-            wtrans.position = localToWorldSpace(newtrans.position);
-            wtrans.rotation = parent_trans.rotation + newtrans.rotation;
-            */
-        }
+        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { local_transform = newtrans; }
 
-        void setLocalPosition(const Vector2<tD_pos> &newpos) { 
-            local_transform.position = newpos; 
-            /*
-            data->getTransform(world_transform).position = localToWorldSpace(newpos);
-            */
-        }
+        void setLocalPosition(const Vector2<tD_pos> &newpos) { local_transform.position = newpos; }
 
-        void setLocalRotation(tD_rot newrot) { 
-            local_transform.rotation = newrot;
-            /*
-            data->getTransform(world_transform).rotation = parent_trans.rotation + newrot;
-            */
-        }
+        void setLocalRotation(tD_rot newrot) { local_transform.rotation = newrot; }
 
+        void setLocalScale(const Vector2<tD_real> &newscale) { local_transform.scale = newscale; }
         
+
         // World transform functions.
+        // NOTE: you should make sure you know when to use local and when to use world transform.
 
         const Transform2<tD_pos, tD_rot> &getWorldTransform() const { return data->getTransform(world_transform); }
         transform2_id getTransformID() const { return world_transform; }
@@ -91,12 +80,19 @@ namespace Diamond {
             local_transform.rotation = newrot - parent_trans.rotation;
         }
 
+        void setWorldScale(const Vector2<tD_real> &newscale) {
+            data->getTransform(world_transform).scale = newscale;
+            local_transform.scale = Vector2<tD_real>(newscale.x / parent_trans.scale.x, 
+                newscale.y / parent_trans.scale.y);
+        }
+
 
         // Transform conversion functions.
         
         Transform2<tD_pos, tD_rot> localToWorldSpace(const Transform2<tD_pos, tD_rot> &local_trans) {
             return Transform2<tD_pos, tD_rot>(localToWorldSpace(local_trans.position), 
-                local_trans.rotation + parent_trans.rotation);
+                local_trans.rotation + parent_trans.rotation, 
+                Vector2<tD_real>(local_trans.scale).scalar(parent_trans.scale));
         }
 
         /**
@@ -110,7 +106,8 @@ namespace Diamond {
 
         Transform2<tD_pos, tD_rot> worldToLocalSpace(const Transform2<tD_pos, tD_rot> &world_trans) {
             return Transform2<tD_pos, tD_rot>(worldToLocalSpace(world_trans.position),
-                world_trans.rotation - parent_trans.rotation);
+                world_trans.rotation - parent_trans.rotation, 
+                Vector2<tD_real>(world_trans.scale).scalar(1.0 / parent_trans.scale.x, 1.0 / parent_trans.scale.y));
         }
 
         /**
@@ -126,7 +123,21 @@ namespace Diamond {
         /**
          Get this entity's world transformation matrix (not including translation).
         */
-        Matrix<tD_real, 2, 2> getTransMat() const;
+        Matrix<tD_real, 2, 2> getTransMat() const {
+            const Transform2<tD_pos, tD_rot> &wtrans = getWorldTransform();
+
+            tD_real radrot = Math::deg2rad(wtrans.rotation);
+
+            tD_real cosrot = std::cos(radrot);
+            tD_real sinrot = std::sin(radrot);
+
+            return Matrix<tD_real, 2, 2>{
+                {
+                    {wtrans.scale.x * cosrot, wtrans.scale.x * sinrot},
+                    {-wtrans.scale.y * sinrot, wtrans.scale.y * cosrot}
+                }
+            };
+        }
 
 
         // Manage entity tree.

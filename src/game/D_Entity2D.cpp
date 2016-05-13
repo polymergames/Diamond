@@ -17,13 +17,11 @@
 #include "D_Entity2D.h"
 
 #include <algorithm> // ?
-#include <cmath> // for sin, cos
-#include "D_Math.h" // for deg2rad
 
 
 Diamond::Entity2D::Entity2D(const std::string &name, DataCenter *data)
     : name(name), 
-      local_transform(Vector2<tD_pos>(0,0), 0), 
+      local_transform(), 
       parent_trans(), 
       parent_trans_mat{ { {1, 0}, {0, 1} } }, 
       data(data),
@@ -70,22 +68,6 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
         other.world_transform = Diamond::INVALID;
     }
     return *this;
-}
-
-
-
-Diamond::Matrix<tD_real, 2, 2> Diamond::Entity2D::getTransMat() const {
-    tD_real radrot = Math::deg2rad(getWorldTransform().rotation);
-
-    tD_real cosrot = std::cos(radrot);
-    tD_real sinrot = std::sin(radrot);
-
-    return Matrix<tD_real, 2, 2>{
-        {
-            {cosrot, sinrot},
-            {-sinrot, cosrot}
-        }
-    };
 }
 
 void Diamond::Entity2D::addChild(Entity2D *child){
@@ -158,6 +140,7 @@ void Diamond::Entity2D::updateTransform(const Transform2<tD_pos, tD_rot> &trans,
 
     wtrans.position = local_transform.position.mul(trans_mat.m) + trans.position;
     wtrans.rotation = local_transform.rotation + trans.rotation;
+    wtrans.scale = Vector2<tD_real>(local_transform.scale).scalar(trans.scale);
 
     parent_trans = trans;
     parent_trans_mat = trans_mat;

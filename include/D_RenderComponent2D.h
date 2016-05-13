@@ -29,16 +29,15 @@ namespace Diamond {
     public:
         RenderComponent2D(const Entity2D *parent, 
                           Renderer2D *renderer, 
-                          std::shared_ptr<const Texture> sprite,
-                          float scale = 1.0f);
-        ~RenderComponent2D();
+                          std::shared_ptr<const Texture> sprite)
+            : parent(parent), renderer(renderer), sprite(sprite), clip_dim() {
+              render_obj = renderer->genRenderObj(parent->getTransformID(), sprite.get());
+        }
+        ~RenderComponent2D() { freeRenderObj(); }
         
         std::shared_ptr<const Texture> getSprite() const { return sprite; }
         void setSprite(const Texture *sprite) { setSprite(std::shared_ptr<const Texture>(sprite)); }
         void setSprite(std::shared_ptr<const Texture> sprite);
-
-        float getScale() const { return scale; }
-        void setScale(float scale);
 
         void flipX();
         void flipY();
@@ -70,7 +69,6 @@ namespace Diamond {
         const Vector2<tDrender_pos> &getPivot() const { return pivot; }
         void setPivot(const Vector2<tDrender_pos> &pivot);
 
-        void initClip();
         void setClip(int x, int y, int w, int h);
         void setClip(int x, int y);
 
@@ -81,7 +79,6 @@ namespace Diamond {
         std::shared_ptr<const Texture> sprite;
         Vector2<int> clip_dim;
         Vector2<tDrender_pos> pivot;
-        float scale;
 
         void freeRenderObj();
     };
@@ -90,14 +87,7 @@ namespace Diamond {
 inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<const Texture> sprite) {
     this->sprite = sprite;
     if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->setTexture(sprite.get(), scale);
-    }
-}
-
-inline void Diamond::RenderComponent2D::setScale(float scale) {
-    this->scale = scale;
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->applyScale(scale);
+        renderer->getRenderObj(render_obj)->setTexture(sprite.get());
     }
 }
 
@@ -137,10 +127,9 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 
 inline void Diamond::RenderComponent2D::makeVisible() {
     if ((tD_index)render_obj == Diamond::INVALID) {
-        render_obj = renderer->genRenderObj(parent->getTransformID(), sprite.get(), scale, pivot);
+        render_obj = renderer->genRenderObj(parent->getTransformID(), sprite.get(), pivot);
         if (clip_dim.x != 0) { // check if any valid clip data has been stored
             RenderObj2D *r = renderer->getRenderObj(render_obj);
-            r->initClip();
             r->setClip(0, 0, clip_dim.x, clip_dim.y);
         }
     }
@@ -164,12 +153,6 @@ inline void Diamond::RenderComponent2D::setPivot(const Vector2<tDrender_pos> &pi
     }
 }
 
-inline void Diamond::RenderComponent2D::initClip() {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->initClip();
-    }
-}
-
 inline void Diamond::RenderComponent2D::setClip(int x, int y, int w, int h) {
     if ((tD_index)render_obj != Diamond::INVALID) {
         renderer->getRenderObj(render_obj)->setClip(x, y, w, h);
@@ -179,6 +162,14 @@ inline void Diamond::RenderComponent2D::setClip(int x, int y, int w, int h) {
 inline void Diamond::RenderComponent2D::setClip(int x, int y) {
     if ((tD_index)render_obj != Diamond::INVALID) {
         renderer->getRenderObj(render_obj)->setClip(x, y);
+    }
+}
+
+
+inline void Diamond::RenderComponent2D::freeRenderObj() {
+    if ((tD_index)render_obj != Diamond::INVALID) {
+        renderer->freeRenderObj(render_obj);
+        render_obj = Diamond::INVALID;
     }
 }
 

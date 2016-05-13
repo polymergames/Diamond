@@ -25,23 +25,27 @@ namespace Diamond {
         public:
         Vector2<PTYPE> position;
         RTYPE rotation;
+        Vector2<tD_real> scale;
         
-        Transform2() : position(), rotation() {}
-        Transform2(Vector2<PTYPE> position) 
-            : position(position), rotation() {}
-        Transform2(Vector2<PTYPE> position, RTYPE rotation) 
-            : position(position), rotation(rotation) {}
+        Transform2() : position(), rotation(), scale(1, 1) {}
+        Transform2(const Vector2<PTYPE> &position) 
+            : position(position), rotation(), scale(1, 1) {}
+        Transform2(const Vector2<PTYPE> &position, RTYPE rotation)
+            : position(position), rotation(rotation), scale(1, 1) {}
+        Transform2(const Vector2<PTYPE> &position, RTYPE rotation, const Vector2<tD_real> &scale)
+            : position(position), rotation(rotation), scale(scale) {}
 
 
         void reset() {
             position = Vector2<PTYPE>();
             rotation = RTYPE();
+            scale = Vector2<tD_real>(1, 1);
         }
 
         // Conversion operator
         template <typename P, typename R>
         operator Transform2<P, R>() const { 
-            return Transform2<P, R>(position, rotation);
+            return Transform2<P, R>(position, rotation, scale);
         }
     };
 }

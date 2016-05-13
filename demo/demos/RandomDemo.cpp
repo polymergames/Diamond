@@ -55,14 +55,17 @@ void RandomDemo::init() {
     }
 
     //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
-    spike->addComponent<RenderComponent2D>(spike, renderer, spike_sprite, 0.1f);
-    spike->setLocalPosition(Vector2<int>(-150, 200));
+    spike->addComponent<RenderComponent2D>(spike, renderer, spike_sprite);
+    // spike->setLocalPosition(Vector2<int>(-150, 200));
+    spike->setLocalPosition(Vector2<int>(-250, 400));
+    spike->setLocalScale(Vector2<float>(0.2f, 0.2f));
     if (!spike->getComponent<RenderComponent2D>()) {
         std::cout << "NULL!" << std::endl;
     }
 
-    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite, 0.1f);
+    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite);
     spike2->setLocalPosition(Vector2<int>(100, 100));
+    spike2->setLocalScale(Vector2<float>(0.1f, 0.1f));
 
     // Animations
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper1.png")));
@@ -70,9 +73,10 @@ void RandomDemo::init() {
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
 
-    zapper->addComponent<RenderComponent2D>(zapper, renderer, zapper_anim.sprites[0], 0.5f);
+    zapper->addComponent<RenderComponent2D>(zapper, renderer, zapper_anim.sprites[0]);
     zapper->addComponent<Animator2D>(zapper->getComponent<RenderComponent2D>(), &zapper_anim);
-    zapper->setLocalPosition(Vector2<int>(50, 100));
+    // zapper->setLocalPosition(Vector2<int>(50, 100));
+    zapper->setLocalPosition(Vector2<int>(400, 220));
 
     zapper2_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
@@ -80,11 +84,13 @@ void RandomDemo::init() {
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
-    zapper2->addComponent<RenderComponent2D>(zapper2, renderer, zapper2_anim.sprite_sheet, z2scale);
+    zapper2->addComponent<RenderComponent2D>(zapper2, renderer, zapper2_anim.sprite_sheet);
     zapper2->addComponent(new AnimatorSheet(zapper2->getComponent<RenderComponent2D>(), &zapper2_anim));
-    zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
-        zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
-    zapper2->setLocalPosition(Vector2<int>(650, 200));
+    //zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
+    //    zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
+    // zapper2->setLocalPosition(Vector2<int>(650, 200));
+    zapper2->setLocalPosition(Vector2<int>(600, 130));
+    zapper2->setLocalScale(Vector2<float>(z2scale, z2scale));
 
     haha = std::unique_ptr<Sound2D>(engine->getDJ()->loadSound("haha.wav"));
 
@@ -128,10 +134,10 @@ void RandomDemo::update(tD_delta delta) {
 
     // Stretching
     if (Input::keydown[Input::K_LSHIFT]) {
-        zapper2->getComponent<RenderComponent2D>()->setScale(zapper2->getComponent<RenderComponent2D>()->getScale() + growspeed * delta);
+        zapper2->setLocalScale(Vector2<float>(1.0, 1.0).scalar(zapper2->getLocalTransform().scale.x + growspeed * delta));
     }
     if (Input::keydown[Input::K_LCTRL]) {
-        zapper2->getComponent<RenderComponent2D>()->setScale(zapper2->getComponent<RenderComponent2D>()->getScale() - growspeed * delta);
+        zapper2->setLocalScale(Vector2<float>(1.0, 1.0).scalar(zapper2->getLocalTransform().scale.x - growspeed * delta));
     }
 
     // Flipping and velocity
@@ -197,8 +203,9 @@ void RandomDemo::update(tD_delta delta) {
     if (Input::touch_up) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
         Entity2D *spawn = engine->getWorld()->createEntity("cloud");
-        spawn->addComponent(new RenderComponent2D(spawn, engine->getRenderer(), cloud_sprite, 0.1f));
+        spawn->addComponent(new RenderComponent2D(spawn, engine->getRenderer(), cloud_sprite));
         spawn->setWorldPosition(Input::touch_pos);
+        spawn->setWorldScale(Vector2<float>(0.1f, 0.1f));
         //engine->getWorld()->addEntity(spawn);
         spike->addChild(spawn);
     }

@@ -72,19 +72,22 @@ void Diamond::SDLRenderer2D::renderAll() {
     for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
         //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
         const Transform2<tDrender_pos, tDrender_rot> &transform = data->getTransform((*i).getTransformID());
+
         SDL_Point pivot = (*i).getSDLPivot();
+
+        SDL_Rect clip = (*i).getClip();
 
         SDL_Rect render_rect = { 
             transform.position.x - pivot.x, // render position x
             transform.position.y - pivot.y, // render position y
-            (*i).getSize().x, // render width
-            (*i).getSize().y // render height
+            clip.w * transform.scale.x, // render width
+            clip.h * transform.scale.y // render height
         };
 
         SDL_RenderCopyEx(
             renderer, // The SDL backend renderer for this SDL instance.
             (*i).getTexture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
-            (*i).getClip(), // source rect
+            &clip, // source rect
             &render_rect, // destination rect
             transform.rotation, // rotation for destination rect in degrees
             &pivot, // rotation pivot location in local space
@@ -134,10 +137,9 @@ Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_o
 }
 
 renderobj_id Diamond::SDLRenderer2D::genRenderObj(transform2_id trans,
-                                                  const Texture *texture,
-                                                  float scale, 
+                                                  const Texture *texture, 
                                                   const Vector2<tDrender_pos> &pivot) {
-    return render_objects.emplace_back(trans, texture, scale, pivot);
+    return render_objects.emplace_back(trans, texture, pivot);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {
