@@ -73,13 +73,12 @@ namespace Diamond {
         
         // World transform functions.
 
-        Transform2<tD_pos, tD_rot> getWorldTransform() const { return data->getTransform(world_transform); }
+        const Transform2<tD_pos, tD_rot> &getWorldTransform() const { return data->getTransform(world_transform); }
         transform2_id getTransformID() const { return world_transform; }
 
         void setWorldTransform(const Transform2<tD_pos, tD_rot> &newtrans) {
             data->getTransform(world_transform) = newtrans;
-            local_transform.position = worldToLocalSpace(newtrans.position);
-            local_transform.rotation = newtrans.rotation - parent_trans.rotation;
+            local_transform = worldToLocalSpace(newtrans);
         }
 
         void setWorldPosition(const Vector2<tD_pos> &newpos) {
@@ -94,6 +93,11 @@ namespace Diamond {
 
 
         // Transform conversion functions.
+        
+        Transform2<tD_pos, tD_rot> localToWorldSpace(const Transform2<tD_pos, tD_rot> &local_trans) {
+            return Transform2<tD_pos, tD_rot>(localToWorldSpace(local_trans.position), 
+                local_trans.rotation + parent_trans.rotation);
+        }
 
         /**
          Transforms a given point from this entity's local space to world space.
@@ -102,6 +106,11 @@ namespace Diamond {
         template <typename V>
         Vector2<V> localToWorldSpace(const Vector2<V> &local_coords) {
             return local_coords.mul(parent_trans_mat.m) + parent_trans.position;
+        }
+
+        Transform2<tD_pos, tD_rot> worldToLocalSpace(const Transform2<tD_pos, tD_rot> &world_trans) {
+            return Transform2<tD_pos, tD_rot>(worldToLocalSpace(world_trans.position),
+                world_trans.rotation - parent_trans.rotation);
         }
 
         /**
@@ -113,6 +122,11 @@ namespace Diamond {
             return (world_coords - parent_trans.position).mul(parent_trans_mat.inv().m);
         }       
         
+
+        /**
+         Get this entity's world transformation matrix (not including translation).
+        */
+        Matrix<tD_real, 2, 2> getTransMat() const;
 
 
         // Manage entity tree.
@@ -175,10 +189,9 @@ namespace Diamond {
 
         // Tree update functions
         void updateComponents(tD_delta delta);
-        void updateTransform(tD_delta delta, 
-                             const Transform2<tD_pos, tD_rot> &trans, 
+        void updateTransform(const Transform2<tD_pos, tD_rot> &trans, 
                              const Matrix<tD_real, 2, 2> &trans_mat);
-        void updateChildrenTransforms(tD_delta delta);
+        void updateChildrenTransforms();
 
     protected:
         //tD_id id;
@@ -196,8 +209,7 @@ namespace Diamond {
         
         // All components are updated once every frame.
         std::map<std::type_index, std::unique_ptr<Component> > components;
-        
-        void setParent(Entity2D *parent);
+
 
         void freeTransform();
     };

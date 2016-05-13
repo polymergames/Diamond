@@ -23,7 +23,7 @@ void Diamond::World2D::killAll() {
 
 void Diamond::World2D::update(tD_delta delta_ms) {
     root->updateComponents(delta_ms);
-    root->updateChildrenTransforms(delta_ms);
+    root->updateChildrenTransforms();
 }
 
 void Diamond::World2D::killTree(Entity2D *root) {

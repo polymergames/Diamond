@@ -45,7 +45,7 @@ namespace Diamond {
         void updateBodies() override {
             for (auto i = pairs.begin(); i != pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
-                Transform2<tD_pos, tD_rot> &trans = i->second->getWorldTransform();
+                const Transform2<tD_pos, tD_rot> &trans = i->second->getWorldTransform();
                 rbody.setPosition(trans.position);
                 rbody.setRotation(trans.rotation);
             }
@@ -59,7 +59,7 @@ namespace Diamond {
 
             // Initialize the new rigidbody with the parent entity's world transform
             Quantum2D::Rigidbody2D &rbody = world.getRigidbody(body->getID());
-            Transform2<tD_pos, tD_rot> &trans = parent->getWorldTransform();
+            const Transform2<tD_pos, tD_rot> &trans = parent->getWorldTransform();
             rbody.setPosition(trans.position);
             rbody.setRotation(trans.rotation);
             return body;

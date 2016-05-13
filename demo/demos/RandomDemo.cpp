@@ -198,7 +198,7 @@ void RandomDemo::update(tD_delta delta) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
         Entity2D *spawn = engine->getWorld()->createEntity("cloud");
         spawn->addComponent(new RenderComponent2D(spawn, engine->getRenderer(), cloud_sprite, 0.1f));
-        spawn->setLocalPosition(Input::touch_pos - spike->getWorldTransform().position);
+        spawn->setWorldPosition(Input::touch_pos);
         //engine->getWorld()->addEntity(spawn);
         spike->addChild(spawn);
     }
