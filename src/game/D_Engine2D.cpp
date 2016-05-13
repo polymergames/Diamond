@@ -144,7 +144,7 @@ bool Diamond::Engine2D::initSDL() {
 
 bool Diamond::Engine2D::initQuantum() {
     phys_world = new QuantumWorld2D();
-    if (!phys_world->init(config, &data)) {
+    if (!phys_world->init(config)) {
         // TODO: Handle physics initialization failure
         return false;
     }

@@ -20,6 +20,7 @@
 #include <functional>
 #include "D_Config.h"
 #include "D_DataCenter.h"
+#include "D_Entity2D.h"
 #include "D_CircleCollider.h"
 #include "D_AABBCollider2D.h"
 #include "D_Rigidbody2D.h"
@@ -34,7 +35,7 @@ namespace Diamond {
          Creates and initializes the physics simulation world.
          Returns true if initialization was successful.
         */
-        virtual bool init(const Config &config, DataCenter *data) = 0;
+        virtual bool init(const Config &config) = 0;
 
         /**
          Steps the physics simulation by the number of milliseconds given.
@@ -52,9 +53,9 @@ namespace Diamond {
         virtual void updateBodies() = 0;
         
         /**
-         Creates a rigidbody object attached to the given transform.
+         Creates a rigidbody object attached to the given entity.
         */
-        virtual Rigidbody2D *genRigidbody(transform2_id transform) = 0;
+        virtual Rigidbody2D *genRigidbody(Entity2D *parent) = 0;
         
         /**
          Frees the memory associated with the given rigidbody.

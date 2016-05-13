@@ -24,7 +24,8 @@
 Diamond::Entity2D::Entity2D(const std::string &name, DataCenter *data)
     : name(name), 
       local_transform(Vector2<tD_pos>(0,0), 0), 
-      world_trans_mat{ { {1, 0}, {0, 1} } }, 
+      parent_trans(), 
+      parent_trans_mat{ { {1, 0}, {0, 1} } }, 
       data(data),
       parent(nullptr), 
       world_transform(data->genTransform()) {}
@@ -70,6 +71,8 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
     }
     return *this;
 }
+
+
 
 void Diamond::Entity2D::addChild(Entity2D *child){
     if (child && child != this) {
@@ -122,37 +125,47 @@ void Diamond::Entity2D::setParent(Entity2D *parent) {
     this->parent = parent;
 }
 
-void Diamond::Entity2D::update(tD_delta delta, 
-                               const Matrix<tD_real, 2, 2> &transform_mat,
-                               const Vector2<tD_pos> &translation, 
-                               tD_rot deg_rot) {
-    Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
-
-    wtrans.position = local_transform.position.mul(transform_mat.m) + translation;
-    wtrans.rotation = local_transform.rotation + deg_rot;
-
-    tD_real radrot = Math::deg2rad(wtrans.rotation);
-
-    world_trans_mat[0][0] = std::cos(radrot);
-    world_trans_mat[0][1] = std::sin(radrot);
-    world_trans_mat[1][0] = -world_trans_mat[0][1];
-    world_trans_mat[1][1] = world_trans_mat[0][0];
-
-    updateComponents(delta);
-
-    updateChildren(delta);
-}
-
 void Diamond::Entity2D::updateComponents(tD_delta delta) {
     for (auto it = components.begin(); it != components.end(); ++it) {
         it->second->update(delta);
     }
+
+    for (Entity2D *child : children) {
+        child->updateComponents(delta);
+    }
 }
 
-void Diamond::Entity2D::updateChildren(tD_delta delta) {
-    Transform2<tD_pos, tD_rot> wtrans = data->getTransform(world_transform);
-    for (Entity2D *child : children) {
-        child->update(delta, world_trans_mat, wtrans.position, wtrans.rotation);
+void Diamond::Entity2D::updateTransform(tD_delta delta,
+                                        const Transform2<tD_pos, tD_rot> &trans,
+                                        const Matrix<tD_real, 2, 2> &trans_mat) {
+    Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
+
+    wtrans.position = local_transform.position.mul(trans_mat.m) + trans.position;
+    wtrans.rotation = local_transform.rotation + trans.rotation;
+
+    parent_trans = trans;
+    parent_trans_mat = trans_mat;
+}
+
+
+
+void Diamond::Entity2D::updateChildrenTransforms(tD_delta delta) {
+    if (!children.empty()) {
+        Transform2<tD_pos, tD_rot> wtrans = data->getTransform(world_transform);
+
+        tD_real radrot = Math::deg2rad(wtrans.rotation);
+
+        Matrix<tD_real, 2, 2> trans_mat;
+        trans_mat[0][0] = std::cos(radrot);
+        trans_mat[0][1] = std::sin(radrot);
+        trans_mat[1][0] = -trans_mat[0][1];
+        trans_mat[1][1] = trans_mat[0][0];
+
+
+        for (Entity2D *child : children) {
+            child->updateTransform(delta, wtrans, trans_mat);
+            child->updateChildrenTransforms(delta);
+        }
     }
 }
 

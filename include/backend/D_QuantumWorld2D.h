@@ -27,10 +27,7 @@
 namespace Diamond {
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
-        QuantumWorld2D() : data(nullptr) {}
-
-        bool init(const Config &config, DataCenter *data) override {
-            this->data = data;
+        bool init(const Config &config) override {
             return world.init(); 
         }
 
@@ -39,26 +36,30 @@ namespace Diamond {
         void updateTransforms() override {
             for (auto i = pairs.begin(); i != pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
-                Transform2<tD_pos, tD_rot> &trans = data->getTransform(i->second);
-                trans.position = rbody.getPosition();
-                trans.rotation = rbody.getRotation();
+                i->second->setWorldPosition(rbody.getPosition());
+                // TODO: test!
+                i->second->setWorldRotation(rbody.getRotation());
             }
         }
 
         void updateBodies() override {
             for (auto i = pairs.begin(); i != pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
-                Transform2<tD_pos, tD_rot> &trans = data->getTransform(i->second);
+                Transform2<tD_pos, tD_rot> &trans = i->second->getWorldTransform();
                 rbody.setPosition(trans.position);
                 rbody.setRotation(trans.rotation);
             }
         }
 
-        Rigidbody2D *genRigidbody(transform2_id transform) override {
+        Rigidbody2D *genRigidbody(Entity2D *parent) override {
             QuantumBody2D *body = new QuantumBody2D(&world);
-            pairs[body->getID()] = transform;
+
+            // Add to rigibody-entity pairs so they can be synchronized
+            pairs[body->getID()] = parent;
+
+            // Initialize the new rigidbody with the parent entity's world transform
             Quantum2D::Rigidbody2D &rbody = world.getRigidbody(body->getID());
-            Transform2<tD_pos, tD_rot> &trans = data->getTransform(transform);
+            Transform2<tD_pos, tD_rot> &trans = parent->getWorldTransform();
             rbody.setPosition(trans.position);
             rbody.setRotation(trans.rotation);
             return body;
@@ -121,8 +122,7 @@ namespace Diamond {
 
     private:
         Quantum2D::DynamicWorld2D world;
-        DataCenter *data;
-        std::map<body2d_id, transform2_id> pairs;
+        std::map<body2d_id, Entity2D*> pairs;
     };
 }
 

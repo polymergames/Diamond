@@ -44,48 +44,75 @@ namespace Diamond {
 
 
         // Local transform functions.
-        // NOTE: If you want to set this entity's world transform, you will have to first convert the world
-        // transform to this entity's PARENT's coordinate system using parent->worldToLocalSpace,
-        // then set that result to this entity's local transform.
 
         const Transform2<tD_pos, tD_rot> &getLocalTransform() const { return local_transform; }
-        Transform2<tD_pos, tD_rot> &getLocalTransform() { return local_transform; }
 
-        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { local_transform = newtrans; }
-        void setLocalPosition(const Vector2<tD_pos> &newpos) { local_transform.position = newpos; }
-        void setLocalRotation(tD_rot newrot) { local_transform.rotation = newrot; }
+        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { 
+            local_transform = newtrans; 
+            /*
+            Transform2<tD_pos, tD_rot> &wtrans = data->getTransform(world_transform);
+            wtrans.position = localToWorldSpace(newtrans.position);
+            wtrans.rotation = parent_trans.rotation + newtrans.rotation;
+            */
+        }
 
+        void setLocalPosition(const Vector2<tD_pos> &newpos) { 
+            local_transform.position = newpos; 
+            /*
+            data->getTransform(world_transform).position = localToWorldSpace(newpos);
+            */
+        }
+
+        void setLocalRotation(tD_rot newrot) { 
+            local_transform.rotation = newrot;
+            /*
+            data->getTransform(world_transform).rotation = parent_trans.rotation + newrot;
+            */
+        }
+
+        
+        // World transform functions.
+
+        Transform2<tD_pos, tD_rot> getWorldTransform() const { return data->getTransform(world_transform); }
+        transform2_id getTransformID() const { return world_transform; }
+
+        void setWorldTransform(const Transform2<tD_pos, tD_rot> &newtrans) {
+            data->getTransform(world_transform) = newtrans;
+            local_transform.position = worldToLocalSpace(newtrans.position);
+            local_transform.rotation = newtrans.rotation - parent_trans.rotation;
+        }
+
+        void setWorldPosition(const Vector2<tD_pos> &newpos) {
+            data->getTransform(world_transform).position = newpos;
+            local_transform.position = worldToLocalSpace(newpos);
+        }
+
+        void setWorldRotation(tD_rot newrot) {
+            data->getTransform(world_transform).rotation = newrot;
+            local_transform.rotation = newrot - parent_trans.rotation;
+        }
 
 
         // Transform conversion functions.
 
-        // Get this entity's world transform matrix.
-        const Matrix<tD_real, 2, 2> &getTransMat() const { return world_trans_mat; }
-
         /**
-         Transforms a given point from this entity's coordinate system to world space.
+         Transforms a given point from this entity's local space to world space.
          TODO: test
         */
         template <typename V>
         Vector2<V> localToWorldSpace(const Vector2<V> &local_coords) {
-            return local_coords.mul(world_trans_mat.m) + getWorldTransform().position;
+            return local_coords.mul(parent_trans_mat.m) + parent_trans.position;
         }
 
         /**
-         Transforms a given point from world space to this entity's coordinate system.
+         Transforms a given point from world space to this entity's local space.
          TODO: test
         */
         template <typename V>
         Vector2<V> worldToLocalSpace(const Vector2<V> &world_coords) {
-            return (world_coords - getWorldTransform().position).mul(world_trans_mat.inv().m);
-        }
-
-
+            return (world_coords - parent_trans.position).mul(parent_trans_mat.inv().m);
+        }       
         
-        // World transform functions.
-        Transform2<tD_pos, tD_rot> getWorldTransform() const { return data->getTransform(world_transform); }
-        transform2_id getTransformID() const { return world_transform; }
-
 
 
         // Manage entity tree.
@@ -147,25 +174,26 @@ namespace Diamond {
 
 
         // Tree update functions
-        void update(tD_delta delta, 
-                    const Matrix<tD_real, 2, 2> &transform_mat, 
-                    const Vector2<tD_pos> &translation, 
-                    tD_rot deg_rot);
         void updateComponents(tD_delta delta);
-        void updateChildren(tD_delta delta);
+        void updateTransform(tD_delta delta, 
+                             const Transform2<tD_pos, tD_rot> &trans, 
+                             const Matrix<tD_real, 2, 2> &trans_mat);
+        void updateChildrenTransforms(tD_delta delta);
 
     protected:
         //tD_id id;
         std::string name;
         Transform2<tD_pos, tD_rot> local_transform;
         transform2_id world_transform;
-        Matrix<tD_real, 2, 2> world_trans_mat;
         DataCenter *data;
+
+        Transform2<tD_pos, tD_rot> parent_trans;
+        Matrix<tD_real, 2, 2> parent_trans_mat;
+
 
         Entity2D *parent;
         std::vector<Entity2D*> children;
-
-        // Components interface with backend data, therefore each entity has its own unique copy.
+        
         // All components are updated once every frame.
         std::map<std::type_index, std::unique_ptr<Component> > components;
         

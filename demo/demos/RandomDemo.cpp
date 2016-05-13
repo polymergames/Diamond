@@ -41,7 +41,6 @@ void RandomDemo::init() {
     zapper2->addChild(spike);
     
     window = renderer->getResolution();
-
     Vector2<int> screen = renderer->getScreenResolution();
     std::cout << "Resolution: " << window.x << " by " << window.y << std::endl;
     std::cout << "Screen resolution: " << screen.x << " by " << screen.y << std::endl;
