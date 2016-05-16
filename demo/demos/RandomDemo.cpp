@@ -143,14 +143,12 @@ void RandomDemo::update(tD_delta delta) {
     // Flipping and velocity
     if (Input::keyup[Input::K_DOWN]) {
         zapper2->getComponent<RenderComponent2D>()->flipX();
-        // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(0, -movespeed));
     }
     if (Input::keyup[Input::K_UP]) {
         zapper2->getComponent<RenderComponent2D>()->flipY();
-        // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(0, movespeed));
     }
 
-    // Movement
+    // Zapper movement
     if (Input::keydown[Input::K_W]) {
         Vector2<float> pos = zapper2->getLocalTransform().position;
         zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
@@ -168,29 +166,52 @@ void RandomDemo::update(tD_delta delta) {
         zapper2->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
     }
 
-    // Rotation and velocity
+    // Zapper rotation
     if (Input::keydown[Input::K_LEFT]) {
-        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation - spinspeed * delta);
-        // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(-movespeed, 0));
+        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation - spinspeed * delta);\
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation + spinspeed * delta);
-        // Quantum2D::QuantumWorld2D::getRigidbody(body).velocity.add(Vector2<float>(movespeed, 0));
+        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation + spinspeed * delta);\
     }
 
-    // Velocity
-    // TODO: use setVelocity
-    if (Input::keyup[Input::K_P4]) {
+    // Spike rotation
+    if (Input::keydown[Input::K_P7]) {
+        spike->setLocalRotation(spike->getLocalTransform().rotation - spinspeed * delta);
+    }
+    if (Input::keydown[Input::K_P9]) {
+        spike->setLocalRotation(spike->getLocalTransform().rotation + spinspeed * delta);
+    }
+
+    // Spike velocity
+    if (Input::keydown[Input::K_J]) {
         spikerb->setVelocity(spikerb->getVelocity().add(Vector2<float>(-movespeed, 0)));
     }
-    if (Input::keyup[Input::K_P6]) {
+    if (Input::keydown[Input::K_K]) {
         spikerb->setVelocity(spikerb->getVelocity().add(Vector2<float>(movespeed, 0)));
     }
-    if (Input::keyup[Input::K_P2]) {
+    if (Input::keydown[Input::K_I]) {
+        spikerb->setVelocity(spikerb->getVelocity().add(Vector2<float>(0, -movespeed)));
+    }
+    if (Input::keydown[Input::K_M]) {
         spikerb->setVelocity(spikerb->getVelocity().add(Vector2<float>(0, movespeed)));
     }
-    if (Input::keyup[Input::K_P8]) {
-        spikerb->setVelocity(spikerb->getVelocity().add(Vector2<float>(0, -movespeed)));
+
+    // Spike Movement
+    if (Input::keydown[Input::K_P4]) {
+        Vector2<float> pos = spike->getLocalTransform().position;
+        spike->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+    }
+    if (Input::keydown[Input::K_P6]) {
+        Vector2<float> pos = spike->getLocalTransform().position;
+        spike->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+    }
+    if (Input::keydown[Input::K_P2]) {
+        Vector2<float> pos = spike->getLocalTransform().position;
+        spike->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+    }
+    if (Input::keydown[Input::K_P8]) {
+        Vector2<float> pos = spike->getLocalTransform().position;
+        spike->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
     }
 
     // Sound

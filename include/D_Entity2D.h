@@ -131,6 +131,7 @@ namespace Diamond {
             tD_real cosrot = std::cos(radrot);
             tD_real sinrot = std::sin(radrot);
 
+            // [Scale] * [rotation] matrix multiplication in that order
             return Matrix<tD_real, 2, 2>{
                 {
                     {wtrans.scale.x * cosrot, wtrans.scale.x * sinrot},
