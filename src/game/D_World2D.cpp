@@ -17,12 +17,22 @@
 #include "D_World2D.h"
 
 
+Diamond::World2D::World2D(DataCenter *data) : data(data), root(createEntity("root")) {}
+
 void Diamond::World2D::killAll() {
     killTree(root);
 }
 
 void Diamond::World2D::update(tD_delta delta_ms) {
+    updateComponents(delta_ms);
+    updateTransforms();
+}
+
+void Diamond::World2D::updateComponents(tD_delta delta_ms) {
     root->updateComponents(delta_ms);
+}
+
+void Diamond::World2D::updateTransforms() {
     root->updateChildrenTransforms();
 }
 

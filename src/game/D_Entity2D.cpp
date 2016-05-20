@@ -70,7 +70,7 @@ Diamond::Entity2D &Diamond::Entity2D::operator=(Entity2D &&other) {
     return *this;
 }
 
-void Diamond::Entity2D::addChild(Entity2D *child){
+Diamond::Entity2D *Diamond::Entity2D::addChild(Entity2D *child) {
     if (child && child != this) {
         children.push_back(child);
         
@@ -84,6 +84,7 @@ void Diamond::Entity2D::addChild(Entity2D *child){
 
         child->setLocalTransform(child->worldToLocalSpace(child->getWorldTransform()));
     }
+    return child;
 }
 
 bool Diamond::Entity2D::removeChild(Entity2D *child) {

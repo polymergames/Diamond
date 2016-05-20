@@ -146,7 +146,7 @@ namespace Diamond {
         /**
          Adds the given entity to this entity's children and sets the child's parent as this entity.
         */
-        void addChild(Entity2D *child);
+        Entity2D *addChild(Entity2D *child);
 
         /**
          Searches children for the given child and removes it from children.

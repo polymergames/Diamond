@@ -26,7 +26,7 @@ namespace Diamond {
     */
     class World2D {
     public:
-        World2D(DataCenter *data) : data(data), root(createEntity("root")) {}
+        World2D(DataCenter *data);
 
         // TODO: implement custom allocator!
         /**
@@ -37,7 +37,7 @@ namespace Diamond {
         /**
          Adds the given entity to the world tree.
         */
-        void addEntity(Entity2D *entity) { root->addChild(entity); }
+        Entity2D *addEntity(Entity2D *entity) { return root->addChild(entity); }
 
         /**
         */
@@ -48,10 +48,20 @@ namespace Diamond {
 
         void killAll();
 
+        /**
+         Updates all components and transforms in the scene graph.
+        */
         void update(tD_delta delta_ms);
 
-        Entity2D *getRoot() const { return root; }
+        /**
+         Updates only the components in the scene graph.
+        */
+        void updateComponents(tD_delta delta_ms);
 
+        /**
+         Updates only the transforms in the scene graph.
+        */
+        void updateTransforms();
     private:
         DataCenter *data;
         Entity2D *root;

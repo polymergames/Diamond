@@ -193,7 +193,7 @@ namespace Diamond {
     // Stream operator
     template <typename M, int dim1, int dim2>
     std::ostream &operator<<(std::ostream &os, const Matrix<M, dim1, dim2> &m) {
-        os << "{" << endl;
+        os << "{" << std::endl;
         for (int r = 0; r < dim1; ++r) {
             for (int c = 0; c < dim2; ++c) {
                 os << " " << m[r][c] << ", ";

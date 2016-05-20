@@ -71,12 +71,7 @@ namespace Diamond {
         // Matrix math
         template <typename M>
         Vector2<M> mul(const M m[2][2]) const {
-            Vector2<M> res;
-            res.x = x * m[0][0];
-            res.y = x * m[0][1];
-            res.x += y * m[1][0];
-            res.y += y * m[1][1];
-            return res;
+            return Vector2<M>(x * m[0][0] + y * m[1][0], x * m[0][1] + y * m[1][1]);
         }
 
         /**
@@ -148,9 +143,15 @@ namespace Diamond {
     };
 
     // Multiplication operator
+
     template <typename V, typename S>
     inline Vector2<V> operator*(const S scalar, const Vector2<V> &vec) {
-        return vec * scalar;
+        return Vector2<V>(scalar * vec.x, scalar * vec.y);
+    }
+
+    template <typename V, typename S>
+    inline Vector2<V> operator*(const Vector2<V> &vec, const S scalar) {
+        return scalar * vec;
     }
 
     // Stream operator
