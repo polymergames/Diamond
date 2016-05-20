@@ -100,7 +100,9 @@ void Diamond::Engine2D::launch(Game2D &game) {
         // Catch up on events
         event_handler->update();
         
-        // Update game logic and entities
+        // Update game logic and entities + entity transforms
+        // Entity transforms should be updated before calling physics world functions
+        // so that physics simulation will run on any transforms that were updated by game logic.
         game.update(delta);
         world->update(delta);
 
@@ -108,6 +110,14 @@ void Diamond::Engine2D::launch(Game2D &game) {
         phys_world->updateBodies();
         phys_world->step(delta);
         phys_world->updateTransforms();
+
+        // Update entity transforms again before drawing
+        // Although physics world already updated its relevant transforms above, 
+        // that did not update the scene graph relationship transforms
+        // (ex. an entity with a rigidbody received an updated position based on its velocity,
+        // but its children were not yet updated based on their parent's new velocity.
+        // That should be done here before drawing the scene)
+        world->updateTransforms();
 
         // Draw pictures!
         renderer->renderAll();
