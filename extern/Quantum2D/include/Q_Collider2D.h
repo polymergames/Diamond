@@ -28,11 +28,12 @@ namespace Quantum2D {
 
     class Collider2D {
     public:
-        Collider2D(Coltype type, 
+        Collider2D(const BodyList &bodylist, 
+                   Coltype type, 
                    body2d_id body,
                    void *parent, 
                    const std::function<void(void *other)> &onCollision) 
-            : type(type), body(body), parent(parent), onCollision(onCollision) {};
+            : bodylist(bodylist), type(type), body(body), parent(parent), onCollision(onCollision) {};
         
         virtual ~Collider2D() {};
 
@@ -48,11 +49,11 @@ namespace Quantum2D {
         
         /**
          Called by a physics world once per frame to update this collider.
-         The provided rigidbody should correspond to this collider's body id from getBodyID().
         */
-        virtual void update(tQ_delta delta_ms, const Rigidbody2D &body) = 0;
+        virtual void update(tQ_delta delta_ms) = 0;
 
     protected:
+        const BodyList &bodylist;
         Coltype type;
         body2d_id body;
         void *parent;

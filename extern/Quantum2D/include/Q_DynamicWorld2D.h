@@ -17,9 +17,6 @@
 #ifndef Q_DYNAMIC_WORLD_2D_H
 #define Q_DYNAMIC_WORLD_2D_H
 
-#include <memory>
-#include "D_sparsevector.h"
-#include "D_swapvector.h"
 #include "Q_Collider2D.h"
 #include "Q_Rigidbody2D.h"
 #include "Q_typedefs.h"
@@ -63,11 +60,13 @@ namespace Quantum2D {
         /**
          Creates a 2D collider object of the given type using the given constructor arguments 
          and adds it to the collision detection system.
+         NOTE: the first constructor argument of all collider types, bodylist, is provided.
+         You only need to call this function with the subsequent arguments.
          The returned id can be used to access the collider with getCollider(id).
         */
         template <class T, typename... Args>
         collider2_id genCollider(Args&&... args) {
-            return colliders.emplace_back(new T(std::forward<Args>(args)...));
+            return colliders.emplace_back(new T(bodies, std::forward<Args>(args)...));
         }
 
         /**
@@ -89,8 +88,8 @@ namespace Quantum2D {
         void step(tQ_delta delta_ms);
 
     private:
-        Diamond::swapvector<Rigidbody2D> bodies;
-        Diamond::swapvector<std::unique_ptr<Collider2D> > colliders;
+        BodyList bodies;
+        ColliderList colliders;
     };
 }
 

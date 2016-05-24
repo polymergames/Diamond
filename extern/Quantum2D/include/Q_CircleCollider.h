@@ -23,7 +23,8 @@
 namespace Quantum2D {
     class CircleCollider : public Collider2D {
     public:
-        CircleCollider(body2d_id body,
+        CircleCollider(const BodyList &bodylist,
+                       body2d_id body,
                        void *parent,
                        const std::function<void(void *other)> &onCollision,
                        tQ_pos radius,
@@ -56,7 +57,7 @@ namespace Quantum2D {
         /**
          Update world coordinates, physics world calls this once per frame.
         */
-        void update(tQ_delta delta_ms, const Rigidbody2D &body) override;
+        void update(tQ_delta delta_ms) override;
 
     private:
         tQ_pos radius;

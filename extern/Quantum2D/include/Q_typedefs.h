@@ -18,6 +18,8 @@
 #define Q_TYPEDEFS_H
 
 #include <stdint.h>
+#include <memory>
+#include "D_swapvector.h"
 #include "D_typedefs.h"
 
 // typedefs used in physics data and calculations
@@ -25,5 +27,13 @@ typedef tD_real tQ_num;
 typedef tQ_num tQ_pos;
 typedef tQ_num tQ_rot;
 typedef tQ_num tQ_delta;
+
+namespace Quantum2D {
+    class Rigidbody2D;
+    class Collider2D;
+
+    typedef Diamond::swapvector<Rigidbody2D> BodyList;
+    typedef Diamond::swapvector<std::unique_ptr<Collider2D> > ColliderList;
+}
 
 #endif // Q_TYPEDEFS_H

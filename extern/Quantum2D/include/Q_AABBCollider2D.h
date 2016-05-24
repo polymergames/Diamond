@@ -23,7 +23,8 @@
 namespace Quantum2D {
     class AABBCollider2D : public Collider2D {
     public:
-        AABBCollider2D(body2d_id body,
+        AABBCollider2D(const BodyList &bodylist, 
+                       body2d_id body,
                        void *parent,
                        const std::function<void(void *other)> &onCollision,
                        const Diamond::Vector2<tQ_num> &dims, 
@@ -40,12 +41,12 @@ namespace Quantum2D {
         const Diamond::Vector2<tQ_num> &getDims() const { return dims; }
 
         /**
-        Get the current coordinates of this AABB's bottom left corner in world space.
+         Get the current coordinates of this AABB's bottom left corner in world space.
         */
         const Diamond::Vector2<tQ_num> &getMin() const { return min; }
 
         /**
-        Get the current coordinates of this AABB's top right corner in world space.
+         Get the current coordinates of this AABB's top right corner in world space.
         */
         const Diamond::Vector2<tQ_num> &getMax() const { return max; }
 
@@ -56,7 +57,7 @@ namespace Quantum2D {
         /**
          Update world coordinates, physics world calls this once per frame.
         */
-        void update(tQ_delta delta_ms, const Rigidbody2D &body) override;
+        void update(tQ_delta delta_ms) override;
 
     private:
         Diamond::Vector2<tQ_num> origin;

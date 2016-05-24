@@ -82,7 +82,7 @@ Diamond::Entity2D *Diamond::Entity2D::addChild(Entity2D *child) {
         child->parent_trans = getWorldTransform();
         child->parent_trans_mat = getTransMat();
 
-        child->setLocalTransform(child->worldToLocalSpace(child->getWorldTransform()));
+        child->local_transform = child->worldToLocalSpace(child->getWorldTransform());
     }
     return child;
 }

@@ -50,13 +50,25 @@ namespace Diamond {
         Transform2<tD_pos, tD_rot> &getLocalTransform() { return local_transform; }
         const Transform2<tD_pos, tD_rot> &getLocalTransform() const { return local_transform; }
 
-        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { local_transform = newtrans; }
+        void setLocalTransform(const Transform2<tD_pos, tD_rot> &newtrans) { 
+            local_transform = newtrans;
+            data->getTransform(world_transform) = localToWorldSpace(newtrans);
+        }
 
-        void setLocalPosition(const Vector2<tD_pos> &newpos) { local_transform.position = newpos; }
+        void setLocalPosition(const Vector2<tD_pos> &newpos) { 
+            local_transform.position = newpos;
+            data->getTransform(world_transform).position = localToWorldSpace(newpos);
+        }
 
-        void setLocalRotation(tD_rot newrot) { local_transform.rotation = newrot; }
+        void setLocalRotation(tD_rot newrot) { 
+            local_transform.rotation = newrot; 
+            data->getTransform(world_transform).rotation = localToWorldRotation(newrot);
+        }
 
-        void setLocalScale(const Vector2<tD_real> &newscale) { local_transform.scale = newscale; }
+        void setLocalScale(const Vector2<tD_real> &newscale) { 
+            local_transform.scale = newscale;
+            data->getTransform(world_transform).scale = localToWorldScale(newscale);
+        }
         
 
         // World transform functions.
@@ -77,22 +89,25 @@ namespace Diamond {
 
         void setWorldRotation(tD_rot newrot) {
             data->getTransform(world_transform).rotation = newrot;
-            local_transform.rotation = newrot - parent_trans.rotation;
+            local_transform.rotation = worldToLocalRotation(newrot);
         }
 
         void setWorldScale(const Vector2<tD_real> &newscale) {
             data->getTransform(world_transform).scale = newscale;
-            local_transform.scale = Vector2<tD_real>(newscale.x / parent_trans.scale.x, 
-                newscale.y / parent_trans.scale.y);
+            local_transform.scale = worldToLocalScale(newscale);
         }
 
 
-        // Transform conversion functions.
+        // Transform conversion local->world
         
-        Transform2<tD_pos, tD_rot> localToWorldSpace(const Transform2<tD_pos, tD_rot> &local_trans) {
-            return Transform2<tD_pos, tD_rot>(localToWorldSpace(local_trans.position), 
-                local_trans.rotation + parent_trans.rotation, 
-                Vector2<tD_real>(local_trans.scale).scalar(parent_trans.scale));
+        /**
+         Transforms a given transform object from this entity's local space to world space.
+        */
+        Transform2<tD_pos, tD_rot> localToWorldSpace(const Transform2<tD_pos, tD_rot> &local_trans) const {
+            return Transform2<tD_pos, tD_rot>(
+                localToWorldSpace(local_trans.position), 
+                localToWorldRotation(local_trans.rotation), 
+                localToWorldScale(local_trans.scale));
         }
 
         /**
@@ -100,14 +115,37 @@ namespace Diamond {
          TODO: test
         */
         template <typename V>
-        Vector2<V> localToWorldSpace(const Vector2<V> &local_coords) {
+        Vector2<V> localToWorldSpace(const Vector2<V> &local_coords) const {
             return local_coords.mul(parent_trans_mat.m) + parent_trans.position;
         }
 
-        Transform2<tD_pos, tD_rot> worldToLocalSpace(const Transform2<tD_pos, tD_rot> &world_trans) {
-            return Transform2<tD_pos, tD_rot>(worldToLocalSpace(world_trans.position),
-                world_trans.rotation - parent_trans.rotation, 
-                Vector2<tD_real>(world_trans.scale).scalar(1.0 / parent_trans.scale.x, 1.0 / parent_trans.scale.y));
+        /**
+         Transforms a given rotation from this entity's local space to world space.
+        */
+        template <typename R>
+        R localToWorldRotation(R local_rot) const {
+            return local_rot + parent_trans.rotation;
+        }
+
+        /**
+         Transforms a given scale vector from this entity's local space to world space.
+        */
+        template <typename S>
+        Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
+            return Vector2<tD_real>(local_scale).scalar(parent_trans.scale);
+        }
+
+
+        // Transform conversion world->local
+
+        /**
+         Transforms a given transform object from world space to this entity's local space.
+        */
+        Transform2<tD_pos, tD_rot> worldToLocalSpace(const Transform2<tD_pos, tD_rot> &world_trans) const {
+            return Transform2<tD_pos, tD_rot>(
+                worldToLocalSpace(world_trans.position),
+                worldToLocalRotation(world_trans.rotation), 
+                worldToLocalScale(world_trans.scale));
         }
 
         /**
@@ -115,10 +153,26 @@ namespace Diamond {
          TODO: test
         */
         template <typename V>
-        Vector2<V> worldToLocalSpace(const Vector2<V> &world_coords) {
+        Vector2<V> worldToLocalSpace(const Vector2<V> &world_coords) const {
             return (world_coords - parent_trans.position).mul(parent_trans_mat.inv().m);
-        }       
+        }
         
+        /**
+         Transforms a given rotation from world space to this entity's local space.
+        */
+        template <typename R>
+        R worldToLocalRotation(R world_rot) const {
+            return world_rot - parent_trans.rotation;
+        }
+
+        /**
+         Transforms a given scale vector from world space to this entity's local space.
+        */
+        template <typename S>
+        Vector2<S> worldToLocalScale(const Vector2<S> &world_scale) const {
+            return Vector2<S>(world_scale).scalar(1.0 / parent_trans.scale.x, 1.0 / parent_trans.scale.y);
+        }
+
 
         /**
          Get this entity's world transformation matrix (not including translation).

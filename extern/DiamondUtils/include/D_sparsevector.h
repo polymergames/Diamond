@@ -31,6 +31,7 @@ namespace Diamond {
     template <class T>
     class sparsevector {
     public:
+
         // Accces functions
 
         T &operator[](tD_id id) { return objects[id]; }
@@ -38,6 +39,7 @@ namespace Diamond {
 
         T &at(tD_id id) { return objects.at(id); }
         const T &at(tD_id id) const { return objects.at(id); }
+
 
         /**
          Constructs an object and adds it to the collection. 
@@ -56,6 +58,7 @@ namespace Diamond {
                 return objects.size() - 1;
             }
         }
+        
 
         /**
          Adds an object to the collection. 
@@ -74,21 +77,17 @@ namespace Diamond {
             }
         }
 
+
         /**
          Removes the object corresponding to the given id.
         */
-        void erase(tD_id erase_id) {
-            free_id_stack.push_back(erase_id);
-        }
+        void erase(tD_id erase_id) { free_id_stack.push_back(erase_id); }
 
 
-        tD_index size() {
-            return objects.size();
-        }
-
-        std::vector<T> &data() {
-            return objects;
-        }
+        /**
+         Returns the total number of valid and invalid elements in the vector.
+        */
+        tD_index size() { return objects.size(); }
 
     private:
         std::vector<T> objects;

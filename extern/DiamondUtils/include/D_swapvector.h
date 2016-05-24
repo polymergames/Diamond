@@ -30,6 +30,7 @@ namespace Diamond {
     template <class T>
     class swapvector {
     public:
+
         // Access and iterator functions
 
         T &operator[](tD_id id) { return objects[id_index_map[id]]; }
@@ -72,6 +73,7 @@ namespace Diamond {
             return new_id;
         }
 
+
         /**
          Adds an object to the collection.
          Returns an id that can be used to access the new object using [] or at().
@@ -95,6 +97,7 @@ namespace Diamond {
             return new_id;
         }
 
+
         /**
          Removes the object corresponding to the given id.
         */
@@ -114,13 +117,17 @@ namespace Diamond {
         }
 
 
-        tD_index size() {
-            return objects.size();
-        }
+        /**
+         Returns the number of elements in the vector.
+        */
+        tD_index size() { return objects.size(); }
 
-        std::vector<T> &data() {
-            return objects;
-        }
+
+        /**
+         Returns a direct reference to the internal vector.
+        */
+        std::vector<T> &data() { return objects; }
+        const std::vector<T> &data() const { return objects; }
 
     private:
         std::vector<T> objects;
