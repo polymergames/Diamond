@@ -1,5 +1,5 @@
 /*
-    Copyright 2015 Ahnaf Siddiqui
+    Copyright 2016 Ahnaf Siddiqui
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,15 +14,22 @@
     limitations under the License.
 */
 
-#ifndef D_COMPONENT_H
-#define D_COMPONENT_H
+#ifndef D_ENTITY_NODE2D_H
+#define D_ENTITY_NODE2D_H
 
+#include "D_Entity.h"
+#include "D_SceneNode2D.h"
 
 namespace Diamond {
-    class Component {
+    /**
+     Combines the functionality of an entity-component system and a scene graph node.
+     Yeah that's right, we used multiple inheritance. Fight me.
+    */
+    class EntityNode2D : public Entity, public SceneNode2D {
     public:
-        virtual ~Component() {}
+        EntityNode2D(TransformList &transform_list, transform2_id world_transform_id)
+            : SceneNode2D(transform_list, world_transform_id) {}
     };
 }
 
-#endif // D_COMPONENT_H
+#endif // D_ENTITY_NODE2D_H

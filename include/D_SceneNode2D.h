@@ -23,6 +23,7 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
+    class SceneNode2D;
     typedef std::vector<SceneNode2D*> ChildList;
 
     class SceneNode2D {
