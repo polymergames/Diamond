@@ -37,6 +37,10 @@ Diamond::SceneNode2D &Diamond::SceneNode2D::addChild(SceneNode2D &child) {
 Diamond::SceneNode2D *Diamond::SceneNode2D::addChild(SceneNode2D *child) {
     if (child && child != this)
         m_children.push_back(child);
+
+    child->updateParentTransform(worldTransform(), getTransMat());
+    child->updateLocalTransform();
+
     return child;
 }
 
