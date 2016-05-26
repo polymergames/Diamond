@@ -45,6 +45,7 @@ void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {
     initClip();
 }
 
+/*
 void Diamond::AnimatorSheet::update(tD_delta delta) {
     elapsed += delta;
     if (elapsed > anim->frame_length) {
@@ -52,7 +53,7 @@ void Diamond::AnimatorSheet::update(tD_delta delta) {
         rendercomp->setClip((cur_frame % anim->columns) * frame_width, (cur_frame / anim->columns) * frame_height);
         elapsed %= anim->frame_length;
     }
-}
+}*/
 
 void Diamond::AnimatorSheet::initClip() {
     frame_width = anim->sprite_sheet->getWidth() / anim->columns;

@@ -19,8 +19,12 @@
 
 #include <stdint.h>
 #include <memory>
-#include "D_swapvector.h"
-#include "D_typedefs.h"
+#include "duSwapvector.h"
+#include "duTypedefs.h"
+
+// ID/index typedefs
+typedef tD_id body2d_id; // 2d rigidbody object id type
+typedef tD_id collider2_id; // 2d collider object id type
 
 // typedefs used in physics data and calculations
 typedef tD_real tQ_num;
@@ -32,8 +36,8 @@ namespace Quantum2D {
     class Rigidbody2D;
     class Collider2D;
 
-    typedef Diamond::swapvector<Rigidbody2D> BodyList;
-    typedef Diamond::swapvector<std::unique_ptr<Collider2D> > ColliderList;
+    typedef Diamond::SwapVector<Rigidbody2D> BodyList;
+    typedef Diamond::SwapVector<std::unique_ptr<Collider2D> > ColliderList;
 }
 
 #endif // Q_TYPEDEFS_H

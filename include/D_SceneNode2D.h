@@ -29,6 +29,10 @@ namespace Diamond {
     class SceneNode2D {
     public:
         SceneNode2D(TransformList &transform_list, transform2_id world_transform_id);
+        virtual ~SceneNode2D() {}
+
+        SceneNode2D(const SceneNode2D&) = delete;
+        SceneNode2D& operator=(const SceneNode2D&) = delete;
 
         // children
 
@@ -158,7 +162,7 @@ namespace Diamond {
 
 
 
-    private:
+    protected:
         Transform2<tD_pos, tD_rot> m_local_transform;
         TransformList &m_transform_list;
         transform2_id m_world_transform_id;

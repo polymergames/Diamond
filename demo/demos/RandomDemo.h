@@ -23,15 +23,14 @@
 #include "D_Animator2D.h"
 #include "D_AnimatorSheet.h"
 #include "D_Game2D.h"
-#include "D_Entity2D.h"
+#include "D_EntityNode2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
 
 class RandomDemo : public Diamond::Game2D {
 public:
-    RandomDemo(float movespeed = 0.75f, float spinspeed = 0.75f, float growspeed = 0.00075f);
-
-    void init() override;
+    RandomDemo(Diamond::Engine2D &engine, 
+        float movespeed = 0.75f, float spinspeed = 0.75f, float growspeed = 0.00075f);
 
     void update(tD_delta delta) override;
 
@@ -40,7 +39,8 @@ public:
 private:
     const float movespeed, spinspeed, growspeed;
 
-    Diamond::Entity2D *spike, *spike2, *zapper, *zapper2;
+    Diamond::EntityNode2D spike, spike2, zapper, zapper2;
+    std::list<Diamond::EntityNode2D> clouds;
 
     std::shared_ptr<Diamond::Texture> spike_sprite;
     std::shared_ptr<Diamond::Texture> cloud_sprite;

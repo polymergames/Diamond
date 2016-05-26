@@ -19,7 +19,6 @@
 
 #include <iostream>
 #include "D_Config.h"
-#include "D_DataCenter.h"
 #include "D_RenderObj2D.h"
 #include "D_Texture.h"
 #include "D_typedefs.h"
@@ -29,7 +28,7 @@ namespace Diamond {
     public:
         virtual ~Renderer2D() {}
 
-        virtual bool init(const Config &config, const DataCenter *data) = 0;
+        virtual bool init(const Config &config) = 0;
         
         virtual void renderAll() = 0;
         

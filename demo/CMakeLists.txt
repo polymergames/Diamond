@@ -16,7 +16,7 @@
 include_directories(demos/)
 
 # Get source files
-file(GLOB_RECURSE SOURCES *.cpp)
+file(GLOB_RECURSE SOURCES demos/*.cpp)
 
 # Build demo
 add_executable(diamondDemo ${SOURCES})

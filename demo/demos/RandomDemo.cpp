@@ -19,27 +19,16 @@
 #include "D_Input.h"
 #include "D_RenderComponent2D.h"
 #include "D_RigidbodyComponent2D.h"
-#include "D_World2D.h"
 using namespace Diamond;
 
-RandomDemo::RandomDemo(float movespeed, float spinspeed, float growspeed) 
-    : movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
-      spike(nullptr), spike2(nullptr), zapper(nullptr), zapper2(nullptr) {}
+RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float growspeed) 
+    : Game2D(engine), movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
+      spike(engine.getTransformList()), 
+      spike2(engine.getTransformList()), 
+      zapper(engine.getTransformList()), 
+      zapper2(engine.getTransformList()) {
+    Renderer2D *renderer = engine.getRenderer();
 
-void RandomDemo::init() {
-    World2D *world = engine->getWorld();
-    Renderer2D *renderer = engine->getRenderer();
-    
-    spike = world->createEntity("spike");
-    spike2 = world->createEntity("spike2");
-    zapper = world->createEntity("zapper");
-    zapper2 = world->createEntity("zapper2");
-
-    world->addEntity(spike2);
-    world->addEntity(zapper2);
-    zapper2->addChild(zapper);
-    zapper2->addChild(spike);
-    
     window = renderer->getResolution();
     Vector2<int> screen = renderer->getScreenResolution();
     std::cout << "Resolution: " << window.x << " by " << window.y << std::endl;
@@ -50,22 +39,22 @@ void RandomDemo::init() {
 
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;
-        engine->quit();
+        engine.quit();
         return;
     }
 
     //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
-    spike->addComponent<RenderComponent2D>(spike, renderer, spike_sprite);
-    // spike->setLocalPosition(Vector2<int>(-150, 200));
-    spike->setLocalPosition(Vector2<int>(-250, 400));
-    spike->setLocalScale(Vector2<float>(0.2f, 0.2f));
-    if (!spike->getComponent<RenderComponent2D>()) {
+    spike.addComponent<RenderComponent2D>(spike.getWorldTransformID(), renderer, spike_sprite);
+    // spike.localTransform().position = Vector2<int>(-150, 200);
+    spike.localTransform().position = Vector2<int>(-250, 400);
+    spike.localTransform().scale = Vector2<float>(0.2f, 0.2f);
+    if (!spike.getComponent<RenderComponent2D>()) {
         std::cout << "NULL!" << std::endl;
     }
 
-    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite);
-    spike2->setLocalPosition(Vector2<int>(100, 100));
-    spike2->setLocalScale(Vector2<float>(0.1f, 0.1f));
+    spike2.addComponent<RenderComponent2D>(spike2.getWorldTransformID(), renderer, spike_sprite);
+    spike2.localTransform().position = Vector2<int>(100, 100);
+    spike2.localTransform().scale = Vector2<float>(0.1f, 0.1f);
 
     // Animations
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper1.png")));
@@ -73,10 +62,10 @@ void RandomDemo::init() {
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
 
-    zapper->addComponent<RenderComponent2D>(zapper, renderer, zapper_anim.sprites[0]);
-    zapper->addComponent<Animator2D>(zapper->getComponent<RenderComponent2D>(), &zapper_anim);
-    // zapper->setLocalPosition(Vector2<int>(50, 100));
-    zapper->setLocalPosition(Vector2<int>(400, 220));
+    zapper.addComponent<RenderComponent2D>(zapper.getWorldTransformID(), renderer, zapper_anim.sprites[0]);
+    zapper.addComponent<Animator2D>(zapper.getComponent<RenderComponent2D>(), &zapper_anim);
+    // zapper.localTransform().position = Vector2<int>(50, 100);
+    zapper.localTransform().position = Vector2<int>(400, 220);
 
     zapper2_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
@@ -84,21 +73,23 @@ void RandomDemo::init() {
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
-    zapper2->addComponent<RenderComponent2D>(zapper2, renderer, zapper2_anim.sprite_sheet);
-    zapper2->addComponent(new AnimatorSheet(zapper2->getComponent<RenderComponent2D>(), &zapper2_anim));
-    //zapper2->getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
+    zapper2.addComponent<RenderComponent2D>(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet);
+    zapper2.addComponent(new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(), &zapper2_anim));
+    //zapper2.getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
     //    zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
-    // zapper2->setLocalPosition(Vector2<int>(650, 200));
-    zapper2->setLocalPosition(Vector2<int>(600, 130));
-    zapper2->setLocalScale(Vector2<float>(z2scale, z2scale));
+    // zapper2.localTransform().position = Vector2<int>(650, 200);
+    zapper2.localTransform().position = Vector2<int>(600, 130);
+    zapper2.localTransform().scale = Vector2<float>(z2scale, z2scale);
 
-    haha = std::unique_ptr<Sound2D>(engine->getDJ()->loadSound("haha.wav"));
+    haha = std::unique_ptr<Sound2D>(engine.getDJ()->loadSound("haha.wav"));
 
     // Physics
-    // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getTransformID());
-    spike->addComponent<RigidbodyComponent2D>(spike, engine->getPhysWorld());
-    spikerb = spike->getComponent<RigidbodyComponent2D>()->getBody();
+    // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getWorldTransformID());
+    spike.addComponent<RigidbodyComponent2D>(engine.getPhysWorld()->genRigidbody(spike.getWorldTransformID()), 
+        engine.getPhysWorld());
+    spikerb = spike.getComponent<RigidbodyComponent2D>()->getBody();
 }
+
 
 void RandomDemo::update(tD_delta delta) {
     // Quantum2D::Rigidbody2D rbody = Quantum2D::QuantumWorld2D::getRigidbody(body);
@@ -114,72 +105,71 @@ void RandomDemo::update(tD_delta delta) {
         spike_sprite->setColor(spike_color);
     }
     if (Input::keyup[Input::K_Y]) {
-        RGBA sc = spike->getComponent<RenderComponent2D>()->getSprite()->getColor();
+        RGBA sc = spike.getComponent<RenderComponent2D>()->getSprite()->getColor();
         sc.a -= 32;
         spike_sprite->setColor(sc);
     }
 
     // Sprite switching
     if (Input::keyup[Input::K_1]) {
-        spike->getComponent<RenderComponent2D>()->setSprite(spike_sprite);
+        spike.getComponent<RenderComponent2D>()->setSprite(spike_sprite);
     }
     if (Input::keyup[Input::K_2]) {
-        spike->getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
+        spike.getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
     }
 
     // Visibility
     if (Input::keyup[Input::K_SPACE]) {
-        zapper2->getComponent<RenderComponent2D>()->toggleVisibility();
+        zapper2.getComponent<RenderComponent2D>()->toggleVisibility();
     }
 
     // Stretching
     if (Input::keydown[Input::K_LSHIFT]) {
-        zapper2->setLocalScale(Vector2<float>(1.0, 1.0).scalar(zapper2->getLocalTransform().scale.x + growspeed * delta));
+        float ds = growspeed * delta;
+        zapper2.localTransform().scale.x += ds;
+        zapper2.localTransform().scale.y += ds;
     }
     if (Input::keydown[Input::K_LCTRL]) {
-        zapper2->setLocalScale(Vector2<float>(1.0, 1.0).scalar(zapper2->getLocalTransform().scale.x - growspeed * delta));
+        float ds = growspeed * delta;
+        zapper2.localTransform().scale.add(Vector2<float>(-ds, -ds));
     }
 
     // Flipping and velocity
     if (Input::keyup[Input::K_DOWN]) {
-        zapper2->getComponent<RenderComponent2D>()->flipX();
+        zapper2.getComponent<RenderComponent2D>()->flipX();
     }
     if (Input::keyup[Input::K_UP]) {
-        zapper2->getComponent<RenderComponent2D>()->flipY();
+        zapper2.getComponent<RenderComponent2D>()->flipY();
     }
 
     // Zapper movement
     if (Input::keydown[Input::K_W]) {
-        Vector2<float> pos = zapper2->getLocalTransform().position;
-        zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
+        zapper2.localTransform().position.y -= movespeed * delta;
     }
     if (Input::keydown[Input::K_S]) {
-        Vector2<float> pos = zapper2->getLocalTransform().position;
-        zapper2->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+        zapper2.localTransform().position.y += movespeed * delta;
     }
     if (Input::keydown[Input::K_A]) {
-        Vector2<float> pos = zapper2->getLocalTransform().position;
-        zapper2->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+        zapper2.localTransform().position.x -= movespeed * delta;
     }
     if (Input::keydown[Input::K_D]) {
-        Vector2<float> pos = zapper2->getLocalTransform().position;
-        zapper2->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+        zapper2.localTransform().position.x += movespeed * delta;
     }
 
     // Zapper rotation
     if (Input::keydown[Input::K_LEFT]) {
-        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation - spinspeed * delta);\
+        zapper2.localTransform().rotation -= spinspeed * delta;
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        zapper2->setLocalRotation(zapper2->getLocalTransform().rotation + spinspeed * delta);\
+        zapper2.localTransform().rotation += spinspeed * delta;
     }
 
     // Spike rotation
     if (Input::keydown[Input::K_P7]) {
-        spike->setLocalRotation(spike->getLocalTransform().rotation - spinspeed * delta);
+        spike.localTransform().rotation -= spinspeed * delta;
     }
     if (Input::keydown[Input::K_P9]) {
-        spike->setLocalRotation(spike->getLocalTransform().rotation + spinspeed * delta);
+        spike.localTransform().rotation += spinspeed * delta;
     }
 
     // Spike velocity
@@ -198,20 +188,16 @@ void RandomDemo::update(tD_delta delta) {
 
     // Spike Movement
     if (Input::keydown[Input::K_P4]) {
-        Vector2<float> pos = spike->getLocalTransform().position;
-        spike->setLocalPosition(Vector2<float>(pos.x - movespeed * delta, pos.y));
+        spike.localTransform().position.x -= movespeed * delta;
     }
     if (Input::keydown[Input::K_P6]) {
-        Vector2<float> pos = spike->getLocalTransform().position;
-        spike->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
+        spike.localTransform().position.x += movespeed * delta;
     }
     if (Input::keydown[Input::K_P2]) {
-        Vector2<float> pos = spike->getLocalTransform().position;
-        spike->setLocalPosition(Vector2<float>(pos.x, pos.y + movespeed * delta));
+        spike.localTransform().position.y += movespeed * delta;
     }
     if (Input::keydown[Input::K_P8]) {
-        Vector2<float> pos = spike->getLocalTransform().position;
-        spike->setLocalPosition(Vector2<float>(pos.x, pos.y - movespeed * delta));
+        spike.localTransform().position.y -= movespeed * delta;
     }
 
     // Sound
@@ -223,12 +209,14 @@ void RandomDemo::update(tD_delta delta) {
     // Touch
     if (Input::touch_up) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
-        Entity2D *spawn = engine->getWorld()->createEntity("cloud");
-        spawn->addComponent(new RenderComponent2D(spawn, engine->getRenderer(), cloud_sprite));
-        spawn->setWorldPosition(Input::touch_pos);
-        spawn->setWorldScale(Vector2<float>(0.1f, 0.1f));
-        //engine->getWorld()->addEntity(spawn);
-        spike->addChild(spawn);
+        clouds.emplace_back(engine.getTransformList());
+        EntityNode2D *cloud = &(clouds.back());
+        cloud->addComponent(
+            new RenderComponent2D(cloud->getWorldTransformID(), engine.getRenderer(), cloud_sprite)
+        );
+        cloud->worldTransform().position = Input::touch_pos;
+        cloud->worldTransform().scale = Vector2<float>(0.1f, 0.1f);
+        spike.addChild(cloud);
     }
 
     //std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;

@@ -23,9 +23,7 @@
 
 class CollideDemo : public Diamond::Game2D {
 public:
-    CollideDemo(float movespeed = 0.75f);
-
-    void init() override;
+    CollideDemo(Diamond::Engine2D &engine, float movespeed = 0.75f);
 
     void update(tD_delta delta) override;
 
@@ -34,7 +32,7 @@ public:
 private:
     const float movespeed;
 
-    Diamond::Entity2D *spike1, *spike2, *zapper1, *zapper2;
+    Diamond::Entity2D spike1, spike2, zapper1, zapper2;
     Diamond::AnimationSheet zapper_anim;
 
     void m_onCollision(void *other);

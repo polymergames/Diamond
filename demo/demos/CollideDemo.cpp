@@ -19,14 +19,14 @@
 #include "D_Input.h"
 #include "D_RenderComponent2D.h"
 #include "D_RigidbodyComponent2D.h"
-#include "D_World2D.h"
 using namespace Diamond;
 
-CollideDemo::CollideDemo(float movespeed) 
-    : movespeed(movespeed), spike1(nullptr), spike2(nullptr), zapper1(nullptr), zapper2(nullptr) {
-}
-
-void CollideDemo::init() {
+CollideDemo::CollideDemo(Engine2D &engine, float movespeed) 
+    : Game2D(engine), movespeed(movespeed), 
+      spike1(engine.getTransformList()),
+      spike2(engine.getTransformList()), 
+      zapper1(engine.getTransformList()), 
+      zapper2(engine.getTransformList()) {/*
     World2D *world = engine->getWorld();
     Renderer2D *renderer = engine->getRenderer();
 
@@ -104,10 +104,11 @@ void CollideDemo::init() {
     zapper2->addComponent<ColliderComponent2D>(physworld->genAABBCollider(rbody, zapper2, 
         callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
-        Vector2<tD_pos>(2 * partial_width * scale, 0)), physworld);
+        Vector2<tD_pos>(2 * partial_width * scale, 0)), physworld);*/
+
 }
 
-void CollideDemo::update(tD_delta delta) {
+void CollideDemo::update(tD_delta delta) {/*
     // zapper1 controls
     if (Input::keydown[Input::K_W]) {
         Vector2<float> pos = zapper1->getLocalTransform().position;
@@ -160,7 +161,7 @@ void CollideDemo::update(tD_delta delta) {
     if (Input::keydown[Input::K_P6]) {
         Vector2<float> pos = spike2->getLocalTransform().position;
         spike2->setLocalPosition(Vector2<float>(pos.x + movespeed * delta, pos.y));
-    }
+    }*/
 }
 
 void CollideDemo::quit() {
@@ -168,6 +169,6 @@ void CollideDemo::quit() {
 }
 
 void CollideDemo::m_onCollision(void *other) {
-    std::cout << "Hit by " << ((Entity2D*)other)->getName() << "!" << std::endl;
+    //std::cout << "Hit by " << ((Entity2D*)other)->getName() << "!" << std::endl;
 }
 

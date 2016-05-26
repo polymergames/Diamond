@@ -19,8 +19,6 @@
 
 #include <functional>
 #include "D_Config.h"
-#include "D_DataCenter.h"
-#include "D_Entity2D.h"
 #include "D_CircleCollider.h"
 #include "D_AABBCollider2D.h"
 #include "D_Rigidbody2D.h"
@@ -53,9 +51,9 @@ namespace Diamond {
         virtual void updateBodies() = 0;
         
         /**
-         Creates a rigidbody object attached to the given entity.
+         Creates a rigidbody object attached to the given transform.
         */
-        virtual Rigidbody2D *genRigidbody(Entity2D *parent) = 0;
+        virtual Rigidbody2D *genRigidbody(transform2_id transform) = 0;
         
         /**
          Frees the memory associated with the given rigidbody.
@@ -65,7 +63,7 @@ namespace Diamond {
         
         /**
          Creates an AABB collider attached to the given rigidbody.
-         parent is a pointer to the entity owning the collider.
+         parent is a pointer to the object owning the collider.
         */
         virtual AABBCollider2D *genAABBCollider(const Rigidbody2D *body,
                                                 void *parent,
@@ -75,7 +73,7 @@ namespace Diamond {
 
         /**
          Creates a circle collider attached to the given rigidbody.
-         parent is a pointer to the entity owning the collider.
+         parent is a pointer to the object owning the collider.
         */
         virtual CircleCollider *genCircleCollider(const Rigidbody2D *body,
                                                   void *parent,

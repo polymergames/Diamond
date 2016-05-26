@@ -18,7 +18,7 @@
 #define Q_AABB_COLLIDER_2D_H
 
 #include "Q_Collider2D.h"
-#include "D_Vector2.h"
+#include "duVector2.h"
 
 namespace Quantum2D {
     class AABBCollider2D : public Collider2D {

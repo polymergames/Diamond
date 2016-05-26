@@ -17,35 +17,36 @@
 #ifndef D_TRANSFORM_2_H
 #define D_TRANSFORM_2_H
 
-#include "D_Vector2.h"
+#include "duVector2.h"
+#include "duTypedefs.h"
 
 namespace Diamond {
-    template <typename PTYPE, typename RTYPE>
+    template <typename PTYPE, typename RTYPE, typename STYPE = tD_real>
     class Transform2 {
         public:
         Vector2<PTYPE> position;
         RTYPE rotation;
-        Vector2<tD_real> scale;
+        Vector2<STYPE> scale;
         
         Transform2() : position(), rotation(), scale(1, 1) {}
         Transform2(const Vector2<PTYPE> &position) 
             : position(position), rotation(), scale(1, 1) {}
         Transform2(const Vector2<PTYPE> &position, RTYPE rotation)
             : position(position), rotation(rotation), scale(1, 1) {}
-        Transform2(const Vector2<PTYPE> &position, RTYPE rotation, const Vector2<tD_real> &scale)
+        Transform2(const Vector2<PTYPE> &position, RTYPE rotation, const Vector2<STYPE> &scale)
             : position(position), rotation(rotation), scale(scale) {}
 
 
         void reset() {
             position = Vector2<PTYPE>();
             rotation = RTYPE();
-            scale = Vector2<tD_real>(1, 1);
+            scale = Vector2<STYPE>(1, 1);
         }
 
         // Conversion operator
-        template <typename P, typename R>
-        operator Transform2<P, R>() const { 
-            return Transform2<P, R>(position, rotation, scale);
+        template <typename P, typename R, typename S>
+        operator Transform2<P, R, S>() const { 
+            return Transform2<P, R, S>(position, rotation, scale);
         }
     };
 }

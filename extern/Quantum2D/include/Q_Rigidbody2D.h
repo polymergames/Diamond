@@ -17,7 +17,7 @@
 #ifndef Q_RIGIDBODY_2D_H
 #define Q_RIGIDBODY_2D_H
 
-#include "D_Vector2.h"
+#include "duVector2.h"
 #include "Q_typedefs.h"
 
 namespace Quantum2D {

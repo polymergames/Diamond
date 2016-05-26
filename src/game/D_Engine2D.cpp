@@ -20,7 +20,6 @@
 #include "D_Game2D.h"
 #include "D_Log.h"
 #include "D_FileLogger.h"
-#include "D_World2D.h"
 
 // SDL subsystems
 #include "D_SDLDiskJockey2D.h"
@@ -37,8 +36,17 @@ Diamond::Engine2D::Engine2D()
       dj(nullptr), 
       timer(nullptr), 
       event_handler(nullptr), 
-      phys_world(nullptr), 
-      world(nullptr) {}
+      phys_world(nullptr) {}
+
+
+Diamond::Engine2D::~Engine2D() {
+    Log::log("Diamond systems shutting down.");
+    delete renderer;
+    delete dj;
+    delete timer;
+    delete event_handler;
+    delete phys_world;
+}
 
 
 bool Diamond::Engine2D::init(const Config &config) {
@@ -60,11 +68,9 @@ bool Diamond::Engine2D::init(const Config &config) {
 
     if (success) {
         Log::log("Diamond systems are online and ready to roll.");
-        // Init Entity world
-        world = new World2D(&data);
     }
     else {
-        shutDown();
+        Log::log("We have a problem sir.");
     }
 
     return success;
@@ -72,16 +78,11 @@ bool Diamond::Engine2D::init(const Config &config) {
 
 void Diamond::Engine2D::launch(Game2D &game) {
     is_running = true;
-    game.setEngine(this);
 
     // Init time
     tD_time time, last_time = timer->msElapsed();
     tD_delta delta;
     int nframes = 0;
-
-    // Init game
-    Log::log("Launching " + config.game_name);
-    game.init();
 
     // Game loop
     while (is_running) {
@@ -100,24 +101,16 @@ void Diamond::Engine2D::launch(Game2D &game) {
         // Catch up on events
         event_handler->update();
         
-        // Update game logic and entities + entity transforms
-        // Entity transforms should be updated before calling physics world functions
-        // so that physics simulation will run on any transforms that were updated by game logic.
+        // Update game logic
         game.update(delta);
-        world->update(delta);
 
         // Update physics
         phys_world->updateBodies();
         phys_world->step(delta);
         phys_world->updateTransforms();
 
-        // Update entity transforms again before drawing
-        // Although physics world already updated its relevant transforms above, 
-        // that did not update the scene graph relationship transforms
-        // (ex. an entity with a rigidbody received an updated position based on its velocity,
-        // but its children were not yet updated based on their parent's new velocity.
-        // That should be done here before drawing the scene)
-        world->updateTransforms();
+        // Update post-physics game logic
+        game.postPhysicsUpdate(delta);
 
         // Draw pictures!
         renderer->renderAll();
@@ -125,15 +118,12 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
     // End game
     game.quit();
-    world->killAll();
-    Log::log("Game ended, Diamond systems shutting down...");
-    shutDown();
 }
 
 
 bool Diamond::Engine2D::initSDL() {
-    renderer = new SDLRenderer2D();
-    if (!renderer->init(config, &data)) {
+    renderer = new SDLRenderer2D(transform_list);
+    if (!renderer->init(config)) {
         // TODO: Handle renderer initialization failure
         return false;
     }
@@ -153,7 +143,7 @@ bool Diamond::Engine2D::initSDL() {
 }
 
 bool Diamond::Engine2D::initQuantum() {
-    phys_world = new QuantumWorld2D();
+    phys_world = new QuantumWorld2D(transform_list);
     if (!phys_world->init(config)) {
         // TODO: Handle physics initialization failure
         return false;
@@ -179,15 +169,5 @@ bool Diamond::Engine2D::initAndroid() {
 
 bool Diamond::Engine2D::initIOS() {
     return initAndroid();
-}
-
-
-void Diamond::Engine2D::shutDown() {
-    delete renderer;
-    delete dj;
-    delete timer;
-    delete event_handler;
-    delete phys_world;
-    delete world;
 }
 

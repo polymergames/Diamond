@@ -27,11 +27,11 @@
 namespace Diamond {
     class RenderComponent2D : public Component {
     public:
-        RenderComponent2D(const Entity2D *parent, 
+        RenderComponent2D(transform2_id transform, 
                           Renderer2D *renderer, 
                           std::shared_ptr<const Texture> sprite)
-            : parent(parent), renderer(renderer), sprite(sprite), clip_dim() {
-              render_obj = renderer->genRenderObj(parent->getTransformID(), sprite.get());
+            : transform(transform), renderer(renderer), sprite(sprite), clip_dim() {
+              render_obj = renderer->genRenderObj(transform, sprite.get());
         }
         ~RenderComponent2D() { freeRenderObj(); }
         
@@ -73,7 +73,7 @@ namespace Diamond {
         void setClip(int x, int y);
 
     private:
-        const Entity2D *parent;
+        transform2_id transform;
         Renderer2D *renderer;
         renderobj_id render_obj;
         std::shared_ptr<const Texture> sprite;
@@ -127,7 +127,7 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 
 inline void Diamond::RenderComponent2D::makeVisible() {
     if ((tD_index)render_obj == Diamond::INVALID) {
-        render_obj = renderer->genRenderObj(parent->getTransformID(), sprite.get(), pivot);
+        render_obj = renderer->genRenderObj(transform, sprite.get(), pivot);
         if (clip_dim.x != 0) { // check if any valid clip data has been stored
             RenderObj2D *r = renderer->getRenderObj(render_obj);
             r->setClip(0, 0, clip_dim.x, clip_dim.y);

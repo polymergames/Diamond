@@ -14,10 +14,10 @@
     limitations under the License.
 */
 
-#ifndef D_MATH_H
-#define D_MATH_H
+#ifndef DU_MATH_H
+#define DU_MATH_H
 
-#include "D_Vector2.h"
+#include "DuVector2.h"
 
 namespace Diamond {
     namespace Math {
@@ -37,4 +37,4 @@ namespace Diamond {
     }
 }
 
-#endif // D_MATH_H
+#endif // DU_MATH_H

@@ -25,41 +25,44 @@
 #include "Q_DynamicWorld2D.h"
 
 namespace Diamond {
+    // TODO: get rid of dynamic allocation, in this and other classes, and just return IDs
+    // (or ID containers) ex. in genRigidbody, etc.
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
-        bool init(const Config &config) override {
-            return world.init(); 
-        }
+        QuantumWorld2D(TransformList &transform_list) : transform_list(transform_list) {}
+
+        bool init(const Config &config) override { return world.init(); }
 
         void step(tD_delta delta_ms) override { world.step(delta_ms); }
         
         void updateTransforms() override {
             for (auto i = pairs.begin(); i != pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
-                i->second->setWorldPosition(rbody.getPosition());
+                Transform2<tD_pos, tD_rot> &trans = transform_list[i->second];
+                trans.position = rbody.getPosition();
                 // TODO: test!
-                i->second->setWorldRotation(rbody.getRotation());
+                trans.rotation = rbody.getRotation();
             }
         }
 
         void updateBodies() override {
             for (auto i = pairs.begin(); i != pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
-                const Transform2<tD_pos, tD_rot> &trans = i->second->getWorldTransform();
+                const Transform2<tD_pos, tD_rot> &trans = transform_list[i->second];
                 rbody.setPosition(trans.position);
                 rbody.setRotation(trans.rotation);
             }
         }
 
-        Rigidbody2D *genRigidbody(Entity2D *parent) override {
+        Rigidbody2D *genRigidbody(transform2_id transform) override {
             QuantumBody2D *body = new QuantumBody2D(&world);
 
             // Add to rigibody-entity pairs so they can be synchronized
-            pairs[body->getID()] = parent;
+            pairs[body->getID()] = transform;
 
             // Initialize the new rigidbody with the parent entity's world transform
             Quantum2D::Rigidbody2D &rbody = world.getRigidbody(body->getID());
-            const Transform2<tD_pos, tD_rot> &trans = parent->getWorldTransform();
+            const Transform2<tD_pos, tD_rot> &trans = transform_list[transform];
             rbody.setPosition(trans.position);
             rbody.setRotation(trans.rotation);
             return body;
@@ -122,7 +125,8 @@ namespace Diamond {
 
     private:
         Quantum2D::DynamicWorld2D world;
-        std::map<body2d_id, Entity2D*> pairs;
+        TransformList &transform_list;
+        std::map<body2d_id, transform2_id> pairs;
     };
 }
 

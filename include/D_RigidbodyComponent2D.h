@@ -18,7 +18,6 @@
 #define D_RIGIDBODY_COMPONENT_2D_H
 
 #include "D_Component.h"
-#include "D_Entity2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
@@ -28,11 +27,6 @@ namespace Diamond {
     public:
         RigidbodyComponent2D(Rigidbody2D *body, PhysicsWorld2D *world)
             : body(body), world(world) {}
-
-        RigidbodyComponent2D(Entity2D *parent, PhysicsWorld2D *world) 
-            : world(world) {
-            body = world->genRigidbody(parent);
-        }
 
         ~RigidbodyComponent2D() { world->freeRigidbody(body); }
         

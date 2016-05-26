@@ -22,12 +22,12 @@
 
 #include "D_Renderer2D.h"
 #include "D_SDLRenderObj2D.h"
-#include "D_swapvector.h"
+#include "duSwapVector.h"
 
 namespace Diamond {
     class SDLRenderer2D : public Renderer2D {
     public:
-        SDLRenderer2D();
+        SDLRenderer2D(const TransformList &transform_list);
         
         /**
          Destroys window and renderer and shuts down SDL and SDL extensions.
@@ -38,7 +38,7 @@ namespace Diamond {
          Initializes SDL, creates window, and initializes image loading.
          Returns whether all of the initialization was successful.
         */
-        bool init(const Config &config, const DataCenter *data) override;
+        bool init(const Config &config) override;
         
         void renderAll() override;
         
@@ -67,11 +67,11 @@ namespace Diamond {
         void freeRenderObj(renderobj_id render_obj) override;
 
     private:
-        SDL_Window *window;
-        SDL_Renderer *renderer;
+        SDL_Window *m_window;
+        SDL_Renderer *m_renderer;
 
-        const DataCenter *data;
-        swapvector<SDLRenderObj2D> render_objects;
+        const TransformList &m_transform_list;
+        SwapVector<SDLRenderObj2D> m_render_objects;
     };
 }
 

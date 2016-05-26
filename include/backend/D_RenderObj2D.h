@@ -18,7 +18,7 @@
 #define D_RENDER_OBJ_2D_H
 
 #include "D_Texture.h"
-#include "D_Vector2.h"
+#include "duVector2.h"
 #include "D_typedefs.h"
 
 namespace Diamond {

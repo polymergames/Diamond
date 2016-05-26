@@ -34,6 +34,13 @@ namespace Diamond {
     */
     class Entity {
     public:
+        Entity() = default;
+        virtual ~Entity() {}
+
+        // We don't think it's a good idea to copy ownership for a set of unknown components
+        Entity(const Entity&) = delete;
+        Entity& operator=(const Entity&) = delete;
+
         void addComponent(Component *component) {
             std::type_index index = typeid(*component);
             if (!m_components[index])

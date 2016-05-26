@@ -22,11 +22,10 @@
 #include "D_SDLTexture.h"
 
 
-Diamond::SDLRenderer2D::SDLRenderer2D() : window(nullptr), renderer(nullptr) {}
+Diamond::SDLRenderer2D::SDLRenderer2D(const TransformList &transform_list) 
+    : m_window(nullptr), m_renderer(nullptr), m_transform_list(transform_list) {}
 
-bool Diamond::SDLRenderer2D::init(const Config &config, const DataCenter *data) {
-    this->data = data;
-
+bool Diamond::SDLRenderer2D::init(const Config &config) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         Log::log("SDL failed to initialize! SDL Error: " + std::string(SDL_GetError()));
@@ -34,27 +33,27 @@ bool Diamond::SDLRenderer2D::init(const Config &config, const DataCenter *data) 
     }
 
     // Create window
-    window = SDL_CreateWindow(config.game_name.c_str(), 
-                              SDL_WINDOWPOS_UNDEFINED, 
-                              SDL_WINDOWPOS_UNDEFINED,
-                              config.window_width, 
-                              config.window_height, 
-                              config.fullscreen 
-                              || config.window_width <= 0
-                              || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-    if (window == nullptr) {
+    m_window = SDL_CreateWindow(config.game_name.c_str(),
+                                SDL_WINDOWPOS_UNDEFINED, 
+                                SDL_WINDOWPOS_UNDEFINED,
+                                config.window_width, 
+                                config.window_height, 
+                                config.fullscreen 
+                                || config.window_width <= 0
+                                || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    if (m_window == nullptr) {
         Log::log("SDL failed to create window! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
 
     // Create renderer
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED 
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED
                                               | (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
-    if (renderer == nullptr) {
+    if (m_renderer == nullptr) {
         Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
-    SDL_SetRenderDrawColor(renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
+    SDL_SetRenderDrawColor(m_renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
 
     // Initialize image loading
     int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -68,10 +67,10 @@ bool Diamond::SDLRenderer2D::init(const Config &config, const DataCenter *data) 
 
 void Diamond::SDLRenderer2D::renderAll() {
     // Render all the graphics
-    SDL_RenderClear(renderer);
-    for (std::vector<SDLRenderObj2D>::iterator i = render_objects.begin(); i != render_objects.end(); ++i) {
+    SDL_RenderClear(m_renderer);
+    for (std::vector<SDLRenderObj2D>::iterator i = m_render_objects.begin(); i != m_render_objects.end(); ++i) {
         //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
-        const Transform2<tDrender_pos, tDrender_rot> &transform = data->getTransform((*i).getTransformID());
+        const Transform2<tDrender_pos, tDrender_rot> &transform = m_transform_list[(*i).getTransformID()];
 
         SDL_Point pivot = (*i).getSDLPivot();
 
@@ -85,7 +84,7 @@ void Diamond::SDLRenderer2D::renderAll() {
         };
 
         SDL_RenderCopyEx(
-            renderer, // The SDL backend renderer for this SDL instance.
+            m_renderer, // The SDL backend renderer for this SDL instance.
             (*i).getTexture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
             &clip, // source rect
             &render_rect, // destination rect
@@ -96,7 +95,7 @@ void Diamond::SDLRenderer2D::renderAll() {
     }
 
     // Update screen
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(m_renderer);
 }
 
 Diamond::Vector2<int> Diamond::SDLRenderer2D::getScreenResolution() const {
@@ -107,7 +106,7 @@ Diamond::Vector2<int> Diamond::SDLRenderer2D::getScreenResolution() const {
 
 Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
     Vector2<int> r;
-    SDL_GL_GetDrawableSize(window, &(r.x), &(r.y));
+    SDL_GL_GetDrawableSize(m_window, &(r.x), &(r.y));
     return r;
 }
 
@@ -119,7 +118,7 @@ Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
         return nullptr;
     }
     
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
     if (texture == NULL) {
         // TODO: Handle texture creation failure
         Log::log("Failed to create texture from " + path + "! SDL Error: " + std::string(SDL_GetError()));
@@ -133,22 +132,22 @@ Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
 }
 
 Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_obj) {
-    return &render_objects[render_obj];
+    return &m_render_objects[render_obj];
 }
 
 renderobj_id Diamond::SDLRenderer2D::genRenderObj(transform2_id trans,
                                                   const Texture *texture, 
                                                   const Vector2<tDrender_pos> &pivot) {
-    return render_objects.emplace_back(trans, texture, pivot);
+    return m_render_objects.emplace_back(trans, texture, pivot);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {
-    render_objects.erase(render_obj);
+    m_render_objects.erase(render_obj);
 }
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
     
     IMG_Quit();
     SDL_Quit();

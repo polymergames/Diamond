@@ -14,11 +14,11 @@
     limitations under the License.
 */
 
-#ifndef D_SWAPVECTOR_H
-#define D_SWAPVECTOR_H
+#ifndef DU_SWAPVECTOR_H
+#define DU_SWAPVECTOR_H
 
 #include <vector>
-#include "D_typedefs.h"
+#include "duTypedefs.h"
 
 namespace Diamond {
     /**
@@ -27,17 +27,17 @@ namespace Diamond {
      Access is O(1) but with higher constant factor than std::vector.
      Does not maintain order of elements, and uses O(n) auxiliary space.
     */
-    template <class T>
-    class swapvector {
+    template <class T, typename TID = tD_id>
+    class SwapVector {
     public:
 
         // Access and iterator functions
 
-        T &operator[](tD_id id) { return objects[id_index_map[id]]; }
-        const T &operator[](tD_id id) const { return objects[id_index_map[id]]; }
+        T &operator[](TID id) { return objects[id_index_map[id]]; }
+        const T &operator[](TID id) const { return objects[id_index_map[id]]; }
 
-        T &at(tD_id id) { return objects.at(id_index_map.at(id)); }
-        const T &at(tD_id id) const { return objects.at(id_index_map.at(id)); }
+        T &at(TID id) { return objects.at(id_index_map.at(id)); }
+        const T &at(TID id) const { return objects.at(id_index_map.at(id)); }
 
         typename std::vector<T>::iterator begin() { return objects.begin(); }
         typename std::vector<T>::iterator end() { return objects.end(); }
@@ -54,8 +54,13 @@ namespace Diamond {
          Returns an id that can be used to access the emplaced object using [] or at().
         */
         template <typename... Args>
-        tD_id emplace_back(Args&&... args) {
-            tD_id new_id;
+        TID emplace(Args&&... args) {
+            return emplace_back(std::forward<Args>(args)...);
+        }
+
+        template <typename... Args>
+        TID emplace_back(Args&&... args) {
+            TID new_id;
 
             if (!free_id_stack.empty()) {
                 new_id = free_id_stack.back();
@@ -78,8 +83,10 @@ namespace Diamond {
          Adds an object to the collection.
          Returns an id that can be used to access the new object using [] or at().
         */
-        tD_id push_back(const T &obj) {
-            tD_id new_id;
+        TID insert(const T &obj) { return push_back(obj); }
+
+        TID push_back(const T &obj) {
+            TID new_id;
 
             if (!free_id_stack.empty()) {
                 new_id = free_id_stack.back();
@@ -101,8 +108,8 @@ namespace Diamond {
         /**
          Removes the object corresponding to the given id.
         */
-        void erase(tD_id erase_id) {
-            tD_index index = id_index_map[erase_id];
+        void erase(TID erase_id) {
+            TID index = id_index_map[erase_id];
 
             // If in middle of vector, replace it with last element in vector
             if (index < objects.size() - 1) {
@@ -120,7 +127,7 @@ namespace Diamond {
         /**
          Returns the number of elements in the vector.
         */
-        tD_index size() { return objects.size(); }
+        TID size() { return objects.size(); }
 
 
         /**
@@ -132,10 +139,10 @@ namespace Diamond {
     private:
         std::vector<T> objects;
 
-        std::vector<tD_index> id_index_map;
-        std::vector<tD_id> index_id_map;
-        std::vector<tD_id> free_id_stack;
+        std::vector<TID> id_index_map;
+        std::vector<TID> index_id_map;
+        std::vector<TID> free_id_stack;
     };
 }
 
-#endif // D_SWAPVECTOR_H
+#endif // DU_SWAPVECTOR_H

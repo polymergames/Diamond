@@ -25,7 +25,7 @@
 // transform typedefs
 typedef tD_real tD_pos; // position coordinate type
 typedef tD_real tD_rot; // rotation value type
-typedef int16_t tDrender_pos; // position coordinate type for rendering
+typedef int32_t tDrender_pos; // position coordinate type for rendering
 typedef float tDrender_rot; // rotation value type for rendering
 
 // ID/index typedefs

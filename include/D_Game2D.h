@@ -23,18 +23,11 @@
 namespace Diamond {
     class Game2D {
     public:
+        /**
+         Put game initialization code in subclass constructor.
+        */
+        Game2D(Engine2D &engine) : engine(engine) {}
         virtual ~Game2D() {}
-
-        /**
-         Called by Diamond launcher to pass engine subsystems to the game.
-        */
-        void setEngine(Engine2D *engine) { this->engine = engine; }
-
-        /**
-         Called at beginning of game, after Diamond backend systems have initialized.
-         Put game initialization code here.
-        */
-        virtual void init() {};
 
         /**
          Called once every frame, where delta is the time in seconds since the last frame.
@@ -43,13 +36,22 @@ namespace Diamond {
         virtual void update(tD_delta delta) {};
 
         /**
+         Called once every frame, where delta is the time in seconds since the last frame
+         (same as the delta that's passed into update).
+         Update any post-physics game logic here
+         (ex. if using a scene graph, you might want to update its transforms here 
+         as well as after game logic in update)
+        */
+        virtual void postPhysicsUpdate(tD_delta delta) {};
+
+        /**
          Called when game ends.
          Put cleanup code here.
         */
         virtual void quit() {};
 
     protected:
-        Engine2D *engine;
+        Engine2D &engine;
     };
 }
 

@@ -42,7 +42,7 @@ void Diamond::Animator2D::setAnimation(const Animation2D *anim) {
     cur_frame = 0;
     elapsed = 0;
 }
-
+/*
 void Diamond::Animator2D::update(tD_delta delta) {
     elapsed += delta;
     if (elapsed > anim->frame_length) {
@@ -50,4 +50,4 @@ void Diamond::Animator2D::update(tD_delta delta) {
         rendercomp->setSprite(anim->sprites[cur_frame]);
         elapsed %= anim->frame_length;
     }
-}
+}*/

@@ -18,7 +18,7 @@
 #define Q_CIRCLE_COLLIDER_H
 
 #include "Q_Collider2D.h"
-#include "D_Vector2.h"
+#include "duVector2.h"
 
 namespace Quantum2D {
     class CircleCollider : public Collider2D {

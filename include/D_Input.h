@@ -18,7 +18,7 @@
 #define D_INPUT_H
 
 #include <vector>
-#include "D_Vector2.h"
+#include "duVector2.h"
 
 namespace Diamond {
     // TODO: turn into class!

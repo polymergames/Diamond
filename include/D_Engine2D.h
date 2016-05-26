@@ -22,13 +22,12 @@
 #endif
 
 #include "D_Config.h"
-#include "D_DataCenter.h"
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
-#include "D_World2D.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
     class Game2D;
@@ -36,6 +35,7 @@ namespace Diamond {
     class Engine2D {
     public:
         Engine2D();
+        ~Engine2D();
 
         virtual bool init(const Config &config);
 
@@ -54,7 +54,8 @@ namespace Diamond {
 
         PhysicsWorld2D *getPhysWorld() const { return phys_world; }
 
-        World2D *getWorld() const { return world; }
+        TransformList &getTransformList() { return transform_list; }
+        const TransformList &getTransformList() const { return transform_list; }
 
         virtual bool isRunning() const { return is_running; }
 
@@ -62,14 +63,14 @@ namespace Diamond {
 
     protected:
         bool is_running;
-        DataCenter data;
         Config config;
         Renderer2D *renderer;
         DiskJockey2D *dj;
         Timer *timer;
         EventHandler *event_handler;
         PhysicsWorld2D *phys_world;
-        World2D *world;
+
+        TransformList transform_list;
 
         virtual bool initSDL();
         virtual bool initQuantum();

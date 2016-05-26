@@ -14,11 +14,11 @@
     limitations under the License.
 */
 
-#ifndef D_MATRIX_H
-#define D_MATRIX_H
+#ifndef DU_MATRIX_H
+#define DU_MATRIX_H
 
 #include <iostream>
-#include "D_Vector2.h"
+#include "DuVector2.h"
 
 namespace Diamond {
     namespace MatrixMath {
@@ -205,4 +205,4 @@ namespace Diamond {
     }
 }
 
-#endif // D_MATRIX_H
+#endif // DU_MATRIX_H

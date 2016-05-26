@@ -27,8 +27,13 @@ namespace Diamond {
     */
     class EntityNode2D : public Entity, public SceneNode2D {
     public:
-        EntityNode2D(TransformList &transform_list, transform2_id world_transform_id)
-            : SceneNode2D(transform_list, world_transform_id) {}
+        EntityNode2D(TransformList &transform_list)
+            : SceneNode2D(transform_list, transform_list.emplace()) {}
+
+        EntityNode2D(const EntityNode2D&) = delete;
+        EntityNode2D& operator=(const EntityNode2D&) = delete;
+
+        virtual ~EntityNode2D() { m_transform_list.erase(getWorldTransformID()); }
     };
 }
 

@@ -23,7 +23,6 @@
 #include "D_RenderComponent2D.h"
 
 namespace Diamond {
-    class RenderComponent2D;
     class AnimatorSheet : public Component {
     public:
         AnimatorSheet(RenderComponent2D *rendercomp, const AnimationSheet *anim);
@@ -32,7 +31,8 @@ namespace Diamond {
 
         const AnimationSheet *getAnimation() const { return anim; }
 
-        void update(tD_delta delta) override;
+        // TODO use external system for updating
+        // void update(tD_delta delta) override;
     private:
         const AnimationSheet *anim;
         RenderComponent2D *rendercomp;
