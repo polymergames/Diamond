@@ -25,6 +25,9 @@
 namespace Diamond {
     class RigidbodyComponent2D : public Component {
     public:
+        RigidbodyComponent2D(transform2_id transform, PhysicsWorld2D *world) 
+            : RigidbodyComponent2D(world->genRigidbody(transform), world) {}
+
         RigidbodyComponent2D(Rigidbody2D *body, PhysicsWorld2D *world)
             : body(body), world(world) {}
 
