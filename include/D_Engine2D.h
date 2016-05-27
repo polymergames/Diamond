@@ -21,12 +21,14 @@
 #include "SDL.h" // Has to be included with game's main function for SDL_main to work. TODO: include for iOS as well?
 #endif
 
+#include "D_Component.h"
 #include "D_Config.h"
 #include "D_DiskJockey2D.h"
 #include "D_EventHandler.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
+#include "D_Updater.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
@@ -37,40 +39,45 @@ namespace Diamond {
         Engine2D();
         ~Engine2D();
 
-        virtual bool init(const Config &config);
+        virtual bool        init(const Config &config);
 
-        virtual void launch(Game2D &game);
+        virtual void        launch(Game2D &game);
 
-        Config &getConfig() { return config; }
-        const Config &getConfig() const { return config; }
+        Config              &getConfig() { return config; }
+        const Config        &getConfig() const { return config; }
 
-        Renderer2D *getRenderer() const { return renderer; }
+        Renderer2D          *getRenderer() const { return renderer; }
 
-        DiskJockey2D *getDJ() const { return dj; }
+        DiskJockey2D        *getDJ() const { return dj; }
 
-        Timer *getTimer() const { return timer; }
+        Timer               *getTimer() const { return timer; }
 
-        EventHandler *getEventHandler() const { return event_handler; }
+        EventHandler        *getEventHandler() const { return event_handler; }
 
-        PhysicsWorld2D *getPhysWorld() const { return phys_world; }
+        PhysicsWorld2D      *getPhysWorld() const { return phys_world; }
 
-        TransformList &getTransformList() { return transform_list; }
+        TransformList       &getTransformList() { return transform_list; }
         const TransformList &getTransformList() const { return transform_list; }
 
-        virtual bool isRunning() const { return is_running; }
+        Updater<Component>  &getComponentUpdater() { return component_updater; }
 
-        virtual void quit() { is_running = false; }
+        virtual bool        isRunning() const { return is_running; }
+
+        virtual void        quit() { is_running = false; }
 
     protected:
-        bool is_running;
-        Config config;
-        Renderer2D *renderer;
-        DiskJockey2D *dj;
-        Timer *timer;
-        EventHandler *event_handler;
-        PhysicsWorld2D *phys_world;
+        bool                    is_running;
 
-        TransformList transform_list;
+        Config                  config;
+        Renderer2D              *renderer;
+        DiskJockey2D            *dj;
+        Timer                   *timer;
+        EventHandler            *event_handler;
+        PhysicsWorld2D          *phys_world;
+        Updater<Component>      component_updater;
+
+        TransformList           transform_list;
+
 
         virtual bool initSDL();
         virtual bool initQuantum();

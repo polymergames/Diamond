@@ -17,19 +17,23 @@
 #include "D_Animator2D.h"
 #include "D_Log.h"
 
-Diamond::Animator2D::Animator2D(RenderComponent2D *rendercomp, const Animation2D *anim) 
-    : rendercomp(rendercomp), anim(anim), cur_frame(0), elapsed(0) {
-    if (!rendercomp) {
-        Log::log("Animator2D ERROR: The given render component is nulL!");
+Diamond::Animator2D::Animator2D(Renderer2D *renderer, 
+                                renderobj_id render_obj, 
+                                const Animation2D *anim, 
+                                Updater<Component> &updater)
+    : m_renderer(renderer), m_render_obj(render_obj), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
+    if (!renderer) {
+        Log::log("Animator2D ERROR: The given renderer is null!");
     }
-    else if (!anim || anim->sprites.size() == 0) {
-        // TODO: throw exception?
-        Log::log("Animator2D ERROR: The given animation is empty!");
-    }
-    else {
-        rendercomp->setSprite(anim->sprites[0]);
-    }
+    setAnimation(anim);
+    updater.addMember(this);
 }
+
+Diamond::Animator2D::Animator2D(RenderComponent2D *rcomp,
+                                const Animation2D *anim, 
+                                Updater<Component> &updater)
+    : Animator2D(rcomp->getRenderer(), rcomp->getRenderObj(), anim, updater) {}
+
 
 void Diamond::Animator2D::setAnimation(const Animation2D *anim) {
     if (!anim || anim->sprites.size() == 0) {
@@ -37,17 +41,17 @@ void Diamond::Animator2D::setAnimation(const Animation2D *anim) {
         Log::log("Animator2D ERROR: Tried to set an empty animation!");
         return;
     }
-    this->anim = anim;
-    rendercomp->setSprite(anim->sprites[0]);
-    cur_frame = 0;
-    elapsed = 0;
+    m_anim      = anim;
+    m_renderer->getRenderObj(m_render_obj)->setTexture(m_anim->sprites[0].get());
+    m_cur_frame = 0;
+    m_elapsed   = 0;
 }
-/*
+
 void Diamond::Animator2D::update(tD_delta delta) {
-    elapsed += delta;
-    if (elapsed > anim->frame_length) {
-        cur_frame = (cur_frame + elapsed / anim->frame_length) % anim->sprites.size();
-        rendercomp->setSprite(anim->sprites[cur_frame]);
-        elapsed %= anim->frame_length;
+    m_elapsed += delta;
+    if (m_elapsed > m_anim->frame_length) {
+        m_cur_frame = (m_cur_frame + m_elapsed / m_anim->frame_length) % m_anim->sprites.size();
+        m_renderer->getRenderObj(m_render_obj)->setTexture(m_anim->sprites[m_cur_frame].get());
+        m_elapsed %= m_anim->frame_length;
     }
-}*/
+}

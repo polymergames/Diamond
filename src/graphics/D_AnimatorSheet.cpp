@@ -17,20 +17,23 @@
 #include "D_AnimatorSheet.h"
 #include "D_Log.h"
 
-Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rendercomp, const AnimationSheet *anim)
-    : rendercomp(rendercomp), anim(anim), cur_frame(0), elapsed(0) {
-    if (!rendercomp) {
-        Log::log("AnimatorSheet ERROR: The given render component is nulL!");
+Diamond::AnimatorSheet::AnimatorSheet(Renderer2D *renderer,
+                                      renderobj_id render_obj,
+                                      const AnimationSheet *anim, 
+                                      Updater<Component> &updater)
+    : m_renderer(renderer), m_render_obj(render_obj), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
+    if (!renderer) {
+        Log::log("AnimatorSheet ERROR: The given renderer is nulL!");
     }
-    else if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
-        // TODO: throw exception?
-        Log::log("AnimatorSheet ERROR: The given animation is empty!");
-    }
-    else {
-        rendercomp->setSprite(anim->sprite_sheet);
-        initClip();
-    }
+    setAnimation(anim);
+    updater.addMember(this);
 }
+
+Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rcomp,
+                                      const AnimationSheet *anim, 
+                                      Updater<Component> &updater)
+    : AnimatorSheet(rcomp->getRenderer(), rcomp->getRenderObj(), anim, updater) {}
+
 
 void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {
     if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
@@ -38,25 +41,31 @@ void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {
         Log::log("AnimatorSheet ERROR: Tried to set an empty animation!");
         return;
     }
-    this->anim = anim;
-    rendercomp->setSprite(anim->sprite_sheet);
-    cur_frame = 0;
-    elapsed = 0;
+
+    m_anim      = anim;
+    m_renderer->getRenderObj(m_render_obj)->setTexture(anim->sprite_sheet.get());
+    m_cur_frame = 0;
+    m_elapsed   = 0;
+
     initClip();
 }
 
-/*
+
 void Diamond::AnimatorSheet::update(tD_delta delta) {
-    elapsed += delta;
-    if (elapsed > anim->frame_length) {
-        cur_frame = (cur_frame + elapsed / anim->frame_length) % anim->num_frames;
-        rendercomp->setClip((cur_frame % anim->columns) * frame_width, (cur_frame / anim->columns) * frame_height);
-        elapsed %= anim->frame_length;
+    m_elapsed += delta;
+
+    if (m_elapsed > m_anim->frame_length) {
+        m_cur_frame = (m_cur_frame + m_elapsed / m_anim->frame_length) % m_anim->num_frames;
+
+        m_renderer->getRenderObj(m_render_obj)->setClip((m_cur_frame % m_anim->columns) * m_frame_width, 
+                                                        (m_cur_frame / m_anim->columns) * m_frame_height);
+        m_elapsed %= m_anim->frame_length;
     }
-}*/
+}
 
 void Diamond::AnimatorSheet::initClip() {
-    frame_width = anim->sprite_sheet->getWidth() / anim->columns;
-    frame_height = anim->sprite_sheet->getHeight() / anim->rows;
-    rendercomp->setClip(0, 0, frame_width, frame_height);
+    m_frame_width = m_anim->sprite_sheet->getWidth() / m_anim->columns;
+    m_frame_height = m_anim->sprite_sheet->getHeight() / m_anim->rows;
+
+    m_renderer->getRenderObj(m_render_obj)->setClip(0, 0, m_frame_width, m_frame_height);
 }

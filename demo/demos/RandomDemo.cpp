@@ -69,10 +69,19 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
     zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
 
-    zapper.addComponent<RenderComponent2D>(zapper.getWorldTransformID(), renderer, zapper_anim.sprites[0]);
-    zapper.addComponent<Animator2D>(zapper.getComponent<RenderComponent2D>(), &zapper_anim);
+
+    zapper.addComponent<RenderComponent2D>(zapper.getWorldTransformID(), 
+                                           renderer, 
+                                           zapper_anim.sprites[0]);
+
+    zapper.addComponent<Animator2D>(renderer,
+                                    zapper.getComponent<RenderComponent2D>()->getRenderObj(), 
+                                    &zapper_anim, 
+                                    engine.getComponentUpdater());
+
     // zapper.localTransform().position = Vector2<int>(50, 100);
     zapper.localTransform().position = Vector2<int>(400, 220);
+
 
     zapper2_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
@@ -81,7 +90,11 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
     zapper2.addComponent<RenderComponent2D>(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet);
-    zapper2.addComponent(new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(), &zapper2_anim));
+
+    zapper2.addComponent(new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(), 
+                                           &zapper2_anim, 
+                                           engine.getComponentUpdater()));
+
     //zapper2.getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
     //    zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
     // zapper2.localTransform().position = Vector2<int>(650, 200);
@@ -128,9 +141,11 @@ void RandomDemo::update(tD_delta delta) {
     }
 
     // Visibility
+    // TODO: implement visibility in renderer system, not in rendercomponent
+    /*
     if (Input::keyup[Input::K_SPACE]) {
         zapper2.getComponent<RenderComponent2D>()->toggleVisibility();
-    }
+    }*/
 
     // Stretching
     if (Input::keydown[Input::K_LSHIFT]) {

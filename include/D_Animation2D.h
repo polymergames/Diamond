@@ -25,8 +25,12 @@
 
 namespace Diamond {
     struct Animation2D {
-        std::vector<std::shared_ptr<Texture>> sprites;
-        tD_delta frame_length = 100; // the length of time in type of tD_delta (assumed milliseconds) of one animation frame
+        std::vector<std::shared_ptr<Texture>>   sprites;
+
+        /**
+         The length of time in type of tD_delta of one animation frame
+        */
+        tD_delta                                frame_length = 100;
     };
 }
 

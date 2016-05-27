@@ -30,14 +30,26 @@ namespace Diamond {
         RenderComponent2D(transform2_id transform, 
                           Renderer2D *renderer, 
                           std::shared_ptr<const Texture> sprite)
-            : transform(transform), renderer(renderer), sprite(sprite), clip_dim() {
-              render_obj = renderer->genRenderObj(transform, sprite.get());
+            : m_transform(transform), m_renderer(renderer), m_sprite(sprite), m_clipDim() {
+              m_renderObj = renderer->genRenderObj(transform, sprite.get());
         }
         ~RenderComponent2D() { freeRenderObj(); }
         
-        std::shared_ptr<const Texture> getSprite() const { return sprite; }
+        transform2_id getTransform() const { return m_transform; }
+        Renderer2D *getRenderer() const { return m_renderer; }
+        renderobj_id getRenderObj() const { return m_renderObj; }
+
+        std::shared_ptr<const Texture> getSprite() const { return m_sprite; }
         void setSprite(const Texture *sprite) { setSprite(std::shared_ptr<const Texture>(sprite)); }
         void setSprite(std::shared_ptr<const Texture> sprite);
+
+        const Vector2<int> &getClipDim() const { return m_clipDim; }
+        void setClip(int x, int y, int w, int h);
+        void setClip(int x, int y);
+
+        const Vector2<tDrender_pos> &getPivot() const { return m_pivot; }
+        void setPivot(const Vector2<tDrender_pos> &pivot);
+
 
         void flipX();
         void flipY();
@@ -45,6 +57,7 @@ namespace Diamond {
         int isFlippedX() const;
         int isFlippedY() const;
 
+        // TODO: implement visibility in renderer system, not in rendercomponent
         /**
          Returns whether this game object's sprite is currently being rendered.
         */
@@ -66,46 +79,40 @@ namespace Diamond {
         */
         void toggleVisibility();
 
-        const Vector2<tDrender_pos> &getPivot() const { return pivot; }
-        void setPivot(const Vector2<tDrender_pos> &pivot);
-
-        void setClip(int x, int y, int w, int h);
-        void setClip(int x, int y);
-
     private:
-        transform2_id transform;
-        Renderer2D *renderer;
-        renderobj_id render_obj;
-        std::shared_ptr<const Texture> sprite;
-        Vector2<int> clip_dim;
-        Vector2<tDrender_pos> pivot;
+        transform2_id m_transform;
+        Renderer2D *m_renderer;
+        renderobj_id m_renderObj;
+        std::shared_ptr<const Texture> m_sprite;
+        Vector2<int> m_clipDim;
+        Vector2<tDrender_pos> m_pivot;
 
         void freeRenderObj();
     };
 }
 
 inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<const Texture> sprite) {
-    this->sprite = sprite;
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->setTexture(sprite.get());
+    m_sprite = sprite;
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->setTexture(sprite.get());
     }
 }
 
 inline void Diamond::RenderComponent2D::flipX() {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->flipX();
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->flipX();
     }
 }
 
 inline void Diamond::RenderComponent2D::flipY() {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->flipY();
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->flipY();
     }
 }
 
 inline int Diamond::RenderComponent2D::isFlippedX() const {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        return renderer->getRenderObj(render_obj)->isFlippedX();
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        return m_renderer->getRenderObj(m_renderObj)->isFlippedX();
     }
     else {
         return 0;
@@ -113,8 +120,8 @@ inline int Diamond::RenderComponent2D::isFlippedX() const {
 }
 
 inline int Diamond::RenderComponent2D::isFlippedY() const {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        return renderer->getRenderObj(render_obj)->isFlippedY();
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        return m_renderer->getRenderObj(m_renderObj)->isFlippedY();
     }
     else {
         return 0;
@@ -122,54 +129,54 @@ inline int Diamond::RenderComponent2D::isFlippedY() const {
 }
 
 inline bool Diamond::RenderComponent2D::isVisible() const {
-    return (tD_index)render_obj != Diamond::INVALID;
+    return (tD_index)m_renderObj != Diamond::INVALID;
 }
 
 inline void Diamond::RenderComponent2D::makeVisible() {
-    if ((tD_index)render_obj == Diamond::INVALID) {
-        render_obj = renderer->genRenderObj(transform, sprite.get(), pivot);
-        if (clip_dim.x != 0) { // check if any valid clip data has been stored
-            RenderObj2D *r = renderer->getRenderObj(render_obj);
-            r->setClip(0, 0, clip_dim.x, clip_dim.y);
+    if ((tD_index)m_renderObj == Diamond::INVALID) {
+        m_renderObj = m_renderer->genRenderObj(m_transform, m_sprite.get(), m_pivot);
+        if (m_clipDim.x != 0) { // check if any valid clip data has been stored
+            RenderObj2D *r = m_renderer->getRenderObj(m_renderObj);
+            r->setClip(0, 0, m_clipDim.x, m_clipDim.y);
         }
     }
 }
 
 inline void Diamond::RenderComponent2D::makeInvisible() {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->getClipDim(clip_dim);
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->getClipDim(m_clipDim);
         freeRenderObj();
     }
 }
 
 inline void Diamond::RenderComponent2D::toggleVisibility() {
-    render_obj == Diamond::INVALID ? makeVisible() : makeInvisible();
+    m_renderObj == Diamond::INVALID ? makeVisible() : makeInvisible();
 }
 
 inline void Diamond::RenderComponent2D::setPivot(const Vector2<tDrender_pos> &pivot) {
-    this->pivot = pivot;
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->setPivot(pivot);
+    m_pivot = pivot;
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->setPivot(pivot);
     }
 }
 
 inline void Diamond::RenderComponent2D::setClip(int x, int y, int w, int h) {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->setClip(x, y, w, h);
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->setClip(x, y, w, h);
     }
 }
 
 inline void Diamond::RenderComponent2D::setClip(int x, int y) {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->getRenderObj(render_obj)->setClip(x, y);
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->getRenderObj(m_renderObj)->setClip(x, y);
     }
 }
 
 
 inline void Diamond::RenderComponent2D::freeRenderObj() {
-    if ((tD_index)render_obj != Diamond::INVALID) {
-        renderer->freeRenderObj(render_obj);
-        render_obj = Diamond::INVALID;
+    if ((tD_index)m_renderObj != Diamond::INVALID) {
+        m_renderer->freeRenderObj(m_renderObj);
+        m_renderObj = Diamond::INVALID;
     }
 }
 

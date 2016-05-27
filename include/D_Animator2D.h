@@ -17,26 +17,37 @@
 #ifndef D_ANIMATOR_2D_H
 #define D_ANIMATOR_2D_H
 
-#include "D_Component.h"
 #include "D_Animation2D.h"
+#include "D_Component.h"
+#include "D_Renderer2D.h"
 #include "D_RenderComponent2D.h"
+#include "D_Updater.h"
 
 namespace Diamond {
     class Animator2D : public Component {
     public:
-        Animator2D(RenderComponent2D *rendercomp, const Animation2D *anim);
+        Animator2D(Renderer2D *renderer, 
+                   renderobj_id render_obj, 
+                   const Animation2D *anim, 
+                   Updater<Component> &updater);
 
-        void setAnimation(const Animation2D *anim);
+        Animator2D(RenderComponent2D *rcomp, 
+                   const Animation2D *anim, 
+                   Updater<Component> &updater);
 
-        const Animation2D *getAnimation() const { return anim; }
 
-        // TODO use external system for updating
-        // void update(tD_delta delta) override;
+        void                setAnimation(const Animation2D *anim);
+        const Animation2D   *getAnimation() const { return m_anim; }
+        void                update(tD_delta delta);
+
+
     private:
-        const Animation2D *anim;
-        RenderComponent2D *rendercomp;
-        tD_index cur_frame;
-        tD_delta elapsed;
+        Renderer2D          *m_renderer;
+        renderobj_id        m_render_obj;
+        const Animation2D   *m_anim;
+
+        tD_index            m_cur_frame;
+        tD_delta            m_elapsed;
     };
 }
 

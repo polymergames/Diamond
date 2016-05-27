@@ -27,44 +27,33 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
       spike2(engine.getTransformList()), 
       zapper1(engine.getTransformList()), 
       zapper2(engine.getTransformList()) {/*
-    World2D *world = engine->getWorld();
-    Renderer2D *renderer = engine->getRenderer();
-
-    spike1 = world->createEntity("spike1");
-    spike2 = world->createEntity("spike2");
-    zapper1 = world->createEntity("zapper1");
-    zapper2 = world->createEntity("zapper2");
-
-    world->addEntity(spike1);
-    world->addEntity(spike2);
-    world->addEntity(zapper1);
-    world->addEntity(zapper2);
+    Renderer2D *renderer = engine.getRenderer();
 
     std::shared_ptr<Texture> spike_sprite = std::shared_ptr<Texture>(renderer->loadTexture("spike.png"));
     
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;
-        engine->quit();
+        engine.quit();
         return;
     }
 
-    spike1->addComponent<RenderComponent2D>(spike1, renderer, spike_sprite);
-    spike1->setLocalPosition(Vector2<int>(500, 400));
-    spike1->setLocalScale(Vector2<float>(0.1f, 0.1f));
+    spike1.addComponent<RenderComponent2D>(spike1, renderer, spike_sprite);
+    spike1.setLocalPosition(Vector2<int>(500, 400));
+    spike1.setLocalScale(Vector2<float>(0.1f, 0.1f));
 
-    spike2->addComponent<RenderComponent2D>(spike2, renderer, spike_sprite);
-    spike2->setLocalPosition(Vector2<int>(900, 200));
-    spike2->setLocalScale(Vector2<float>(0.1f, 0.1f));
+    spike2.addComponent<RenderComponent2D>(spike2, renderer, spike_sprite);
+    spike2.setLocalPosition(Vector2<int>(900, 200));
+    spike2.setLocalScale(Vector2<float>(0.1f, 0.1f));
 
     zapper_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
     zapper_anim.rows = 2;
     zapper_anim.columns = 2;
     zapper_anim.num_frames = 4;
 
-    zapper1->addComponent<RenderComponent2D>(zapper1, renderer, spike_sprite);
-    zapper1->addComponent<AnimatorSheet>(zapper1->getComponent<RenderComponent2D>(), &zapper_anim);
-    zapper1->setLocalPosition(Vector2<int>(300, 100));
-    zapper1->setLocalScale(Vector2<float>(0.5f, 0.5f));
+    zapper1.addComponent<RenderComponent2D>(zapper1, renderer, spike_sprite);
+    zapper1.addComponent<AnimatorSheet>(zapper1.getComponent<RenderComponent2D>(), &zapper_anim);
+    zapper1.setLocalPosition(Vector2<int>(300, 100));
+    zapper1.setLocalScale(Vector2<float>(0.5f, 0.5f));
 
     zapper2->addComponent<RenderComponent2D>(zapper2, renderer, spike_sprite);
     zapper2->addComponent<AnimatorSheet>(zapper2->getComponent<RenderComponent2D>(), &zapper_anim);
