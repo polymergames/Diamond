@@ -34,12 +34,14 @@ public:
 
     void update(tD_delta delta) override;
 
+    void postPhysicsUpdate(tD_delta delta) override;
+
     void quit() override;
 
 private:
     const float movespeed, spinspeed, growspeed;
 
-    Diamond::EntityNode2D spike, spike2, zapper, zapper2;
+    Diamond::EntityNode2D root, spike, spike2, zapper, zapper2;
     std::list<Diamond::EntityNode2D> clouds;
 
     std::shared_ptr<Diamond::Texture> spike_sprite;

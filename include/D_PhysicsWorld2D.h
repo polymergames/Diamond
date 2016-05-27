@@ -36,19 +36,10 @@ namespace Diamond {
         virtual bool init(const Config &config) = 0;
 
         /**
-         Steps the physics simulation by the number of milliseconds given.
+         Steps the physics simulation by the number of milliseconds given
+         and syncs physics and Diamond transform data.
         */
-        virtual void step(tD_delta delta_ms) = 0;
-
-        /**
-         Updates the game's transforms with the data from the physics engine's rigidbodies.
-        */
-        virtual void updateTransforms() = 0;
-
-        /**
-         Updates the physics engine's rigidbodies with the data from the game's transforms.
-        */
-        virtual void updateBodies() = 0;
+        virtual void update(tD_delta delta_ms) = 0;
         
         /**
          Creates a rigidbody object attached to the given transform.

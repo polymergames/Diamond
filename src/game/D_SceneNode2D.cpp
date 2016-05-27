@@ -60,10 +60,25 @@ bool Diamond::SceneNode2D::removeChild(SceneNode2D *child) {
 
 
 
-void Diamond::SceneNode2D::updateParentTransform(const Transform2<tD_pos, tD_rot> &parent_transform, 
-                                                 const Matrix<tD_real, 2, 2> &parent_trans_mat) {
-    m_parent_transform = parent_transform;
-    m_parent_trans_mat = parent_trans_mat;
+void Diamond::SceneNode2D::updateAllWorldTransforms() {
+    updateWorldTransform();
+
+    const Transform2<tD_pos, tD_rot> &world_trans = worldTransform();
+    Matrix<tD_real, 2, 2> trans_mat = getTransMat();
+
+    for (SceneNode2D *child : m_children) {
+        child->updateParentTransform(world_trans, trans_mat);
+        child->updateAllWorldTransforms();
+    }
+}
+
+
+void Diamond::SceneNode2D::updateAllLocalTransforms() {
+    updateLocalTransform();
+
+    for (SceneNode2D *child : m_children) {
+        child->updateAllLocalTransforms();
+    }
 }
 
 

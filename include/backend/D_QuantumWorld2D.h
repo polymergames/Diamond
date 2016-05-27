@@ -33,9 +33,22 @@ namespace Diamond {
 
         bool init(const Config &config) override { return world.init(); }
 
-        void step(tD_delta delta_ms) override { world.step(delta_ms); }
+        void update(tD_delta delta_ms) override { 
+            updateBodies();
+            world.step(delta_ms); 
+            updateTransforms();
+        }
         
-        void updateTransforms() override {
+        void updateBodies() {
+            for (auto i = pairs.begin(); i != pairs.end(); ++i) {
+                Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
+                const Transform2<tD_pos, tD_rot> &trans = transform_list[i->second];
+                rbody.setPosition(trans.position);
+                rbody.setRotation(trans.rotation);
+            }
+        }
+
+        void updateTransforms() {
             for (auto i = pairs.begin(); i != pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
                 Transform2<tD_pos, tD_rot> &trans = transform_list[i->second];
@@ -44,15 +57,7 @@ namespace Diamond {
                 trans.rotation = rbody.getRotation();
             }
         }
-
-        void updateBodies() override {
-            for (auto i = pairs.begin(); i != pairs.end(); ++i) {
-                Quantum2D::Rigidbody2D &rbody = world.getRigidbody(i->first);
-                const Transform2<tD_pos, tD_rot> &trans = transform_list[i->second];
-                rbody.setPosition(trans.position);
-                rbody.setRotation(trans.rotation);
-            }
-        }
+        
 
         Rigidbody2D *genRigidbody(transform2_id transform) override {
             QuantumBody2D *body = new QuantumBody2D(&world);

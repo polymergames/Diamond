@@ -70,16 +70,31 @@ namespace Diamond {
 
         // update transforms
 
+        /**
+         Updates all world transforms based on local transforms and parent world transforms
+         in the tree rooted at this node.
+        */
+        void updateAllWorldTransforms();
+
+        /**
+         Updates all local transforms based on world transforms in the tree rooted at this node. 
+        */
+        void updateAllLocalTransforms();
+
+
         void updateWorldTransform() { worldTransform() = localToWorldSpace(m_local_transform); }
 
         void updateLocalTransform() { m_local_transform = worldToLocalSpace(worldTransform()); }
 
         void updateParentTransform(const Transform2<tD_pos, tD_rot> &parent_transform,
-                                   const Matrix<tD_real, 2, 2> &parent_trans_mat);
+                                   const Matrix<tD_real, 2, 2> &parent_trans_mat) {
+            m_parent_transform = parent_transform;
+            m_parent_trans_mat = parent_trans_mat;
+        }
 
 
 
-        // transform conversion local-> world
+        // transform conversion local->world
 
         /**
          Transforms a given transform object from this node's local space to world space.

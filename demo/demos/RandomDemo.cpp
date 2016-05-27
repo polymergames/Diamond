@@ -23,10 +23,17 @@ using namespace Diamond;
 
 RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float growspeed) 
     : Game2D(engine), movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
+      root(engine.getTransformList()), 
       spike(engine.getTransformList()), 
       spike2(engine.getTransformList()), 
       zapper(engine.getTransformList()), 
       zapper2(engine.getTransformList()) {
+
+    root.addChild(spike2);
+    root.addChild(zapper2);
+    zapper2.addChild(zapper);
+    zapper2.addChild(spike);
+
     Renderer2D *renderer = engine.getRenderer();
 
     window = renderer->getResolution();
@@ -88,6 +95,8 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     spike.addComponent<RigidbodyComponent2D>(engine.getPhysWorld()->genRigidbody(spike.getWorldTransformID()), 
         engine.getPhysWorld());
     spikerb = spike.getComponent<RigidbodyComponent2D>()->getBody();
+
+    root.updateAllWorldTransforms();
 }
 
 
@@ -220,6 +229,13 @@ void RandomDemo::update(tD_delta delta) {
     }
 
     //std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
+
+    root.updateAllWorldTransforms();
+}
+
+void RandomDemo::postPhysicsUpdate(tD_delta delta) {
+    root.updateAllLocalTransforms();
+    root.updateAllWorldTransforms();
 }
 
 void RandomDemo::quit() {};
