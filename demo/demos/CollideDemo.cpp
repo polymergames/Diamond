@@ -52,15 +52,13 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
 
     zapper1.addComponent<RenderComponent2D>(zapper1.getTransformID(), renderer, spike_sprite);
     zapper1.addComponent<AnimatorSheet>(zapper1.getComponent<RenderComponent2D>(), 
-                                        &zapper_anim, 
-                                        engine.getComponentUpdater());
+                                        &zapper_anim);
     zapper1.transform().position = Vector2<int>(300, 100);
     zapper1.transform().scale = Vector2<float>(0.5f, 0.5f);
 
     zapper2.addComponent<RenderComponent2D>(zapper2.getTransformID(), renderer, spike_sprite);
     zapper2.addComponent<AnimatorSheet>(zapper2.getComponent<RenderComponent2D>(), 
-                                        &zapper_anim, 
-                                        engine.getComponentUpdater());
+                                        &zapper_anim);
     zapper2.transform().position = Vector2<int>(700, 300);
     zapper2.transform().scale = Vector2<float>(0.5f, 0.5f);
 
@@ -143,6 +141,13 @@ void CollideDemo::update(tD_delta delta) {
     if (Input::keydown[Input::K_P6]) {
         spike2.transform().position.x += movespeed * delta;
     }
+
+
+    // update entities
+    spike1.updateComponents(delta);
+    spike2.updateComponents(delta);
+    zapper1.updateComponents(delta);
+    zapper2.updateComponents(delta);
 }
 
 void CollideDemo::quit() {

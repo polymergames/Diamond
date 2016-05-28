@@ -103,7 +103,6 @@ void Diamond::Engine2D::launch(Game2D &game) {
         
         // Update game logic
         game.update(delta);
-        component_updater.update(delta);
 
         // Update physics
         phys_world->update(delta);

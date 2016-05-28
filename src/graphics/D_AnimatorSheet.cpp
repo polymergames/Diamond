@@ -19,20 +19,17 @@
 
 Diamond::AnimatorSheet::AnimatorSheet(Renderer2D *renderer,
                                       renderobj_id render_obj,
-                                      const AnimationSheet *anim, 
-                                      Updater<Component> &updater)
+                                      const AnimationSheet *anim)
     : m_renderer(renderer), m_render_obj(render_obj), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
     if (!renderer) {
         Log::log("AnimatorSheet ERROR: The given renderer is nulL!");
     }
     setAnimation(anim);
-    updater.addMember(this);
 }
 
 Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rcomp,
-                                      const AnimationSheet *anim, 
-                                      Updater<Component> &updater)
-    : AnimatorSheet(rcomp->getRenderer(), rcomp->getRenderObj(), anim, updater) {}
+                                      const AnimationSheet *anim)
+    : AnimatorSheet(rcomp->getRenderer(), rcomp->getRenderObj(), anim) {}
 
 
 void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {

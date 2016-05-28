@@ -28,7 +28,6 @@
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
-#include "D_Updater.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
@@ -59,8 +58,6 @@ namespace Diamond {
         TransformList       &getTransformList() { return transform_list; }
         const TransformList &getTransformList() const { return transform_list; }
 
-        Updater<Component>  &getComponentUpdater() { return component_updater; }
-
         virtual bool        isRunning() const { return is_running; }
 
         virtual void        quit() { is_running = false; }
@@ -74,7 +71,6 @@ namespace Diamond {
         Timer                   *timer;
         EventHandler            *event_handler;
         PhysicsWorld2D          *phys_world;
-        Updater<Component>      component_updater;
 
         TransformList           transform_list;
 

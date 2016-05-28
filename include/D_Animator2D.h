@@ -21,24 +21,21 @@
 #include "D_Component.h"
 #include "D_Renderer2D.h"
 #include "D_RenderComponent2D.h"
-#include "D_Updater.h"
 
 namespace Diamond {
     class Animator2D : public Component {
     public:
         Animator2D(Renderer2D *renderer, 
                    renderobj_id render_obj, 
-                   const Animation2D *anim, 
-                   Updater<Component> &updater);
+                   const Animation2D *anim);
 
         Animator2D(RenderComponent2D *rcomp, 
-                   const Animation2D *anim, 
-                   Updater<Component> &updater);
+                   const Animation2D *anim);
 
 
         void                setAnimation(const Animation2D *anim);
         const Animation2D   *getAnimation() const { return m_anim; }
-        void                update(tD_delta delta);
+        void                update(tD_delta delta) override;
 
 
     private:

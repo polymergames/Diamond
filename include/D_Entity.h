@@ -24,7 +24,7 @@
 
 namespace Diamond { 
     /**
-     Holds a table of components indexed by type.
+     Holds and updates a table of components indexed by type.
      The purpose of this class is to handle component ownership.
      Therefore, it takes ownership of any component added to it
      and destroys all of its components at the end of its lifetime.
@@ -40,6 +40,18 @@ namespace Diamond {
         // We don't think it's a good idea to copy ownership for a set of unknown components
         Entity(const Entity&) = delete;
         Entity& operator=(const Entity&) = delete;
+
+
+
+        /**
+         Call this once a frame to update all of this entity's components.
+        */
+        void updateComponents(tD_delta delta) {
+            for (auto it = m_components.begin(); it != m_components.end(); ++it)
+                it->second->update(delta);
+        }
+
+
 
         void addComponent(Component *component) {
             std::type_index index = typeid(*component);

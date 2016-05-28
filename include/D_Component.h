@@ -23,21 +23,9 @@
 namespace Diamond {
     class Component {
     public:
-        virtual ~Component() {
-            if (m_remover)
-                m_remover();
-        }
+        virtual ~Component() {}
 
-        virtual void    update(tD_delta delta) {}
-
-        /**
-         Set a function that this component can call when it's destroyed
-         to remove itself from any system that is using it.
-        */
-        void            setRemover(const std::function<void(void)> &remover) { m_remover = remover; }
-
-    private:
-        std::function<void(void)> m_remover;
+        virtual void update(tD_delta delta) {}
     };
 }
 

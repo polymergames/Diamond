@@ -22,24 +22,21 @@
 #include "D_Component.h"
 #include "D_Renderer2D.h"
 #include "D_RenderComponent2D.h"
-#include "D_Updater.h"
 
 namespace Diamond {
     class AnimatorSheet : public Component {
     public:
         AnimatorSheet(Renderer2D *renderer, 
                       renderobj_id render_obj, 
-                      const AnimationSheet *anim, 
-                      Updater<Component> &updater);
+                      const AnimationSheet *anim);
 
         AnimatorSheet(RenderComponent2D *rcomp, 
-                      const AnimationSheet *anim, 
-                      Updater<Component> &updater);
+                      const AnimationSheet *anim);
 
 
         void                    setAnimation(const AnimationSheet *anim);
         const AnimationSheet    *getAnimation() const { return m_anim; }
-        void                    update(tD_delta delta);
+        void                    update(tD_delta delta) override;
 
     private:
         Renderer2D              *m_renderer;

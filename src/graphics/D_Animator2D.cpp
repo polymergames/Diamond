@@ -19,20 +19,17 @@
 
 Diamond::Animator2D::Animator2D(Renderer2D *renderer, 
                                 renderobj_id render_obj, 
-                                const Animation2D *anim, 
-                                Updater<Component> &updater)
+                                const Animation2D *anim)
     : m_renderer(renderer), m_render_obj(render_obj), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
     if (!renderer) {
         Log::log("Animator2D ERROR: The given renderer is null!");
     }
     setAnimation(anim);
-    updater.addMember(this);
 }
 
 Diamond::Animator2D::Animator2D(RenderComponent2D *rcomp,
-                                const Animation2D *anim, 
-                                Updater<Component> &updater)
-    : Animator2D(rcomp->getRenderer(), rcomp->getRenderObj(), anim, updater) {}
+                                const Animation2D *anim)
+    : Animator2D(rcomp->getRenderer(), rcomp->getRenderObj(), anim) {}
 
 
 void Diamond::Animator2D::setAnimation(const Animation2D *anim) {

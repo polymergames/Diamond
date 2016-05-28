@@ -76,8 +76,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     zapper.addComponent<Animator2D>(renderer,
                                     zapper.getComponent<RenderComponent2D>()->getRenderObj(), 
-                                    &zapper_anim, 
-                                    engine.getComponentUpdater());
+                                    &zapper_anim);
 
     // zapper.localTransform().position = Vector2<int>(50, 100);
     zapper.localTransform().position = Vector2<int>(400, 220);
@@ -92,8 +91,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper2.addComponent<RenderComponent2D>(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet);
 
     zapper2.addComponent(new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(), 
-                                           &zapper2_anim, 
-                                           engine.getComponentUpdater()));
+                                           &zapper2_anim));
 
     //zapper2.getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
     //    zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
@@ -244,6 +242,14 @@ void RandomDemo::update(tD_delta delta) {
     }
 
     //std::cout << "Delta = " << delta << "ms; FPS = " << Time::fps << std::endl;
+
+
+    // update entities
+    root.updateComponents(delta);
+    spike.updateComponents(delta);
+    spike2.updateComponents(delta);
+    zapper.updateComponents(delta);
+    zapper2.updateComponents(delta);
 
     root.updateAllWorldTransforms();
 }
