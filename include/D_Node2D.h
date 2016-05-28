@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef D_SCENE_NODE2D_H
-#define D_SCENE_NODE2D_H
+#ifndef D_NODE2D_H
+#define D_NODE2D_H
 
 #include <vector>
 #include "duMatrix.h"
@@ -23,16 +23,16 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
-    class SceneNode2D;
-    typedef std::vector<SceneNode2D*> ChildList;
+    class Node2D;
+    typedef std::vector<Node2D*> ChildList;
 
-    class SceneNode2D {
+    class Node2D {
     public:
-        SceneNode2D(TransformList &transform_list, transform2_id world_transform_id);
-        virtual ~SceneNode2D() {}
+        Node2D(TransformList &transform_list, transform2_id world_transform_id);
+        virtual ~Node2D() {}
 
-        SceneNode2D(const SceneNode2D&) = delete;
-        SceneNode2D& operator=(const SceneNode2D&) = delete;
+        Node2D(const Node2D&) = delete;
+        Node2D& operator=(const Node2D&) = delete;
 
         // children
 
@@ -41,15 +41,15 @@ namespace Diamond {
         /**
          Returns the given child after adding it to children.
         */
-        SceneNode2D &addChild(SceneNode2D &child);
-        SceneNode2D *addChild(SceneNode2D *child);
+        Node2D &addChild(Node2D &child);
+        Node2D *addChild(Node2D *child);
 
         /**
          Searches children for the given child and removes it from children.
          Returns true if child was found and removed, otherwise false.
         */
-        bool removeChild(SceneNode2D &child);
-        bool removeChild(SceneNode2D *child);
+        bool removeChild(Node2D &child);
+        bool removeChild(Node2D *child);
 
 
 
@@ -189,4 +189,4 @@ namespace Diamond {
     };
 }
 
-#endif // D_SCENE_NODE2D_H
+#endif // D_NODE2D_H

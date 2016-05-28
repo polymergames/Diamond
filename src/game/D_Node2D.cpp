@@ -14,14 +14,14 @@
     limitations under the License.
 */
 
-#include "D_SceneNode2D.h"
+#include "D_Node2D.h"
 
 #include <algorithm> // ?
 #include <cmath> // for sin, cos
 #include "duMath.h" // for deg2rad
 
 
-Diamond::SceneNode2D::SceneNode2D(TransformList &transform_list, transform2_id world_transform_id)
+Diamond::Node2D::Node2D(TransformList &transform_list, transform2_id world_transform_id)
     : m_local_transform(), 
       m_transform_list(transform_list),
       m_world_transform_id(world_transform_id), 
@@ -30,11 +30,11 @@ Diamond::SceneNode2D::SceneNode2D(TransformList &transform_list, transform2_id w
 
 
 
-Diamond::SceneNode2D &Diamond::SceneNode2D::addChild(SceneNode2D &child) {
+Diamond::Node2D &Diamond::Node2D::addChild(Node2D &child) {
     return *(addChild(&child));
 }
 
-Diamond::SceneNode2D *Diamond::SceneNode2D::addChild(SceneNode2D *child) {
+Diamond::Node2D *Diamond::Node2D::addChild(Node2D *child) {
     if (child && child != this)
         m_children.push_back(child);
 
@@ -45,11 +45,11 @@ Diamond::SceneNode2D *Diamond::SceneNode2D::addChild(SceneNode2D *child) {
 }
 
 
-bool Diamond::SceneNode2D::removeChild(SceneNode2D &child) {
+bool Diamond::Node2D::removeChild(Node2D &child) {
     return removeChild(&child);
 }
 
-bool Diamond::SceneNode2D::removeChild(SceneNode2D *child) {
+bool Diamond::Node2D::removeChild(Node2D *child) {
     auto it = std::find(m_children.begin(), m_children.end(), child);
     if (it != m_children.end()) {
         m_children.erase(it);
@@ -60,30 +60,30 @@ bool Diamond::SceneNode2D::removeChild(SceneNode2D *child) {
 
 
 
-void Diamond::SceneNode2D::updateAllWorldTransforms() {
+void Diamond::Node2D::updateAllWorldTransforms() {
     updateWorldTransform();
 
     const Transform2<tD_pos, tD_rot> &world_trans = worldTransform();
     Matrix<tD_real, 2, 2> trans_mat = getTransMat();
 
-    for (SceneNode2D *child : m_children) {
+    for (Node2D *child : m_children) {
         child->updateParentTransform(world_trans, trans_mat);
         child->updateAllWorldTransforms();
     }
 }
 
 
-void Diamond::SceneNode2D::updateAllLocalTransforms() {
+void Diamond::Node2D::updateAllLocalTransforms() {
     updateLocalTransform();
 
-    for (SceneNode2D *child : m_children) {
+    for (Node2D *child : m_children) {
         child->updateAllLocalTransforms();
     }
 }
 
 
 
-Diamond::Matrix<tD_real, 2, 2> Diamond::SceneNode2D::getTransMat() const {
+Diamond::Matrix<tD_real, 2, 2> Diamond::Node2D::getTransMat() const {
     const Transform2<tD_pos, tD_rot> &wtrans = worldTransform();
 
     tD_real radrot = Math::deg2rad(wtrans.rotation);

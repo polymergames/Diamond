@@ -18,17 +18,17 @@
 #define D_ENTITY_NODE2D_H
 
 #include "D_Entity.h"
-#include "D_SceneNode2D.h"
+#include "D_Node2D.h"
 
 namespace Diamond {
     /**
      Combines the functionality of an entity-component system and a scene graph node.
      Yeah that's right, we used multiple inheritance. Fight me.
     */
-    class EntityNode2D : public Entity, public SceneNode2D {
+    class EntityNode2D : public Entity, public Node2D {
     public:
         EntityNode2D(TransformList &transform_list)
-            : SceneNode2D(transform_list, transform_list.emplace()) {}
+            : Node2D(transform_list, transform_list.emplace()) {}
 
         EntityNode2D(const EntityNode2D&) = delete;
         EntityNode2D& operator=(const EntityNode2D&) = delete;
