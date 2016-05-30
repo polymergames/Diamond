@@ -30,7 +30,7 @@ namespace Diamond {
                       renderobj_id render_obj, 
                       const AnimationSheet *anim);
 
-        AnimatorSheet(RenderComponent2D *rcomp, 
+        AnimatorSheet(const SharedPtr<RenderComponent2D> &rcomp, 
                       const AnimationSheet *anim);
 
 

@@ -29,7 +29,7 @@ namespace Diamond {
                    renderobj_id render_obj, 
                    const Animation2D *anim);
 
-        Animator2D(RenderComponent2D *rcomp, 
+        Animator2D(const SharedPtr<RenderComponent2D> &rcomp, 
                    const Animation2D *anim);
 
 

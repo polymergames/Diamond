@@ -29,9 +29,9 @@ namespace Diamond {
     public:
         RenderComponent2D(transform2_id transform, 
                           Renderer2D *renderer, 
-                          std::shared_ptr<const Texture> sprite)
+                          const SharedPtr<const Texture> &sprite)
             : m_transform(transform), m_renderer(renderer), m_sprite(sprite), m_clipDim() {
-              m_renderObj = renderer->genRenderObj(transform, sprite.get());
+              m_renderObj = renderer->genRenderObj(transform, sprite);
         }
         ~RenderComponent2D() { freeRenderObj(); }
         
@@ -39,9 +39,9 @@ namespace Diamond {
         Renderer2D *getRenderer() const { return m_renderer; }
         renderobj_id getRenderObj() const { return m_renderObj; }
 
-        std::shared_ptr<const Texture> getSprite() const { return m_sprite; }
-        void setSprite(const Texture *sprite) { setSprite(std::shared_ptr<const Texture>(sprite)); }
-        void setSprite(std::shared_ptr<const Texture> sprite);
+        const SharedPtr<const Texture> &getSprite() const { return m_sprite; }
+        void setSprite(const Texture *sprite) { setSprite(SharedPtr<const Texture>(sprite)); }
+        void setSprite(const SharedPtr<const Texture> &sprite);
 
         const Vector2<int> &getClipDim() const { return m_clipDim; }
         void setClip(int x, int y, int w, int h);
@@ -83,7 +83,7 @@ namespace Diamond {
         transform2_id m_transform;
         Renderer2D *m_renderer;
         renderobj_id m_renderObj;
-        std::shared_ptr<const Texture> m_sprite;
+        SharedPtr<const Texture> m_sprite;
         Vector2<int> m_clipDim;
         Vector2<tDrender_pos> m_pivot;
 
@@ -91,7 +91,7 @@ namespace Diamond {
     };
 }
 
-inline void Diamond::RenderComponent2D::setSprite(std::shared_ptr<const Texture> sprite) {
+inline void Diamond::RenderComponent2D::setSprite(const SharedPtr<const Texture> &sprite) {
     m_sprite = sprite;
     if ((tD_index)m_renderObj != Diamond::INVALID) {
         m_renderer->getRenderObj(m_renderObj)->setTexture(sprite.get());
@@ -134,7 +134,7 @@ inline bool Diamond::RenderComponent2D::isVisible() const {
 
 inline void Diamond::RenderComponent2D::makeVisible() {
     if ((tD_index)m_renderObj == Diamond::INVALID) {
-        m_renderObj = m_renderer->genRenderObj(m_transform, m_sprite.get(), m_pivot);
+        m_renderObj = m_renderer->genRenderObj(m_transform, m_sprite, m_pivot);
         if (m_clipDim.x != 0) { // check if any valid clip data has been stored
             RenderObj2D *r = m_renderer->getRenderObj(m_renderObj);
             r->setClip(0, 0, m_clipDim.x, m_clipDim.y);

@@ -18,6 +18,18 @@
 #include "CollideDemo.h"
 #include "RandomDemo.h"
 
+class DeleteConfig {
+public:
+    DeleteConfig(int &count) : m_count(count) {}
+    
+    void operator() (Diamond::Config *config) const {
+        delete config;
+        m_count = m_count + 1;
+    }
+private:
+    int &m_count;
+};
+
 int main(int argc, char *argv[]) {
     Diamond::Config config;
     Diamond::Engine2D engine;

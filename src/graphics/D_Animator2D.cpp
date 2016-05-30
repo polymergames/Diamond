@@ -27,7 +27,7 @@ Diamond::Animator2D::Animator2D(Renderer2D *renderer,
     setAnimation(anim);
 }
 
-Diamond::Animator2D::Animator2D(RenderComponent2D *rcomp,
+Diamond::Animator2D::Animator2D(const SharedPtr<RenderComponent2D> &rcomp,
                                 const Animation2D *anim)
     : Animator2D(rcomp->getRenderer(), rcomp->getRenderObj(), anim) {}
 

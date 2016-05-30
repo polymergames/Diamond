@@ -16,9 +16,9 @@
 
 #include "RandomDemo.h"
 
+#include "D_ComponentNames.h"
 #include "D_Input.h"
 #include "D_RenderComponent2D.h"
-#include "D_RigidbodyComponent2D.h"
 using namespace Diamond;
 
 RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float growspeed) 
@@ -41,8 +41,8 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     std::cout << "Resolution: " << window.x << " by " << window.y << std::endl;
     std::cout << "Screen resolution: " << screen.x << " by " << screen.y << std::endl;
 
-    spike_sprite = std::shared_ptr<Texture>(renderer->loadTexture("spike.png"));
-    cloud_sprite = std::shared_ptr<Texture>(renderer->loadTexture("cloud.png"));
+    spike_sprite = SharedPtr<Texture>(renderer->loadTexture("spike.png"));
+    cloud_sprite = SharedPtr<Texture>(renderer->loadTexture("cloud.png"));
 
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;
@@ -51,47 +51,51 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     }
 
     //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
-    spike.addComponent<RenderComponent2D>(spike.getWorldTransformID(), renderer, spike_sprite);
+    spike.addComponent(RENDERCOMPONENT, 
+        new RenderComponent2D(spike.getWorldTransformID(), renderer, spike_sprite));
     // spike.localTransform().position = Vector2<int>(-150, 200);
     spike.localTransform().position = Vector2<int>(-250, 400);
     spike.localTransform().scale = Vector2<float>(0.2f, 0.2f);
-    if (!spike.getComponent<RenderComponent2D>()) {
-        std::cout << "NULL!" << std::endl;
+    if (!spike.getComponent(RENDERCOMPONENT)) {
+        std::cout << "NULL render component!" << std::endl;
+        engine.quit();
+        return;
     }
 
-    spike2.addComponent<RenderComponent2D>(spike2.getWorldTransformID(), renderer, spike_sprite);
+    spike2.addComponent(RENDERCOMPONENT, 
+        new RenderComponent2D(spike2.getWorldTransformID(), renderer, spike_sprite));
     spike2.localTransform().position = Vector2<int>(100, 100);
     spike2.localTransform().scale = Vector2<float>(0.1f, 0.1f);
 
     // Animations
-    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper1.png")));
-    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper2.png")));
-    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper3.png")));
-    zapper_anim.sprites.push_back(std::shared_ptr<Texture>(renderer->loadTexture("zapper4.png")));
+    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper1.png")));
+    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper2.png")));
+    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper3.png")));
+    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper4.png")));
 
 
-    zapper.addComponent<RenderComponent2D>(zapper.getWorldTransformID(), 
-                                           renderer, 
-                                           zapper_anim.sprites[0]);
+    zapper.addComponent(RENDERCOMPONENT, 
+        new RenderComponent2D(zapper.getWorldTransformID(), renderer, zapper_anim.sprites[0]));
 
-    zapper.addComponent<Animator2D>(renderer,
-                                    zapper.getComponent<RenderComponent2D>()->getRenderObj(), 
-                                    &zapper_anim);
+    zapper.addComponent(ANIMATOR, 
+        new Animator2D(
+            renderer, zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT)->getRenderObj(), &zapper_anim));
 
     // zapper.localTransform().position = Vector2<int>(50, 100);
     zapper.localTransform().position = Vector2<int>(400, 220);
 
 
-    zapper2_anim.sprite_sheet = std::shared_ptr<Texture>(renderer->loadTexture("zapper.png"));
+    zapper2_anim.sprite_sheet = SharedPtr<Texture>(renderer->loadTexture("zapper.png"));
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
     zapper2_anim.rows = 2;
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
-    zapper2.addComponent<RenderComponent2D>(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet);
+    zapper2.addComponent(RENDERCOMPONENT, 
+        new RenderComponent2D(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet));
 
-    zapper2.addComponent(new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(), 
-                                           &zapper2_anim));
+    zapper2.addComponent(ANIMATOR, 
+        new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper2_anim));
 
     //zapper2.getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
     //    zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
@@ -103,9 +107,8 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     // Physics
     // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getWorldTransformID());
-    spike.addComponent<RigidbodyComponent2D>(engine.getPhysWorld()->genRigidbody(spike.getWorldTransformID()), 
-        engine.getPhysWorld());
-    spikerb = spike.getComponent<RigidbodyComponent2D>()->getBody();
+    spikerb = engine.getPhysWorld()->genRigidbody(spike.getWorldTransformID());
+    spike.addComponent(spikerb);
 
     root.updateAllWorldTransforms();
 }

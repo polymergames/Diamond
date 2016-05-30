@@ -15,10 +15,8 @@
 */
 
 #include "CollideDemo.h"
-#include "D_ColliderComponent2D.h"
 #include "D_Input.h"
 #include "D_RenderComponent2D.h"
-#include "D_RigidbodyComponent2D.h"
 using namespace Diamond;
 
 CollideDemo::CollideDemo(Engine2D &engine, float movespeed) 
@@ -66,36 +64,37 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     PhysicsWorld2D *physworld = engine.getPhysWorld();
     std::function<void(void*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
 
-    spike1.addComponent<RigidbodyComponent2D>(spike1.getTransformID(), physworld);
-    Rigidbody2D *rbody = spike1.getComponent<RigidbodyComponent2D>()->getBody();
+    SharedPtr<Rigidbody2D> rbody = physworld->genRigidbody(spike1.getTransformID());
+    spike1.addComponent(rbody);
+
     float scale = spike1.transform().scale.x;
     tD_pos radius = spike_sprite->getWidth() * scale / 2.0;
-    spike1.addComponent<ColliderComponent2D>(physworld->genCircleCollider(rbody, &spike1, 
-        callback, radius, Vector2<tD_pos>(radius, radius)), physworld);
+    spike1.addComponent(physworld->genCircleCollider(rbody, &spike1, 
+        callback, radius, Vector2<tD_pos>(radius, radius)));
 
-    spike2.addComponent<RigidbodyComponent2D>(spike2.getTransformID(), physworld);
-    rbody = spike2.getComponent<RigidbodyComponent2D>()->getBody();
+    rbody = physworld->genRigidbody(spike2.getTransformID());
+    spike2.addComponent(rbody);
     scale = spike2.transform().scale.x;
     radius = spike_sprite->getWidth() * scale / 2.0;
-    spike2.addComponent<ColliderComponent2D>(physworld->genCircleCollider(rbody, &spike2, 
-        callback, radius, Vector2<tD_pos>(radius, radius)), physworld);
+    spike2.addComponent(physworld->genCircleCollider(rbody, &spike2, 
+        callback, radius, Vector2<tD_pos>(radius, radius)));
 
-    zapper1.addComponent<RigidbodyComponent2D>(zapper1.getTransformID(), physworld);
-    rbody = zapper1.getComponent<RigidbodyComponent2D>()->getBody();
+    rbody = physworld->genRigidbody(zapper1.getTransformID());
+    zapper1.addComponent(rbody);
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
     scale = zapper1.transform().scale.x;
-    zapper1.addComponent<ColliderComponent2D>(physworld->genAABBCollider(rbody, &zapper1, 
+    zapper1.addComponent(physworld->genAABBCollider(rbody, &zapper1, 
         callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
-        Vector2<tD_pos>(2 * partial_width * scale, 0)), physworld);
+        Vector2<tD_pos>(2 * partial_width * scale, 0)));
 
-    zapper2.addComponent<RigidbodyComponent2D>(zapper2.getTransformID(), physworld);
-    rbody = zapper2.getComponent<RigidbodyComponent2D>()->getBody();
+    rbody = physworld->genRigidbody(zapper2.getTransformID());
+    zapper2.addComponent(rbody);
     scale = zapper2.transform().scale.x;
-    zapper2.addComponent<ColliderComponent2D>(physworld->genAABBCollider(rbody, &zapper2, 
+    zapper2.addComponent(physworld->genAABBCollider(rbody, &zapper2, 
         callback, 
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
-        Vector2<tD_pos>(2 * partial_width * scale, 0)), physworld);
+        Vector2<tD_pos>(2 * partial_width * scale, 0)));
 
 }
 

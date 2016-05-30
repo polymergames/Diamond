@@ -50,7 +50,7 @@ namespace Diamond {
          Loads an image file as an SDL texture. Caller is responsible for ownership!
          Returns nullptr if texture failed to load.
         */
-        Texture *loadTexture(std::string path) override;
+        SharedPtr<Texture> loadTexture(std::string path) override;
 
         RenderObj2D *getRenderObj(renderobj_id render_obj) override;
         
@@ -58,7 +58,7 @@ namespace Diamond {
          Creates and returns id of an SDLRenderObj2D, which is a rendering unit for the render loop.
         */
         renderobj_id genRenderObj(transform2_id trans,
-                                  const Texture *texture, 
+                                  const SharedPtr<const Texture> &texture,
                                   const Vector2<tDrender_pos> &pivot) override;
         
         /**

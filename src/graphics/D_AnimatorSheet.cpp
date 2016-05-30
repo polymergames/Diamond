@@ -27,7 +27,7 @@ Diamond::AnimatorSheet::AnimatorSheet(Renderer2D *renderer,
     setAnimation(anim);
 }
 
-Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rcomp,
+Diamond::AnimatorSheet::AnimatorSheet(const SharedPtr<RenderComponent2D> &rcomp,
                                       const AnimationSheet *anim)
     : AnimatorSheet(rcomp->getRenderer(), rcomp->getRenderObj(), anim) {}
 

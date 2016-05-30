@@ -110,7 +110,7 @@ Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
     return r;
 }
 
-Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
+Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::string path) {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (surface == NULL) {
         // TODO: Handle image loading failure
@@ -128,7 +128,7 @@ Diamond::Texture *Diamond::SDLRenderer2D::loadTexture(std::string path) {
     int height = surface->h;
     
     SDL_FreeSurface(surface);
-    return new SDLTexture(texture, width, height);
+    return makeShared<SDLTexture>(texture, width, height);
 }
 
 Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_obj) {
@@ -136,9 +136,9 @@ Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_o
 }
 
 renderobj_id Diamond::SDLRenderer2D::genRenderObj(transform2_id trans,
-                                                  const Texture *texture, 
+                                                  const SharedPtr<const Texture> &texture,
                                                   const Vector2<tDrender_pos> &pivot) {
-    return m_render_objects.emplace_back(trans, texture, pivot);
+    return m_render_objects.emplace_back(trans, texture.get(), pivot);
 }
 
 void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {

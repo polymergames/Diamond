@@ -38,6 +38,15 @@ namespace Diamond {
     using SharedPtr =       std::shared_ptr<T>;
 
     using TransformList =   SparseVector<Transform2<tD_pos, tD_rot> >;
+
+    
+    template<typename T, class... Args>
+    inline SharedPtr<T> makeShared(Args&&... args) {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
+
+    // TODO: create a allocateShared function that uses std::allocate_shared and takes an Allocator argument. 
+    // This can be used by Diamond systems with allocators for memory management.
 }
 
 #endif // D_TYPEDEFS_H

@@ -45,8 +45,8 @@ private:
     Diamond::EntityNode2D root, spike, spike2, zapper, zapper2;
     std::list<Diamond::EntityNode2D> clouds;
 
-    std::shared_ptr<Diamond::Texture> spike_sprite;
-    std::shared_ptr<Diamond::Texture> cloud_sprite;
+    Diamond::SharedPtr<Diamond::Texture> spike_sprite;
+    Diamond::SharedPtr<Diamond::Texture> cloud_sprite;
 
     Diamond::Animation2D zapper_anim;
     Diamond::AnimationSheet zapper2_anim;
@@ -55,7 +55,7 @@ private:
     Diamond::SharedPtr<Diamond::Sound2D> haha;
     Diamond::Vector2<int> window;
 
-    Diamond::Rigidbody2D *spikerb;
+    Diamond::SharedPtr<Diamond::Rigidbody2D> spikerb;
 };
 
 #endif // RANDOM_DEMO_H

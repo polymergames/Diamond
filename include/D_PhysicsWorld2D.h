@@ -44,38 +44,28 @@ namespace Diamond {
         /**
          Creates a rigidbody object attached to the given transform.
         */
-        virtual Rigidbody2D *genRigidbody(transform2_id transform) = 0;
-        
-        /**
-         Frees the memory associated with the given rigidbody.
-        */
-        virtual void freeRigidbody(Rigidbody2D *body) = 0;
+        virtual SharedPtr<Rigidbody2D> genRigidbody(transform2_id transform) = 0;
 
         
         /**
          Creates an AABB collider attached to the given rigidbody.
          parent is a pointer to the object owning the collider.
         */
-        virtual AABBCollider2D *genAABBCollider(const Rigidbody2D *body,
-                                                void *parent,
-                                                const std::function<void(void *other)> &onCollision,
-                                                const Vector2<tD_pos> &dims,
-                                                const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) = 0;
+        virtual SharedPtr<AABBCollider2D> genAABBCollider(const SharedPtr<Rigidbody2D> &body,
+                                                          void *parent,
+                                                          const std::function<void(void *other)> &onCollision,
+                                                          const Vector2<tD_pos> &dims,
+                                                          const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) = 0;
 
         /**
          Creates a circle collider attached to the given rigidbody.
          parent is a pointer to the object owning the collider.
         */
-        virtual CircleCollider *genCircleCollider(const Rigidbody2D *body,
-                                                  void *parent,
-                                                  const std::function<void(void *other)> &onCollision,
-                                                  tD_pos radius,
-                                                  const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) = 0;
-
-        /**
-         Frees the memory associated with a given collider.
-        */
-        virtual void freeCollider(Collider2D *collider) = 0;
+        virtual SharedPtr<CircleCollider> genCircleCollider(const SharedPtr<Rigidbody2D> &body,
+                                                            void *parent,
+                                                            const std::function<void(void *other)> &onCollision,
+                                                            tD_pos radius,
+                                                            const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) = 0;
     };
 }
 

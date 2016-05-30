@@ -18,23 +18,14 @@
 #define D_ENTITY_H
 
 #include <map>
-#include <typeindex>
 #include "D_Component.h"
 
 namespace Diamond {
-    /**
-     Pointer type used to hold components in an Entity
-    */
-    using ComponentPtr = SharedPtr<Component>;
-
     /**
      Holds and updates a table of components indexed by type.
      The purpose of this class is to handle component ownership.
      Therefore, it takes ownership of any component added to it
      and destroys all of its components at the end of its lifetime.
-
-     Special thanks to Chewy Gumball and vijoc on stackoverflow for addComponent() and getComponent() functions.
-     http://gamedev.stackexchange.com/questions/55950/entity-component-systems-with-c-accessing-components
     */
     class Entity {
     public:
@@ -55,37 +46,33 @@ namespace Diamond {
         }
 
 
-        void addComponent(Component *component) { addComponent(ComponentPtr(component)); }
-
-        void addComponent(ComponentPtr component) {
-            std::type_index index = typeid(*component);
-            m_components[index] = component;
+        void addComponent(const std::string &name, Component &component) { 
+            addComponent(name, &component);
         }
 
-        template <class T, typename... Args>
-        void addComponent(Args&&... args) {
-            std::type_index index = typeid(T);
-            m_components[index] = ComponentPtr(new T(std::forward<Args>(args)...));
+        void addComponent(const std::string &name, Component *component) { 
+            addComponent(name, SharedPtr<Component>(component));
         }
 
-        template <class T>
-        T *getComponent() const {
-            auto c = m_components.find(std::type_index(typeid(T)));
-            if (c != m_components.end())
-                return static_cast<T*>(c->second.get());
-            else
-                return nullptr;
+        void addComponent(const std::string &name, SharedPtr<Component> component) {
+            m_components[name] = component;
+        }
+
+        SharedPtr<Component> getComponent(const std::string &name) {
+            return m_components[name];
         }
 
         template <class T>
-        void removeComponent() {
-            auto c = m_components.find(std::type_index(typeid(T)));
-            if (c != m_components.end())
-                m_components.erase(c);
+        SharedPtr<T> getComponent(const std::string &name) {
+            return std::dynamic_pointer_cast<T>(m_components[name]);
+        }
+
+        void removeComponent(const std::string &name) {
+            m_components.erase(name);
         }
 
     protected:
-        std::map<std::type_index, ComponentPtr > m_components;
+        std::map<std::string, SharedPtr<Component> > m_components;
     };
 }
 
