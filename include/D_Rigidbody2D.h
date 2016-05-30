@@ -17,11 +17,12 @@
 #ifndef D_RIGIDBODY_2D_H
 #define D_RIGIDBODY_2D_H
 
+#include "D_Component.h"
 #include "D_typedefs.h"
 #include "duVector2.h"
 
 namespace Diamond {
-    class Rigidbody2D {
+    class Rigidbody2D : public Component {
     public:
         virtual ~Rigidbody2D() {}
 

@@ -17,7 +17,6 @@
 #ifndef D_COMPONENT_H
 #define D_COMPONENT_H
 
-#include <functional>
 #include "D_typedefs.h"
 
 namespace Diamond {

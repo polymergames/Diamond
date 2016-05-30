@@ -17,11 +17,13 @@
 #ifndef D_SOUND_2D_H
 #define D_SOUND_2D_H
 
+#include "D_Component.h"
+
 namespace Diamond {
     /**
      If using the SDL sound implementation, see D_SDLSound2D.h for an important note on the reliability of some functions.
     */
-    class Sound2D {
+    class Sound2D : public Component {
     public:
         // TODO: bool is_playing()
 

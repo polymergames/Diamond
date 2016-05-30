@@ -17,8 +17,10 @@
 #ifndef D_COLLIDER_2D_H
 #define D_COLLIDER_2D_H
 
+#include "D_Component.h"
+
 namespace Diamond {
-    class Collider2D {
+    class Collider2D : public Component {
     public:
         virtual ~Collider2D() {}
     };

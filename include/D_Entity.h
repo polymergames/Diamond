@@ -22,7 +22,12 @@
 #include <typeindex>
 #include "D_Component.h"
 
-namespace Diamond { 
+namespace Diamond {
+    /**
+     Pointer type used to hold components in an Entity
+    */
+    using ComponentPtr = SharedPtr<Component>;
+
     /**
      Holds and updates a table of components indexed by type.
      The purpose of this class is to handle component ownership.

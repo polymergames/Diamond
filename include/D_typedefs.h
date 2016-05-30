@@ -17,23 +17,27 @@
 #ifndef D_TYPEDEFS_H
 #define D_TYPEDEFS_H
 
+#include <memory>
 #include <stdint.h>
 #include "duSparseVector.h"
 #include "duTypedefs.h"
 #include "D_Transform2.h"
 
 // transform typedefs
-typedef tD_real tD_pos; // position coordinate type
-typedef tD_real tD_rot; // rotation value type
-typedef int32_t tDrender_pos; // position coordinate type for rendering
-typedef float tDrender_rot; // rotation value type for rendering
+using tD_pos =          tD_real;    // position coordinate type
+using tD_rot =          tD_real;    // rotation value type
+using tDrender_pos =    int32_t;    // position coordinate type for rendering
+using tDrender_rot =    float;      // rotation value type for rendering
 
 // ID/index typedefs
-typedef tD_id renderobj_id; // render object id type
-typedef tD_id transform2_id; // 2d transform object id type
+using renderobj_id =    tD_id;      // render object id type
+using transform2_id =   tD_id;      // 2d transform object id type
 
 namespace Diamond {
-    typedef SparseVector<Transform2<tD_pos, tD_rot> > TransformList;
+    template <typename T>
+    using SharedPtr =       std::shared_ptr<T>;
+
+    using TransformList =   SparseVector<Transform2<tD_pos, tD_rot> >;
 }
 
 #endif // D_TYPEDEFS_H

@@ -17,6 +17,8 @@
 #ifndef D_MUSIC_H
 #define D_MUSIC_H
 
+#include "D_Component.h"
+
 namespace Diamond {
     /**
      An audio object meant to be played as background music. 
@@ -25,7 +27,7 @@ namespace Diamond {
      (this happens in the SDL mixer implementation with pause(), resume(), stop(), and set_volume()).
      To manipulate all/main music that is active, use the functions in AudioManager2D.
     */
-    class Music {
+    class Music : public Component {
     public:
         virtual ~Music() {};
 
