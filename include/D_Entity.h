@@ -18,7 +18,6 @@
 #define D_ENTITY_H
 
 #include <map>
-#include <memory>
 #include <typeindex>
 #include "D_Component.h"
 
@@ -47,7 +46,6 @@ namespace Diamond {
         Entity& operator=(const Entity&) = delete;
 
 
-
         /**
          Call this once a frame to update all of this entity's components.
         */
@@ -57,18 +55,17 @@ namespace Diamond {
         }
 
 
+        void addComponent(Component *component) { addComponent(ComponentPtr(component)); }
 
-        void addComponent(Component *component) {
+        void addComponent(ComponentPtr component) {
             std::type_index index = typeid(*component);
-            if (!m_components[index])
-                m_components[index] = std::unique_ptr<Component>(component);
+            m_components[index] = component;
         }
 
         template <class T, typename... Args>
         void addComponent(Args&&... args) {
             std::type_index index = typeid(T);
-            if (!m_components[index])
-                m_components[index] = std::unique_ptr<Component>(new T(std::forward<Args>(args)...));
+            m_components[index] = ComponentPtr(new T(std::forward<Args>(args)...));
         }
 
         template <class T>
@@ -88,7 +85,7 @@ namespace Diamond {
         }
 
     protected:
-        std::map<std::type_index, std::unique_ptr<Component> > m_components;
+        std::map<std::type_index, ComponentPtr > m_components;
     };
 }
 

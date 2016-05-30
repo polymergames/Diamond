@@ -26,9 +26,9 @@ namespace Diamond {
 
         bool init(const Config &config) override;
 
-        Sound2D *loadSound(std::string path) override;
+        SharedPtr<Sound2D> loadSound(std::string path) override;
 
-        Music *loadMusic(std::string path) override;
+        SharedPtr<Music> loadMusic(std::string path) override;
 
         int getMaxVolume() const override;
 

@@ -37,22 +37,22 @@ bool Diamond::SDLDiskJockey2D::init(const Config &config) {
     return true;
 }
 
-Diamond::Sound2D *Diamond::SDLDiskJockey2D::loadSound(std::string path) {
+Diamond::SharedPtr<Diamond::Sound2D> Diamond::SDLDiskJockey2D::loadSound(std::string path) {
     Mix_Chunk *sound = Mix_LoadWAV(path.c_str());
     if (sound == NULL) {
         Log::log("Failed to load sound " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
-    return new SDLSound2D(sound);
+    return SharedPtr<Sound2D>(new SDLSound2D(sound));
 }
 
-Diamond::Music *Diamond::SDLDiskJockey2D::loadMusic(std::string path) {
+Diamond::SharedPtr<Diamond::Music> Diamond::SDLDiskJockey2D::loadMusic(std::string path) {
     Mix_Music *music = Mix_LoadMUS(path.c_str());
     if (music == NULL) {
         Log::log("Failed to load music " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
-    return new SDLMusic(music);
+    return SharedPtr<Music>(new SDLMusic(music));
 }
 
 int Diamond::SDLDiskJockey2D::getMaxVolume() const {

@@ -22,6 +22,7 @@
 #include "D_Config.h"
 #include "D_Sound2D.h"
 #include "D_Music.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
     class DiskJockey2D {
@@ -30,9 +31,9 @@ namespace Diamond {
 
         virtual bool init(const Config &config) = 0;
 
-        virtual Sound2D *loadSound(std::string path) = 0;
+        virtual SharedPtr<Sound2D> loadSound(std::string path) = 0;
 
-        virtual Music *loadMusic(std::string path) = 0;
+        virtual SharedPtr<Music> loadMusic(std::string path) = 0;
 
         virtual int getMaxVolume() const = 0;
 

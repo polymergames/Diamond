@@ -99,7 +99,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper2.localTransform().position = Vector2<int>(600, 130);
     zapper2.localTransform().scale = Vector2<float>(z2scale, z2scale);
 
-    haha = std::unique_ptr<Sound2D>(engine.getDJ()->loadSound("haha.wav"));
+    haha = engine.getDJ()->loadSound("haha.wav");
 
     // Physics
     // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getWorldTransformID());

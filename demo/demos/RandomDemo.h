@@ -25,6 +25,7 @@
 #include "D_Game2D.h"
 #include "D_EntityNode2D.h"
 #include "D_Rigidbody2D.h"
+#include "D_Sound2D.h"
 #include "D_typedefs.h"
 
 class RandomDemo : public Diamond::Game2D {
@@ -51,7 +52,7 @@ private:
     Diamond::AnimationSheet zapper2_anim;
 
     Diamond::RGBA spike_color;
-    std::unique_ptr<Diamond::Sound2D> haha;
+    Diamond::SharedPtr<Diamond::Sound2D> haha;
     Diamond::Vector2<int> window;
 
     Diamond::Rigidbody2D *spikerb;
