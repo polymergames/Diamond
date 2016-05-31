@@ -18,7 +18,6 @@
 
 #include "D_ComponentNames.h"
 #include "D_Input.h"
-#include "D_RenderComponent2D.h"
 using namespace Diamond;
 
 RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float growspeed) 
@@ -52,7 +51,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     //spike.addComponent(makeShared<RenderComponent2D>(&spike, spike_sprite, 0.1f));
     spike.addComponent(RENDERCOMPONENT, 
-        makeShared<RenderComponent2D>(spike.getWorldTransformID(), renderer, spike_sprite));
+        renderer->makeRenderComponent(spike.getWorldTransformID(), spike_sprite));
     // spike.localTransform().position = Vector2<int>(-150, 200);
     spike.localTransform().position = Vector2<int>(-250, 400);
     spike.localTransform().scale = Vector2<float>(0.2f, 0.2f);
@@ -63,36 +62,35 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     }
 
     spike2.addComponent(RENDERCOMPONENT, 
-        makeShared<RenderComponent2D>(spike2.getWorldTransformID(), renderer, spike_sprite));
+        renderer->makeRenderComponent(spike2.getWorldTransformID(), spike_sprite));
     spike2.localTransform().position = Vector2<int>(100, 100);
     spike2.localTransform().scale = Vector2<float>(0.1f, 0.1f);
 
     // Animations
-    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper1.png")));
-    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper2.png")));
-    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper3.png")));
-    zapper_anim.sprites.push_back(SharedPtr<Texture>(renderer->loadTexture("zapper4.png")));
+    zapper_anim.sprites.push_back(renderer->loadTexture("zapper1.png"));
+    zapper_anim.sprites.push_back(renderer->loadTexture("zapper2.png"));
+    zapper_anim.sprites.push_back(renderer->loadTexture("zapper3.png"));
+    zapper_anim.sprites.push_back(renderer->loadTexture("zapper4.png"));
 
 
     zapper.addComponent(RENDERCOMPONENT, 
-        makeShared<RenderComponent2D>(zapper.getWorldTransformID(), renderer, zapper_anim.sprites[0]));
+        renderer->makeRenderComponent(zapper.getWorldTransformID(), zapper_anim.sprites[0]));
 
     zapper.addComponent(ANIMATOR, 
-        makeShared<Animator2D>(
-            renderer, zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT)->getRenderObj(), &zapper_anim));
+        makeShared<Animator2D>(zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper_anim));
 
     // zapper.localTransform().position = Vector2<int>(50, 100);
     zapper.localTransform().position = Vector2<int>(400, 220);
 
 
-    zapper2_anim.sprite_sheet = SharedPtr<Texture>(renderer->loadTexture("zapper.png"));
+    zapper2_anim.sprite_sheet = renderer->loadTexture("zapper.png");
     //std::cout << "Zapper sheet is " << zapper2_anim.sprite_sheet->width << " by " << zapper2_anim.sprite_sheet->height << std::endl;
     zapper2_anim.rows = 2;
     zapper2_anim.columns = 2;
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
     zapper2.addComponent(RENDERCOMPONENT, 
-        makeShared<RenderComponent2D>(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet));
+        renderer->makeRenderComponent(zapper2.getWorldTransformID(), zapper2_anim.sprite_sheet));
 
     zapper2.addComponent(ANIMATOR, 
         makeShared<AnimatorSheet>(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper2_anim));
@@ -107,7 +105,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     // Physics
     // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getWorldTransformID());
-    spikerb = engine.getPhysWorld()->genRigidbody(spike.getWorldTransformID());
+    spikerb = engine.getPhysWorld()->makeRigidbody(spike.getWorldTransformID());
     spike.addComponent(RIGIDBODY, spikerb);
 
     root.updateAllWorldTransforms();
@@ -237,7 +235,7 @@ void RandomDemo::update(tD_delta delta) {
         clouds.emplace_back(engine.getTransformList());
         EntityNode2D *cloud = &(clouds.back());
         cloud->addComponent(RENDERCOMPONENT, 
-            makeShared<RenderComponent2D>(cloud->getWorldTransformID(), engine.getRenderer(), cloud_sprite));
+            engine.getRenderer()->makeRenderComponent(cloud->getWorldTransformID(), cloud_sprite));
         cloud->worldTransform().position = Input::touch_pos;
         cloud->worldTransform().scale = Vector2<float>(0.1f, 0.1f);
         spike.addChild(cloud);

@@ -29,13 +29,13 @@ namespace Diamond {
         SDLTexture(SDL_Texture *texture, int width, int height);
         ~SDLTexture();
 
-        int getWidth() const { return width; }
+        int getWidth() const override { return width; }
 
-        int getHeight() const { return height; }
+        int getHeight() const override { return height; }
 
-        RGBA getColor() const { return color; }
+        RGBA getColor() const override { return color; }
 
-        void setColor(RGBA color);
+        void setColor(RGBA color) override;
 
     private:
         int16_t width, height;

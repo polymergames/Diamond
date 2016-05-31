@@ -26,7 +26,7 @@ Diamond::SDLTexture::~SDLTexture() {
 }
 
 void Diamond::SDLTexture::setColor(Diamond::RGBA color) {
-    Texture::setColor(color);
+    this->color = color;
     SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
     SDL_SetTextureAlphaMod(texture, color.a);
 }
