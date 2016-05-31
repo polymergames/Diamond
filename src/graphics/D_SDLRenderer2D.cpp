@@ -17,8 +17,9 @@
 #include "D_SDLRenderer2D.h"
 
 #include <iostream>
-#include "D_Log.h"
 #include "SDL_image.h"
+#include "D_Log.h"
+#include "D_SDLRenderComponent2D.h"
 #include "D_SDLTexture.h"
 
 
@@ -70,11 +71,10 @@ void Diamond::SDLRenderer2D::renderAll() {
     SDL_RenderClear(m_renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = m_render_objects.begin(); i != m_render_objects.end(); ++i) {
         //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
-        const Transform2<tDrender_pos, tDrender_rot> &transform = m_transform_list[(*i).getTransformID()];
+        const Transform2<tSDLrender_pos, tSDLrender_rot> &transform = m_transform_list[(*i).getTransformID()];
 
-        SDL_Point pivot = (*i).getSDLPivot();
-
-        SDL_Rect clip = (*i).getClip();
+        SDL_Point pivot = (*i).pivot();
+        SDL_Rect clip = (*i).clip();
 
         SDL_Rect render_rect = { 
             transform.position.x - pivot.x, // render position x
@@ -85,7 +85,7 @@ void Diamond::SDLRenderer2D::renderAll() {
 
         SDL_RenderCopyEx(
             m_renderer, // The SDL backend renderer for this SDL instance.
-            (*i).getTexture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
+            (*i).texture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
             &clip, // source rect
             &render_rect, // destination rect
             transform.rotation, // rotation for destination rect in degrees
@@ -131,18 +131,16 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::st
     return makeShared<SDLTexture>(texture, width, height);
 }
 
-Diamond::RenderObj2D *Diamond::SDLRenderer2D::getRenderObj(renderobj_id render_obj) {
-    return &m_render_objects[render_obj];
-}
+Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
+    transform2_id transform,
+    const SharedPtr<const Texture> &texture,
+    const Vector2<tD_pos> &pivot
+    ) {
+    SDLrenderobj_id robj = m_render_objects.emplace(
+        transform, std::dynamic_pointer_cast<const SDLTexture>(texture), pivot
+    );
 
-renderobj_id Diamond::SDLRenderer2D::genRenderObj(transform2_id trans,
-                                                  const SharedPtr<const Texture> &texture,
-                                                  const Vector2<tDrender_pos> &pivot) {
-    return m_render_objects.emplace_back(trans, texture.get(), pivot);
-}
-
-void Diamond::SDLRenderer2D::freeRenderObj(renderobj_id render_obj) {
-    m_render_objects.erase(render_obj);
+    return makeShared<SDLRenderComponent2D>(m_render_objects, robj);
 }
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {

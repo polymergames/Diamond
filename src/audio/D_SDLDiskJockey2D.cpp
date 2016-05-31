@@ -43,7 +43,7 @@ Diamond::SharedPtr<Diamond::Sound2D> Diamond::SDLDiskJockey2D::loadSound(std::st
         Log::log("Failed to load sound " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
-    return SharedPtr<Sound2D>(new SDLSound2D(sound));
+    return makeShared<SDLSound2D>(sound);
 }
 
 Diamond::SharedPtr<Diamond::Music> Diamond::SDLDiskJockey2D::loadMusic(std::string path) {
@@ -52,7 +52,7 @@ Diamond::SharedPtr<Diamond::Music> Diamond::SDLDiskJockey2D::loadMusic(std::stri
         Log::log("Failed to load music " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
-    return SharedPtr<Music>(new SDLMusic(music));
+    return makeShared<SDLMusic>(music));
 }
 
 int Diamond::SDLDiskJockey2D::getMaxVolume() const {

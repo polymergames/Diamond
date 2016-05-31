@@ -69,7 +69,7 @@ namespace Diamond {
 
 
     // TODO: get rid of dynamic allocation, in this and other classes, and just return IDs
-    // (or ID containers) ex. in genRigidbody, etc.
+    // (or ID containers) ex. in makeRigidbody, etc.
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
         QuantumWorld2D(TransformList &transform_list) 
@@ -103,7 +103,7 @@ namespace Diamond {
         }
         
 
-        SharedPtr<Rigidbody2D> genRigidbody(transform2_id transform) override {
+        SharedPtr<Rigidbody2D> makeRigidbody(transform2_id transform) override {
             QuantumBody2D *body = new QuantumBody2D(&m_world);
 
             // Add to rigibody-entity pairs so they can be synchronized
@@ -118,11 +118,11 @@ namespace Diamond {
         }
         
         
-        SharedPtr<AABBCollider2D> genAABBCollider(const SharedPtr<Rigidbody2D> &body,
-                                                  void *parent,
-                                                  const std::function<void(void *other)> &onCollision,
-                                                  const Vector2<tD_pos> &dims,
-                                                  const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) override {
+        SharedPtr<AABBCollider2D> makeAABBCollider(const SharedPtr<Rigidbody2D> &body,
+                                                   void *parent,
+                                                   const std::function<void(void *other)> &onCollision,
+                                                   const Vector2<tD_pos> &dims,
+                                                   const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) override {
             const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
             if (qbody) {
                 collider2_id col = m_world.genCollider<Quantum2D::AABBCollider2D>(qbody->getID(), parent, onCollision, dims, origin);
@@ -133,11 +133,11 @@ namespace Diamond {
             return nullptr;
         }
         
-        SharedPtr<CircleCollider> genCircleCollider(const SharedPtr<Rigidbody2D> &body,
-                                                    void *parent,
-                                                    const std::function<void(void *other)> &onCollision,
-                                                    tD_pos radius,
-                                                    const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) override {
+        SharedPtr<CircleCollider> makeCircleCollider(const SharedPtr<Rigidbody2D> &body,
+                                                     void *parent,
+                                                     const std::function<void(void *other)> &onCollision,
+                                                     tD_pos radius,
+                                                     const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) override {
             const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
             if (qbody) {
                 collider2_id col = m_world.genCollider<Quantum2D::CircleCollider>(qbody->getID(), parent, onCollision, radius, center);

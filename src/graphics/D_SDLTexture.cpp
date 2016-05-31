@@ -16,7 +16,8 @@
 
 #include "D_SDLTexture.h"
 
-Diamond::SDLTexture::SDLTexture(SDL_Texture *texture, int width, int height) : Texture(width, height), texture(texture) {
+Diamond::SDLTexture::SDLTexture(SDL_Texture *texture, int width, int height) 
+    : texture(texture), width(width), height(height), color({ 255, 255, 255, 255 }) {
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 }
 

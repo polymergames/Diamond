@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include "D_Config.h"
-#include "D_RenderObj2D.h"
+#include "D_RenderComponent2D.h"
 #include "D_Texture.h"
 #include "D_typedefs.h"
 
@@ -36,15 +36,17 @@ namespace Diamond {
 
         virtual Diamond::Vector2<int> getScreenResolution() const = 0;
 
+        /**
+         Loads an image file as a texture.
+         Returns nullptr if texture failed to load.
+        */
         virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
-        
-        virtual RenderObj2D *getRenderObj(renderobj_id render_obj) = 0;
 
-        virtual renderobj_id genRenderObj(transform2_id trans, 
-                                          const SharedPtr<const Texture> &texture,
-                                          const Vector2<tDrender_pos> &pivot = Vector2<tDrender_pos>(0, 0)) = 0;
-
-        virtual void freeRenderObj(renderobj_id render_obj) = 0;
+        virtual SharedPtr<RenderComponent2D> makeRenderComponent(
+            transform2_id transform, 
+            const SharedPtr<const Texture> &texture,
+            const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
+        ) = 0;
     };
 }
 

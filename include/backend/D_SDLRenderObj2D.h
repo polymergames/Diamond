@@ -19,73 +19,52 @@
 
 #include "SDL.h"
 
-#include "D_RenderObj2D.h"
+#include "duVector2.h"
 #include "D_SDLTexture.h"
+#include "D_SDLtypedefs.h"
 
 namespace Diamond {
-    class SDLRenderObj2D : public RenderObj2D {
+    class SDLRenderObj2D {
     public:
         SDLRenderObj2D(transform2_id transform,
-                       const Texture *texture, 
-                       const Vector2<tDrender_pos> &pivot)
-            : transform(transform), texture(dynamic_cast<const SDLTexture*>(texture)), flip(SDL_FLIP_NONE) {
-            this->pivot.x = pivot.x;
-            this->pivot.y = pivot.y;
-            clip.x = 0;
-            clip.y = 0;
-            clip.w = texture->getWidth();
-            clip.h = texture->getHeight();
+                       const SharedPtr<const SDLTexture> &texture,
+                       const Vector2<tSDLrender_pos> &pivot)
+            : m_transform(transform), m_texture(texture), m_flip(SDL_FLIP_NONE) {
+            m_pivot.x = pivot.x;
+            m_pivot.y = pivot.y;
+            m_clip.x = 0;
+            m_clip.y = 0;
+            m_clip.w = m_texture->getWidth();
+            m_clip.h = m_texture->getHeight();
         }
 
 
-        transform2_id getTransformID() const { return transform; }
+        transform2_id getTransformID() const { return m_transform; }
 
-
-        Vector2<tDrender_pos> getPivot() const override { return Vector2<tDrender_pos>(pivot.x, pivot.y); }
-        void setPivot(const Vector2<tDrender_pos> &newpivot) override { pivot.x = newpivot.x; pivot.y = newpivot.y; }
-        const SDL_Point &getSDLPivot() const { return pivot; }
+        SDL_Point &pivot() { return m_pivot; }
+        const SDL_Point &pivot() const { return m_pivot; }
         
-        
-        const SDLTexture *getTexture() const { return texture; }
-
-        void setTexture(const Texture *texture) override {
-            this->texture = dynamic_cast<const SDLTexture*>(texture);
-        }
+        SharedPtr<const SDLTexture> &texture() { return m_texture; }
+        const SharedPtr<const SDLTexture> &texture() const { return m_texture; }
 
 
-        SDL_RendererFlip getFlip() const { return flip; }
-        void flipX() override { flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_HORIZONTAL); }
-        void flipY() override { flip = (SDL_RendererFlip)(flip ^ SDL_FLIP_VERTICAL); }
+        SDL_RendererFlip getFlip() const { return m_flip; }
+        void flipX() { m_flip = (SDL_RendererFlip)(m_flip ^ SDL_FLIP_HORIZONTAL); }
+        void flipY() { m_flip = (SDL_RendererFlip)(m_flip ^ SDL_FLIP_VERTICAL); }
 
-        int isFlippedX() const override { return flip & SDL_FLIP_HORIZONTAL; }
-        int isFlippedY() const override { return flip & SDL_FLIP_VERTICAL; }
+        int isFlippedX() const { return m_flip & SDL_FLIP_HORIZONTAL; }
+        int isFlippedY() const { return m_flip & SDL_FLIP_VERTICAL; }
 
 
-        const SDL_Rect &getClip() const { return clip; }
-
-        void setClip(int x, int y, int w, int h) override {
-            clip.x = x;
-            clip.y = y;
-            clip.w = w;
-            clip.h = h;
-        }
-
-        void setClip(int x, int y) override {
-            clip.x = x;
-            clip.y = y;
-        }
-
-        void getClipDim(Vector2<int> &dim) const override {
-            dim.x = clip.w;
-            dim.y = clip.h;
-        }
+        SDL_Rect &clip() { return m_clip; }
+        const SDL_Rect &clip() const { return m_clip; }
 
     private:
-        transform2_id transform;
-        SDL_Point pivot;
-        const SDLTexture *texture;
-        SDL_Rect clip;
-        SDL_RendererFlip flip;
+        transform2_id m_transform;
+        SDL_Point m_pivot;
+        SharedPtr<const SDLTexture> m_texture;
+        SDL_Rect m_clip;
+        SDL_RendererFlip m_flip;
     };
 }
 

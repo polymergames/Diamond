@@ -21,8 +21,8 @@
 #include "SDL.h"
 
 #include "D_Renderer2D.h"
-#include "D_SDLRenderObj2D.h"
-#include "duSwapVector.h"
+#include "D_SDLtypedefs.h"
+
 
 namespace Diamond {
     class SDLRenderer2D : public Renderer2D {
@@ -45,33 +45,21 @@ namespace Diamond {
         Vector2<int> getResolution() const override;
 
         Diamond::Vector2<int> getScreenResolution() const override;
-
-        /**
-         Loads an image file as an SDL texture. Caller is responsible for ownership!
-         Returns nullptr if texture failed to load.
-        */
+        
         SharedPtr<Texture> loadTexture(std::string path) override;
-
-        RenderObj2D *getRenderObj(renderobj_id render_obj) override;
         
-        /**
-         Creates and returns id of an SDLRenderObj2D, which is a rendering unit for the render loop.
-        */
-        renderobj_id genRenderObj(transform2_id trans,
-                                  const SharedPtr<const Texture> &texture,
-                                  const Vector2<tDrender_pos> &pivot) override;
-        
-        /**
-         Marks the given id as available for a new SDLRenderObj2D, and removes its currently associated renderobj.
-        */
-        void freeRenderObj(renderobj_id render_obj) override;
+        SharedPtr<RenderComponent2D> makeRenderComponent(
+            transform2_id transform,
+            const SharedPtr<const Texture> &texture,
+            const Vector2<tD_pos> &pivot
+        ) override;
 
     private:
         SDL_Window *m_window;
         SDL_Renderer *m_renderer;
 
         const TransformList &m_transform_list;
-        SwapVector<SDLRenderObj2D> m_render_objects;
+        SDLRenderObjList m_render_objects;
     };
 }
 

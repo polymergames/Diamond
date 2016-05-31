@@ -26,20 +26,21 @@
 // transform typedefs
 using tD_pos =          tD_real;    // position coordinate type
 using tD_rot =          tD_real;    // rotation value type
-using tDrender_pos =    int32_t;    // position coordinate type for rendering
-using tDrender_rot =    float;      // rotation value type for rendering
 
 // ID/index typedefs
-using renderobj_id =    tD_id;      // render object id type
 using transform2_id =   tD_id;      // 2d transform object id type
 
+
 namespace Diamond {
+    // Container for Transforms
+    using TransformList = SparseVector<Transform2<tD_pos, tD_rot> >;
+
+
+    // Smart pointer stuff
+
     template <typename T>
     using SharedPtr =       std::shared_ptr<T>;
 
-    using TransformList =   SparseVector<Transform2<tD_pos, tD_rot> >;
-
-    
     template<typename T, class... Args>
     inline SharedPtr<T> makeShared(Args&&... args) {
         return std::make_shared<T>(std::forward<Args>(args)...);

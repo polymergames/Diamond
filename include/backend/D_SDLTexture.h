@@ -24,13 +24,22 @@
 namespace Diamond {
     class SDLTexture : public Texture {
     public:
-        SDLTexture(SDL_Texture *texture, int width, int height);
+        SDL_Texture *texture;
 
+        SDLTexture(SDL_Texture *texture, int width, int height);
         ~SDLTexture();
+
+        int getWidth() const { return width; }
+
+        int getHeight() const { return height; }
+
+        RGBA getColor() const { return color; }
 
         void setColor(RGBA color);
 
-        SDL_Texture *texture;
+    private:
+        int16_t width, height;
+        RGBA color;
     };
 }
 
