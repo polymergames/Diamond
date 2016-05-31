@@ -21,6 +21,9 @@
 #include "duMath.h" // for deg2rad
 
 
+Diamond::Node2D::Node2D(TransformList &transform_list) 
+    : Node2D(transform_list, transform_list.emplace()) {}
+
 Diamond::Node2D::Node2D(TransformList &transform_list, transform2_id world_transform_id)
     : m_local_transform(), 
       m_transform_list(transform_list),

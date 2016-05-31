@@ -28,6 +28,7 @@ namespace Diamond {
 
     class Node2D {
     public:
+        Node2D(TransformList &transform_list);
         Node2D(TransformList &transform_list, transform2_id world_transform_id);
         virtual ~Node2D() {}
 

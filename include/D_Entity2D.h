@@ -29,6 +29,9 @@ namespace Diamond {
         Entity2D(TransformList &transform_list)
             : m_transform_list(transform_list), m_transform_id(transform_list.emplace()) {}
 
+        Entity2D(TransformList &transform_list, transform2_id transform_id)
+            : m_transform_list(transform_list), m_transform_id(transform_id) {}
+
         // We haven't perfected cloning yet
         // (and we don't plan to, it's creepy)
         Entity2D(const Entity2D&) = delete;

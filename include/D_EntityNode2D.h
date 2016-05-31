@@ -28,7 +28,10 @@ namespace Diamond {
     class EntityNode2D : public Entity, public Node2D {
     public:
         EntityNode2D(TransformList &transform_list)
-            : Node2D(transform_list, transform_list.emplace()) {}
+            : Node2D(transform_list) {}
+
+        EntityNode2D(TransformList &transform_list, transform2_id world_transform_id)
+            : Node2D(transform_list, world_transform_id) {}
 
         EntityNode2D(const EntityNode2D&) = delete;
         EntityNode2D& operator=(const EntityNode2D&) = delete;

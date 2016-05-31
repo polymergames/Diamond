@@ -41,8 +41,8 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     std::cout << "Resolution: " << window.x << " by " << window.y << std::endl;
     std::cout << "Screen resolution: " << screen.x << " by " << screen.y << std::endl;
 
-    spike_sprite = SharedPtr<Texture>(renderer->loadTexture("spike.png"));
-    cloud_sprite = SharedPtr<Texture>(renderer->loadTexture("cloud.png"));
+    spike_sprite = renderer->loadTexture("spike.png");
+    cloud_sprite = renderer->loadTexture("cloud.png");
 
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;
@@ -50,9 +50,9 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
         return;
     }
 
-    //spike.addComponent(new RenderComponent2D(&spike, spike_sprite, 0.1f));
+    //spike.addComponent(makeShared<RenderComponent2D>(&spike, spike_sprite, 0.1f));
     spike.addComponent(RENDERCOMPONENT, 
-        new RenderComponent2D(spike.getWorldTransformID(), renderer, spike_sprite));
+        makeShared<RenderComponent2D>(spike.getWorldTransformID(), renderer, spike_sprite));
     // spike.localTransform().position = Vector2<int>(-150, 200);
     spike.localTransform().position = Vector2<int>(-250, 400);
     spike.localTransform().scale = Vector2<float>(0.2f, 0.2f);
@@ -63,7 +63,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     }
 
     spike2.addComponent(RENDERCOMPONENT, 
-        new RenderComponent2D(spike2.getWorldTransformID(), renderer, spike_sprite));
+        makeShared<RenderComponent2D>(spike2.getWorldTransformID(), renderer, spike_sprite));
     spike2.localTransform().position = Vector2<int>(100, 100);
     spike2.localTransform().scale = Vector2<float>(0.1f, 0.1f);
 
@@ -75,10 +75,10 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
 
     zapper.addComponent(RENDERCOMPONENT, 
-        new RenderComponent2D(zapper.getWorldTransformID(), renderer, zapper_anim.sprites[0]));
+        makeShared<RenderComponent2D>(zapper.getWorldTransformID(), renderer, zapper_anim.sprites[0]));
 
     zapper.addComponent(ANIMATOR, 
-        new Animator2D(
+        makeShared<Animator2D>(
             renderer, zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT)->getRenderObj(), &zapper_anim));
 
     // zapper.localTransform().position = Vector2<int>(50, 100);
@@ -92,10 +92,10 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
     zapper2.addComponent(RENDERCOMPONENT, 
-        new RenderComponent2D(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet));
+        makeShared<RenderComponent2D>(zapper2.getWorldTransformID(), renderer, zapper2_anim.sprite_sheet));
 
     zapper2.addComponent(ANIMATOR, 
-        new AnimatorSheet(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper2_anim));
+        makeShared<AnimatorSheet>(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper2_anim));
 
     //zapper2.getComponent<RenderComponent2D>()->setPivot(Vector2<int>(zapper2_anim.sprite_sheet->getWidth() * z2scale / (2 * zapper2_anim.columns), 
     //    zapper2_anim.sprite_sheet->getHeight() * z2scale / (2 * zapper2_anim.rows)));
@@ -108,7 +108,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     // Physics
     // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getWorldTransformID());
     spikerb = engine.getPhysWorld()->genRigidbody(spike.getWorldTransformID());
-    spike.addComponent(spikerb);
+    spike.addComponent(RIGIDBODY, spikerb);
 
     root.updateAllWorldTransforms();
 }
@@ -124,21 +124,21 @@ void RandomDemo::update(tD_delta delta) {
         spike_sprite->setColor(spike_color);
     }
     if (Input::keydown[Input::K_T]) {
-        spike_color = { 255, 255, 255, 255 };
+        spike_color = { 0, 0, 0, 255 };
         spike_sprite->setColor(spike_color);
     }
     if (Input::keyup[Input::K_Y]) {
-        RGBA sc = spike.getComponent<RenderComponent2D>()->getSprite()->getColor();
+        RGBA sc = spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)->getSprite()->getColor();
         sc.a -= 32;
         spike_sprite->setColor(sc);
     }
 
     // Sprite switching
     if (Input::keyup[Input::K_1]) {
-        spike.getComponent<RenderComponent2D>()->setSprite(spike_sprite);
+        spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)->setSprite(spike_sprite);
     }
     if (Input::keyup[Input::K_2]) {
-        spike.getComponent<RenderComponent2D>()->setSprite(cloud_sprite);
+        spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)->setSprite(cloud_sprite);
     }
 
     // Visibility
@@ -161,10 +161,10 @@ void RandomDemo::update(tD_delta delta) {
 
     // Flipping and velocity
     if (Input::keyup[Input::K_DOWN]) {
-        zapper2.getComponent<RenderComponent2D>()->flipX();
+        zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT)->flipX();
     }
     if (Input::keyup[Input::K_UP]) {
-        zapper2.getComponent<RenderComponent2D>()->flipY();
+        zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT)->flipY();
     }
 
     // Zapper movement
@@ -236,9 +236,8 @@ void RandomDemo::update(tD_delta delta) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
         clouds.emplace_back(engine.getTransformList());
         EntityNode2D *cloud = &(clouds.back());
-        cloud->addComponent(
-            new RenderComponent2D(cloud->getWorldTransformID(), engine.getRenderer(), cloud_sprite)
-        );
+        cloud->addComponent(RENDERCOMPONENT, 
+            makeShared<RenderComponent2D>(cloud->getWorldTransformID(), engine.getRenderer(), cloud_sprite));
         cloud->worldTransform().position = Input::touch_pos;
         cloud->worldTransform().scale = Vector2<float>(0.1f, 0.1f);
         spike.addChild(cloud);
