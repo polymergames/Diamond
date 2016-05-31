@@ -20,32 +20,34 @@
 #include <memory>
 #include "D_AnimationSheet.h"
 #include "D_Component.h"
-#include "D_Renderer2D.h"
 #include "D_RenderComponent2D.h"
 
 namespace Diamond {
     class AnimatorSheet : public Component {
     public:
-        AnimatorSheet(Renderer2D *renderer, 
-                      renderobj_id render_obj, 
-                      const AnimationSheet *anim);
-
         AnimatorSheet(const SharedPtr<RenderComponent2D> &rcomp, 
                       const AnimationSheet *anim);
 
 
-        void                    setAnimation(const AnimationSheet *anim);
-        const AnimationSheet    *getAnimation() const { return m_anim; }
-        void                    update(tD_delta delta) override;
+        const AnimationSheet            *getAnimation() const { return m_anim; }
+
+        void                            setAnimation(const AnimationSheet *anim);
+
+
+        const SharedPtr<RenderComponent2D>  &getRenderComponent() const { return m_render_comp; }
+
+        void                                setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp);
+        
+
+        void                            update(tD_delta delta) override;
 
     private:
-        Renderer2D              *m_renderer;
-        renderobj_id            m_render_obj;
-        const AnimationSheet    *m_anim;
+        SharedPtr<RenderComponent2D>    m_render_comp;
+        const AnimationSheet            *m_anim;
 
-        int16_t                 m_frame_width, m_frame_height;
-        tD_index                m_cur_frame;
-        tD_delta                m_elapsed;
+        int16_t                         m_frame_width, m_frame_height;
+        tD_index                        m_cur_frame;
+        tD_delta                        m_elapsed;
 
         void initClip();
     };

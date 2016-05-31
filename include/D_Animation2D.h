@@ -17,7 +17,6 @@
 #ifndef D_ANIMATION2D_H
 #define D_ANIMATION2D_H
 
-#include <memory>
 #include <vector>
 
 #include "D_typedefs.h"
@@ -25,12 +24,12 @@
 
 namespace Diamond {
     struct Animation2D {
-        std::vector<std::shared_ptr<Texture>>   sprites;
+        std::vector<SharedPtr<Texture> > sprites;
 
         /**
          The length of time in type of tD_delta of one animation frame
         */
-        tD_delta                                frame_length = 100;
+        tD_delta frame_length = 100;
     };
 }
 

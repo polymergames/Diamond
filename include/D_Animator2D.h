@@ -19,32 +19,34 @@
 
 #include "D_Animation2D.h"
 #include "D_Component.h"
-#include "D_Renderer2D.h"
 #include "D_RenderComponent2D.h"
 
 namespace Diamond {
     class Animator2D : public Component {
     public:
-        Animator2D(Renderer2D *renderer, 
-                   renderobj_id render_obj, 
-                   const Animation2D *anim);
-
         Animator2D(const SharedPtr<RenderComponent2D> &rcomp, 
                    const Animation2D *anim);
+        
+
+        const Animation2D                   *getAnimation() const { return m_anim; }
+
+        void                                setAnimation(const Animation2D *anim);
+        
+
+        const SharedPtr<RenderComponent2D>  &getRenderComponent() const { return m_render_comp; }
+
+        void                                setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp);
 
 
-        void                setAnimation(const Animation2D *anim);
-        const Animation2D   *getAnimation() const { return m_anim; }
-        void                update(tD_delta delta) override;
+        void                                update(tD_delta delta) override;
 
 
     private:
-        Renderer2D          *m_renderer;
-        renderobj_id        m_render_obj;
-        const Animation2D   *m_anim;
+        SharedPtr<RenderComponent2D>        m_render_comp;
+        const Animation2D                   *m_anim;
 
-        tD_index            m_cur_frame;
-        tD_delta            m_elapsed;
+        tD_index                            m_cur_frame;
+        tD_delta                            m_elapsed;
     };
 }
 

@@ -17,22 +17,20 @@
 #ifndef D_ANIMATION_SHEET_H
 #define D_ANIMATION_SHEET_H
 
-#include <memory>
-
 #include "D_typedefs.h"
 #include "D_Texture.h"
 
 namespace Diamond {
     struct AnimationSheet {
-        std::shared_ptr<Texture>    sprite_sheet;
+        SharedPtr<Texture> sprite_sheet;
 
         /**
          The length of time in type of tD_delta of one animation frame
         */
-        tD_delta                    frame_length = 100;
+        tD_delta    frame_length = 100;
 
-        uint16_t                    num_frames = 1;
-        uint8_t                     rows = 1, columns = 1;
+        uint16_t    num_frames = 1;
+        uint8_t     rows = 1, columns = 1;
     };
 }
 

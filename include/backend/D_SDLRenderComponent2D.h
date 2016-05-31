@@ -45,12 +45,12 @@ namespace Diamond {
             return Vector2<tD_pos>(clip.x, clip.y);
         }
 
-        Vector2<tD_pos> getClipDim() const override {
+        Vector2<int> getClipDim() const override {
             SDL_Rect &clip = m_renderObjList[m_renderObj].clip();
-            return Vector2<tD_pos>(clip.w, clip.h);
+            return Vector2<int>(clip.w, clip.h);
         }
 
-        void setClip(tD_pos x, tD_pos y, tD_pos w, tD_pos h) override {
+        void setClip(tD_pos x, tD_pos y, int w, int h) override {
             SDL_Rect &clip = m_renderObjList[m_renderObj].clip();
             clip.x = x;
             clip.y = y;
@@ -64,7 +64,7 @@ namespace Diamond {
             clip.y = y;
         }
 
-        void setClipDim(tD_pos w, tD_pos h) override {
+        void setClipDim(int w, int h) override {
             SDL_Rect &clip = m_renderObjList[m_renderObj].clip();
             clip.w = w;
             clip.h = h;
@@ -76,15 +76,15 @@ namespace Diamond {
         }
 
         void setPivot(const Vector2<tD_pos> &newpivot) override {
-            m_renderObjList[m_renderObj].pivot() = { newpivot.x, newpivot.y };
+            m_renderObjList[m_renderObj].pivot() = { (int)newpivot.x, (int)newpivot.y };
         }
 
 
         void flipX() override { m_renderObjList[m_renderObj].flipX(); }
         void flipY() override { m_renderObjList[m_renderObj].flipY(); }
 
-        bool isFlippedX() const override { m_renderObjList[m_renderObj].isFlippedX(); }
-        bool isFlippedY() const override { m_renderObjList[m_renderObj].isFlippedY(); }
+        bool isFlippedX() const override { return m_renderObjList[m_renderObj].isFlippedX(); }
+        bool isFlippedY() const override { return m_renderObjList[m_renderObj].isFlippedY(); }
 
     private:
         SDLrenderobj_id m_renderObj;

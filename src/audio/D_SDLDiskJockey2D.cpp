@@ -52,7 +52,7 @@ Diamond::SharedPtr<Diamond::Music> Diamond::SDLDiskJockey2D::loadMusic(std::stri
         Log::log("Failed to load music " + path + "! SDL_mixer Error: " + std::string(Mix_GetError()));
         return nullptr;
     }
-    return makeShared<SDLMusic>(music));
+    return makeShared<SDLMusic>(music);
 }
 
 int Diamond::SDLDiskJockey2D::getMaxVolume() const {

@@ -33,11 +33,11 @@ namespace Diamond {
 
 
         virtual Vector2<tD_pos>             getClipPos() const = 0;
-        virtual Vector2<tD_pos>             getClipDim() const = 0;
+        virtual Vector2<int>                getClipDim() const = 0;
 
-        virtual void                        setClip(tD_pos x, tD_pos y, tD_pos w, tD_pos h) = 0;
+        virtual void                        setClip(tD_pos x, tD_pos y, int w, int h) = 0;
         virtual void                        setClipPos(tD_pos x, tD_pos y) = 0;
-        virtual void                        setClipDim(tD_pos w, tD_pos h) = 0;
+        virtual void                        setClipDim(int w, int h) = 0;
 
 
         virtual Vector2<tD_pos>             getPivot() const = 0;
