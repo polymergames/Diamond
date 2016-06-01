@@ -26,10 +26,13 @@ namespace Diamond {
     public:
         virtual ~Rigidbody2D() {}
 
-        virtual Vector2<tD_pos> getPosition() = 0;
+        virtual Vector2<tD_pos> getPosition() const = 0;
         virtual void setPosition(const Vector2<tD_pos> &newpos) = 0;
 
-        virtual Vector2<tD_pos> getVelocity() = 0;
+        virtual float getRotation() const = 0;
+        virtual void setRotation(tD_rot newrot) = 0;
+
+        virtual Vector2<tD_pos> getVelocity() const = 0;
         virtual void setVelocity(const Vector2<tD_pos> &newvel) = 0;
     };
 }

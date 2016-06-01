@@ -157,9 +157,10 @@ void CollideDemo::quit() {
     //
 }
 
-// TODO: can't seem to modify other
 void CollideDemo::m_onCollision(void *other) {
-    std::cout << "Hit by " << ((Entity2D*)other)->getTransformPtr() << "!" << std::endl;
-    ((Entity2D*)other)->transform().position.x += 20;
+    SharedPtr<Rigidbody2D> rbody = ((Entity2D*)other)->getComponent<Rigidbody2D>(RIGIDBODY);
+    if (rbody) {
+        rbody->setRotation(rbody->getRotation() + 20);
+    }
 }
 
