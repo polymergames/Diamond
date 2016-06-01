@@ -36,6 +36,15 @@ namespace Diamond {
         Entity(const Entity&) = delete;
         Entity& operator=(const Entity&) = delete;
 
+        // But moving is OK
+        Entity(Entity &&other) : m_components(std::move(other.m_components)) {}
+        Entity& operator=(Entity &&other) {
+            if (this != &other) {
+                m_components = std::move(other.m_components);
+            }
+            return *this;
+        }
+
 
         /**
          Call this once a frame to update all of this entity's components.
