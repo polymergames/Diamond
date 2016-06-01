@@ -32,16 +32,16 @@ private:
 
 int main(int argc, char *argv[]) {
     Diamond::Config config;
-    Diamond::Engine2D engine;
-    
     config.vsync = true;
     //config.bg_color = { 0, 128, 255, 255 };
 
     // Thank you Joey de Vries for this color :P
     config.bg_color = { 50, 76, 76, 255 };
     
+    bool success;
+    Diamond::Engine2D engine(config, success);
     
-    if (engine.init(config)) {
+    if (success) {
         {
             RandomDemo demo(engine);
             engine.launch(demo);
@@ -51,6 +51,9 @@ int main(int argc, char *argv[]) {
             CollideDemo demo(engine);
             engine.launch(demo);
         }
+    }
+    else {
+        std::cout << "Diamond Engine failed to initialize!" << std::endl;
     }
     
 	return 0;

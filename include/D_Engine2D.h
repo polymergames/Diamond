@@ -21,6 +21,7 @@
 #include "SDL.h" // Has to be included with game's main function for SDL_main to work. TODO: include for iOS as well?
 #endif
 
+#include <fstream>
 #include "D_Component.h"
 #include "D_Config.h"
 #include "D_DiskJockey2D.h"
@@ -35,10 +36,8 @@ namespace Diamond {
 
     class Engine2D {
     public:
-        Engine2D();
+        Engine2D(const Config &config, bool &success);
         ~Engine2D();
-
-        virtual bool        init(const Config &config);
 
         virtual void        launch(Game2D &game);
 
@@ -73,6 +72,7 @@ namespace Diamond {
         PhysicsWorld2D          *phys_world;
 
         TransformList           transform_list;
+        std::ofstream           logstream;
 
 
         virtual bool initSDL();

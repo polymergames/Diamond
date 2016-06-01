@@ -21,7 +21,7 @@
 
 namespace Diamond {
     namespace Math {
-        const float PI = 3.14159265;
+        const float PI = 3.14159265f;
         const float RAD2DEG = 180 / PI;
         const float DEG2RAD = PI / 180;
 

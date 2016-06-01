@@ -19,7 +19,7 @@
 #include <iostream>
 #include "D_Game2D.h"
 #include "D_Log.h"
-#include "D_FileLogger.h"
+#include "D_StreamLogger.h"
 
 // SDL subsystems
 #include "D_SDLDiskJockey2D.h"
@@ -30,28 +30,16 @@
 // Quantum2D
 #include "D_QuantumWorld2D.h"
 
-Diamond::Engine2D::Engine2D() 
+Diamond::Engine2D::Engine2D(const Config &config, bool &success)
     : is_running(false), 
+      config(config), 
       renderer(nullptr), 
       dj(nullptr), 
       timer(nullptr), 
       event_handler(nullptr), 
-      phys_world(nullptr) {}
+      phys_world(nullptr) {
 
-
-Diamond::Engine2D::~Engine2D() {
-    Log::log("Diamond systems shutting down.");
-    delete renderer;
-    delete dj;
-    delete timer;
-    delete event_handler;
-    delete phys_world;
-}
-
-
-bool Diamond::Engine2D::init(const Config &config) {
-    this->config = config;
-    bool success = false;
+    success = false;
 
 #if defined _WIN32
     success = initWindows();
@@ -62,18 +50,25 @@ bool Diamond::Engine2D::init(const Config &config) {
 #elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
     success = initIOS();
 #else
-    std::cout << "Platform unsupported!" << std::endl;
-    return false;
+    Log::log("Platform unsupported!");
+    success = false;
 #endif
 
-    if (success) {
+    if (success)
         Log::log("Diamond systems are online and ready to roll.");
-    }
-    else {
+    else
         Log::log("We have a problem sir.");
-    }
+}
 
-    return success;
+
+Diamond::Engine2D::~Engine2D() {
+    Log::log("Diamond systems shutting down.");
+    delete renderer;
+    delete dj;
+    delete timer;
+    delete event_handler;
+    delete phys_world;
+    logstream.close();
 }
 
 void Diamond::Engine2D::launch(Game2D &game) {
@@ -151,7 +146,12 @@ bool Diamond::Engine2D::initQuantum() {
 }
 
 bool Diamond::Engine2D::initWindows() {
-    Log::setLogger(new FileLogger(config.game_name + ".log"));
+    logstream.open(config.game_name + ".log", std::ios::app);
+    if (!logstream.is_open())
+        std::cout << "Logger ERROR: Failed to open log file " << config.game_name + ".log" << "!" << std::endl;
+    else
+        Log::setLogger(new StreamLogger(logstream));
+
     return initSDL() && initQuantum();
 }
 
