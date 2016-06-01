@@ -26,10 +26,10 @@
 namespace Diamond {
     class SDLRenderObj2D {
     public:
-        SDLRenderObj2D(transform2_id transform,
+        SDLRenderObj2D(const DTransform2 &transform,
                        const SharedPtr<const SDLTexture> &texture,
                        const Vector2<tSDLrender_pos> &pivot)
-            : m_transform(transform), m_texture(texture), m_flip(SDL_FLIP_NONE) {
+            : m_transform(&transform), m_texture(texture), m_flip(SDL_FLIP_NONE) {
             m_pivot.x = pivot.x;
             m_pivot.y = pivot.y;
             m_clip.x = 0;
@@ -39,7 +39,7 @@ namespace Diamond {
         }
 
 
-        transform2_id getTransformID() const { return m_transform; }
+        const DTransform2 &getTransform() const { return *m_transform; }
 
         SDL_Point &pivot() { return m_pivot; }
         const SDL_Point &pivot() const { return m_pivot; }
@@ -60,7 +60,7 @@ namespace Diamond {
         const SDL_Rect &clip() const { return m_clip; }
 
     private:
-        transform2_id m_transform;
+        const DTransform2 *m_transform;
         SDL_Point m_pivot;
         SharedPtr<const SDLTexture> m_texture;
         SDL_Rect m_clip;

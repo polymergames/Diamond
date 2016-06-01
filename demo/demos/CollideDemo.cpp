@@ -21,10 +21,10 @@ using namespace Diamond;
 
 CollideDemo::CollideDemo(Engine2D &engine, float movespeed) 
     : Game2D(engine), movespeed(movespeed), 
-      spike1(engine.getTransformList()),
-      spike2(engine.getTransformList()), 
-      zapper1(engine.getTransformList()), 
-      zapper2(engine.getTransformList()) {
+      spike1(engine.makeTransform()),
+      spike2(engine.makeTransform()), 
+      zapper1(engine.makeTransform()), 
+      zapper2(engine.makeTransform()) {
     Renderer2D *renderer = engine.getRenderer();
 
     SharedPtr<Texture> spike_sprite = renderer->loadTexture("spike.png");
@@ -36,12 +36,12 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     }
 
     spike1.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(spike1.getTransformID(), spike_sprite));
+        renderer->makeRenderComponent(spike1.transform(), spike_sprite));
     spike1.transform().position = Vector2<int>(500, 400);
     spike1.transform().scale = Vector2<float>(0.1f, 0.1f);
 
     spike2.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(spike2.getTransformID(), spike_sprite));
+        renderer->makeRenderComponent(spike2.transform(), spike_sprite));
     spike2.transform().position = Vector2<int>(900, 200);
     spike2.transform().scale = Vector2<float>(0.1f, 0.1f);
 
@@ -51,14 +51,14 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     zapper_anim.num_frames = 4;
 
     zapper1.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(zapper1.getTransformID(), spike_sprite));
+        renderer->makeRenderComponent(zapper1.transform(), spike_sprite));
     zapper1.addComponent(ANIMATOR, 
         makeShared<AnimatorSheet>(zapper1.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper_anim));
     zapper1.transform().position = Vector2<int>(300, 100);
     zapper1.transform().scale = Vector2<float>(0.5f, 0.5f);
 
     zapper2.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(zapper2.getTransformID(), spike_sprite));
+        renderer->makeRenderComponent(zapper2.transform(), spike_sprite));
     zapper2.addComponent(ANIMATOR, 
         makeShared<AnimatorSheet>(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper_anim));
     zapper2.transform().position = Vector2<int>(700, 300);
@@ -68,7 +68,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     PhysicsWorld2D *physworld = engine.getPhysWorld();
     std::function<void(void*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
 
-    SharedPtr<Rigidbody2D> rbody = physworld->makeRigidbody(spike1.getTransformID());
+    SharedPtr<Rigidbody2D> rbody = physworld->makeRigidbody(spike1.transform());
     spike1.addComponent(RIGIDBODY, rbody);
 
     float scale = spike1.transform().scale.x;
@@ -76,14 +76,14 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     spike1.addComponent(COLLIDER, 
         physworld->makeCircleCollider(rbody, &spike1, callback, radius, Vector2<tD_pos>(radius, radius)));
 
-    rbody = physworld->makeRigidbody(spike2.getTransformID());
+    rbody = physworld->makeRigidbody(spike2.transform());
     spike2.addComponent(RIGIDBODY, rbody);
     scale = spike2.transform().scale.x;
     radius = spike_sprite->getWidth() * scale / 2.0;
     spike2.addComponent(COLLIDER, 
         physworld->makeCircleCollider(rbody, &spike2, callback, radius, Vector2<tD_pos>(radius, radius)));
 
-    rbody = physworld->makeRigidbody(zapper1.getTransformID());
+    rbody = physworld->makeRigidbody(zapper1.transform());
     zapper1.addComponent(RIGIDBODY, rbody);
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
     scale = zapper1.transform().scale.x;
@@ -92,7 +92,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
         Vector2<tD_pos>(partial_width * scale, zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale),
         Vector2<tD_pos>(2 * partial_width * scale, 0)));
 
-    rbody = physworld->makeRigidbody(zapper2.getTransformID());
+    rbody = physworld->makeRigidbody(zapper2.transform());
     zapper2.addComponent(RIGIDBODY, rbody);
     scale = zapper2.transform().scale.x;
     zapper2.addComponent(COLLIDER,
@@ -157,7 +157,9 @@ void CollideDemo::quit() {
     //
 }
 
+// TODO: can't seem to modify other
 void CollideDemo::m_onCollision(void *other) {
-    std::cout << "Hit by " << ((Entity2D*)other)->getTransformID() << "!" << std::endl;
+    std::cout << "Hit by " << ((Entity2D*)other)->getTransformPtr() << "!" << std::endl;
+    ((Entity2D*)other)->transform().position.x += 20;
 }
 

@@ -18,6 +18,7 @@
 #define D_ENTITY2D_H
 
 #include "D_Entity.h"
+#include "D_Transform2.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
@@ -26,28 +27,18 @@ namespace Diamond {
     */
     class Entity2D : public Entity {
     public:
-        Entity2D(TransformList &transform_list)
-            : m_transform_list(transform_list), m_transform_id(transform_list.emplace()) {}
+        Entity2D(const Transform2Ptr &transform) 
+            : m_transform(transform) {}
 
-        Entity2D(TransformList &transform_list, transform2_id transform_id)
-            : m_transform_list(transform_list), m_transform_id(transform_id) {}
+        DTransform2 &transform() { return *m_transform; }
+        const DTransform2 &transform() const { return *m_transform; }
 
-        // We haven't perfected cloning yet
-        // (and we don't plan to, it's creepy)
-        Entity2D(const Entity2D&) = delete;
-        Entity2D& operator=(const Entity2D&) = delete;
-
-        virtual ~Entity2D() { m_transform_list.erase(m_transform_id); }
-
-
-        Transform2<tD_pos, tD_rot> &transform() { return m_transform_list[m_transform_id]; }
-        const Transform2<tD_pos, tD_rot> &transform() const { return m_transform_list[m_transform_id]; }
-
-        transform2_id getTransformID() const { return m_transform_id; }
+        const Transform2Ptr &getTransformPtr() const {
+            return m_transform;
+        }
 
     protected:
-        TransformList &m_transform_list;
-        transform2_id m_transform_id;
+        Transform2Ptr m_transform;
     };
 }
 

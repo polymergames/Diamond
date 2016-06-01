@@ -17,6 +17,7 @@
 #ifndef D_RENDER_COMPONENT_H
 #define D_RENDER_COMPONENT_H
 
+#include "duVector2.h"
 #include "D_Component.h"
 #include "D_Texture.h"
 #include "D_typedefs.h"

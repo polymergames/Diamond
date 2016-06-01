@@ -115,7 +115,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
 
 bool Diamond::Engine2D::initSDL() {
-    renderer = new SDLRenderer2D(transform_list);
+    renderer = new SDLRenderer2D();
     if (!renderer->init(config)) {
         // TODO: Handle renderer initialization failure
         return false;
@@ -136,7 +136,7 @@ bool Diamond::Engine2D::initSDL() {
 }
 
 bool Diamond::Engine2D::initQuantum() {
-    phys_world = new QuantumWorld2D(transform_list);
+    phys_world = new QuantumWorld2D();
     if (!phys_world->init(config)) {
         // TODO: Handle physics initialization failure
         return false;

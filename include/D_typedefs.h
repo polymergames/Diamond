@@ -18,28 +18,17 @@
 #define D_TYPEDEFS_H
 
 #include <memory>
-#include <stdint.h>
-#include "duSparseVector.h"
 #include "duTypedefs.h"
-#include "D_Transform2.h"
 
 // transform typedefs
 using tD_pos =          tD_real;    // position coordinate type
 using tD_rot =          tD_real;    // rotation value type
 
-// ID/index typedefs
-using transform2_id =   tD_id;      // 2d transform object id type
-
 
 namespace Diamond {
-    // Container for Transforms
-    using TransformList = SparseVector<Transform2<tD_pos, tD_rot> >;
-
-
     // Smart pointer stuff
-
     template <typename T>
-    using SharedPtr =       std::shared_ptr<T>;
+    using SharedPtr =   std::shared_ptr<T>;
 
     template<typename T, class... Args>
     inline SharedPtr<T> makeShared(Args&&... args) {
@@ -48,6 +37,14 @@ namespace Diamond {
 
     // TODO: create a allocateShared function that uses std::allocate_shared and takes an Allocator argument. 
     // This can be used by Diamond systems with allocators for memory management.
+
+
+    // Transform typedefs for convenience
+    template <typename P, typename R, typename S> class Transform2;
+
+    using DTransform2 =         Transform2<tD_pos, tD_rot, tD_real>;
+    using Transform2Ptr =       SharedPtr<DTransform2 >;
+    using ConstTransform2Ptr =  SharedPtr<const DTransform2 >;
 }
 
 #endif // D_TYPEDEFS_H

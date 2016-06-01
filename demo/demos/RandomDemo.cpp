@@ -22,11 +22,11 @@ using namespace Diamond;
 
 RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float growspeed) 
     : Game2D(engine), movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
-      root(engine.getTransformList()), 
-      spike(engine.getTransformList()), 
-      spike2(engine.getTransformList()), 
-      zapper(engine.getTransformList()), 
-      zapper2(engine.getTransformList()) {
+      root(engine.makeTransform()), 
+      spike(engine.makeTransform()), 
+      spike2(engine.makeTransform()), 
+      zapper(engine.makeTransform()), 
+      zapper2(engine.makeTransform()) {
 
     root.addChild(spike2);
     root.addChild(zapper2);
@@ -51,7 +51,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     //spike.addComponent(makeShared<RenderComponent2D>(&spike, spike_sprite, 0.1f));
     spike.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(spike.getWorldTransformID(), spike_sprite));
+        renderer->makeRenderComponent(spike.worldTransform(), spike_sprite));
     // spike.localTransform().position = Vector2<int>(-150, 200);
     spike.localTransform().position = Vector2<int>(-250, 400);
     spike.localTransform().scale = Vector2<float>(0.2f, 0.2f);
@@ -62,7 +62,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     }
 
     spike2.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(spike2.getWorldTransformID(), spike_sprite));
+        renderer->makeRenderComponent(spike2.worldTransform(), spike_sprite));
     spike2.localTransform().position = Vector2<int>(100, 100);
     spike2.localTransform().scale = Vector2<float>(0.1f, 0.1f);
 
@@ -74,7 +74,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
 
     zapper.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(zapper.getWorldTransformID(), zapper_anim.sprites[0]));
+        renderer->makeRenderComponent(zapper.worldTransform(), zapper_anim.sprites[0]));
 
     zapper.addComponent(ANIMATOR, 
         makeShared<Animator2D>(zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper_anim));
@@ -90,7 +90,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
     zapper2.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(zapper2.getWorldTransformID(), zapper2_anim.sprite_sheet));
+        renderer->makeRenderComponent(zapper2.worldTransform(), zapper2_anim.sprite_sheet));
 
     zapper2.addComponent(ANIMATOR, 
         makeShared<AnimatorSheet>(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper2_anim));
@@ -104,8 +104,8 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     haha = engine.getDJ()->loadSound("haha.wav");
 
     // Physics
-    // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.getWorldTransformID());
-    spikerb = engine.getPhysWorld()->makeRigidbody(spike.getWorldTransformID());
+    // body = Quantum2D::QuantumWorld2D::genRigidbody(spike.worldTransform());
+    spikerb = engine.getPhysWorld()->makeRigidbody(spike.worldTransform());
     spike.addComponent(RIGIDBODY, spikerb);
 
     root.updateAllWorldTransforms();
@@ -232,10 +232,10 @@ void RandomDemo::update(tD_delta delta) {
     // Touch
     if (Input::touch_up) {
         //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
-        clouds.emplace_back(engine.getTransformList());
+        clouds.emplace_back(engine.makeTransform());
         EntityNode2D *cloud = &(clouds.back());
         cloud->addComponent(RENDERCOMPONENT, 
-            engine.getRenderer()->makeRenderComponent(cloud->getWorldTransformID(), cloud_sprite));
+            engine.getRenderer()->makeRenderComponent(cloud->worldTransform(), cloud_sprite));
         cloud->worldTransform().position = Input::touch_pos;
         cloud->worldTransform().scale = Vector2<float>(0.1f, 0.1f);
         spike.addChild(cloud);

@@ -18,6 +18,7 @@
 #define D_RENDERER_2D_H
 
 #include <iostream>
+#include "duVector2.h"
 #include "D_Config.h"
 #include "D_RenderComponent2D.h"
 #include "D_Texture.h"
@@ -43,10 +44,18 @@ namespace Diamond {
         virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
 
         virtual SharedPtr<RenderComponent2D> makeRenderComponent(
-            transform2_id transform, 
+            const DTransform2 &transform,
             const SharedPtr<const Texture> &texture,
             const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) = 0;
+
+        SharedPtr<RenderComponent2D> makeRenderComponent(
+            const ConstTransform2Ptr &transform,
+            const SharedPtr<const Texture> &texture,
+            const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
+            ) {
+            return makeRenderComponent(*transform, texture, pivot);
+        }
     };
 }
 

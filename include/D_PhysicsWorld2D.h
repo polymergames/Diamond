@@ -44,7 +44,11 @@ namespace Diamond {
         /**
          Creates a rigidbody object attached to the given transform.
         */
-        virtual SharedPtr<Rigidbody2D> makeRigidbody(transform2_id transform) = 0;
+        virtual SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) = 0;
+
+        SharedPtr<Rigidbody2D> makeRigidbody(const Transform2Ptr &transform) {
+            return makeRigidbody(*transform);
+        }
 
         
         /**

@@ -29,7 +29,7 @@
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_Timer.h"
-#include "D_typedefs.h"
+#include "D_Transform2.h"
 
 namespace Diamond {
     class Game2D;
@@ -54,25 +54,23 @@ namespace Diamond {
 
         PhysicsWorld2D      *getPhysWorld() const { return phys_world; }
 
-        TransformList       &getTransformList() { return transform_list; }
-        const TransformList &getTransformList() const { return transform_list; }
-
         virtual bool        isRunning() const { return is_running; }
 
         virtual void        quit() { is_running = false; }
 
+        Transform2Ptr       makeTransform() { return makeShared<DTransform2>(); }
+
     protected:
-        bool                    is_running;
+        bool                is_running;
 
-        Config                  config;
-        Renderer2D              *renderer;
-        DiskJockey2D            *dj;
-        Timer                   *timer;
-        EventHandler            *event_handler;
-        PhysicsWorld2D          *phys_world;
-
-        TransformList           transform_list;
-        std::ofstream           logstream;
+        Config              config;
+        Renderer2D          *renderer;
+        DiskJockey2D        *dj;
+        Timer               *timer;
+        EventHandler        *event_handler;
+        PhysicsWorld2D      *phys_world;
+        
+        std::ofstream       logstream;
 
 
         virtual bool initSDL();

@@ -21,13 +21,9 @@
 #include "duMath.h" // for deg2rad
 
 
-Diamond::Node2D::Node2D(TransformList &transform_list) 
-    : Node2D(transform_list, transform_list.emplace()) {}
-
-Diamond::Node2D::Node2D(TransformList &transform_list, transform2_id world_transform_id)
-    : m_local_transform(), 
-      m_transform_list(transform_list),
-      m_world_transform_id(world_transform_id), 
+Diamond::Node2D::Node2D(const Transform2Ptr &world_transform)
+    : m_localTransform(), 
+      m_worldTransform(world_transform),
       m_parent_transform(), 
       m_parent_trans_mat{ { {1, 0}, {0, 1} } } {}
 
@@ -41,7 +37,7 @@ Diamond::Node2D *Diamond::Node2D::addChild(Node2D *child) {
     if (child && child != this)
         m_children.push_back(child);
 
-    child->updateParentTransform(worldTransform(), getTransMat());
+    child->updateParentTransform(*m_worldTransform, getTransMat());
     child->updateLocalTransform();
 
     return child;
@@ -66,11 +62,10 @@ bool Diamond::Node2D::removeChild(Node2D *child) {
 void Diamond::Node2D::updateAllWorldTransforms() {
     updateWorldTransform();
 
-    const Transform2<tD_pos, tD_rot> &world_trans = worldTransform();
     Matrix<tD_real, 2, 2> trans_mat = getTransMat();
 
     for (Node2D *child : m_children) {
-        child->updateParentTransform(world_trans, trans_mat);
+        child->updateParentTransform(*m_worldTransform, trans_mat);
         child->updateAllWorldTransforms();
     }
 }
@@ -87,9 +82,7 @@ void Diamond::Node2D::updateAllLocalTransforms() {
 
 
 Diamond::Matrix<tD_real, 2, 2> Diamond::Node2D::getTransMat() const {
-    const Transform2<tD_pos, tD_rot> &wtrans = worldTransform();
-
-    tD_real radrot = Math::deg2rad(wtrans.rotation);
+    tD_real radrot = Math::deg2rad(m_worldTransform->rotation);
 
     tD_real cosrot = std::cos(radrot);
     tD_real sinrot = std::sin(radrot);
@@ -97,8 +90,8 @@ Diamond::Matrix<tD_real, 2, 2> Diamond::Node2D::getTransMat() const {
     // [Scale] * [rotation] matrix multiplication in that order
     return Matrix<tD_real, 2, 2>{
         {
-            {wtrans.scale.x * cosrot, wtrans.scale.x * sinrot},
-            { -wtrans.scale.y * sinrot, wtrans.scale.y * cosrot }
+            {m_worldTransform->scale.x * cosrot, m_worldTransform->scale.x * sinrot},
+            { -m_worldTransform->scale.y * sinrot, m_worldTransform->scale.y * cosrot }
         }
     };
 }

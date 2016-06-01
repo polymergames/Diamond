@@ -29,9 +29,9 @@ namespace Diamond {
                       const AnimationSheet *anim);
 
 
-        const AnimationSheet            *getAnimation() const { return m_anim; }
+        const AnimationSheet                *getAnimation() const { return m_anim; }
 
-        void                            setAnimation(const AnimationSheet *anim);
+        void                                setAnimation(const AnimationSheet *anim);
 
 
         const SharedPtr<RenderComponent2D>  &getRenderComponent() const { return m_render_comp; }
@@ -39,15 +39,15 @@ namespace Diamond {
         void                                setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp);
         
 
-        void                            update(tD_delta delta) override;
+        void                                update(tD_delta delta) override;
 
     private:
-        SharedPtr<RenderComponent2D>    m_render_comp;
-        const AnimationSheet            *m_anim;
+        SharedPtr<RenderComponent2D>        m_render_comp;
+        const AnimationSheet                *m_anim;
 
-        int16_t                         m_frame_width, m_frame_height;
-        tD_index                        m_cur_frame;
-        tD_delta                        m_elapsed;
+        int16_t                             m_frame_width, m_frame_height;
+        tD_index                            m_cur_frame;
+        tD_delta                            m_elapsed;
 
         void initClip();
     };

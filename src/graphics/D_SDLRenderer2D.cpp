@@ -21,10 +21,11 @@
 #include "D_Log.h"
 #include "D_SDLRenderComponent2D.h"
 #include "D_SDLTexture.h"
+#include "D_Transform2.h"
 
 
-Diamond::SDLRenderer2D::SDLRenderer2D(const TransformList &transform_list) 
-    : m_window(nullptr), m_renderer(nullptr), m_transform_list(transform_list) {}
+Diamond::SDLRenderer2D::SDLRenderer2D() 
+    : m_window(nullptr), m_renderer(nullptr) {}
 
 bool Diamond::SDLRenderer2D::init(const Config &config) {
     // Initialize SDL
@@ -71,7 +72,7 @@ void Diamond::SDLRenderer2D::renderAll() {
     SDL_RenderClear(m_renderer);
     for (std::vector<SDLRenderObj2D>::iterator i = m_render_objects.begin(); i != m_render_objects.end(); ++i) {
         //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
-        const Transform2<tSDLrender_pos, tSDLrender_rot> &transform = m_transform_list[(*i).getTransformID()];
+        Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> transform = (*i).getTransform();
 
         SDL_Point pivot = (*i).pivot();
         SDL_Rect clip = (*i).clip();
@@ -132,7 +133,7 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::st
 }
 
 Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
-    transform2_id transform,
+    const DTransform2 &transform,
     const SharedPtr<const Texture> &texture,
     const Vector2<tD_pos> &pivot
     ) {

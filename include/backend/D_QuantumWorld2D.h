@@ -18,16 +18,17 @@
 #define D_QUANTUM_WORLD_2D_H
 
 #include <map>
+#include "Q_DynamicWorld2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_QuantumBody2D.h"
 #include "D_QuantumAABBCollider2D.h"
 #include "D_QuantumCircleCollider.h"
-#include "Q_DynamicWorld2D.h"
+#include "D_Transform2.h"
 
 namespace Diamond {
     class QuantumBodyDeleter {
     public:
-        QuantumBodyDeleter(std::map<body2d_id, transform2_id> &pairs) : m_pairs(pairs) {}
+        QuantumBodyDeleter(std::map<body2d_id, DTransform2*> &pairs) : m_pairs(pairs) {}
 
         void operator() (Rigidbody2D *body) const {
             QuantumBody2D *qbody = dynamic_cast<QuantumBody2D*>(body);
@@ -40,7 +41,7 @@ namespace Diamond {
         }
 
     private:
-        std::map<body2d_id, transform2_id> &m_pairs;
+        std::map<body2d_id, DTransform2*> &m_pairs;
     };
 
 
@@ -72,8 +73,7 @@ namespace Diamond {
     // (or ID containers) ex. in makeRigidbody, etc.
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
-        QuantumWorld2D(TransformList &transform_list) 
-            : m_transformList(transform_list), m_bodyDeleter(m_pairs), m_colliderDeleter(m_world) {}
+        QuantumWorld2D() : m_bodyDeleter(m_pairs), m_colliderDeleter(m_world) {}
 
         bool init(const Config &config) override { return m_world.init(); }
 
@@ -86,34 +86,31 @@ namespace Diamond {
         void updateBodies() {
             for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
-                const Transform2<tD_pos, tD_rot> &trans = m_transformList[i->second];
-                rbody.setPosition(trans.position);
-                rbody.setRotation(trans.rotation);
+                rbody.setPosition(i->second->position);
+                rbody.setRotation(i->second->rotation);
             }
         }
 
         void updateTransforms() {
             for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
-                Transform2<tD_pos, tD_rot> &trans = m_transformList[i->second];
-                trans.position = rbody.getPosition();
+                i->second->position = rbody.getPosition();
                 // TODO: test!
-                trans.rotation = rbody.getRotation();
+                i->second->rotation = rbody.getRotation();
             }
         }
         
 
-        SharedPtr<Rigidbody2D> makeRigidbody(transform2_id transform) override {
+        SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) override {
             QuantumBody2D *body = new QuantumBody2D(&m_world);
 
             // Add to rigibody-entity pairs so they can be synchronized
-            m_pairs[body->getID()] = transform;
+            m_pairs[body->getID()] = &transform;
 
             // Initialize the new rigidbody with the parent entity's world transform
             Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(body->getID());
-            const Transform2<tD_pos, tD_rot> &trans = m_transformList[transform];
-            rbody.setPosition(trans.position);
-            rbody.setRotation(trans.rotation);
+            rbody.setPosition(transform.position);
+            rbody.setRotation(transform.rotation);
             return SharedPtr<Rigidbody2D>(body, m_bodyDeleter);
         }
         
@@ -150,8 +147,7 @@ namespace Diamond {
 
     private:
         Quantum2D::DynamicWorld2D m_world;
-        TransformList &m_transformList;
-        std::map<body2d_id, transform2_id> m_pairs;
+        std::map<body2d_id, DTransform2*> m_pairs;
 
         QuantumBodyDeleter m_bodyDeleter;
         QuantumColliderDeleter m_colliderDeleter;

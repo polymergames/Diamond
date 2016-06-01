@@ -27,7 +27,7 @@
 namespace Diamond {
     class SDLRenderer2D : public Renderer2D {
     public:
-        SDLRenderer2D(const TransformList &transform_list);
+        SDLRenderer2D();
         
         /**
          Destroys window and renderer and shuts down SDL and SDL extensions.
@@ -49,7 +49,7 @@ namespace Diamond {
         SharedPtr<Texture> loadTexture(std::string path) override;
         
         SharedPtr<RenderComponent2D> makeRenderComponent(
-            transform2_id transform,
+            const DTransform2 &transform,
             const SharedPtr<const Texture> &texture,
             const Vector2<tD_pos> &pivot
         ) override;
@@ -58,7 +58,6 @@ namespace Diamond {
         SDL_Window *m_window;
         SDL_Renderer *m_renderer;
 
-        const TransformList &m_transform_list;
         SDLRenderObjList m_render_objects;
     };
 }

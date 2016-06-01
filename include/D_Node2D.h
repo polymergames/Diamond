@@ -28,14 +28,9 @@ namespace Diamond {
 
     class Node2D {
     public:
-        Node2D(TransformList &transform_list);
-        Node2D(TransformList &transform_list, transform2_id world_transform_id);
-        virtual ~Node2D() {}
+        Node2D(const Transform2Ptr &world_transform);
 
-        Node2D(const Node2D&) = delete;
-        Node2D& operator=(const Node2D&) = delete;
-
-        // children
+        // Parenting troubles
 
         const ChildList &getChildren() const { return m_children; }
 
@@ -53,21 +48,15 @@ namespace Diamond {
         bool removeChild(Node2D *child);
 
 
-
         // local transform
-
-        Transform2<tD_pos, tD_rot> &localTransform() { return m_local_transform; }
-        const Transform2<tD_pos, tD_rot> &localTransform() const { return m_local_transform; }
-
+        DTransform2 &localTransform() { return m_localTransform; }
+        const DTransform2 &localTransform() const { return m_localTransform; }
 
         // world transform
+        DTransform2 &worldTransform() { return *m_worldTransform; }
+        const DTransform2 &worldTransform() const { return *m_worldTransform; }
 
-        Transform2<tD_pos, tD_rot> &worldTransform() { return m_transform_list[m_world_transform_id]; }
-        const Transform2<tD_pos, tD_rot> &worldTransform() const { return m_transform_list[m_world_transform_id]; }
-
-        transform2_id getWorldTransformID() const { return m_world_transform_id; }
-
-
+        const Transform2Ptr &getWorldTransformPtr() const { return m_worldTransform; }
 
         // update transforms
 
@@ -83,11 +72,11 @@ namespace Diamond {
         void updateAllLocalTransforms();
 
 
-        void updateWorldTransform() { worldTransform() = localToWorldSpace(m_local_transform); }
+        void updateWorldTransform() { *m_worldTransform = localToWorldSpace(m_localTransform); }
 
-        void updateLocalTransform() { m_local_transform = worldToLocalSpace(worldTransform()); }
+        void updateLocalTransform() { m_localTransform = worldToLocalSpace(*m_worldTransform); }
 
-        void updateParentTransform(const Transform2<tD_pos, tD_rot> &parent_transform,
+        void updateParentTransform(const DTransform2 &parent_transform,
                                    const Matrix<tD_real, 2, 2> &parent_trans_mat) {
             m_parent_transform = parent_transform;
             m_parent_trans_mat = parent_trans_mat;
@@ -100,19 +89,21 @@ namespace Diamond {
         /**
          Transforms a given transform object from this node's local space to world space.
         */
-        Transform2<tD_pos, tD_rot> localToWorldSpace(const Transform2<tD_pos, tD_rot> &local_trans) const {
-            return Transform2<tD_pos, tD_rot>(
+        template <typename P, typename R, typename S>
+        Transform2<P, R, S> localToWorldSpace(const Transform2<P, R, S> &local_trans) const {
+            return Transform2<P, R, S>(
                 localToWorldSpace(local_trans.position), 
                 localToWorldRotation(local_trans.rotation), 
-                localToWorldScale(local_trans.scale));
+                localToWorldScale(local_trans.scale)
+            );
         }
 
         /**
          Transforms a given point from this node's local space to world space.
          TODO: test
         */
-        template <typename V>
-        Vector2<V> localToWorldSpace(const Vector2<V> &local_coords) const {
+        template <typename P>
+        Vector2<P> localToWorldSpace(const Vector2<P> &local_coords) const {
             return local_coords.mul(m_parent_trans_mat.m) + m_parent_transform.position;
         }
 
@@ -129,7 +120,7 @@ namespace Diamond {
         */
         template <typename S>
         Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
-            return Vector2<tD_real>(local_scale).scalar(m_parent_transform.scale);
+            return Vector2<S>(local_scale).scalar(m_parent_transform.scale);
         }
 
 
@@ -138,19 +129,21 @@ namespace Diamond {
         /**
          Transforms a given transform object from world space to this node's local space.
         */
-        Transform2<tD_pos, tD_rot> worldToLocalSpace(const Transform2<tD_pos, tD_rot> &world_trans) const {
-            return Transform2<tD_pos, tD_rot>(
+        template <typename P, typename R, typename S>
+        Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
+            return Transform2<P, R, S>(
                 worldToLocalSpace(world_trans.position),
                 worldToLocalRotation(world_trans.rotation), 
-                worldToLocalScale(world_trans.scale));
+                worldToLocalScale(world_trans.scale)
+            );
         }
 
         /**
          Transforms a given point from world space to this node's local space.
          TODO: test
         */
-        template <typename V>
-        Vector2<V> worldToLocalSpace(const Vector2<V> &world_coords) const {
+        template <typename P>
+        Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords) const {
             return (world_coords - m_parent_transform.position).mul(m_parent_trans_mat.inv().m);
         }
         
@@ -179,12 +172,11 @@ namespace Diamond {
 
 
     protected:
-        Transform2<tD_pos, tD_rot> m_local_transform;
-        TransformList &m_transform_list;
-        transform2_id m_world_transform_id;
+        DTransform2             m_localTransform;
+        Transform2Ptr           m_worldTransform;
 
-        Transform2<tD_pos, tD_rot> m_parent_transform;
-        Matrix<tD_real, 2, 2> m_parent_trans_mat;
+        DTransform2             m_parent_transform;
+        Matrix<tD_real, 2, 2>   m_parent_trans_mat;
 
         ChildList m_children;
     };
