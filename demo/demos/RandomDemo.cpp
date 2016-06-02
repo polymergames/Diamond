@@ -255,6 +255,12 @@ void RandomDemo::update(tD_delta delta) {
 }
 
 void RandomDemo::postPhysicsUpdate(tD_delta delta) {
+    root.postPhysicsUpdateComponents(delta);
+    spike.postPhysicsUpdateComponents(delta);
+    spike2.postPhysicsUpdateComponents(delta);
+    zapper.postPhysicsUpdateComponents(delta);
+    zapper2.postPhysicsUpdateComponents(delta);
+
     root.updateAllLocalTransforms();
     root.updateAllWorldTransforms();
 }

@@ -54,6 +54,11 @@ namespace Diamond {
                 it->second->update(delta);
         }
 
+        void postPhysicsUpdateComponents(tD_delta delta) {
+            for (auto it = m_components.begin(); it != m_components.end(); ++it)
+                it->second->postPhysicsUpdate(delta);
+        }
+
 
         void addComponent(const std::string &name, Component &component) { 
             addComponent(name, &component);
