@@ -25,6 +25,8 @@ namespace Diamond {
         virtual ~Component() {}
 
         virtual void update(tD_delta delta) {}
+
+        virtual void postPhysicsUpdate(tD_delta delta) {}
     };
 }
 
