@@ -77,11 +77,11 @@ void Diamond::SDLRenderer2D::renderAll() {
         SDL_Point pivot = (*i).pivot();
         SDL_Rect clip = (*i).clip();
 
-        SDL_Rect render_rect = { 
-            transform.position.x - pivot.x, // render position x
-            transform.position.y - pivot.y, // render position y
-            clip.w * transform.scale.x, // render width
-            clip.h * transform.scale.y // render height
+        SDL_Rect render_rect = {
+            (int)(transform.position.x - pivot.x), // render position x
+            (int)(transform.position.y - pivot.y), // render position y
+            (int)(clip.w * transform.scale.x), // render width
+            (int)(clip.h * transform.scale.y) // render height
         };
 
         SDL_RenderCopyEx(
