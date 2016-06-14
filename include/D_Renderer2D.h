@@ -29,20 +29,21 @@ namespace Diamond {
     public:
         virtual ~Renderer2D() {}
 
-        virtual bool init(const Config &config) = 0;
+        virtual bool                    init(const Config &config) = 0;
         
-        virtual void renderAll() = 0;
+        virtual void                    renderAll() = 0;
         
-        virtual Vector2<int> getResolution() const = 0;
+        virtual Vector2<int>            getResolution() const = 0;
 
-        virtual Diamond::Vector2<int> getScreenResolution() const = 0;
+        virtual Diamond::Vector2<int>   getScreenResolution() const = 0;
 
         /**
          Loads an image file as a texture.
          Returns nullptr if texture failed to load.
         */
-        virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
+        virtual SharedPtr<Texture>      loadTexture(std::string path) = 0;
 
+        
         virtual SharedPtr<RenderComponent2D> makeRenderComponent(
             const DTransform2 &transform,
             const SharedPtr<const Texture> &texture,
@@ -53,7 +54,7 @@ namespace Diamond {
             const ConstTransform2Ptr &transform,
             const SharedPtr<const Texture> &texture,
             const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
-            ) {
+        ) {
             return makeRenderComponent(*transform, texture, pivot);
         }
     };
