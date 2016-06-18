@@ -29,6 +29,10 @@ namespace Diamond {
         ~QuantumCircleCollider() {}
         
         collider2_id getColliderID() const { return collider; }
+        
+        void setColFunc(const std::function<void(void *other)> &onCollision) override {
+            circle->setColFunc(onCollision);
+        }
 
         tD_pos getRadius() const override { return circle->getRadius(); }
         

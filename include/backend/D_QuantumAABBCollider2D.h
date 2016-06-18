@@ -30,6 +30,10 @@ namespace Diamond {
 
         collider2_id getColliderID() const { return collider; }
         
+        void setColFunc(const std::function<void(void *other)> &onCollision) override {
+            aabb->setColFunc(onCollision);
+        }
+        
         Vector2<tD_pos> getOrigin() const override { return aabb->getOrigin(); }
         
         Vector2<tD_pos> getDims() const override { return aabb->getDims(); }

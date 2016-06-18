@@ -17,12 +17,15 @@
 #ifndef D_COLLIDER_2D_H
 #define D_COLLIDER_2D_H
 
+#include <functional>
 #include "D_Component.h"
 
 namespace Diamond {
     class Collider2D : public Component {
     public:
         virtual ~Collider2D() {}
+        
+        virtual void setColFunc(const std::function<void(void *other)> &onCollision) = 0;
     };
 }
 
