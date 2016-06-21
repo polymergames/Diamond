@@ -33,11 +33,11 @@ namespace Diamond {
         
         body2d_id getID() const { return body; }
 
-        Vector2<tD_pos> getPosition() const override { return world->getRigidbody(body).getPosition(); }
-        void setPosition(const Vector2<tD_pos> &newpos) override { world->getRigidbody(body).setPosition(newpos); }
+        Vector2<tD_pos> getPosition() const { return world->getRigidbody(body).getPosition(); }
+        void setPosition(const Vector2<tD_pos> &newpos) { world->getRigidbody(body).setPosition(newpos); }
 
-        float getRotation() const override { return world->getRigidbody(body).getRotation(); }
-        void setRotation(tD_rot newrot) override { world->getRigidbody(body).setRotation(newrot); }
+        float getRotation() const { return world->getRigidbody(body).getRotation(); }
+        void setRotation(tD_rot newrot) { world->getRigidbody(body).setRotation(newrot); }
 
         Vector2<tD_pos> getVelocity() const override { return world->getRigidbody(body).getVelocity(); }
         void setVelocity(const Vector2<tD_pos> &newvel) override { world->getRigidbody(body).setVelocity(newvel); }

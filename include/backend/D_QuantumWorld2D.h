@@ -71,6 +71,7 @@ namespace Diamond {
 
     // TODO: get rid of dynamic allocation, in this and other classes, and just return IDs
     // (or ID containers) ex. in makeRigidbody, etc.
+    // or use memory pools
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
         QuantumWorld2D() : m_bodyDeleter(m_pairs), m_colliderDeleter(m_world) {}
@@ -79,8 +80,17 @@ namespace Diamond {
 
         void update(tD_delta delta_ms) override { 
             updateBodies();
-            m_world.step(delta_ms); 
+            
+            m_world.step(delta_ms);
+            
+            // Sync diamond transforms with physics transforms
+            // BEFORE calling collision callbacks
+            // in case the collision callbacks make any changes to
+            // diamond transforms which would then be lost
+            // if syncing transforms was done afterwards.
             updateTransforms();
+            
+            m_world.callbackCollisions();
         }
         
         void updateBodies() {

@@ -22,6 +22,14 @@
 #include "Q_typedefs.h"
 
 namespace Quantum2D {
+    struct ColliderPair {
+    public:
+        ColliderPair(Collider2D *a, Collider2D *b) : a(a), b(b) {}
+
+        Collider2D *a, *b;
+    };
+
+
     class DynamicWorld2D {
     public:
         /**
@@ -87,9 +95,21 @@ namespace Quantum2D {
         */
         void step(tQ_delta delta_ms);
 
+        /**
+         Get the pairs of colliders that collided in the last simulation step.
+        */
+        const std::vector<ColliderPair> &getCollidePairs() { return pairs; }
+
+        /**
+		 Invokes callback functions for this frame's collision pairs.
+        */
+		void callbackCollisions();
+
     private:
         BodyList bodies;
         ColliderList colliders;
+
+        std::vector<ColliderPair> pairs;
     };
 }
 
