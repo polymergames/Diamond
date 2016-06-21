@@ -158,12 +158,12 @@ void CollideDemo::quit() {
 }
 
 void CollideDemo::m_onCollision(void *other) {
-    /*
-    SharedPtr<Rigidbody2D> rbody = ((Entity2D*)other)->getComponent<Rigidbody2D>(RIGIDBODY);
-    if (rbody) {
-        rbody->setRotation(rbody->getRotation() + 20);
-    }
-    */
+    Entity *other_entity = (Entity*)other;
+    Entity2D *other_entity2d = dynamic_cast<Entity2D*>(other_entity);
+    
+    if (other_entity2d)
+        other_entity2d->transform().rotation += 20;
+    
     std::cout << "Hit by " << other << std::endl;
 }
 
