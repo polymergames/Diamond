@@ -20,6 +20,13 @@
 #include "D_Input.h"
 using namespace Diamond;
 
+enum : uint8_t {
+    LOWEST,
+    DEFAULT,
+    HIGHER,
+    HIGHEST
+} Layer;
+
 RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float growspeed) 
     : Game2D(engine), movespeed(movespeed), spinspeed(spinspeed), growspeed(growspeed), 
       root(engine.makeTransform()), 
@@ -51,7 +58,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     //spike.addComponent(makeShared<RenderComponent2D>(&spike, spike_sprite, 0.1f));
     spike.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(spike.worldTransform(), spike_sprite));
+        renderer->makeRenderComponent(spike.worldTransform(), spike_sprite, HIGHEST));
     // spike.localTransform().position = Vector2<int>(-150, 200);
     spike.localTransform().position = Vector2<int>(-250, 400);
     spike.localTransform().scale = Vector2<float>(0.2f, 0.2f);
@@ -62,7 +69,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     }
 
     spike2.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(spike2.worldTransform(), spike_sprite));
+        renderer->makeRenderComponent(spike2.worldTransform(), spike_sprite, HIGHER));
     spike2.localTransform().position = Vector2<int>(100, 100);
     spike2.localTransform().scale = Vector2<float>(0.1f, 0.1f);
 
@@ -75,6 +82,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
 
     zapper.addComponent(RENDERCOMPONENT, 
         renderer->makeRenderComponent(zapper.worldTransform(), zapper_anim.sprites[0]));
+    zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT)->setLayer(DEFAULT);
 
     zapper.addComponent(ANIMATOR, 
         makeShared<Animator2D>(zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper_anim));
@@ -90,7 +98,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed, float
     zapper2_anim.num_frames = 4;
     float z2scale = 0.5f;
     zapper2.addComponent(RENDERCOMPONENT, 
-        renderer->makeRenderComponent(zapper2.worldTransform(), zapper2_anim.sprite_sheet));
+        renderer->makeRenderComponent(zapper2.worldTransform(), zapper2_anim.sprite_sheet, LOWEST));
 
     zapper2.addComponent(ANIMATOR, 
         makeShared<AnimatorSheet>(zapper2.getComponent<RenderComponent2D>(RENDERCOMPONENT), &zapper2_anim));
@@ -129,6 +137,18 @@ void RandomDemo::update(tD_delta delta) {
         RGBA sc = spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)->getSprite()->getColor();
         sc.a -= 32;
         spike_sprite->setColor(sc);
+    }
+    
+    // Layer
+    if (Input::keyup[Input::K_L]) {
+        auto rcomp = zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT);
+        uint8_t curLayer = rcomp->getLayer();
+        if (curLayer == LOWEST) {
+            rcomp->setLayer(HIGHEST);
+        }
+        else {
+            rcomp->setLayer(LOWEST);
+        }
     }
 
     // Sprite switching
@@ -231,13 +251,17 @@ void RandomDemo::update(tD_delta delta) {
     
     // Touch
     if (Input::touch_up) {
-        //			std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
+        // std::cout << Input::touch_pos.x << ", " << Input::touch_pos.y << std::endl;
         clouds.emplace_back(engine.makeTransform());
         EntityNode2D *cloud = &(clouds.back());
-        cloud->addComponent(RENDERCOMPONENT, 
-            engine.getRenderer()->makeRenderComponent(cloud->worldTransform(), cloud_sprite));
+        
+        auto rcomp = engine.getRenderer()->makeRenderComponent(cloud->worldTransform(), cloud_sprite);
+        cloud->addComponent(RENDERCOMPONENT, rcomp);
+        rcomp->setLayer(DEFAULT);
+        
         cloud->worldTransform().position = Input::touch_pos;
         cloud->worldTransform().scale = Vector2<float>(0.1f, 0.1f);
+        
         spike.addChild(cloud);
     }
 

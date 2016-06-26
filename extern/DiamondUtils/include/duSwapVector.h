@@ -85,22 +85,18 @@ namespace Diamond {
         */
         TID insert(const T &obj) { return push_back(obj); }
 
+        TID insert(T &&obj) { return push_back(obj); }
+
         TID push_back(const T &obj) {
-            TID new_id;
-
-            if (!free_id_stack.empty()) {
-                new_id = free_id_stack.back();
-                free_id_stack.pop_back();
-                id_index_map[new_id] = objects.size();
-            }
-            else {
-                new_id = id_index_map.size();
-                id_index_map.push_back(objects.size());
-            }
-
+            TID new_id = genNewID();
             objects.push_back(obj);
-            index_id_map.push_back(new_id);
+            return new_id;
+        }
 
+        // TODO: test if rvalue reference is being forwarded properly
+        TID push_back(T &&obj) {
+            TID new_id = genNewID();
+            objects.push_back(obj);
             return new_id;
         }
 
@@ -142,6 +138,25 @@ namespace Diamond {
         std::vector<TID> id_index_map;
         std::vector<TID> index_id_map;
         std::vector<TID> free_id_stack;
+
+
+        TID genNewID() {
+            TID new_id;
+
+            if (!free_id_stack.empty()) {
+                new_id = free_id_stack.back();
+                free_id_stack.pop_back();
+                id_index_map[new_id] = objects.size();
+            }
+            else {
+                new_id = id_index_map.size();
+                id_index_map.push_back(objects.size());
+            }
+
+            index_id_map.push_back(new_id);
+
+            return new_id;
+        }
     };
 }
 

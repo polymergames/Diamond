@@ -27,11 +27,6 @@ namespace Diamond {
 
     // ID/index typedefs
     using SDLrenderobj_id = tD_id;      // render object id type
-
-
-    // Container for render objects
-    class SDLRenderObj2D;
-    using SDLRenderObjList = SwapVector<SDLRenderObj2D>;
 }
 
 #endif // D_SDL_TYPEDEFS_H

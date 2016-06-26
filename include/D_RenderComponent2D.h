@@ -32,6 +32,8 @@ namespace Diamond {
 
         virtual void                        setSprite(const SharedPtr<const Texture> &sprite) = 0;
 
+        virtual uint8_t                     getLayer() const = 0;
+        virtual void                        setLayer(uint8_t newLayer) = 0;
 
         virtual Vector2<tD_pos>             getClipPos() const = 0;
         virtual Vector2<int>                getClipDim() const = 0;

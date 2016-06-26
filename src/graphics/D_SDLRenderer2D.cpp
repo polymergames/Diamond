@@ -27,6 +27,15 @@
 Diamond::SDLRenderer2D::SDLRenderer2D() 
     : m_window(nullptr), m_renderer(nullptr) {}
 
+Diamond::SDLRenderer2D::~SDLRenderer2D() {
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
+    
+    IMG_Quit();
+    SDL_Quit();
+}
+
+
 bool Diamond::SDLRenderer2D::init(const Config &config) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
@@ -70,29 +79,31 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
 void Diamond::SDLRenderer2D::renderAll() {
     // Render all the graphics
     SDL_RenderClear(m_renderer);
-    for (std::vector<SDLRenderObj2D>::iterator i = m_render_objects.begin(); i != m_render_objects.end(); ++i) {
-        //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
-        Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> transform = (*i).getTransform();
+    for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
+        for (auto i = l->begin(); i != l->end(); ++i) {
+            //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
+            Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> transform = (*i).getTransform();
 
-        SDL_Point pivot = (*i).pivot();
-        SDL_Rect clip = (*i).clip();
+            SDL_Point pivot = (*i).pivot();
+            SDL_Rect clip = (*i).clip();
 
-        SDL_Rect render_rect = {
-            (int)(transform.position.x - pivot.x), // render position x
-            (int)(transform.position.y - pivot.y), // render position y
-            (int)(clip.w * transform.scale.x), // render width
-            (int)(clip.h * transform.scale.y) // render height
-        };
+            SDL_Rect render_rect = {
+                (int)(transform.position.x - pivot.x), // render position x
+                (int)(transform.position.y - pivot.y), // render position y
+                (int)(clip.w * transform.scale.x), // render width
+                (int)(clip.h * transform.scale.y) // render height
+            };
 
-        SDL_RenderCopyEx(
-            m_renderer, // The SDL backend renderer for this SDL instance.
-            (*i).texture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
-            &clip, // source rect
-            &render_rect, // destination rect
-            transform.rotation, // rotation for destination rect in degrees
-            &pivot, // rotation pivot location in local space
-            (*i).getFlip() // current flip status
-        );
+            SDL_RenderCopyEx(
+                m_renderer, // The SDL backend renderer for this SDL instance.
+                (*i).texture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
+                &clip, // source rect
+                &render_rect, // destination rect
+                transform.rotation, // rotation for destination rect in degrees
+                &pivot, // rotation pivot location in local space
+                (*i).getFlip() // current flip status
+            );
+        }
     }
 
     // Update screen
@@ -135,19 +146,32 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::st
 Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
     const DTransform2 &transform,
     const SharedPtr<const Texture> &texture,
+    uint8_t layer,
     const Vector2<tD_pos> &pivot
     ) {
-    SDLrenderobj_id robj = m_render_objects.emplace(
+    // Make room for a new layer if necessary
+    if ((int)layer > (int)m_render_objects.size() - 1) {
+        m_render_objects.resize(layer + 1);
+    }
+    
+    SDLrenderobj_id robj = m_render_objects[layer].emplace(
         transform, std::dynamic_pointer_cast<const SDLTexture>(texture), pivot
     );
 
-    return makeShared<SDLRenderComponent2D>(m_render_objects, robj);
+    return makeShared<SDLRenderComponent2D>(*this, robj, layer);
 }
 
-Diamond::SDLRenderer2D::~SDLRenderer2D() {
-    SDL_DestroyRenderer(m_renderer);
-    SDL_DestroyWindow(m_window);
+Diamond::SDLrenderobj_id Diamond::SDLRenderer2D::changeLayer(uint8_t curLayer,
+                                                             SDLrenderobj_id robj,
+                                                             uint8_t newLayer) {
+    // Make room for a new layer if necessary
+    if (newLayer > m_render_objects.size() - 1) {
+        m_render_objects.resize(newLayer + 1);
+    }
     
-    IMG_Quit();
-    SDL_Quit();
+    SDLrenderobj_id newID =
+        m_render_objects[newLayer].insert(std::move(m_render_objects[curLayer][robj]));
+    m_render_objects[curLayer].erase(robj);
+    
+    return newID;
 }

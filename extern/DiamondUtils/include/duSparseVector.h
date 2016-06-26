@@ -27,6 +27,8 @@ namespace Diamond {
      Access is O(1) and faster than swapvector by a constant factor (and same as std::vector).
      Unlike swapvector, maintains order of elements and uses O(1) amortized auxiliary space, but 
      leaves gaps of invalid data, and therefore should not be iterated directly.
+     Please note that when an element is removed from a SparseVector, it is not necessarily
+     destroyed / its destructor is not necessarily called.
     */
     template <class T, typename TID = tD_id>
     class SparseVector {
@@ -65,6 +67,20 @@ namespace Diamond {
          Returns an id that can be used to access the new object using [] or at().
         */
         TID insert(const T &obj) {
+            if (!free_id_stack.empty()) {
+                TID new_id = free_id_stack.back();
+                free_id_stack.pop_back();
+                objects[new_id] = obj;
+                return new_id;
+            }
+            else {
+                objects.push_back(obj);
+                return objects.size() - 1;
+            }
+        }
+
+        // TODO: test if rvalue reference is being forwarded properly
+        TID insert(T &&obj) {
             if (!free_id_stack.empty()) {
                 TID new_id = free_id_stack.back();
                 free_id_stack.pop_back();

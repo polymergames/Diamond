@@ -21,6 +21,7 @@
 #include "SDL.h"
 
 #include "D_Renderer2D.h"
+#include "D_SDLRenderObj2D.h"
 #include "D_SDLtypedefs.h"
 
 
@@ -51,14 +52,35 @@ namespace Diamond {
         SharedPtr<RenderComponent2D> makeRenderComponent(
             const DTransform2 &transform,
             const SharedPtr<const Texture> &texture,
-            const Vector2<tD_pos> &pivot
+            uint8_t layer = 0, 
+            const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) override;
+        
+        
+        SDLRenderObj2D &renderObj(uint8_t layer,
+                                  SDLrenderobj_id robj) {
+            return m_render_objects[layer][robj];
+        }
+        
+        const SDLRenderObj2D &renderObj(uint8_t layer,
+                                        SDLrenderobj_id robj) const {
+            return m_render_objects[layer][robj];
+        }
+        
+        void destroyRenderObj(uint8_t layer,
+                              SDLrenderobj_id robj) {
+            m_render_objects[layer].erase(robj);
+        }
+        
+        SDLrenderobj_id changeLayer(uint8_t curLayer,
+                                    SDLrenderobj_id robj,
+                                    uint8_t newLayer);
 
     private:
         SDL_Window *m_window;
         SDL_Renderer *m_renderer;
 
-        SDLRenderObjList m_render_objects;
+        std::vector<SwapVector<SDLRenderObj2D> > m_render_objects;
     };
 }
 
