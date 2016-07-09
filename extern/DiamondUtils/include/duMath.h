@@ -17,6 +17,7 @@
 #ifndef DU_MATH_H
 #define DU_MATH_H
 
+#include <cstdlib>
 #include "DuVector2.h"
 
 namespace Diamond {
@@ -33,6 +34,10 @@ namespace Diamond {
         template <typename A, typename B, typename C>
         inline bool leftOf(Vector2<C> &x, Vector2<A> &ea, Vector2<B> &eb) {
             return (eb.x - ea.x) * (x.y - ea.y) - (eb.y - ea.y) * (x.x - ea.x) > 0;
+        }
+
+        inline float random(float min, float max) {
+            return min + ((float)std::rand() / RAND_MAX) * (max - min);
         }
     }
 }
