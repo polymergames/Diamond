@@ -15,6 +15,7 @@
 */
 
 #include "D_TextureFactory.h"
+#include "D_Log.h"
 
 Diamond::TextureFactory::TextureFactory(Renderer2D *renderer, const std::string &pathRoot)
     : m_renderer(renderer), m_pathRoot(pathRoot) {}
@@ -24,13 +25,12 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::TextureFactory::loadTexture(const 
     // Check if texture has already been loaded
     SharedPtr<Texture> texture = m_textureMap[fileName];
     
-    if (texture) {
-        return texture;
-    }
     // Otherwise, load the texture and save it to the internal store
-    else {
+    if (!texture) {
         texture = m_renderer->loadTexture(m_pathRoot + fileName);
         m_textureMap[fileName] = texture;
+        // DEBUG
+        Log::log("Loaded " + fileName + " from disk!");
     }
     
     return texture;
