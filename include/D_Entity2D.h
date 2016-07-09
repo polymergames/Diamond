@@ -30,6 +30,8 @@ namespace Diamond {
         Entity2D(const Transform2Ptr &transform) 
             : m_transform(transform) {}
 
+        virtual ~Entity2D() {}
+
         DTransform2 &transform() { return *m_transform; }
         const DTransform2 &transform() const { return *m_transform; }
 
