@@ -41,6 +41,9 @@ namespace Diamond {
 
         Vector2<tD_pos> getVelocity() const override { return world->getRigidbody(body).getVelocity(); }
         void setVelocity(const Vector2<tD_pos> &newvel) override { world->getRigidbody(body).setVelocity(newvel); }
+        
+        float getAngularVelocity() const override { return world->getRigidbody(body).angVelocity(); }
+        void setAngularVelocity(float newVel) override { world->getRigidbody(body).angVelocity() = newVel; }
 
     private:
         body2d_id body;

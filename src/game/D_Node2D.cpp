@@ -17,8 +17,6 @@
 #include "D_Node2D.h"
 
 #include <algorithm> // ?
-#include <cmath> // for sin, cos
-#include "duMath.h" // for deg2rad
 
 
 Diamond::Node2D::Node2D(const Transform2Ptr &world_transform)
@@ -77,21 +75,4 @@ void Diamond::Node2D::updateAllLocalTransforms() {
     for (Node2D *child : m_children) {
         child->updateAllLocalTransforms();
     }
-}
-
-
-
-Diamond::Matrix<tD_real, 2, 2> Diamond::Node2D::getTransMat() const {
-    tD_real radrot = Math::deg2rad(m_worldTransform->rotation);
-
-    tD_real cosrot = std::cos(radrot);
-    tD_real sinrot = std::sin(radrot);
-
-    // [Scale] * [rotation] matrix multiplication in that order
-    return Matrix<tD_real, 2, 2>{
-        {
-            {m_worldTransform->scale.x * cosrot, m_worldTransform->scale.x * sinrot},
-            { -m_worldTransform->scale.y * sinrot, m_worldTransform->scale.y * cosrot }
-        }
-    };
 }

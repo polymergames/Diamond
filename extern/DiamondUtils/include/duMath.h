@@ -18,7 +18,8 @@
 #define DU_MATH_H
 
 #include <cstdlib>
-#include "DuVector2.h"
+#include "duVector2.h"
+#include "duMatrix.h"
 
 namespace Diamond {
     namespace Math {
@@ -30,14 +31,41 @@ namespace Diamond {
 
         inline float deg2rad(float deg) { return deg * DEG2RAD; }
 
-        // TODO: move this to vector header!
         template <typename A, typename B, typename C>
         inline bool leftOf(Vector2<C> &x, Vector2<A> &ea, Vector2<B> &eb) {
             return (eb.x - ea.x) * (x.y - ea.y) - (eb.y - ea.y) * (x.x - ea.x) > 0;
         }
 
+
         inline float random(float min, float max) {
             return min + ((float)std::rand() / RAND_MAX) * (max - min);
+        }
+
+
+        // Generates a transformation matrix for rotation and scale, storing it in out
+        template <typename T>
+        void transMat(T rot_rad, T scale_x, T scale_y, T out[2][2]) {
+            float cosrot = std::cos(rot_rad);
+            float sinrot = std::sin(rot_rad);
+
+            // [Scale] * [rotation] matrix multiplication in that order
+            out[0][0] = scale_x * cosrot;
+            out[0][1] = scale_x * sinrot;
+            out[1][0] = -scale_y * sinrot;
+            out[1][1] = scale_y * cosrot;
+        }
+
+        template <typename T>
+        Matrix<T, 2, 2> transMat(T rot_rad, T scale_x, T scale_y) {
+            float cosrot = std::cos(rot_rad);
+            float sinrot = std::sin(rot_rad);
+
+            return Matrix<T, 2, 2>{
+                {
+                    {scale_x * cosrot, scale_x * sinrot},
+                    {-scale_y * sinrot, scale_y * cosrot}
+                }
+            }; 
         }
     }
 }

@@ -22,8 +22,9 @@
 
 namespace Quantum2D {
     class Rigidbody2D {
+        // TODO: replace get functions with reference accessors!
     public:
-        Rigidbody2D() : rotation(0) {}
+        Rigidbody2D() : rotation(0), m_angVelocity(0) {}
 
         const Diamond::Vector2<tQ_pos> &getPosition() const { return position; }
         Diamond::Vector2<tQ_pos> &getPosition() { return position; }
@@ -37,10 +38,15 @@ namespace Quantum2D {
         Diamond::Vector2<tQ_pos> &getVelocity() { return velocity; }
         void setVelocity(const Diamond::Vector2<tQ_pos> &newvel) { velocity = newvel; }
 
+        tQ_rot angVelocity() const { return m_angVelocity; }
+        tQ_rot &angVelocity() { return m_angVelocity; }
+
     private:
         Diamond::Vector2<tQ_pos> position;
         tQ_rot rotation;
+
         Diamond::Vector2<tQ_pos> velocity;
+        tQ_rot m_angVelocity;
     };
 }
 

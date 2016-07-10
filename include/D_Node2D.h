@@ -18,7 +18,7 @@
 #define D_NODE2D_H
 
 #include <vector>
-#include "duMatrix.h"
+#include "duMath.h" // for deg2rad and transMat
 #include "D_Transform2.h"
 #include "D_typedefs.h"
 
@@ -167,7 +167,11 @@ namespace Diamond {
         /**
          Get this node's world transformation matrix (not including translation).
         */
-        Matrix<tD_real, 2, 2> getTransMat() const;
+        Matrix<tD_real, 2, 2> getTransMat() const {
+            return Math::transMat(Math::deg2rad(m_worldTransform->rotation), 
+                                  m_worldTransform->scale.x, 
+                                  m_worldTransform->scale.y);
+        }
 
 
 

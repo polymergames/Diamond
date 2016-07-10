@@ -26,6 +26,11 @@ namespace Diamond {
      ID references that are guaranteed valid for the lifetime of a referred element.
      Access is O(1) but with higher constant factor than std::vector.
      Does not maintain order of elements, and uses O(n) auxiliary space.
+
+     Because the container is indexed by IDs which are not necessarily in order,
+     do not try to iterate by accessing a sequential series of integer indices.
+     Instead, either use the iterators (ex. begin(), end())
+     or obtain the raw vector from data() and iterate that.
     */
     template <class T, typename TID = tD_id>
     class SwapVector {
