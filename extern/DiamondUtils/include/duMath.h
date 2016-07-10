@@ -32,7 +32,9 @@ namespace Diamond {
         inline float deg2rad(float deg) { return deg * DEG2RAD; }
 
         template <typename A, typename B, typename C>
-        inline bool leftOf(Vector2<C> &x, Vector2<A> &ea, Vector2<B> &eb) {
+        inline bool leftOf(const Vector2<C> &x, 
+                           const Vector2<A> &ea, 
+                           const Vector2<B> &eb) {
             return (eb.x - ea.x) * (x.y - ea.y) - (eb.y - ea.y) * (x.x - ea.x) > 0;
         }
 

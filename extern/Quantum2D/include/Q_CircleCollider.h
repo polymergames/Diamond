@@ -41,7 +41,7 @@ namespace Quantum2D {
         tQ_pos getRadiusSq() const { return radiusSq; }
 
         /**
-         Get the center position of this circle in the parent transform's local space.
+         Get the center position of this circle in the parent rigidbody's local space.
         */
         const Diamond::Vector2<tQ_pos> &getCenter() const { return center; }
 
@@ -57,7 +57,7 @@ namespace Quantum2D {
         /**
          Update world coordinates, physics world calls this once per frame.
         */
-        void update(tQ_delta delta_ms) override;
+        void update(tQ_delta delta) override;
 
     private:
         tQ_pos radius;

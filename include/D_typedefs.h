@@ -18,7 +18,9 @@
 #define D_TYPEDEFS_H
 
 #include <memory>
+#include <vector>
 #include "duTypedefs.h"
+#include "duVector2.h"
 
 // transform typedefs
 using tD_pos =          tD_real;    // position coordinate type
@@ -45,6 +47,8 @@ namespace Diamond {
     using DTransform2 =         Transform2<tD_pos, tD_rot, tD_real>;
     using Transform2Ptr =       SharedPtr<DTransform2 >;
     using ConstTransform2Ptr =  SharedPtr<const DTransform2 >;
+    
+    using PointList = std::vector<Vector2<tD_pos> >;
 }
 
 #endif // D_TYPEDEFS_H

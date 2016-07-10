@@ -31,7 +31,7 @@ namespace Quantum2D {
                        const Diamond::Vector2<tQ_num> &origin = Diamond::Vector2<tQ_num>(0, 0));
 
         /**
-         Get the origin point of this AABB in the parent transform's local space.
+         Get the origin point of this AABB in the parent rigidbody's local space.
         */
         const Diamond::Vector2<tQ_num> &getOrigin() const { return origin; }
 
@@ -57,7 +57,7 @@ namespace Quantum2D {
         /**
          Update world coordinates, physics world calls this once per frame.
         */
-        void update(tQ_delta delta_ms) override;
+        void update(tQ_delta delta) override;
 
     private:
         Diamond::Vector2<tQ_num> origin;

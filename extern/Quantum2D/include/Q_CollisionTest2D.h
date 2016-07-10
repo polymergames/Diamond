@@ -19,6 +19,7 @@
 
 #include "Q_AABBCollider2D.h"
 #include "Q_CircleCollider.h"
+#include "Q_PolyCollider.h"
 
 namespace Quantum2D {
     namespace CollisionTest2D {
@@ -35,8 +36,8 @@ namespace Quantum2D {
         bool circle2(const CircleCollider *a, const CircleCollider *b);
 
         bool circleAABB(const CircleCollider *a, const AABBCollider2D *b);
-
-        extern bool initialized;
+        
+        bool poly2(const PolyCollider *a, const PolyCollider *b);
     }
 }
 

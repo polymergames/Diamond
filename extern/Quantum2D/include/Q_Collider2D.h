@@ -50,7 +50,7 @@ namespace Quantum2D {
         /**
          Called by a physics world once per frame to update this collider.
         */
-        virtual void update(tQ_delta delta_ms) = 0;
+        virtual void update(tQ_delta delta) = 0;
 
     protected:
         const BodyList &bodylist;

@@ -23,6 +23,7 @@
 #include "D_QuantumBody2D.h"
 #include "D_QuantumAABBCollider2D.h"
 #include "D_QuantumCircleCollider.h"
+#include "D_QuantumPolyCollider.h"
 #include "D_Transform2.h"
 
 namespace Diamond {
@@ -52,13 +53,20 @@ namespace Diamond {
         void operator() (Collider2D *collider) const {
             QuantumAABBCollider2D *qaabb = nullptr;
             QuantumCircleCollider *qcircle = nullptr;
+            QuantumPolyCollider *qpoly = nullptr;
 
+            // TODO: create a base quantum collider class
+            // and use it to get the collider ID,
+            // don't need these conditionals
             // Try aabb
             if (qaabb = dynamic_cast<QuantumAABBCollider2D*>(collider))
                 m_world.freeCollider(qaabb->getColliderID());
             // try circle
             else if (qcircle = dynamic_cast<QuantumCircleCollider*>(collider))
                 m_world.freeCollider(qcircle->getColliderID());
+            // try poly
+            else if (qpoly = dynamic_cast<QuantumPolyCollider*>(collider))
+                m_world.freeCollider(qpoly->getColliderID());
 
             delete collider;
             // DEBUG
@@ -151,6 +159,23 @@ namespace Diamond {
                 Quantum2D::CircleCollider *circle = dynamic_cast<Quantum2D::CircleCollider*>(m_world.getCollider(col));
                 if (circle)
                     return SharedPtr<CircleCollider>(new QuantumCircleCollider(col, circle), m_colliderDeleter);
+            }
+            return nullptr;
+        }
+        
+        SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
+                                                 void *parent,
+                                                 const std::function<void(void *other)> &onCollision,
+                                                 const PointList &points) override {
+            const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
+            if (qbody) {
+                collider2_id col = m_world.genCollider<Quantum2D::PolyCollider>(qbody->getID(),
+                                                                                parent,
+                                                                                onCollision,
+                                                                                points);
+                Quantum2D::PolyCollider *poly = dynamic_cast<Quantum2D::PolyCollider*>(m_world.getCollider(col));
+                if (poly)
+                    return SharedPtr<PolyCollider>(new QuantumPolyCollider(col, poly), m_colliderDeleter);
             }
             return nullptr;
         }

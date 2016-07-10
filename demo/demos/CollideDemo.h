@@ -20,6 +20,7 @@
 #include "D_AnimatorSheet.h"
 #include "D_Entity2D.h"
 #include "D_Game2D.h"
+#include "D_typedefs.h"
 
 class CollideDemo : public Diamond::Game2D {
 public:
@@ -31,9 +32,16 @@ public:
 
 private:
     const float movespeed;
+    const float spinspeed = 0.75f;
+    
+    const float SPIKE_SCALE = 0.1f;
+    const float ZAPPER_SCALE = 0.5f;
 
     Diamond::Entity2D spike1, spike2, zapper1, zapper2;
+    Diamond::Entity2D indicator_spike;
     Diamond::AnimationSheet zapper_anim;
+    
+    Diamond::PointList zapperColPoints;
 
     void m_onCollision(void *other);
 };

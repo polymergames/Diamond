@@ -21,6 +21,7 @@
 #include "D_Config.h"
 #include "D_CircleCollider.h"
 #include "D_AABBCollider2D.h"
+#include "D_PolyCollider.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
 
@@ -70,6 +71,17 @@ namespace Diamond {
                                                              const std::function<void(void *other)> &onCollision,
                                                              tD_pos radius,
                                                              const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) = 0;
+        
+        /**
+         Creates a polygon collider attached to the given rigidbody.
+         parent is a pointer to the object owning the collider.
+         The given points may be used by reference
+         and must therefore remain valid throughout the life of the collider.
+        */
+        virtual SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
+                                                         void *parent,
+                                                         const std::function<void(void *other)> &onCollision,
+                                                         const PointList &points) = 0;
     };
 }
 
