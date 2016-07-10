@@ -98,7 +98,6 @@ namespace Diamond {
                 Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
                 rbody.position() = i->second->position;
                 rbody.rotation() = i->second->rotation;
-                rbody.scale() = i->second->scale;
             }
         }
 
@@ -108,7 +107,6 @@ namespace Diamond {
                 i->second->position = rbody.position();
                 // TODO: test!
                 i->second->rotation = rbody.rotation();
-                i->second->scale = rbody.scale();
             }
         }
         
@@ -123,7 +121,6 @@ namespace Diamond {
             Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(body->getID());
             rbody.position() = transform.position;
             rbody.rotation() = transform.rotation;
-            rbody.scale() = transform.scale;
             return SharedPtr<Rigidbody2D>(body, m_bodyDeleter);
         }
         

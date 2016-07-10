@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include "duMath.h"
 #include "duSwapvector.h"
 #include "duTypedefs.h"
 
@@ -32,12 +33,20 @@ typedef tQ_num tQ_pos;
 typedef tQ_num tQ_rot;
 typedef tQ_num tQ_delta;
 
+
 namespace Quantum2D {
     class Rigidbody2D;
     class Collider2D;
 
     typedef Diamond::SwapVector<Rigidbody2D> BodyList;
     typedef Diamond::SwapVector<std::unique_ptr<Collider2D> > ColliderList;
+    
+    // change based on the unit you are using for angles
+    // ex. if you are storing radians in rigidbodies,
+    // then this should just return its input rotation.
+    // If you are storing degrees, this should convert the input
+    // to radians.
+    inline tQ_rot Qrot2rad(tQ_rot rot) { return Diamond::Math::deg2rad(rot); }
 }
 
 #endif // Q_TYPEDEFS_H
