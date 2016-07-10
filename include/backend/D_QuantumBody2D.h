@@ -32,15 +32,15 @@ namespace Diamond {
         }
         
         body2d_id getID() const { return body; }
+/*
+        Vector2<tD_pos> getPosition() const { return world->getRigidbody(body).position(); }
+        void setPosition(const Vector2<tD_pos> &newpos) { world->getRigidbody(body).position = newpos; }
 
-        Vector2<tD_pos> getPosition() const { return world->getRigidbody(body).getPosition(); }
-        void setPosition(const Vector2<tD_pos> &newpos) { world->getRigidbody(body).setPosition(newpos); }
-
-        float getRotation() const { return world->getRigidbody(body).getRotation(); }
-        void setRotation(tD_rot newrot) { world->getRigidbody(body).setRotation(newrot); }
-
-        Vector2<tD_pos> getVelocity() const override { return world->getRigidbody(body).getVelocity(); }
-        void setVelocity(const Vector2<tD_pos> &newvel) override { world->getRigidbody(body).setVelocity(newvel); }
+        float getRotation() const { return world->getRigidbody(body).rotation(); }
+        void setRotation(tD_rot newrot) { world->getRigidbody(body).rotation = newrot; }
+*/
+        Vector2<tD_pos> getVelocity() const override { return world->getRigidbody(body).velocity(); }
+        void setVelocity(const Vector2<tD_pos> &newvel) override { world->getRigidbody(body).velocity() = newvel; }
         
         float getAngularVelocity() const override { return world->getRigidbody(body).angVelocity(); }
         void setAngularVelocity(float newVel) override { world->getRigidbody(body).angVelocity() = newVel; }

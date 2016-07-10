@@ -93,7 +93,7 @@ namespace Quantum2D {
         /**
          Steps the physics simulation by the number of milliseconds given.
         */
-        void step(tQ_delta delta_ms);
+        void step(tQ_delta delta);
 
         /**
          Get the pairs of colliders that collided in the last simulation step.

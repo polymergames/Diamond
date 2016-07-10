@@ -22,30 +22,40 @@
 
 namespace Quantum2D {
     class Rigidbody2D {
-        // TODO: replace get functions with reference accessors!
     public:
-        Rigidbody2D() : rotation(0), m_angVelocity(0) {}
+        Rigidbody2D() : m_rotation(0), m_angVelocity(0) {}
 
-        const Diamond::Vector2<tQ_pos> &getPosition() const { return position; }
-        Diamond::Vector2<tQ_pos> &getPosition() { return position; }
-        void setPosition(const Diamond::Vector2<tQ_pos> &newpos) { position = newpos; }
+        const Diamond::Vector2<tQ_pos>  &position() const { return m_position; }
+        Diamond::Vector2<tQ_pos>        &position() { return m_position; }
 
-        tQ_rot getRotation() const { return rotation; }
-        tQ_rot &getRotation() { return rotation; }
-        void setRotation(tQ_rot newrot) { rotation = newrot; }
+        tQ_rot                          rotation() const { return m_rotation; }
+        tQ_rot                          &rotation() { return m_rotation; }
+        
+        const Diamond::Vector2<tQ_pos>  &scale() const { return m_scale; }
+        Diamond::Vector2<tQ_pos>        &scale() { return m_scale; }
 
-        const Diamond::Vector2<tQ_pos> &getVelocity() const { return velocity; }
-        Diamond::Vector2<tQ_pos> &getVelocity() { return velocity; }
-        void setVelocity(const Diamond::Vector2<tQ_pos> &newvel) { velocity = newvel; }
+        const Diamond::Vector2<tQ_pos>  &velocity() const { return m_velocity; }
+        Diamond::Vector2<tQ_pos>        &velocity() { return m_velocity; }
 
-        tQ_rot angVelocity() const { return m_angVelocity; }
-        tQ_rot &angVelocity() { return m_angVelocity; }
+        tQ_rot                          angVelocity() const { return m_angVelocity; }
+        tQ_rot                          &angVelocity() { return m_angVelocity; }
+        
+        
+        void update(tQ_delta delta) {
+            integrate(delta);
+        }
+        
+        void integrate(tQ_delta delta) {
+            m_position += m_velocity * delta;
+            m_rotation += m_angVelocity * delta;
+        }
 
     private:
-        Diamond::Vector2<tQ_pos> position;
-        tQ_rot rotation;
+        Diamond::Vector2<tQ_pos> m_position;
+        tQ_rot m_rotation;
+        Diamond::Vector2<tQ_pos> m_scale;
 
-        Diamond::Vector2<tQ_pos> velocity;
+        Diamond::Vector2<tQ_pos> m_velocity;
         tQ_rot m_angVelocity;
     };
 }

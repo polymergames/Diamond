@@ -96,17 +96,19 @@ namespace Diamond {
         void updateBodies() {
             for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
-                rbody.setPosition(i->second->position);
-                rbody.setRotation(i->second->rotation);
+                rbody.position() = i->second->position;
+                rbody.rotation() = i->second->rotation;
+                rbody.scale() = i->second->scale;
             }
         }
 
         void updateTransforms() {
             for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
                 Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
-                i->second->position = rbody.getPosition();
+                i->second->position = rbody.position();
                 // TODO: test!
-                i->second->rotation = rbody.getRotation();
+                i->second->rotation = rbody.rotation();
+                i->second->scale = rbody.scale();
             }
         }
         
@@ -119,8 +121,9 @@ namespace Diamond {
 
             // Initialize the new rigidbody with the parent entity's world transform
             Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(body->getID());
-            rbody.setPosition(transform.position);
-            rbody.setRotation(transform.rotation);
+            rbody.position() = transform.position;
+            rbody.rotation() = transform.rotation;
+            rbody.scale() = transform.scale;
             return SharedPtr<Rigidbody2D>(body, m_bodyDeleter);
         }
         
