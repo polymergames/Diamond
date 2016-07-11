@@ -26,6 +26,18 @@
 
 
 namespace Diamond {
+    struct SDLRenderablePoint {
+        Vector2<int> coords;
+        RGBA color;
+    };
+    
+    struct SDLRenderableLine {
+        Vector2<int> p1;
+        Vector2<int> p2;
+        RGBA color;
+    };
+    
+    
     class SDLRenderer2D : public Renderer2D {
     public:
         SDLRenderer2D();
@@ -57,6 +69,14 @@ namespace Diamond {
         ) override;
         
         
+        void renderPoint(const Vector2<tD_pos> &coords,
+                         const RGBA &color) override;
+        
+        void renderLine(const Vector2<tD_pos> &p1,
+                        const Vector2<tD_pos> &p2,
+                        const RGBA &color) override;
+        
+        
         SDLRenderObj2D &renderObj(uint8_t layer,
                                   SDLrenderobj_id robj) {
             return m_render_objects[layer][robj];
@@ -79,8 +99,13 @@ namespace Diamond {
     private:
         SDL_Window *m_window;
         SDL_Renderer *m_renderer;
+        
+        RGBA m_bgColor;
 
         std::vector<SwapVector<SDLRenderObj2D> > m_render_objects;
+        
+        std::vector<SDLRenderablePoint> m_render_points_queue;
+        std::vector<SDLRenderableLine> m_render_lines_queue;
     };
 }
 

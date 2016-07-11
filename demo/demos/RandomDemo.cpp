@@ -139,6 +139,19 @@ void RandomDemo::update(tD_delta delta) {
         spike_sprite->setColor(sc);
     }
     
+    // Drawing
+    auto renderer = engine.getRenderer();
+    RGBA renderColor = {0, 255, 0, 255};
+    
+    renderer->renderPoint(spike.worldTransform().position, renderColor);
+    renderer->renderPoint(spike2.worldTransform().position, renderColor);
+    renderer->renderPoint(zapper.worldTransform().position, renderColor);
+    renderer->renderPoint(zapper2.worldTransform().position, renderColor);
+    
+    renderer->renderLine(spike.worldTransform().position,
+                         zapper2.worldTransform().position,
+                         renderColor);
+    
     // Layer
     if (Input::keyup[Input::K_L]) {
         auto rcomp = zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT);

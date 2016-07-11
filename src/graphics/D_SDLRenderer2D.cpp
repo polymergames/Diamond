@@ -25,7 +25,7 @@
 
 
 Diamond::SDLRenderer2D::SDLRenderer2D() 
-    : m_window(nullptr), m_renderer(nullptr) {}
+    : m_window(nullptr), m_renderer(nullptr), m_bgColor({0, 0, 0, 100}) {}
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
     SDL_DestroyRenderer(m_renderer);
@@ -64,7 +64,9 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
         Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
-    SDL_SetRenderDrawColor(m_renderer, config.bg_color.r, config.bg_color.g, config.bg_color.b, config.bg_color.a);
+    
+    // Set background color
+    m_bgColor = config.bg_color;
 
     // Initialize image loading
     int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -77,8 +79,12 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
 }
 
 void Diamond::SDLRenderer2D::renderAll() {
-    // Render all the graphics
+    // Render background
+    SDL_SetRenderDrawColor(m_renderer,
+                           m_bgColor.r, m_bgColor.g, m_bgColor.b, m_bgColor.a);
     SDL_RenderClear(m_renderer);
+    
+    // Render sprites
     for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
         for (auto i = l->begin(); i != l->end(); ++i) {
             //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
@@ -105,7 +111,38 @@ void Diamond::SDLRenderer2D::renderAll() {
             );
         }
     }
+    
+    
+    // Render points
+    for (SDLRenderablePoint point : m_render_points_queue) {
+        SDL_SetRenderDrawColor(m_renderer,
+                               point.color.r,
+                               point.color.g,
+                               point.color.b,
+                               point.color.a);
+        
+        SDL_RenderDrawPoint(m_renderer,
+                            point.coords.x, point.coords.y);
+    }
+    
+    m_render_points_queue.clear();
+    
+    // Render lines
+    for (SDLRenderableLine line : m_render_lines_queue) {
+        SDL_SetRenderDrawColor(m_renderer,
+                               line.color.r,
+                               line.color.g,
+                               line.color.b,
+                               line.color.a);
+        
+        SDL_RenderDrawLine(m_renderer,
+                           line.p1.x, line.p1.y,
+                           line.p2.x, line.p2.y);
+    }
+    
+    m_render_lines_queue.clear();
 
+    
     // Update screen
     SDL_RenderPresent(m_renderer);
 }
@@ -160,6 +197,19 @@ Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRende
 
     return makeShared<SDLRenderComponent2D>(*this, robj, layer);
 }
+
+
+void Diamond::SDLRenderer2D::renderPoint(const Vector2<tD_pos> &coords,
+                                         const RGBA &color) {
+    m_render_points_queue.push_back({coords, color});
+}
+
+void Diamond::SDLRenderer2D::renderLine(const Vector2<tD_pos> &p1,
+                                        const Vector2<tD_pos> &p2,
+                                        const RGBA &color) {
+    m_render_lines_queue.push_back({p1, p2, color});
+}
+
 
 Diamond::SDLrenderobj_id Diamond::SDLRenderer2D::changeLayer(uint8_t curLayer,
                                                              SDLrenderobj_id robj,

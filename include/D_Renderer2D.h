@@ -59,6 +59,15 @@ namespace Diamond {
         ) {
             return makeRenderComponent(*transform, texture, layer, pivot);
         }
+        
+        
+        // Primitives rendering
+        virtual void renderPoint(const Vector2<tD_pos> &coords,
+                                 const RGBA &color) = 0;
+        
+        virtual void renderLine(const Vector2<tD_pos> &p1,
+                                const Vector2<tD_pos> &p2,
+                                const RGBA &color) = 0;
     };
 }
 
