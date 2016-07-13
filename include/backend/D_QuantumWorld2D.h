@@ -23,6 +23,7 @@
 #include "D_QuantumBody2D.h"
 #include "D_QuantumAABBCollider2D.h"
 #include "D_QuantumCircleCollider.h"
+#include "D_QuantumPolyPoints.h"
 #include "D_QuantumPolyCollider.h"
 #include "D_Transform2.h"
 
@@ -163,16 +164,21 @@ namespace Diamond {
             return nullptr;
         }
         
+        SharedPtr<PolyColPoints> makePolyColPoints(const PointList &points) override {
+            return SharedPtr<PolyColPoints>(new QuantumPolyPoints(points));
+        }
+        
         SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
                                                  void *parent,
                                                  const std::function<void(void *other)> &onCollision,
-                                                 const PointList &points) override {
+                                                 const SharedPtr<PolyColPoints> &points) override {
             const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
-            if (qbody) {
+            const QuantumPolyPoints *qpoints = dynamic_cast<const QuantumPolyPoints*>(points.get());
+            if (qbody && qpoints) {
                 collider2_id col = m_world.genCollider<Quantum2D::PolyCollider>(qbody->getID(),
                                                                                 parent,
                                                                                 onCollision,
-                                                                                points);
+                                                                                qpoints->get());
                 Quantum2D::PolyCollider *poly = dynamic_cast<Quantum2D::PolyCollider*>(m_world.getCollider(col));
                 if (poly)
                     return SharedPtr<PolyCollider>(new QuantumPolyCollider(col, poly), m_colliderDeleter);

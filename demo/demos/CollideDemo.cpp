@@ -28,7 +28,8 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
       spike2(engine.makeTransform()), 
       zapper1(engine.makeTransform()), 
       zapper2(engine.makeTransform()),
-      indicator_spike(engine.makeTransform()) {
+      indicator_spike(engine.makeTransform()),
+      m_debug(engine.getRenderer()) {
     Renderer2D *renderer = engine.getRenderer();
 
     SharedPtr<Texture> spike_sprite = renderer->loadTexture("spike.png");
@@ -101,14 +102,16 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     // using partial width because the sprite file is 5 times as wide as the actual zapper sprite
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
           
-          
+    PointList zapperColPoints;
+    
     zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, 0));
     zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale, 0));
-    zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale,
-                                             zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
     zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale,
                                              zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
-      
+    zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale,
+                                             zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
+    
+    ptrZapperPolyPoints = physworld->makePolyColPoints(zapperColPoints);
           
     rbody = physworld->makeRigidbody(zapper1.transform());
     zapper1.addComponent(RIGIDBODY, rbody);
@@ -119,7 +122,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
         Vector2<tD_pos>(2 * partial_width * scale, 0)));
     */
     zapper1.addComponent(COLLIDER,
-                         physworld->makePolyCollider(rbody, &zapper1, callback, zapperColPoints));
+                         physworld->makePolyCollider(rbody, &zapper1, callback, ptrZapperPolyPoints));
 
     rbody = physworld->makeRigidbody(zapper2.transform());
     zapper2.addComponent(RIGIDBODY, rbody);
@@ -130,7 +133,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
         Vector2<tD_pos>(2 * partial_width * scale, 0)));
     */
     zapper2.addComponent(COLLIDER,
-                         physworld->makePolyCollider(rbody, &zapper2, callback, zapperColPoints));
+                         physworld->makePolyCollider(rbody, &zapper2, callback, ptrZapperPolyPoints));
 }
 
 void CollideDemo::update(tD_delta delta) {
@@ -138,6 +141,10 @@ void CollideDemo::update(tD_delta delta) {
     auto z1col = zapper1.getComponent<PolyCollider>(COLLIDER);
     auto z2col = zapper2.getComponent<PolyCollider>(COLLIDER);
     
+    m_debug.draw(z1col, colliderColor);
+    m_debug.draw(z2col, colliderColor);
+    
+    /*
     for (Vector2<float> point : z1col->worldPoints()) {
         std::cout << point << " ";
     }
@@ -147,6 +154,7 @@ void CollideDemo::update(tD_delta delta) {
         std::cout << point << " ";
     }
     std::cout << std::endl;
+    */
     
     
     // zapper1 controls

@@ -14,27 +14,23 @@
     limitations under the License.
 */
 
-#ifndef D_DEBUG_DRAWER_H
-#define D_DEBUG_DRAWER_H
+#ifndef D_QUANTUM_POLY_POINTS_H
+#define D_QUANTUM_POLY_POINTS_H
 
-#include "D_Renderer2D.h"
-#include "D_PolyCollider.h"
+#include "D_PolyColPoints.h"
+#include "Q_CWPoints.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
-    class DebugDrawer {
+    class QuantumPolyPoints : public PolyColPoints {
     public:
-        DebugDrawer(Renderer2D *renderer);
+        QuantumPolyPoints(const PointList &points) : m_points(points) {}
         
-        void draw(const PolyCollider *poly, const RGBA &color);
-        
-        void draw(const SharedPtr<PolyCollider> &poly, const RGBA &color) {
-            draw(poly.get(), color);
-        }
+        const Quantum2D::CWPoints<PointList> &get() const { return m_points; }
         
     private:
-        Renderer2D *m_renderer;
+        Quantum2D::CWPoints<PointList> m_points;
     };
 }
 
-#endif // D_DEBUG_DRAWER_H
+#endif // D_QUANTUM_POLY_POINTS_H

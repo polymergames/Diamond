@@ -18,6 +18,7 @@
 #define Q_POLY_COLLIDER_H
 
 #include "Q_Collider2D.h"
+#include "Q_CWPoints.h"
 
 namespace Quantum2D {
     /**
@@ -29,7 +30,7 @@ namespace Quantum2D {
                      body2d_id body,
                      void *parent,
                      const std::function<void(void *other)> &onCollision,
-                     const PointList &points);
+                     const CWPoints<PointList> &points);
         
         /**
          Get the coordinates of this polygon's vertices

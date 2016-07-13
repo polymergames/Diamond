@@ -14,27 +14,16 @@
     limitations under the License.
 */
 
-#ifndef D_DEBUG_DRAWER_H
-#define D_DEBUG_DRAWER_H
+#ifndef D_POLY_COL_POINTS_H
+#define D_POLY_COL_POINTS_H
 
-#include "D_Renderer2D.h"
-#include "D_PolyCollider.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
-    class DebugDrawer {
+    class PolyColPoints {
     public:
-        DebugDrawer(Renderer2D *renderer);
-        
-        void draw(const PolyCollider *poly, const RGBA &color);
-        
-        void draw(const SharedPtr<PolyCollider> &poly, const RGBA &color) {
-            draw(poly.get(), color);
-        }
-        
-    private:
-        Renderer2D *m_renderer;
+        virtual ~PolyColPoints() {}
     };
 }
 
-#endif // D_DEBUG_DRAWER_H
+#endif // D_POLY_COL_POINTS_H
