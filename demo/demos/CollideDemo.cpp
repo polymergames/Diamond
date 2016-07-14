@@ -39,6 +39,8 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
         engine.quit();
         return;
     }
+          
+    Vector2<int> window = renderer->getResolution();
 
     spike1.addComponent(RENDERCOMPONENT, 
         renderer->makeRenderComponent(spike1.transform(), spike_sprite));
@@ -56,7 +58,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
                                   spike_sprite,
                                   0,
                                   Vector2<float>(spike_pivot, spike_pivot)));
-    indicator_spike.transform().position = Vector2<int>(100, 100);
+    indicator_spike.transform().position = Vector2<int>(window.x - 100, 100);
     indicator_spike.transform().scale = Vector2<float>(SPIKE_SCALE, SPIKE_SCALE);
           
     zapper_anim.sprite_sheet = renderer->loadTexture("zapper.png");
@@ -104,12 +106,13 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
           
     PointList zapperColPoints;
     
+    float zheight = zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale;
     zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, 0));
     zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale, 0));
-    zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale,
-                                             zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
-    zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale,
-                                             zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale));
+    zapperColPoints.push_back(Vector2<float>(5 * partial_width * scale, zheight / 2.0));
+    zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale, zheight));
+    zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, zheight));
+    zapperColPoints.push_back(Vector2<float>(0, zheight / 2.0));
     
     ptrZapperPolyPoints = physworld->makePolyColPoints(zapperColPoints);
           
@@ -137,25 +140,9 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
 }
 
 void CollideDemo::update(tD_delta delta) {
-    // DEBUG
-    auto z1col = zapper1.getComponent<PolyCollider>(COLLIDER);
-    auto z2col = zapper2.getComponent<PolyCollider>(COLLIDER);
-    
-    m_debug.draw(z1col, colliderColor);
-    m_debug.draw(z2col, colliderColor);
-    
-    /*
-    for (Vector2<float> point : z1col->worldPoints()) {
-        std::cout << point << " ";
-    }
-    std::cout << std::endl;
-    
-    for (Vector2<float> point : z2col->worldPoints()) {
-        std::cout << point << " ";
-    }
-    std::cout << std::endl;
-    */
-    
+    // draw colliders
+    m_debug.draw(zapper1.getComponent<PolyCollider>(COLLIDER), colliderColor);
+    m_debug.draw(zapper2.getComponent<PolyCollider>(COLLIDER), colliderColor);
     
     // zapper1 controls
     if (Input::keydown[Input::K_W]) {
