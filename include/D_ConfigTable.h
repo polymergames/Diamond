@@ -1,5 +1,5 @@
 /*
-    Copyright 2015 Ahnaf Siddiqui
+    Copyright 2016 Ahnaf Siddiqui
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,27 +14,26 @@
     limitations under the License.
 */
 
-#include "D_Log.h"
+#ifndef D_CONFIGTABLE_H
+#define D_CONFIGTABLE_H
 
-#include <iostream>
-#include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace Diamond {
-    namespace Log {
-        static std::unique_ptr<Logger> logger = std::unique_ptr<Logger>(new Logger);
-    }
+    class ConfigTable {
+    public:
+        std::string get(const std::string &key) { return m_table[key]; }
+
+        void set(const std::string &key,
+                 const std::string &value) { m_table[key] = value; }
+
+        size_t size() const { return m_table.size(); }
+
+    private:
+        std::unordered_map<std::string, std::string> m_table;
+    };
 }
 
-void Diamond::Log::setLogger(Logger *logger) {
-    // TODO: gotta completely refactor this junk
-    // use a global stream object for logging
-    if (!Log::logger)
-        Log::logger = std::unique_ptr<Logger>(logger);
-    else
-        // like, this is bad
-        delete logger;
-}
 
-void Diamond::Log::log(const std::string &message) {
-    logger->log(message);
-}
+#endif // D_CONFIGTABLE_H
