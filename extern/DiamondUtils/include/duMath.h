@@ -20,6 +20,7 @@
 #include <cstdlib>
 #include "duVector2.h"
 #include "duMatrix.h"
+#include "duTypedefs.h"
 
 namespace Diamond {
     namespace Math {
@@ -31,6 +32,11 @@ namespace Diamond {
 
         inline float deg2rad(float deg) { return deg * DEG2RAD; }
 
+        inline float random(float min, float max) {
+            return min + ((float)std::rand() / RAND_MAX) * (max - min);
+        }
+
+        // Geometry
         template <typename A, typename B, typename C>
         inline bool leftOf(const Vector2<C> &x, 
                            const Vector2<A> &ea, 
@@ -38,10 +44,17 @@ namespace Diamond {
             return (eb.x - ea.x) * (x.y - ea.y) - (eb.y - ea.y) * (x.x - ea.x) > 0;
         }
 
+        inline float dist2SegmentPoint(const Vector2<float> &ea, 
+                                       const Vector2<float> &eb, 
+                                       const Vector2<float> &x) {
+            float length2 = ea.distanceSq(eb);
+            if (length2 < EPS && length2 > -EPS)
+                return ea.distanceSq(x);
 
-        inline float random(float min, float max) {
-            return min + ((float)std::rand() / RAND_MAX) * (max - min);
+            float t = std::max(0.0f, std::min(1.0f, (float)((x - ea).dot(eb - ea) / length2)));
+            return x.distanceSq(ea + t * (eb - ea));
         }
+        
 
 
         // Generates a transformation matrix for rotation and scale, storing it in out

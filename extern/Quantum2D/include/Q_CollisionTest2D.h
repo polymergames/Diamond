@@ -38,6 +38,8 @@ namespace Quantum2D {
         bool circleAABB(const CircleCollider *a, const AABBCollider2D *b);
         
         bool poly2(const PolyCollider *a, const PolyCollider *b);
+
+        bool circlePoly(const CircleCollider *a, const PolyCollider *b);
     }
 }
 

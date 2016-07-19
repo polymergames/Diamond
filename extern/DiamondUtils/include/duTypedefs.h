@@ -31,6 +31,7 @@ typedef tD_index tD_id; // general identification type
 
 namespace Diamond {
     const tD_index INVALID = ~0; // represents an invalid id or array index.
+    const tD_real EPS = 0.0001;
 }
 
 #endif // DU_TYPEDEFS_H

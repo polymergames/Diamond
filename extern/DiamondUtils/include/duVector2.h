@@ -68,6 +68,11 @@ namespace Diamond {
             return *this;
         }
 
+        template <typename V>
+        float dot(const Vector2<V> &b) {
+            return x * b.x + y * b.y;
+        }
+
         // Matrix math
         template <typename M>
         Vector2<M> mul(const M m[2][2]) const {
