@@ -31,7 +31,7 @@ namespace Diamond {
 
     protected:
         // TODO: move this somewhere else?
-        static constexpr std::string configDelim = ":";
+        static constexpr auto configDelim = ":";
 
         bool parseLine(const std::string &line,
                        std::string &key,

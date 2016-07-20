@@ -23,7 +23,40 @@
 namespace Diamond {
     class ConfigTable {
     public:
-        std::string get(const std::string &key) { return m_table[key]; }
+
+        std::string get(const std::string &key) {
+            return m_table[key];
+        }
+
+        int getInt(const std::string &key) {
+            return std::stoi(m_table[key]);
+        }
+
+        float getFloat(const std::string &key) {
+            return std::stof(m_table[key]);
+        }
+
+        double getDouble(const std::string &key) {
+            return std::stod(m_table[key]);
+        }
+
+        bool getBool(const std::string &key) {
+            std::string res = m_table[key];
+
+            // TODO: make more concise
+            return res == "1"    ||
+                   res == "y"    ||
+                   res == "Y"    ||
+                   res == "T"    ||
+                   res == "yes"  ||
+                   res == "Yes"  ||
+                   res == "YES"  ||
+                   res == "true" ||
+                   res == "True" ||
+                   res == "TRUE";
+
+        }
+
 
         void set(const std::string &key,
                  const std::string &value) { m_table[key] = value; }

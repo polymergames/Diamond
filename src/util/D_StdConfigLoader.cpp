@@ -18,10 +18,6 @@
 #include "D_StdConfigLoader.h"
 #include <fstream>
 
-Diamond::StdConfigLoader::StdConfigLoader(const std::string &pathRoot)
-    : m_pathRoot(pathRoot) {}
-
-
 Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
     ConfigTable config;
 
@@ -34,11 +30,13 @@ Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
         std::string line, key, value;
 
         while (std::getline(fileStream, line)) {
-            if (!parseLine(line, key, value)) {
-                Log::log("Failed to parse line " + line + " in " + path);
-            }
-            else {
-                config.set(key, value);
+            if (!line.empty()) {
+                if (!parseLine(line, key, value)) {
+                    Log::log("Failed to parse line " + line + " in " + path);
+                }
+                else {
+                    config.set(key, value);
+                }
             }
         }
 
@@ -50,6 +48,10 @@ Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
 
     return config;
 }
+
+
+Diamond::StdConfigLoader::StdConfigLoader(const std::string &pathRoot)
+    : m_pathRoot(pathRoot) {}
 
 void Diamond::StdConfigLoader::write(const ConfigTable &table,
                                      const std::string &path) {

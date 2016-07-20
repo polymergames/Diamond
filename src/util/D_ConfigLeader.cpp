@@ -19,5 +19,15 @@
 bool Diamond::ConfigLoader::parseLine(const std::string &line,
                                       std::string &key,
                                       std::string &value) {
-    //
+    auto i = line.find(':');
+
+    if (i == std::string::npos ||
+        i < 1 ||
+        i + 1 == line.size())
+        return false;
+
+    key = line.substr(0, i);
+    value = line.substr(i + 1);
+
+    return true;
 }
