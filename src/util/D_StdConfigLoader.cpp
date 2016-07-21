@@ -25,7 +25,7 @@ Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
     fileStream.open(path);
 
     if (fileStream.is_open()) {
-        Log::log("Opened config file " + path);
+        Log::log("Opened config file " + path + " for reading");
 
         std::string line, key, value;
 
@@ -43,7 +43,7 @@ Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
         fileStream.close();
     }
     else {
-        Log::log("Failed to open config file " + path);
+        Log::log("Failed to open config file " + path + " for reading");
     }
 
     return config;
@@ -55,5 +55,21 @@ Diamond::StdConfigLoader::StdConfigLoader(const std::string &pathRoot)
 
 void Diamond::StdConfigLoader::write(const ConfigTable &table,
                                      const std::string &path) {
-    // TODO
+    std::ofstream filestream;
+    filestream.open(path);
+
+    if (filestream.is_open()) {
+        Log::log("Opened config file " + path + " for writing");
+
+        for (auto pair : table.data()) {
+            // DEBUG
+            // std::cout << pair.first << ":" << pair.second << std::endl;
+            filestream << pair.first << ":" << pair.second << std::endl;
+        }
+
+        filestream.close();
+    }
+    else {
+        Log::log("Failed to open config file " + path + " for writing");
+    }
 }

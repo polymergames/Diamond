@@ -84,3 +84,25 @@ TEST(ConfigTest, LoadsFile) {
     EXPECT_FALSE(config.getBool("Completed"));
     EXPECT_TRUE(config.getBool("Multiplayer"));
 }
+
+
+TEST(ConfigTest, WritesFile) {
+    StdConfigLoader configLoader;
+    ConfigTable config;
+
+    config.set("Game", "Snake");
+    config.set("Fun", true);
+    config.set("Highscore", 300);
+    config.set("pi", 3.14);
+
+    EXPECT_EQ(config.size(), 4);
+
+    configLoader.write(config, "dump.cfg");
+
+    ConfigTable loadedConfig = configLoader.load("dump.cfg");
+
+    EXPECT_EQ(loadedConfig.get("Game"), "Snake");
+    EXPECT_TRUE(loadedConfig.getBool("Fun"));
+    EXPECT_EQ(loadedConfig.getInt("Highscore"), 300);
+    EXPECT_FLOAT_EQ(loadedConfig.getFloat("pi"), 3.14);
+}

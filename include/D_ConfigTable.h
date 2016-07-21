@@ -21,50 +21,101 @@
 #include <unordered_map>
 
 namespace Diamond {
+    using tConfigHashMap = std::unordered_map<std::string, std::string>;
+
+    /**
+     * Stores key-value pairs for configuration items.
+     * All get functions return the value-initialized type
+     * if the given key is not found.
+     */
     class ConfigTable {
     public:
+
+        bool hasKey(const std::string &key) {
+            return m_table.find(key) != m_table.end();
+        }
+
 
         std::string get(const std::string &key) {
             return m_table[key];
         }
 
-        int getInt(const std::string &key) {
-            return std::stoi(m_table[key]);
+        std::string get(const std::string &key) const {
+            return findGet(key);
         }
+
+
+        int getInt(const std::string &key) {
+            return std::atoi(m_table[key].c_str());
+        }
+
+        int getInt(const std::string &key) const {
+            return std::atoi(findGet(key).c_str());
+        }
+
 
         float getFloat(const std::string &key) {
-            return std::stof(m_table[key]);
+            return std::atof(m_table[key].c_str());
         }
 
-        double getDouble(const std::string &key) {
-            return std::stod(m_table[key]);
+        float getFloat(const std::string &key) const {
+            return std::atof(findGet(key).c_str());
         }
+
 
         bool getBool(const std::string &key) {
-            std::string res = m_table[key];
+            return stringToBool(m_table[key]);
+        }
 
-            // TODO: make more concise
-            return res == "1"    ||
-                   res == "y"    ||
-                   res == "Y"    ||
-                   res == "T"    ||
-                   res == "yes"  ||
-                   res == "Yes"  ||
-                   res == "YES"  ||
-                   res == "true" ||
-                   res == "True" ||
-                   res == "TRUE";
-
+        bool getBool(const std::string &key) const {
+            return stringToBool(findGet(key));
         }
 
 
         void set(const std::string &key,
                  const std::string &value) { m_table[key] = value; }
 
+        void set(const std::string &key,
+                 const char *value) { m_table[key] = value; }
+
+        void set(const std::string &key,
+                 int value) { m_table[key] = std::to_string(value); }
+
+        void set(const std::string &key,
+                 float value) { m_table[key] = std::to_string(value); }
+
+        void set(const std::string &key,
+                 double value) { m_table[key] = std::to_string(value); }
+
+        void set(const std::string &key,
+                 bool value) { m_table[key] = std::to_string((int)value); }
+
+
         size_t size() const { return m_table.size(); }
 
+
+        const tConfigHashMap &data() const { return m_table; }
+
     private:
-        std::unordered_map<std::string, std::string> m_table;
+        tConfigHashMap m_table;
+
+        std::string findGet(const std::string &key) const {
+            auto i = m_table.find(key);
+            return i != m_table.end() ? i->second : std::string();
+        }
+
+        bool stringToBool(const std::string &str) const {
+            return str == "1"    ||
+                   str == "y"    ||
+                   str == "Y"    ||
+                   str == "T"    ||
+                   str == "yes"  ||
+                   str == "Yes"  ||
+                   str == "YES"  ||
+                   str == "true" ||
+                   str == "True" ||
+                   str == "TRUE";
+        }
     };
 }
 
