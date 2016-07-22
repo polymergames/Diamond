@@ -31,7 +31,7 @@ namespace Diamond {
     class ConfigTable {
     public:
 
-        bool hasKey(const std::string &key) {
+        bool hasKey(const std::string &key) const {
             return m_table.find(key) != m_table.end();
         }
 

@@ -25,6 +25,13 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
+
+    struct RenderDef2D {
+        uint8_t layer = 0;
+        Vector2<tD_pos> pivot;
+    };
+
+
     class Renderer2D {
     public:
         virtual ~Renderer2D() {}
@@ -45,19 +52,38 @@ namespace Diamond {
 
         
         virtual SharedPtr<RenderComponent2D> makeRenderComponent(
-            const DTransform2 &transform,
-            const SharedPtr<const Texture> &texture,
-            uint8_t layer = 0,
-            const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
+                const DTransform2 &transform,
+                const SharedPtr<const Texture> &texture,
+                uint8_t layer = 0,
+                const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) = 0;
 
         SharedPtr<RenderComponent2D> makeRenderComponent(
-            const ConstTransform2Ptr &transform,
-            const SharedPtr<const Texture> &texture,
-            uint8_t layer = 0,
-            const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
+                const ConstTransform2Ptr &transform,
+                const SharedPtr<const Texture> &texture,
+                uint8_t layer = 0,
+                const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) {
             return makeRenderComponent(*transform, texture, layer, pivot);
+        }
+
+
+        virtual SharedPtr<RenderComponent2D> makeRenderComponent(
+                const DTransform2 &transform,
+                const SharedPtr<const Texture> &texture,
+                const RenderDef2D &renderDef
+        ) {
+            return makeRenderComponent(transform, texture,
+                                       renderDef.layer, renderDef.pivot);
+        }
+
+        SharedPtr<RenderComponent2D> makeRenderComponent(
+                const ConstTransform2Ptr &transform,
+                const SharedPtr<const Texture> &texture,
+                const RenderDef2D &renderDef
+        ) {
+            return makeRenderComponent(transform, texture,
+                                       renderDef.layer, renderDef.pivot);
         }
         
         

@@ -27,25 +27,41 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
+
+    struct RigidbodyDef2D {
+        // TODO: mass, etc.
+    };
+
+    struct AABBDef {
+        Vector2<tD_pos> dims;
+        Vector2<tD_pos> origin;
+    };
+
+    struct CircleDef {
+        tD_pos radius;
+        Vector2<tD_pos> center;
+    };
+
+
     class PhysicsWorld2D {
     public:
         virtual ~PhysicsWorld2D() {}
 
         /**
-         Creates and initializes the physics simulation world.
-         Returns true if initialization was successful.
-        */
+         * Creates and initializes the physics simulation world.
+         * Returns true if initialization was successful.
+         */
         virtual bool init(const Config &config) = 0;
 
         /**
-         Steps the physics simulation by the number of milliseconds given
-         and syncs physics and Diamond transform data.
-        */
+         * Steps the physics simulation by the number of milliseconds given
+         * and syncs physics and Diamond transform data.
+         */
         virtual void update(tD_delta delta_ms) = 0;
         
         /**
-         Creates a rigidbody object attached to the given transform.
-        */
+         * Creates a rigidbody object attached to the given transform.
+         */
         virtual SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) = 0;
 
         SharedPtr<Rigidbody2D> makeRigidbody(const Transform2Ptr &transform) {
@@ -54,37 +70,72 @@ namespace Diamond {
 
         
         /**
-         Creates an AABB collider attached to the given rigidbody.
-         parent is a pointer to the object owning the collider.
-        */
-        virtual SharedPtr<AABBCollider2D> makeAABBCollider(const SharedPtr<Rigidbody2D> &body,
-                                                           void *parent,
-                                                           const std::function<void(void *other)> &onCollision,
-                                                           const Vector2<tD_pos> &dims,
-                                                           const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)) = 0;
+         * Creates an AABB collider attached to the given rigidbody.
+         * parent is a pointer to the object owning the collider.
+         */
+        virtual SharedPtr<AABBCollider2D> makeAABBCollider(
+                const SharedPtr<Rigidbody2D> &body,
+                void *parent,
+                const std::function<void(void *other)> &onCollision,
+                const Vector2<tD_pos> &dims,
+                const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)
+        ) = 0;
+
+        SharedPtr<AABBCollider2D> makeAABBCollider(
+                const SharedPtr<Rigidbody2D> &body,
+                void *parent,
+                const std::function<void(void *other)> &onCollision,
+                const AABBDef &colDef
+        ) {
+            return makeAABBCollider(body, parent, onCollision,
+                                    colDef.dims, colDef.origin);
+        }
+
 
         /**
-         Creates a circle collider attached to the given rigidbody.
-         parent is a pointer to the object owning the collider.
-        */
-        virtual SharedPtr<CircleCollider> makeCircleCollider(const SharedPtr<Rigidbody2D> &body,
-                                                             void *parent,
-                                                             const std::function<void(void *other)> &onCollision,
-                                                             tD_pos radius,
-                                                             const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)) = 0;
-        
+         * Creates a circle collider attached to the given rigidbody.
+         * parent is a pointer to the object owning the collider.
+         */
+        virtual SharedPtr<CircleCollider> makeCircleCollider(
+                const SharedPtr<Rigidbody2D> &body,
+                void *parent,
+                const std::function<void(void *other)> &onCollision,
+                tD_pos radius,
+                const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)
+        ) = 0;
+
+        SharedPtr<CircleCollider> makeCircleCollider(
+                const SharedPtr<Rigidbody2D> &body,
+                void *parent,
+                const std::function<void(void *other)> &onCollision,
+                const CircleDef &colDef
+        ) {
+            return makeCircleCollider(body, parent, onCollision,
+                                      colDef.radius, colDef.center);
+        }
+
+
+        /**
+         * Transforms the given set of points into the physics engine's
+         * required format for polygon collider points. The given
+         * and returned points are in local space, and the
+         * returned object should be used to construct polygon colliders
+         * with the given shape.
+         */
         virtual SharedPtr<PolyColPoints> makePolyColPoints(const PointList &points) = 0;
         
         /**
-         Creates a polygon collider attached to the given rigidbody.
-         parent is a pointer to the object owning the collider.
-         The given points may be used by reference
-         and must therefore remain valid throughout the life of the collider.
-        */
-        virtual SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
-                                                         void *parent,
-                                                         const std::function<void(void *other)> &onCollision,
-                                                         const SharedPtr<PolyColPoints> &points) = 0;
+         * Creates a polygon collider attached to the given rigidbody.
+         * parent is a pointer to the object owning the collider.
+         * The given points may be used by reference
+         * and must therefore remain valid throughout the life of the collider.
+         */
+        virtual SharedPtr<PolyCollider> makePolyCollider(
+                const SharedPtr<Rigidbody2D> &body,
+                void *parent,
+                const std::function<void(void *other)> &onCollision,
+                const SharedPtr<PolyColPoints> &points
+        ) = 0;
     };
 }
 
