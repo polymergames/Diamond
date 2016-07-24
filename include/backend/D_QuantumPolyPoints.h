@@ -24,12 +24,12 @@
 namespace Diamond {
     class QuantumPolyPoints : public PolyColPoints {
     public:
-        QuantumPolyPoints(const PointList &points) : m_points(points) {}
+        QuantumPolyPoints(const PointList2D &points) : m_points(points) {}
         
-        const Quantum2D::CWPoints<PointList> &get() const { return m_points; }
+        const Quantum2D::CWPoints<PointList2D> &get() const { return m_points; }
         
     private:
-        Quantum2D::CWPoints<PointList> m_points;
+        Quantum2D::CWPoints<PointList2D> m_points;
     };
 }
 

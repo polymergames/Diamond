@@ -23,7 +23,7 @@ Diamond::DebugDrawer::DebugDrawer(Renderer2D *renderer)
 
 void Diamond::DebugDrawer::draw(const Diamond::PolyCollider *poly,
                                 const RGBA &color) {
-    PointList points = poly->worldPoints();
+    PointList2D points = poly->worldPoints();
     
     for (int i = 1; i < points.size(); ++i) {
         m_renderer->renderLine(points[i-1], points[i], color);

@@ -164,7 +164,7 @@ namespace Diamond {
             return nullptr;
         }
         
-        SharedPtr<PolyColPoints> makePolyColPoints(const PointList &points) override {
+        SharedPtr<PolyColPoints> makePolyColPoints(const PointList2D &points) override {
             return SharedPtr<PolyColPoints>(new QuantumPolyPoints(points));
         }
         

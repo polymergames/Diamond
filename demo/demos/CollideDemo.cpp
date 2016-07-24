@@ -104,7 +104,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     // using partial width because the sprite file is 5 times as wide as the actual zapper sprite
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
           
-    PointList zapperColPoints;
+    PointList2D zapperColPoints;
     
     float zheight = zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale;
     zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, 0));

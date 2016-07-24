@@ -122,7 +122,7 @@ namespace Diamond {
          * returned object should be used to construct polygon colliders
          * with the given shape.
          */
-        virtual SharedPtr<PolyColPoints> makePolyColPoints(const PointList &points) = 0;
+        virtual SharedPtr<PolyColPoints> makePolyColPoints(const PointList2D &points) = 0;
         
         /**
          * Creates a polygon collider attached to the given rigidbody.

@@ -34,13 +34,13 @@ namespace Diamond {
          Get the coordinates of this polygon's vertices
          in the parent rigidbody's local space.
         */
-        virtual PointList points() const = 0;
+        virtual PointList2D points() const = 0;
         
         /**
          Get the current coordinates of this polygon's vertices
          in world space.
         */
-        virtual PointList worldPoints() const = 0;
+        virtual PointList2D worldPoints() const = 0;
     };
 }
 

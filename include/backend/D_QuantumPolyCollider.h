@@ -34,9 +34,9 @@ namespace Diamond {
             poly->setColFunc(onCollision);
         }
         
-        PointList points() const override { return poly->points(); }
+        PointList2D points() const override { return poly->points(); }
         
-        PointList worldPoints() const override { return poly->worldPoints(); }
+        PointList2D worldPoints() const override { return poly->worldPoints(); }
         
     private:
         collider2_id collider;

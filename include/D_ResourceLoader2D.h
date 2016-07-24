@@ -34,18 +34,18 @@ namespace Diamond {
      */
     namespace ResourceLoader2D {
 
-        bool defRender(const ConfigTable &config,
-                       RenderDef2D &renderDef,
-                       Vector2<tD_real> &scale);
+        bool loadRenderDef(const ConfigTable &config,
+                           RenderDef2D &renderDef,
+                           Vector2<tD_real> &scale);
 
-        bool defAABB(const ConfigTable &config,
-                     AABBDef &aabb);
+        bool loadAABBDef(const ConfigTable &config,
+                         AABBDef &aabb);
 
-        bool defCircle(const ConfigTable &config,
-                       CircleDef &circle);
+        bool loadCircleDef(const ConfigTable &config,
+                           CircleDef &circle);
 
 
-        PointList defPolyPoints(const ConfigTable &config);
+        PointList2D loadPoints(const ConfigTable &config);
 
 
         ConfigTable genRenderConfig(
@@ -56,7 +56,7 @@ namespace Diamond {
 
         ConfigTable genCircleConfig(const CircleDef &circle);
 
-        ConfigTable genPolyPointsConfig(const PointList &points);
+        ConfigTable genPointsConfig(const PointList2D &points);
 
     };
 }

@@ -18,9 +18,9 @@
 #include "D_Log.h"
 
 
-bool Diamond::ResourceLoader2D::defRender(const ConfigTable &config,
-                                          RenderDef2D &renderDef,
-                                          Vector2<tD_real> &scale) {
+bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
+                                              RenderDef2D &renderDef,
+                                              Vector2<tD_real> &scale) {
     renderDef.layer = config.getInt("layer");
 
     renderDef.pivot.x = config.getFloat("pivotX");
@@ -36,8 +36,8 @@ bool Diamond::ResourceLoader2D::defRender(const ConfigTable &config,
     return true;
 }
 
-bool Diamond::ResourceLoader2D::defAABB(const ConfigTable &config,
-                                        AABBDef &aabb) {
+bool Diamond::ResourceLoader2D::loadAABBDef(const ConfigTable &config,
+                                            AABBDef &aabb) {
     if (!config.hasKey("dimX") || !config.hasKey("dimY")) {
         Log::log("Required AABB dimensions are missing in config");
         return false;
@@ -53,8 +53,8 @@ bool Diamond::ResourceLoader2D::defAABB(const ConfigTable &config,
 
 }
 
-bool Diamond::ResourceLoader2D::defCircle(const ConfigTable &config,
-                                          CircleDef &circle) {
+bool Diamond::ResourceLoader2D::loadCircleDef(const ConfigTable &config,
+                                              CircleDef &circle) {
     circle.center.x = config.getFloat("centerX");
     circle.center.y = config.getFloat("centerY");
 
@@ -63,10 +63,10 @@ bool Diamond::ResourceLoader2D::defCircle(const ConfigTable &config,
     return true;
 }
 
-Diamond::PointList Diamond::ResourceLoader2D::defPolyPoints(
+Diamond::PointList2D Diamond::ResourceLoader2D::loadPoints(
         const ConfigTable &config
 ) {
-    PointList points;
+    PointList2D points;
     int n = 1;
 
     std::string xstr("x" + std::to_string(n));
@@ -127,8 +127,8 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genCircleConfig(
     return config;
 }
 
-Diamond::ConfigTable Diamond::ResourceLoader2D::genPolyPointsConfig(
-        const PointList &points
+Diamond::ConfigTable Diamond::ResourceLoader2D::genPointsConfig(
+        const PointList2D &points
 ) {
     ConfigTable config;
 
