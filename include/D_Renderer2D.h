@@ -27,7 +27,7 @@
 namespace Diamond {
 
     struct RenderDef2D {
-        uint8_t layer = 0;
+        uint8_t layer;
         Vector2<tD_pos> pivot;
     };
 

@@ -37,7 +37,7 @@ bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
 }
 
 bool Diamond::ResourceLoader2D::loadAABBDef(const ConfigTable &config,
-                                            AABBDef &aabb) {
+                                            AABBDef2D &aabb) {
     if (!config.hasKey("dimX") || !config.hasKey("dimY")) {
         Log::log("Required AABB dimensions are missing in config");
         return false;
@@ -101,7 +101,7 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genRenderConfig(
 }
 
 Diamond::ConfigTable Diamond::ResourceLoader2D::genAABBConfig(
-        const AABBDef &aabb
+        const AABBDef2D &aabb
 ) {
     ConfigTable config;
 

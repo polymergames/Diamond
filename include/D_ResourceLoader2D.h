@@ -32,14 +32,14 @@ namespace Diamond {
      * The functions return true if a valid definition was stored
      * in the output parameter, otherwise they return false.
      */
-    namespace ResourceLoader2D {
-
+    class ResourceLoader2D {
+    public:
         bool loadRenderDef(const ConfigTable &config,
                            RenderDef2D &renderDef,
                            Vector2<tD_real> &scale);
 
         bool loadAABBDef(const ConfigTable &config,
-                         AABBDef &aabb);
+                         AABBDef2D &aabb);
 
         bool loadCircleDef(const ConfigTable &config,
                            CircleDef &circle);
@@ -52,7 +52,7 @@ namespace Diamond {
                 const RenderDef2D &renderDef,
                 const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1));
 
-        ConfigTable genAABBConfig(const AABBDef &aabb);
+        ConfigTable genAABBConfig(const AABBDef2D &aabb);
 
         ConfigTable genCircleConfig(const CircleDef &circle);
 

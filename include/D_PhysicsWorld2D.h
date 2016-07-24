@@ -32,7 +32,7 @@ namespace Diamond {
         // TODO: mass, etc.
     };
 
-    struct AABBDef {
+    struct AABBDef2D {
         Vector2<tD_pos> dims;
         Vector2<tD_pos> origin;
     };
@@ -85,7 +85,7 @@ namespace Diamond {
                 const SharedPtr<Rigidbody2D> &body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
-                const AABBDef &colDef
+                const AABBDef2D &colDef
         ) {
             return makeAABBCollider(body, parent, onCollision,
                                     colDef.dims, colDef.origin);
