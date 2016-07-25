@@ -53,7 +53,7 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 
 
 # Build Diamond library
-add_library(Diamond SHARED ${SOURCES})
+add_library(Diamond STATIC ${SOURCES})
 target_link_libraries(Diamond ${LINK_LIBS})
 install(TARGETS Diamond DESTINATION lib)
 
