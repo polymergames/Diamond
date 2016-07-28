@@ -141,8 +141,11 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
 
 void CollideDemo::update(tD_delta delta) {
     // draw colliders
+    float angleInterval = 12;
     m_debug.draw(zapper1.getComponent<PolyCollider>(COLLIDER), colliderColor);
     m_debug.draw(zapper2.getComponent<PolyCollider>(COLLIDER), colliderColor);
+    m_debug.draw(spike1.getComponent<CircleCollider>(COLLIDER), colliderColor, angleInterval);
+    m_debug.draw(spike2.getComponent<CircleCollider>(COLLIDER), colliderColor, angleInterval);
     
     // zapper1 controls
     if (Input::keydown[Input::K_W]) {

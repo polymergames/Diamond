@@ -18,12 +18,16 @@
 #define D_DEBUG_DRAWER_H
 
 #include "D_Renderer2D.h"
+#include "D_CircleCollider.h"
 #include "D_PolyCollider.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
     class DebugDrawer {
     public:
+
+        static constexpr float DEFAULT_ANGLE_INTERVAL = 12.0f;
+
         DebugDrawer(Renderer2D *renderer);
         
         void draw(const PolyCollider *poly, const RGBA &color);
@@ -31,7 +35,18 @@ namespace Diamond {
         void draw(const SharedPtr<PolyCollider> &poly, const RGBA &color) {
             draw(poly.get(), color);
         }
-        
+
+
+        void draw(const CircleCollider *circle,
+                  const RGBA &color,
+                  float angleInterval = DEFAULT_ANGLE_INTERVAL);
+
+        void draw(const SharedPtr<CircleCollider> &circle,
+                  const RGBA &color,
+                  float angleInterval = DEFAULT_ANGLE_INTERVAL) {
+            draw(circle.get(), color, angleInterval);
+        }
+
     private:
         Renderer2D *m_renderer;
     };

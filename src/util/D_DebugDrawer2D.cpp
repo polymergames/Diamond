@@ -15,7 +15,9 @@
 */
 
 #include "D_DebugDrawer2D.h"
+#include "duMath.h"
 
+static const float RAD_EPS = 0.002f;
 
 Diamond::DebugDrawer::DebugDrawer(Renderer2D *renderer)
     : m_renderer(renderer) {}
@@ -30,4 +32,26 @@ void Diamond::DebugDrawer::draw(const Diamond::PolyCollider *poly,
     }
     
     m_renderer->renderLine(points.back(), points.front(), color);
+}
+
+
+void Diamond::DebugDrawer::draw(const CircleCollider *circle,
+                                const RGBA &color,
+                                float angleInterval) {
+    float angleIntervalRad = Math::deg2rad(angleInterval);
+    Vector2<float> center = circle->getWorldPos();
+    float radius = circle->getRadius();
+
+    Vector2<float> prev = center + Vector2<float>(radius, 0);
+    Vector2<float> next;
+
+    for (float a = angleIntervalRad;
+         a < (2 * Math::PI + RAD_EPS);
+         a += angleIntervalRad) {
+        next = center + Vector2<float>(radius, 0).rotate(a);
+
+        m_renderer->renderLine(prev, next, color);
+
+        prev = next;
+    }
 }
