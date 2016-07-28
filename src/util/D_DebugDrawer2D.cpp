@@ -22,36 +22,39 @@ static const float RAD_EPS = 0.002f;
 Diamond::DebugDrawer::DebugDrawer(Renderer2D *renderer)
     : m_renderer(renderer) {}
 
-
-void Diamond::DebugDrawer::draw(const Diamond::PolyCollider *poly,
+void Diamond::DebugDrawer::draw(const PointList2D &poly,
                                 const RGBA &color) {
-    PointList2D points = poly->worldPoints();
-    
-    for (int i = 1; i < points.size(); ++i) {
-        m_renderer->renderLine(points[i-1], points[i], color);
+    for (int i = 1; i < poly.size(); ++i) {
+        m_renderer->renderLine(poly[i-1], poly[i], color);
     }
-    
-    m_renderer->renderLine(points.back(), points.front(), color);
+
+    m_renderer->renderLine(poly.back(), poly.front(), color);
+}
+
+
+void Diamond::DebugDrawer::draw(const CircleDef &circle,
+                                const RGBA &color,
+                                float angleInterval) {
+    float angleIntervalRad = Math::deg2rad(angleInterval);
+
+    Vector2<float> prev = circle.center + Vector2<float>(circle.radius, 0);
+    Vector2<float> next;
+
+    for (float a = angleIntervalRad;
+         a < (2 * Math::PI + RAD_EPS);
+         a += angleIntervalRad) {
+        next = circle.center + Vector2<float>(circle.radius, 0).rotate(a);
+
+        m_renderer->renderLine(prev, next, color);
+
+        prev = next;
+    }
 }
 
 
 void Diamond::DebugDrawer::draw(const CircleCollider *circle,
                                 const RGBA &color,
                                 float angleInterval) {
-    float angleIntervalRad = Math::deg2rad(angleInterval);
-    Vector2<float> center = circle->getWorldPos();
-    float radius = circle->getRadius();
-
-    Vector2<float> prev = center + Vector2<float>(radius, 0);
-    Vector2<float> next;
-
-    for (float a = angleIntervalRad;
-         a < (2 * Math::PI + RAD_EPS);
-         a += angleIntervalRad) {
-        next = center + Vector2<float>(radius, 0).rotate(a);
-
-        m_renderer->renderLine(prev, next, color);
-
-        prev = next;
-    }
+    CircleDef circleDef = { circle->getRadius(), circle->getWorldPos() };
+    draw(circleDef, color, angleInterval);
 }
