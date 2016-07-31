@@ -27,7 +27,7 @@
 namespace Diamond {
 
     struct RenderDef2D {
-        uint8_t layer;
+        RenderLayer layer;
         Vector2<tD_pos> pivot;
     };
 
@@ -36,32 +36,32 @@ namespace Diamond {
     public:
         virtual ~Renderer2D() {}
 
-        virtual bool                    init(const Config &config) = 0;
+        virtual bool init(const Config &config) = 0;
         
-        virtual void                    renderAll() = 0;
+        virtual void renderAll() = 0;
         
-        virtual Vector2<int>            getResolution() const = 0;
+        virtual Vector2<int> getResolution() const = 0;
 
-        virtual Diamond::Vector2<int>   getScreenResolution() const = 0;
+        virtual Vector2<int> getScreenResolution() const = 0;
 
         /**
          Loads an image file as a texture.
          Returns nullptr if texture failed to load.
         */
-        virtual SharedPtr<Texture>      loadTexture(std::string path) = 0;
+        virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
 
         
         virtual SharedPtr<RenderComponent2D> makeRenderComponent(
                 const DTransform2 &transform,
                 const SharedPtr<const Texture> &texture,
-                uint8_t layer = 0,
+                RenderLayer layer = 0,
                 const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) = 0;
 
         SharedPtr<RenderComponent2D> makeRenderComponent(
                 const ConstTransform2Ptr &transform,
                 const SharedPtr<const Texture> &texture,
-                uint8_t layer = 0,
+                RenderLayer layer = 0,
                 const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) {
             return makeRenderComponent(*transform, texture, layer, pivot);

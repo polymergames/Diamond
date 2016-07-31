@@ -20,7 +20,7 @@
 #include "D_Input.h"
 using namespace Diamond;
 
-enum : uint8_t {
+enum : RenderLayer {
     LOWEST,
     DEFAULT,
     HIGHER,
@@ -155,7 +155,7 @@ void RandomDemo::update(tD_delta delta) {
     // Layer
     if (Input::keyup[Input::K_L]) {
         auto rcomp = zapper.getComponent<RenderComponent2D>(RENDERCOMPONENT);
-        uint8_t curLayer = rcomp->getLayer();
+        RenderLayer curLayer = rcomp->getLayer();
         if (curLayer == LOWEST) {
             rcomp->setLayer(HIGHEST);
         }

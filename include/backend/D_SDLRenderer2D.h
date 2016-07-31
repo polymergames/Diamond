@@ -64,7 +64,7 @@ namespace Diamond {
         SharedPtr<RenderComponent2D> makeRenderComponent(
             const DTransform2 &transform,
             const SharedPtr<const Texture> &texture,
-            uint8_t layer = 0, 
+            RenderLayer layer = 0,
             const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) override;
         
@@ -77,24 +77,24 @@ namespace Diamond {
                         const RGBA &color) override;
         
         
-        SDLRenderObj2D &renderObj(uint8_t layer,
+        SDLRenderObj2D &renderObj(RenderLayer layer,
                                   SDLrenderobj_id robj) {
             return m_render_objects[layer][robj];
         }
         
-        const SDLRenderObj2D &renderObj(uint8_t layer,
+        const SDLRenderObj2D &renderObj(RenderLayer layer,
                                         SDLrenderobj_id robj) const {
             return m_render_objects[layer][robj];
         }
         
-        void destroyRenderObj(uint8_t layer,
+        void destroyRenderObj(RenderLayer layer,
                               SDLrenderobj_id robj) {
             m_render_objects[layer].erase(robj);
         }
         
-        SDLrenderobj_id changeLayer(uint8_t curLayer,
+        SDLrenderobj_id changeLayer(RenderLayer curLayer,
                                     SDLrenderobj_id robj,
-                                    uint8_t newLayer);
+                                    RenderLayer newLayer);
 
     private:
         SDL_Window *m_window;

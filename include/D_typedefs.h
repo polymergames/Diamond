@@ -49,6 +49,9 @@ namespace Diamond {
     using ConstTransform2Ptr =  SharedPtr<const DTransform2 >;
     
     using PointList2D = std::vector<Vector2<tD_pos> >;
+
+    // Renderer
+    using RenderLayer = uint8_t;
 }
 
 #endif // D_TYPEDEFS_H

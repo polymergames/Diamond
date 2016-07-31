@@ -183,7 +183,7 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::st
 Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
     const DTransform2 &transform,
     const SharedPtr<const Texture> &texture,
-    uint8_t layer,
+    RenderLayer layer,
     const Vector2<tD_pos> &pivot
     ) {
     // Make room for a new layer if necessary
@@ -211,9 +211,9 @@ void Diamond::SDLRenderer2D::renderLine(const Vector2<tD_pos> &p1,
 }
 
 
-Diamond::SDLrenderobj_id Diamond::SDLRenderer2D::changeLayer(uint8_t curLayer,
+Diamond::SDLrenderobj_id Diamond::SDLRenderer2D::changeLayer(RenderLayer curLayer,
                                                              SDLrenderobj_id robj,
-                                                             uint8_t newLayer) {
+                                                             RenderLayer newLayer) {
     // Make room for a new layer if necessary
     if (newLayer > m_render_objects.size() - 1) {
         m_render_objects.resize(newLayer + 1);

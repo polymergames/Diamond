@@ -36,6 +36,7 @@ namespace Diamond {
     public:
         bool loadRenderDef(const ConfigTable &config,
                            RenderDef2D &renderDef,
+                           std::string &texturePath,
                            Vector2<tD_real> &scale);
 
         bool loadAABBDef(const ConfigTable &config,
@@ -50,7 +51,9 @@ namespace Diamond {
 
         ConfigTable genRenderConfig(
                 const RenderDef2D &renderDef,
-                const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1));
+                const std::string &texturePath,
+                const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1)
+        );
 
         ConfigTable genAABBConfig(const AABBDef2D &aabb);
 

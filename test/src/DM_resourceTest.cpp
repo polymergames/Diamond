@@ -25,18 +25,21 @@ TEST(Resource2DTest, RenderDef) {
     ResourceLoader2D resources;
 
     RenderDef2D renderDefA = {3, Vector2<float>(12, 6.2)};
+    std::string textureA = "bigboss";
     Vector2<float> scaleA(2.5f, 3.0f);
 
-    ConfigTable config = resources.genRenderConfig(renderDefA, scaleA);
+    ConfigTable config = resources.genRenderConfig(renderDefA, textureA, scaleA);
 
     RenderDef2D renderDefB;
+    std::string textureB;
     Vector2<float> scaleB;
 
-    ASSERT_TRUE(resources.loadRenderDef(config, renderDefB, scaleB));
+    ASSERT_TRUE(resources.loadRenderDef(config, renderDefB, textureB, scaleB));
 
     EXPECT_EQ(renderDefB.layer, renderDefA.layer);
     EXPECT_FLOAT_EQ(renderDefB.pivot.x, renderDefA.pivot.x);
     EXPECT_FLOAT_EQ(renderDefB.pivot.y, renderDefA.pivot.y);
+    EXPECT_EQ(textureB, textureA);
     EXPECT_FLOAT_EQ(scaleB.x, scaleA.x);
     EXPECT_FLOAT_EQ(scaleB.y, scaleA.y);
 }

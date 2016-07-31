@@ -27,7 +27,7 @@ namespace Diamond {
     public:
         SDLRenderComponent2D(SDLRenderer2D &renderer,
                              SDLrenderobj_id renderObj,
-                             uint8_t layer)
+                             RenderLayer layer)
             : m_renderer(renderer), m_renderObj(renderObj), m_layer(layer) {}
         
         ~SDLRenderComponent2D() {
@@ -43,11 +43,11 @@ namespace Diamond {
             m_renderer.renderObj(m_layer, m_renderObj).texture()
                 = std::dynamic_pointer_cast<const SDLTexture>(sprite);
         }
+
+
+        RenderLayer getLayer() const override { return m_layer; }
         
-        
-        uint8_t getLayer() const override { return m_layer; }
-        
-        void setLayer(uint8_t newLayer) override {
+        void setLayer(RenderLayer newLayer) override {
             m_renderObj = m_renderer.changeLayer(m_layer, m_renderObj, newLayer);
             m_layer = newLayer;
         }
@@ -103,7 +103,7 @@ namespace Diamond {
     private:
         SDLRenderer2D &m_renderer;
         SDLrenderobj_id m_renderObj;
-        uint8_t m_layer;
+        RenderLayer m_layer;
     };
 }
 

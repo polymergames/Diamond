@@ -20,12 +20,23 @@
 
 bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
                                               RenderDef2D &renderDef,
+                                              std::string &texturePath,
                                               Vector2<tD_real> &scale) {
+    texturePath = config.get("texturePath");
+
+    if (texturePath.empty()) {
+        Log::log("Required path to texture is missing in config");
+        return false;
+    }
+
+
     renderDef.layer = config.getInt("layer");
 
     renderDef.pivot.x = config.getFloat("pivotX");
     renderDef.pivot.y = config.getFloat("pivotY");
 
+
+    // Default scale
     scale.set(1, 1);
 
     if (config.hasKey("scaleX"))
@@ -85,9 +96,13 @@ Diamond::PointList2D Diamond::ResourceLoader2D::loadPoints(
 
 
 Diamond::ConfigTable Diamond::ResourceLoader2D::genRenderConfig(
-        const RenderDef2D &renderDef, const Vector2<tD_real> &scale
+        const RenderDef2D &renderDef,
+        const std::string &texturePath,
+        const Vector2<tD_real> &scale
 ) {
     ConfigTable config;
+
+    config.set("texturePath", texturePath);
 
     config.set("layer", renderDef.layer);
 
