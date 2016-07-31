@@ -58,7 +58,11 @@ namespace Diamond {
 
         virtual void        quit() { is_running = false; }
 
-        Transform2Ptr       makeTransform() { return makeShared<DTransform2>(); }
+        Transform2Ptr makeTransform(const Vector2<tD_pos> &pos = Vector2<tD_pos>(0, 0),
+                                    tD_rot rot = 0,
+                                    const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1)) {
+            return makeShared<DTransform2>(pos, rot, scale);
+        }
 
     protected:
         bool                is_running;
