@@ -52,7 +52,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     spike2.transform().position = Vector2<int>(900, 200);
     spike2.transform().scale = Vector2<float>(SPIKE_SCALE, SPIKE_SCALE);
 
-    float spike_pivot = spike_sprite->getWidth() * SPIKE_SCALE / 2.0f;
+    float spike_pivot = spike_sprite->getWidth() / 2.0f;
     indicator_spike.addComponent(RENDERCOMPONENT,
     renderer->makeRenderComponent(indicator_spike.transform(),
                                   spike_sprite,
