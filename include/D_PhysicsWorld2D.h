@@ -33,12 +33,12 @@ namespace Diamond {
     };
 
     struct AABBDef2D {
-        Vector2<tD_pos> dims;
+        Vector2<tD_pos> dims = Vector2<tD_pos>(1, 1);
         Vector2<tD_pos> origin;
     };
 
     struct CircleDef {
-        tD_pos radius;
+        tD_pos radius = 1;
         Vector2<tD_pos> center;
     };
 

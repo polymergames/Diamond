@@ -29,11 +29,13 @@ bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
         return false;
     }
 
+    if (config.hasKey("layer"))
+        renderDef.layer = config.getInt("layer");
 
-    renderDef.layer = config.getInt("layer");
-
-    renderDef.pivot.x = config.getFloat("pivotX");
-    renderDef.pivot.y = config.getFloat("pivotY");
+    if (config.hasKey("pivotX"))
+        renderDef.pivot.x = config.getFloat("pivotX");
+    if (config.hasKey("pivotY"))
+        renderDef.pivot.y = config.getFloat("pivotY");
 
 
     // Default scale
@@ -57,8 +59,10 @@ bool Diamond::ResourceLoader2D::loadAABBDef(const ConfigTable &config,
     aabb.dims.x = config.getFloat("dimX");
     aabb.dims.y = config.getFloat("dimY");
 
-    aabb.origin.x = config.getFloat("originX");
-    aabb.origin.y = config.getFloat("originY");
+    if (config.hasKey("originX"))
+        aabb.origin.x = config.getFloat("originX");
+    if (config.hasKey("originY"))
+        aabb.origin.y = config.getFloat("originY");
 
     return true;
 
@@ -66,10 +70,17 @@ bool Diamond::ResourceLoader2D::loadAABBDef(const ConfigTable &config,
 
 bool Diamond::ResourceLoader2D::loadCircleDef(const ConfigTable &config,
                                               CircleDef &circle) {
-    circle.center.x = config.getFloat("centerX");
-    circle.center.y = config.getFloat("centerY");
+    if (!config.hasKey("radius")) {
+        Log::log("Required circle radius is missing in config");
+        return false;
+    }
 
     circle.radius = config.getFloat("radius");
+
+    if (config.hasKey("centerX"))
+        circle.center.x = config.getFloat("centerX");
+    if (config.hasKey("centerY"))
+        circle.center.y = config.getFloat("centerY");
 
     return true;
 }

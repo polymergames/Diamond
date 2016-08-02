@@ -24,7 +24,9 @@ using namespace Diamond;
 TEST(Resource2DTest, RenderDef) {
     ResourceLoader2D resources;
 
-    RenderDef2D renderDefA = {3, Vector2<float>(12, 6.2)};
+    RenderDef2D renderDefA;
+    renderDefA.layer = 3;
+    renderDefA.pivot = Vector2<float>(12, 6.2);
     std::string textureA = "bigboss";
     Vector2<float> scaleA(2.5f, 3.0f);
 
@@ -47,7 +49,9 @@ TEST(Resource2DTest, RenderDef) {
 TEST(Resource2DTest, AABBDef) {
     ResourceLoader2D resources;
 
-    AABBDef2D aabbA = {Vector2<float>(12, 14), Vector2<float>(-2, 1)};
+    AABBDef2D aabbA;
+    aabbA.dims = Vector2<float>(12, 14);
+    aabbA.origin = Vector2<float>(-2, 1);
 
     ConfigTable config = resources.genAABBConfig(aabbA);
 
@@ -64,7 +68,9 @@ TEST(Resource2DTest, AABBDef) {
 TEST(Resource2DTest, CircleDef) {
     ResourceLoader2D resources;
 
-    CircleDef circleA = {3.6, Vector2<float>(7, 11)};
+    CircleDef circleA;
+    circleA.radius = 3.6;
+    circleA.center = Vector2<float>(7, 11);
 
     ConfigTable config = resources.genCircleConfig(circleA);
 
