@@ -31,21 +31,21 @@ namespace Quantum2D {
                      void *parent,
                      const std::function<void(void *other)> &onCollision,
                      const CWPoints<PointList> &points);
-
+        
         /**
          Get the coordinates of this polygon's vertices
          in the parent rigidbody's local space.
         */
         const PointList &points() const { return m_points; }
-
+        
         /**
          Get the current coordinates of this polygon's vertices
          in world space.
         */
         const PointList &worldPoints() const { return m_worldPoints; }
-
+        
         void update(tQ_delta delta) override;
-
+        
     private:
         const PointList &m_points;
         PointList m_worldPoints;

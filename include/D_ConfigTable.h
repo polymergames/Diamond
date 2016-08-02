@@ -17,10 +17,28 @@
 #ifndef D_CONFIGTABLE_H
 #define D_CONFIGTABLE_H
 
+#include <cstdlib>
 #include <string>
+#include <sstream>
 #include <unordered_map>
 
 namespace Diamond {
+    // TODO: Move this somewhere else.
+    // This is needed because Android doesn't seem
+    // to have std's to_string function.
+    template <typename T>
+    std::string toString(T value)
+    {
+#if defined __ANDROID__
+        std::ostringstream os;
+        os << value;
+        return os.str();
+#else
+        return std::to_string(value);
+#endif
+    }
+
+
     using tConfigHashMap = std::unordered_map<std::string, std::string>;
 
     /**
@@ -79,16 +97,16 @@ namespace Diamond {
                  const char *value) { m_table[key] = value; }
 
         void set(const std::string &key,
-                 int value) { m_table[key] = std::to_string(value); }
+                 int value) { m_table[key] = toString(value); }
 
         void set(const std::string &key,
-                 float value) { m_table[key] = std::to_string(value); }
+                 float value) { m_table[key] = toString(value); }
 
         void set(const std::string &key,
-                 double value) { m_table[key] = std::to_string(value); }
+                 double value) { m_table[key] = toString(value); }
 
         void set(const std::string &key,
-                 bool value) { m_table[key] = std::to_string((int)value); }
+                 bool value) { m_table[key] = toString((int)value); }
 
 
         size_t size() const { return m_table.size(); }

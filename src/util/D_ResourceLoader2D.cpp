@@ -91,15 +91,15 @@ Diamond::PointList2D Diamond::ResourceLoader2D::loadPoints(
     PointList2D points;
     int n = 1;
 
-    std::string xstr("x" + std::to_string(n));
-    std::string ystr("y" + std::to_string(n));
+    std::string xstr("x" + toString(n));
+    std::string ystr("y" + toString(n));
 
     while(config.hasKey(xstr) && config.hasKey(ystr)) {
         points.push_back(Vector2<tD_pos>(config.getFloat(xstr),
                                          config.getFloat(ystr)));
 
-        xstr = "x" + std::to_string(++n);
-        ystr = "y" + std::to_string(n);
+        xstr = "x" + toString(++n);
+        ystr = "y" + toString(n);
     }
 
     return points;
@@ -159,8 +159,8 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genPointsConfig(
     ConfigTable config;
 
     for (int i = 0; i < points.size(); ++i) {
-        std::string xstr("x" + std::to_string(i+1));
-        std::string ystr("y" + std::to_string(i+1));
+        std::string xstr("x" + toString(i+1));
+        std::string ystr("y" + toString(i+1));
 
         config.set(xstr, points[i].x);
         config.set(ystr, points[i].y);
