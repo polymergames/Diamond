@@ -14,24 +14,22 @@
     limitations under the License.
 */
 
-#ifndef D_STDCONFIGLOADER_H
-#define D_STDCONFIGLOADER_H
+#ifndef D_SDLCONFIGLOADER_H
+#define D_SDLCONFIGLOADER_H
 
 #include "D_ConfigLoader.h"
 
 namespace Diamond {
-    class StdConfigLoader : public ConfigLoader {
+    class SDLConfigLoader : public ConfigLoader {
     public:
-        StdConfigLoader(const std::string &pathRoot = "");
+        static const int DEFAULT_BUFSIZE = 100000;
+        static const int LINESIZE        = 1000;
 
         ConfigTable load(const std::string &path) override;
 
         bool write(const ConfigTable &table,
                    const std::string &path) override;
-
-    private:
-        std::string m_pathRoot;
     };
 }
 
-#endif // D_STDCONFIGLOADER_H
+#endif // D_SDLCONFIGLOADER_H

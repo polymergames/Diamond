@@ -26,7 +26,7 @@ namespace Diamond {
 
         virtual ConfigTable load(const std::string &path) = 0;
 
-        virtual void write(const ConfigTable &table,
+        virtual bool write(const ConfigTable &table,
                            const std::string &path) = 0;
 
     protected:

@@ -19,8 +19,11 @@
 
 #include <cstdlib>
 #include <string>
-#include <sstream>
 #include <unordered_map>
+
+#if defined __ANDROID__
+#include <sstream>
+#endif
 
 namespace Diamond {
     // TODO: Move this somewhere else.

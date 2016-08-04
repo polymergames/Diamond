@@ -18,6 +18,10 @@
 #include "D_StdConfigLoader.h"
 #include <fstream>
 
+Diamond::StdConfigLoader::StdConfigLoader(const std::string &pathRoot)
+        : m_pathRoot(pathRoot) {}
+
+
 Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
     ConfigTable config;
 
@@ -50,10 +54,7 @@ Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
 }
 
 
-Diamond::StdConfigLoader::StdConfigLoader(const std::string &pathRoot)
-    : m_pathRoot(pathRoot) {}
-
-void Diamond::StdConfigLoader::write(const ConfigTable &table,
+bool Diamond::StdConfigLoader::write(const ConfigTable &table,
                                      const std::string &path) {
     std::ofstream filestream;
     filestream.open(path);
@@ -71,5 +72,8 @@ void Diamond::StdConfigLoader::write(const ConfigTable &table,
     }
     else {
         Log::log("Failed to open config file " + path + " for writing");
+        return false;
     }
+
+    return true;
 }
