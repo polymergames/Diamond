@@ -16,6 +16,7 @@
 
 #include "gtest/gtest.h"
 #include "D_StdConfigLoader.h"
+#include "D_SDLConfigLoader.h"
 
 using namespace Diamond;
 
@@ -33,6 +34,30 @@ public:
         return ok;
     }
 };
+
+
+static ConfigTable testLoadsFile(ConfigLoader &configLoader) {
+    ConfigTable config = configLoader.load("game.cfg");
+
+    EXPECT_EQ(config.size(), 11);
+
+    EXPECT_EQ(config.get("Game"), "Life");
+    EXPECT_EQ(config.get("Difficulty"), "HardAF");
+
+    EXPECT_EQ(config.getInt("PowerLevel"), 9001);
+    EXPECT_EQ(config.getInt("Release"), 0);
+    EXPECT_FLOAT_EQ(config.getFloat("pi"), 3.14);
+
+    EXPECT_EQ(config.get("Price"), "Death");
+    EXPECT_EQ(config.get("Graphics"), "Ultra");
+
+    EXPECT_TRUE(config.getBool("Running"));
+    EXPECT_TRUE(config.getBool("Purchased"));
+    EXPECT_FALSE(config.getBool("Completed"));
+    EXPECT_TRUE(config.getBool("Multiplayer"));
+
+    return config;
+}
 
 
 TEST(ConfigTest, Parses) {
@@ -62,31 +87,13 @@ TEST(ConfigTest, InvalidParses) {
 }
 
 
-TEST(ConfigTest, LoadsFile) {
+TEST(StdConfigTest, LoadsFile) {
     StdConfigLoader configLoader;
-
-    ConfigTable config = configLoader.load("game.cfg");
-
-    EXPECT_EQ(config.size(), 11);
-
-    EXPECT_EQ(config.get("Game"), "Life");
-    EXPECT_EQ(config.get("Difficulty"), "HardAF");
-
-    EXPECT_EQ(config.getInt("PowerLevel"), 9001);
-    EXPECT_EQ(config.getInt("Release"), 0);
-    EXPECT_FLOAT_EQ(config.getFloat("pi"), 3.14);
-
-    EXPECT_EQ(config.get("Price"), "Death");
-    EXPECT_EQ(config.get("Graphics"), "Ultra");
-
-    EXPECT_TRUE(config.getBool("Running"));
-    EXPECT_TRUE(config.getBool("Purchased"));
-    EXPECT_FALSE(config.getBool("Completed"));
-    EXPECT_TRUE(config.getBool("Multiplayer"));
+    testLoadsFile(configLoader);
 }
 
 
-TEST(ConfigTest, WritesFile) {
+TEST(StdConfigTest, WritesFile) {
     StdConfigLoader configLoader;
     ConfigTable config;
 
@@ -105,4 +112,10 @@ TEST(ConfigTest, WritesFile) {
     EXPECT_TRUE(loadedConfig.getBool("Fun"));
     EXPECT_EQ(loadedConfig.getInt("Highscore"), 300);
     EXPECT_FLOAT_EQ(loadedConfig.getFloat("pi"), 3.14);
+}
+
+
+TEST(SDLConfigTest, LoadsFile) {
+    SDLConfigLoader configLoader;
+    testLoadsFile(configLoader);
 }
