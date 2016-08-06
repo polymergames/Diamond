@@ -22,16 +22,39 @@ using namespace Diamond;
 
 class TestConfigLoader : public StdConfigLoader {
 public:
-    bool testParse(const std::string &line,
+    enum TestStatus {
+        TESTERROR,
+        TESTPARSED,
+        TESTCOMMENT,
+        TESTEMPTY
+    };
+
+    void testParse(const std::string &line,
                    const std::string &expKey,
-                   const std::string &expVal) {
+                   const std::string &expVal,
+                   TestStatus expStatus) {
         std::string key, val;
-        bool ok = parseLine(line, key, val);
+        Status status = parseLine(line, key, val);
 
         EXPECT_EQ(expKey, key);
         EXPECT_EQ(expVal, val);
 
-        return ok;
+        switch (expStatus) {
+            case TESTERROR:
+                EXPECT_EQ(status, ERROR);
+                break;
+            case TESTPARSED:
+                EXPECT_EQ(status, PARSED);
+                break;
+            case TESTCOMMENT:
+                EXPECT_EQ(status, COMMENT);
+                break;
+            case TESTEMPTY:
+                EXPECT_EQ(status, EMPTY);
+                break;
+            default:
+                break;
+        }
     }
 };
 
@@ -60,30 +83,119 @@ static ConfigTable testLoadsFile(ConfigLoader &configLoader) {
 }
 
 
-TEST(ConfigTest, Parses) {
+TEST(ConfigTest, ParsesNormal) {
     TestConfigLoader configLoader;
-    bool ok;
 
-    ok = configLoader.testParse("Boss:Ahnaf", "Boss", "Ahnaf");
-    EXPECT_TRUE(ok);
+    configLoader.testParse("Boss:Ahnaf", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
 
-    ok = configLoader.testParse("MyPowerLevel:9001", "MyPowerLevel", "9001");
-    EXPECT_TRUE(ok);
+    configLoader.testParse("MyPowerLevel:9001", "MyPowerLevel", "9001",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+}
+
+TEST(ConfigTest, ParsesSpaceRight) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("Boss: Ahnaf", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse("MyPowerLevel: 9001", "MyPowerLevel", "9001",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+}
+
+TEST(ConfigTest, ParsesSpaceLeft) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("Boss :Ahnaf", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse("MyPowerLevel :9001", "MyPowerLevel", "9001",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+}
+
+TEST(ConfigTest, ParsesSpaceBoth) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("Boss : Ahnaf", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse("MyPowerLevel : 9001", "MyPowerLevel", "9001",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+}
+
+TEST(ConfigTest, ParsesSpacesGalore) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("Boss : Ahnaf ", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse(" Boss : Ahnaf ", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
 }
 
 
 TEST(ConfigTest, InvalidParses) {
     TestConfigLoader configLoader;
-    bool ok;
 
-    ok = configLoader.testParse("iamerror", "", "");
-    EXPECT_FALSE(ok);
+    configLoader.testParse("iamerror", "", "",
+                           TestConfigLoader::TestStatus::TESTERROR);
 
-    ok = configLoader.testParse(":wut", "", "");
-    EXPECT_FALSE(ok);
+    configLoader.testParse(":wut", "", "",
+                           TestConfigLoader::TestStatus::TESTERROR);
 
-    ok = configLoader.testParse("wut:", "", "");
-    EXPECT_FALSE(ok);
+    configLoader.testParse("wut:", "", "",
+                           TestConfigLoader::TestStatus::TESTERROR);
+}
+
+
+TEST(ConfigTest, EmptySkips) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("", "", "",
+                           TestConfigLoader::TestStatus::TESTEMPTY);
+}
+
+
+TEST(ConfigTest, CommentBeginSkips) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("#", "", "",
+                           TestConfigLoader::TestStatus::TESTCOMMENT);
+
+    configLoader.testParse("# ", "", "",
+                           TestConfigLoader::TestStatus::TESTCOMMENT);
+
+    configLoader.testParse(" #This is a comment", "", "",
+                           TestConfigLoader::TestStatus::TESTCOMMENT);
+
+    configLoader.testParse(" # This is a comment", "", "",
+                           TestConfigLoader::TestStatus::TESTCOMMENT);
+
+    configLoader.testParse("# This is a comment", "", "",
+                           TestConfigLoader::TestStatus::TESTCOMMENT);
+
+    configLoader.testParse("#  This is a comment", "", "",
+                           TestConfigLoader::TestStatus::TESTCOMMENT);
+}
+
+TEST(ConfigTest, CommentEndSkips) {
+    TestConfigLoader configLoader;
+
+    configLoader.testParse("Boss:Ahnaf # That's me", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse("MyPowerLevel:9001#I'm powerful", "MyPowerLevel", "9001",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse("Boss:Ahnaf# That's me", "Boss", "Ahnaf",
+                           TestConfigLoader::TestStatus::TESTPARSED);
+
+    configLoader.testParse("MyPowerLevel:9001 #I'm powerful", "MyPowerLevel", "9001",
+                           TestConfigLoader::TestStatus::TESTPARSED);
 }
 
 

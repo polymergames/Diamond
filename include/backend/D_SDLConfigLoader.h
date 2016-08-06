@@ -25,10 +25,15 @@ namespace Diamond {
         static const int DEFAULT_BUFSIZE = 100000;
         static const int LINESIZE        = 1000;
 
+        SDLConfigLoader(const std::string &pathRoot = "");
+
         ConfigTable load(const std::string &path) override;
 
         bool write(const ConfigTable &table,
                    const std::string &path) override;
+
+    private:
+        std::string m_pathRoot;
     };
 }
 

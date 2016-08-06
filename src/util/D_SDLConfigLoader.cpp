@@ -20,13 +20,19 @@
 #include "D_Log.h"
 
 
+Diamond::SDLConfigLoader::SDLConfigLoader(const std::string &pathRoot)
+    : m_pathRoot(pathRoot) {}
+
+
 Diamond::ConfigTable Diamond::SDLConfigLoader::load(const std::string &path) {
     ConfigTable config;
+    std::string fullPath = m_pathRoot + path;
 
-    SDL_RWops *file = SDL_RWFromFile(path.c_str(), "r");
+    SDL_RWops *file = SDL_RWFromFile(fullPath.c_str(), "r");
 
     if (file != NULL) {
         // Load file contents into buffer
+
         Sint64 size = SDL_RWsize(file);
 
         if (size <= 0) {
@@ -51,7 +57,7 @@ Diamond::ConfigTable Diamond::SDLConfigLoader::load(const std::string &path) {
         SDL_RWclose(file);
 
         if (ntotal != size) {
-            Log::log("WARNING: not all data from config file " + path +
+            Log::log("WARNING: not all data from config file " + fullPath +
                      " was read (" + toString(ntotal) + " bytes read out of " +
                      toString(size) + ")");
         }
@@ -59,20 +65,16 @@ Diamond::ConfigTable Diamond::SDLConfigLoader::load(const std::string &path) {
         // Parse each line in the buffer
         if (ntotal > 0) {
             std::string line, key, value;
+            Status status;
             line.reserve(LINESIZE);
 
             for (int i = 0, begin = 0; i <= ntotal; ++i) {
                 if (buf[i] == '\n' || (i == ntotal && i != begin)) {
                     line.assign(buf + begin, i - begin);
 
-                    if (!line.empty()) {
-                        if (!parseLine(line, key, value)) {
-                            Log::log("Failed to parse line " + line +
-                                     " in " + path);
-                        }
-                        else {
-                            config.set(key, value);
-                        }
+                    if (!configureLine(line, config)) {
+                        Log::log("Failed to parse line " + line +
+                                 " in " + fullPath);
                     }
 
                     begin = i + 1;
@@ -80,11 +82,13 @@ Diamond::ConfigTable Diamond::SDLConfigLoader::load(const std::string &path) {
             }
         }
         else {
-            Log::log("Failed to read data from config file " + path);
+            Log::log("Failed to read data from config file " + fullPath);
         }
+
+        delete[] buf;
     }
     else {
-        Log::log("Failed to open config file " + path + " for reading");
+        Log::log("Failed to open config file " + fullPath + " for reading");
     }
 
     return config;

@@ -16,18 +16,74 @@
 
 #include "D_ConfigLoader.h"
 
-bool Diamond::ConfigLoader::parseLine(const std::string &line,
-                                      std::string &key,
-                                      std::string &value) {
-    auto i = line.find(':');
 
-    if (i == std::string::npos ||
-        i < 1 ||
-        i + 1 == line.size())
-        return false;
+bool Diamond::ConfigLoader::configureLine(const std::string &line,
+                                          ConfigTable &config) {
+    std::string key, value;
 
-    key = line.substr(0, i);
-    value = line.substr(i + 1);
+    Status status = parseLine(line, key, value);
+
+    switch (status) {
+        case ERROR:
+            return false;
+        case PARSED:
+            config.set(key, value);
+            break;
+        default:
+            break;
+    }
 
     return true;
+}
+
+Diamond::ConfigLoader::Status Diamond::ConfigLoader::parseLine(const std::string &line,
+                                                               std::string &key,
+                                                               std::string &value) {
+    auto first = line.find_first_not_of(' ');
+
+    if (first == std::string::npos)
+        return EMPTY;
+
+    if (line[first] == commentMark)
+        return COMMENT;
+
+
+    auto last = line.size() - 1;
+    auto c = line.find(commentMark);
+    if (c != std::string::npos)
+        last = c - 1;
+
+    // Find where the key and value are separated
+    auto i = line.find(configDelim);
+
+    // Check that key-value delimiter is not
+    // at beginning or end
+    if (i == std::string::npos ||
+        i <= first ||
+        i >= last)
+        return ERROR;
+
+    key = line.substr(first, i - first);
+    value = line.substr(i + 1, last - i);
+
+    trimEndSpace(key);
+    trimFrontSpace(value);
+    trimEndSpace(value);
+
+    return PARSED;
+}
+
+
+void Diamond::ConfigLoader::trimFrontSpace(std::string &str) {
+    auto i = str.find_first_not_of(' ');
+    str.erase(0, i);
+}
+
+
+void Diamond::ConfigLoader::trimEndSpace(std::string &str) {
+    auto i = str.find_last_not_of(' ');
+
+    if (i != std::string::npos && i + 1 < str.size()) {
+        str.erase(i + 1);
+    }
 }

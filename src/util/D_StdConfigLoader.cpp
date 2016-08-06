@@ -19,35 +19,33 @@
 #include <fstream>
 
 Diamond::StdConfigLoader::StdConfigLoader(const std::string &pathRoot)
-        : m_pathRoot(pathRoot) {}
+    : m_pathRoot(pathRoot) {}
 
 
 Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
     ConfigTable config;
+    std::string fullPath = m_pathRoot + path;
 
     std::ifstream fileStream;
-    fileStream.open(path);
+    fileStream.open(fullPath);
 
     if (fileStream.is_open()) {
-        Log::log("Opened config file " + path + " for reading");
+        Log::log("Opened config file " + fullPath + " for reading");
 
         std::string line, key, value;
 
         while (std::getline(fileStream, line)) {
-            if (!line.empty()) {
-                if (!parseLine(line, key, value)) {
-                    Log::log("Failed to parse line " + line + " in " + path);
-                }
-                else {
-                    config.set(key, value);
-                }
+            if (!configureLine(line, config)) {
+                Log::log("Failed to parse line " + line +
+                         " in " + fullPath);
             }
         }
 
         fileStream.close();
     }
     else {
-        Log::log("Failed to open config file " + path + " for reading");
+        Log::log("Failed to open config file " +
+                 fullPath + " for reading");
     }
 
     return config;
@@ -56,11 +54,13 @@ Diamond::ConfigTable Diamond::StdConfigLoader::load(const std::string &path) {
 
 bool Diamond::StdConfigLoader::write(const ConfigTable &table,
                                      const std::string &path) {
+    std::string fullPath = m_pathRoot + path;
+
     std::ofstream filestream;
-    filestream.open(path);
+    filestream.open(fullPath);
 
     if (filestream.is_open()) {
-        Log::log("Opened config file " + path + " for writing");
+        Log::log("Opened config file " + fullPath + " for writing");
 
         for (auto pair : table.data()) {
             // DEBUG
@@ -71,7 +71,7 @@ bool Diamond::StdConfigLoader::write(const ConfigTable &table,
         filestream.close();
     }
     else {
-        Log::log("Failed to open config file " + path + " for writing");
+        Log::log("Failed to open config file " + fullPath + " for writing");
         return false;
     }
 

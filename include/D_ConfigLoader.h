@@ -9,7 +9,7 @@
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    WITHOUT WARRANTIES OR CONDITIONS OF vovANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
 */
@@ -30,12 +30,27 @@ namespace Diamond {
                            const std::string &path) = 0;
 
     protected:
-        // TODO: move this somewhere else?
-        static constexpr auto configDelim = ":";
+        enum Status {
+            ERROR,
+            PARSED,
+            COMMENT,
+            EMPTY
+        };
 
-        bool parseLine(const std::string &line,
-                       std::string &key,
-                       std::string &value);
+        // TODO: move this somewhere else?
+        static constexpr auto configDelim = ':';
+        static constexpr auto commentMark = '#';
+
+        bool configureLine(const std::string &line,
+                           ConfigTable &config);
+
+        Status parseLine(const std::string &line,
+                         std::string &key,
+                         std::string &value);
+
+        void trimFrontSpace(std::string &str);
+
+        void trimEndSpace(std::string &str);
     };
 }
 
