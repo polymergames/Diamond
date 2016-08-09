@@ -34,10 +34,6 @@ namespace Diamond {
         void draw(const PointList2D &poly, const RGBA &color);
 
         void draw(const PolyCollider *poly, const RGBA &color) {
-            // DEBUG
-            for (auto point : poly->worldPoints())
-                std::cout << point << std::endl;
-
             draw(poly->worldPoints(), color);
         }
         
