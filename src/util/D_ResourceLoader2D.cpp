@@ -22,7 +22,7 @@ bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
                                               RenderDef2D &renderDef,
                                               std::string &texturePath,
                                               Vector2<tD_real> &scale) {
-    texturePath = config.get("texturePath");
+    texturePath = config.get("texture");
 
     if (texturePath.empty()) {
         Log::log("Required path to texture is missing in config");
@@ -113,7 +113,7 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genRenderConfig(
 ) {
     ConfigTable config;
 
-    config.set("texturePath", texturePath);
+    config.set("texture", texturePath);
 
     config.set("layer", renderDef.layer);
 

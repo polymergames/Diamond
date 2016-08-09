@@ -23,7 +23,6 @@
 #include "D_QuantumBody2D.h"
 #include "D_QuantumAABBCollider2D.h"
 #include "D_QuantumCircleCollider.h"
-#include "D_QuantumPolyPoints.h"
 #include "D_QuantumPolyCollider.h"
 #include "D_Transform2.h"
 
@@ -59,6 +58,7 @@ namespace Diamond {
             // TODO: create a base quantum collider class
             // and use it to get the collider ID,
             // don't need these conditionals
+
             // Try aabb
             if (qaabb = dynamic_cast<QuantumAABBCollider2D*>(collider))
                 m_world.freeCollider(qaabb->getColliderID());
@@ -164,21 +164,16 @@ namespace Diamond {
             return nullptr;
         }
         
-        SharedPtr<PolyColPoints> makePolyColPoints(const PointList2D &points) override {
-            return SharedPtr<PolyColPoints>(new QuantumPolyPoints(points));
-        }
-        
         SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
                                                  void *parent,
                                                  const std::function<void(void *other)> &onCollision,
-                                                 const SharedPtr<PolyColPoints> &points) override {
+                                                 const PointList2D &points) override {
             const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
-            const QuantumPolyPoints *qpoints = dynamic_cast<const QuantumPolyPoints*>(points.get());
-            if (qbody && qpoints) {
+            if (qbody) {
                 collider2_id col = m_world.genCollider<Quantum2D::PolyCollider>(qbody->getID(),
                                                                                 parent,
                                                                                 onCollision,
-                                                                                qpoints->get());
+                                                                                points);
                 Quantum2D::PolyCollider *poly = dynamic_cast<Quantum2D::PolyCollider*>(m_world.getCollider(col));
                 if (poly)
                     return SharedPtr<PolyCollider>(new QuantumPolyCollider(col, poly), m_colliderDeleter);

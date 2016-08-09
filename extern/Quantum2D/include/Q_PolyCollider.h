@@ -18,11 +18,13 @@
 #define Q_POLY_COLLIDER_H
 
 #include "Q_Collider2D.h"
-#include "Q_CWPoints.h"
 
 namespace Quantum2D {
     /**
-     Points MUST be specified in clockwise order!
+     Points must contain at least three vectors forming
+     the boundary of a convex polygon. Consecutive points
+     should be adjacent on the polygon in a consistent order
+     (clockwise or counterclockwise).
     */
     class PolyCollider : public Collider2D {
     public:
@@ -30,25 +32,26 @@ namespace Quantum2D {
                      body2d_id body,
                      void *parent,
                      const std::function<void(void *other)> &onCollision,
-                     const CWPoints<PointList> &points);
+                     const PointList2D &points);
         
         /**
          Get the coordinates of this polygon's vertices
          in the parent rigidbody's local space.
+         Points are in clockwise order.
         */
-        const PointList &points() const { return m_points; }
+        const PointList2D &points() const { return m_points; }
         
         /**
          Get the current coordinates of this polygon's vertices
          in world space.
         */
-        const PointList &worldPoints() const { return m_worldPoints; }
+        const PointList2D &worldPoints() const { return m_worldPoints; }
         
         void update(tQ_delta delta) override;
         
     private:
-        const PointList &m_points;
-        PointList m_worldPoints;
+        PointList2D m_points;
+        PointList2D m_worldPoints;
     };
 }
 

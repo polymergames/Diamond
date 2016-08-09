@@ -29,8 +29,6 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::TextureFactory::loadTexture(const 
     if (!texture) {
         texture = m_renderer->loadTexture(m_pathRoot + fileName);
         m_textureMap[fileName] = texture;
-        // DEBUG
-        Log::log("Loaded " + fileName + " from disk!");
     }
     
     return texture;

@@ -24,22 +24,22 @@
 #include "duTypedefs.h"
 
 // ID/index typedefs
-typedef tD_id body2d_id; // 2d rigidbody object id type
-typedef tD_id collider2_id; // 2d collider object id type
+typedef tD_id   body2d_id; // 2d rigidbody object id type
+typedef tD_id   collider2_id; // 2d collider object id type
 
 // typedefs used in physics data and calculations
 typedef tD_real tQ_num;
-typedef tQ_num tQ_pos;
-typedef tQ_num tQ_rot;
-typedef tQ_num tQ_delta;
+typedef tQ_num  tQ_pos;
+typedef tQ_num  tQ_rot;
+typedef tQ_num  tQ_delta;
 
 namespace Quantum2D {
     class Rigidbody2D;
     class Collider2D;
 
-    using BodyList = Diamond::SwapVector<Rigidbody2D>;
+    using BodyList     = Diamond::SwapVector<Rigidbody2D>;
     using ColliderList = Diamond::SwapVector<std::unique_ptr<Collider2D> >;
-    using PointList = std::vector<Diamond::Vector2<tQ_pos> >;
+    using PointList2D  = std::vector<Diamond::Vector2<tQ_pos> >;
     
     // change based on the unit you are using for angles
     // ex. if you are storing radians in rigidbodies,

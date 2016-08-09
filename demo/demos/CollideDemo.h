@@ -21,7 +21,6 @@
 #include "D_DebugDrawer2D.h"
 #include "D_Entity2D.h"
 #include "D_Game2D.h"
-#include "D_PolyColPoints.h"
 #include "D_typedefs.h"
 
 class CollideDemo : public Diamond::Game2D {
@@ -46,8 +45,6 @@ private:
     Diamond::DebugDrawer m_debug;
     
     const Diamond::RGBA colliderColor = {0, 255, 0, 100};
-    
-    Diamond::SharedPtr<Diamond::PolyColPoints> ptrZapperPolyPoints;
 
     void m_onCollision(void *other);
 };

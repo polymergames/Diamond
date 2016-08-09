@@ -24,11 +24,11 @@ using namespace Diamond;
 
 CollideDemo::CollideDemo(Engine2D &engine, float movespeed) 
     : Game2D(engine), movespeed(movespeed), 
-      spike1(engine.makeTransform()),
-      spike2(engine.makeTransform()), 
-      zapper1(engine.makeTransform()), 
-      zapper2(engine.makeTransform()),
-      indicator_spike(engine.makeTransform()),
+      spike1          (engine.makeTransform()),
+      spike2          (engine.makeTransform()),
+      zapper1         (engine.makeTransform()),
+      zapper2         (engine.makeTransform()),
+      indicator_spike (engine.makeTransform()),
       m_debug(engine.getRenderer()) {
     Renderer2D *renderer = engine.getRenderer();
 
@@ -113,8 +113,6 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale, zheight));
     zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, zheight));
     zapperColPoints.push_back(Vector2<float>(0, zheight / 2.0));
-    
-    ptrZapperPolyPoints = physworld->makePolyColPoints(zapperColPoints);
           
     rbody = physworld->makeRigidbody(zapper1.transform());
     zapper1.addComponent(RIGIDBODY, rbody);
@@ -125,7 +123,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
         Vector2<tD_pos>(2 * partial_width * scale, 0)));
     */
     zapper1.addComponent(COLLIDER,
-                         physworld->makePolyCollider(rbody, &zapper1, callback, ptrZapperPolyPoints));
+                         physworld->makePolyCollider(rbody, &zapper1, callback, zapperColPoints));
 
     rbody = physworld->makeRigidbody(zapper2.transform());
     zapper2.addComponent(RIGIDBODY, rbody);
@@ -136,7 +134,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
         Vector2<tD_pos>(2 * partial_width * scale, 0)));
     */
     zapper2.addComponent(COLLIDER,
-                         physworld->makePolyCollider(rbody, &zapper2, callback, ptrZapperPolyPoints));
+                         physworld->makePolyCollider(rbody, &zapper2, callback, zapperColPoints));
 }
 
 void CollideDemo::update(tD_delta delta) {

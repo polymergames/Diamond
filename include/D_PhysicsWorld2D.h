@@ -21,7 +21,6 @@
 #include "D_Config.h"
 #include "D_CircleCollider.h"
 #include "D_AABBCollider2D.h"
-#include "D_PolyColPoints.h"
 #include "D_PolyCollider.h"
 #include "D_Rigidbody2D.h"
 #include "D_typedefs.h"
@@ -116,25 +115,14 @@ namespace Diamond {
 
 
         /**
-         * Transforms the given set of points into the physics engine's
-         * required format for polygon collider points. The given
-         * and returned points are in local space, and the
-         * returned object should be used to construct polygon colliders
-         * with the given shape.
-         */
-        virtual SharedPtr<PolyColPoints> makePolyColPoints(const PointList2D &points) = 0;
-        
-        /**
          * Creates a polygon collider attached to the given rigidbody.
          * parent is a pointer to the object owning the collider.
-         * The given points may be used by reference
-         * and must therefore remain valid throughout the life of the collider.
          */
         virtual SharedPtr<PolyCollider> makePolyCollider(
                 const SharedPtr<Rigidbody2D> &body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
-                const SharedPtr<PolyColPoints> &points
+                const PointList2D &points
         ) = 0;
     };
 }
