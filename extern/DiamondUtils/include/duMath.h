@@ -17,6 +17,7 @@
 #ifndef DU_MATH_H
 #define DU_MATH_H
 
+#include <algorithm>
 #include <cstdlib>
 #include "duVector2.h"
 #include "duMatrix.h"

@@ -17,6 +17,7 @@
 #ifndef D_CONFIGLOADER_H
 #define D_CONFIGLOADER_H
 
+#include <array>
 #include "D_ConfigTable.h"
 
 namespace Diamond {
@@ -37,6 +38,8 @@ namespace Diamond {
             EMPTY
         };
 
+        static const std::array<std::string, 1> ignoreStrings;
+
         // TODO: move this somewhere else?
         static constexpr auto configDelim = ':';
         static constexpr auto commentMark = '#';
@@ -47,6 +50,17 @@ namespace Diamond {
         Status parseLine(const std::string &line,
                          std::string &key,
                          std::string &value);
+
+        template <class StrArray>
+        void removeStrings(std::string &str, const StrArray &removeStrs) {
+            for (auto rem : removeStrs) {
+                auto i = str.find(rem);
+                while (i != std::string::npos) {
+                    str.erase(i, 1);
+                    i = str.find(rem);
+                }
+            }
+        }
 
         void trimFrontSpace(std::string &str);
 

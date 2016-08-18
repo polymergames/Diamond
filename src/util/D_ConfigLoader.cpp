@@ -17,6 +17,8 @@
 #include "D_ConfigLoader.h"
 
 
+const std::array<std::string, 1> Diamond::ConfigLoader::ignoreStrings = { "\r" };
+
 bool Diamond::ConfigLoader::configureLine(const std::string &line,
                                           ConfigTable &config) {
     std::string key, value;
@@ -69,6 +71,9 @@ Diamond::ConfigLoader::Status Diamond::ConfigLoader::parseLine(const std::string
     trimEndSpace(key);
     trimFrontSpace(value);
     trimEndSpace(value);
+
+    removeStrings(key, ignoreStrings);
+    removeStrings(value, ignoreStrings);
 
     return PARSED;
 }
