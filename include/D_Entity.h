@@ -49,12 +49,12 @@ namespace Diamond {
         /**
          Call this once a frame to update all of this entity's components.
         */
-        void updateComponents(tD_delta delta) {
+        void updateComponents(tD_delta delta) const {
             for (auto it = m_components.begin(); it != m_components.end(); ++it)
                 it->second->update(delta);
         }
 
-        void postPhysicsUpdateComponents(tD_delta delta) {
+        void postPhysicsUpdateComponents(tD_delta delta) const {
             for (auto it = m_components.begin(); it != m_components.end(); ++it)
                 it->second->postPhysicsUpdate(delta);
         }
@@ -72,7 +72,7 @@ namespace Diamond {
             m_components[name] = component;
         }
 
-        SharedPtr<Component> getComponent(const std::string &name) {
+        SharedPtr<Component> getComponent(const std::string &name) const {
             auto i = m_components.find(name);
             if (i != m_components.end())
                 return i->second;
@@ -81,7 +81,7 @@ namespace Diamond {
         }
 
         template <class T>
-        SharedPtr<T> getComponent(const std::string &name) {
+        SharedPtr<T> getComponent(const std::string &name) const {
             return std::dynamic_pointer_cast<T>(getComponent(name));
         }
 
