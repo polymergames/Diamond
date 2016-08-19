@@ -73,12 +73,16 @@ namespace Diamond {
         }
 
         SharedPtr<Component> getComponent(const std::string &name) {
-            return m_components[name];
+            auto i = m_components.find(name);
+            if (i != m_components.end())
+                return i->second;
+            else
+                return nullptr;
         }
 
         template <class T>
         SharedPtr<T> getComponent(const std::string &name) {
-            return std::dynamic_pointer_cast<T>(m_components[name]);
+            return std::dynamic_pointer_cast<T>(getComponent(name));
         }
 
         void removeComponent(const std::string &name) {
