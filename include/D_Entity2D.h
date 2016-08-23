@@ -35,6 +35,9 @@ namespace Diamond {
         DTransform2 &transform() { return *m_transform; }
         const DTransform2 &transform() const { return *m_transform; }
 
+        // TODO: make this (and other const functions)
+        // return a const smart pointer!
+        // (ex. ConstTransform2Ptr)
         const Transform2Ptr &getTransformPtr() const {
             return m_transform;
         }
