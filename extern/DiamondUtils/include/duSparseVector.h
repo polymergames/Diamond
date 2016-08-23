@@ -28,7 +28,8 @@ namespace Diamond {
      Unlike swapvector, maintains order of elements and uses O(1) amortized auxiliary space, but 
      leaves gaps of invalid data, and therefore should not be iterated directly.
      Please note that when an element is removed from a SparseVector, it is not necessarily
-     destroyed / its destructor is not necessarily called.
+     destroyed / its destructor is not necessarily called immediately
+     (but will be destroyed eventually).
     */
     template <class T, typename TID = tD_id>
     class SparseVector {
