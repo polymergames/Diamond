@@ -28,11 +28,8 @@ namespace Diamond {
 void Diamond::Log::setLogger(Logger *logger) {
     // TODO: gotta completely refactor this junk
     // use a global stream object for logging
-    if (!Log::logger)
+    if (logger)
         Log::logger = std::unique_ptr<Logger>(logger);
-    else
-        // like, this is bad
-        delete logger;
 }
 
 void Diamond::Log::log(const std::string &message) {
