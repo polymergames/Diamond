@@ -17,6 +17,7 @@
 #ifndef Q_DYNAMIC_WORLD_2D_H
 #define Q_DYNAMIC_WORLD_2D_H
 
+#include <bitset>
 #include "Q_Collider2D.h"
 #include "Q_Rigidbody2D.h"
 #include "Q_typedefs.h"
@@ -36,8 +37,34 @@ namespace Quantum2D {
          Initializes the simulation world.
          Returns true if initialization was successful, otherwise false.
         */
-        bool init();
+        bool init(bool allLayersCollide = true);
 
+        
+        /**
+         Turns collision between the given layers
+         on (if collides = true) or off (collides = false)
+        */
+        void setLayersCollide(QLayer layer1, QLayer layer2, bool collides) {
+            layerMap[layer1][layer2] = collides;
+            layerMap[layer2][layer1] = collides;
+        }
+        
+        /**
+         Checks if collision between the given layers is on.
+        */
+        bool doLayersCollide(QLayer layer1, QLayer layer2) const {
+            return layerMap[layer1][layer2];
+        }
+        
+        /**
+         Turn on collision between all layers.
+        */
+        void allLayersCollideOn();
+        
+        /**
+         Turn off collision between all layers.
+        */
+        void allLayersCollideOff();
 
         /**
          Returns a reference to the rigidbody with the given id.
@@ -98,7 +125,7 @@ namespace Quantum2D {
         /**
          Get the pairs of colliders that collided in the last simulation step.
         */
-        const std::vector<ColliderPair> &getCollidePairs() { return pairs; }
+        const std::vector<ColliderPair> &getCollidePairs() const { return pairs; }
 
         /**
 		 Invokes callback functions for this frame's collision pairs.
@@ -106,10 +133,10 @@ namespace Quantum2D {
 		void callbackCollisions();
 
     private:
-        BodyList bodies;
-        ColliderList colliders;
-
+        BodyList                  bodies;
+        ColliderList              colliders;
         std::vector<ColliderPair> pairs;
+        std::bitset<MAX_LAYERS>   layerMap[MAX_LAYERS];
     };
 }
 

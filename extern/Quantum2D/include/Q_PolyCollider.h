@@ -32,7 +32,8 @@ namespace Quantum2D {
                      body2d_id body,
                      void *parent,
                      const std::function<void(void *other)> &onCollision,
-                     const PointList2D &points);
+                     const PointList2D &points,
+                     QLayer layer = 0);
         
         /**
          Get the coordinates of this polygon's vertices

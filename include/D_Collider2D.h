@@ -25,6 +25,10 @@ namespace Diamond {
     public:
         virtual ~Collider2D() {}
         
+        virtual CollisionLayer getLayer() const = 0;
+        
+        virtual void setLayer(CollisionLayer layer) = 0;
+        
         virtual void setColFunc(const std::function<void(void *other)> &onCollision) = 0;
     };
 }

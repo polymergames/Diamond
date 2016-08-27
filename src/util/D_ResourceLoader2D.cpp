@@ -21,7 +21,7 @@
 bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
                                               RenderDef2D &renderDef,
                                               std::string &texturePath,
-                                              Vector2<tD_real> &scale) {
+                                              Vector2<tD_real> &scale) const {
     texturePath = config.get("texture");
 
     if (texturePath.empty()) {
@@ -29,8 +29,8 @@ bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
         return false;
     }
 
-    if (config.hasKey("layer"))
-        renderDef.layer = config.getInt("layer");
+    if (config.hasKey("renderLayer"))
+        renderDef.layer = config.getInt("renderLayer");
 
     if (config.hasKey("pivotX"))
         renderDef.pivot.x = config.getFloat("pivotX");
@@ -49,8 +49,19 @@ bool Diamond::ResourceLoader2D::loadRenderDef(const ConfigTable &config,
     return true;
 }
 
+bool Diamond::ResourceLoader2D::loadColliderDef(const ConfigTable &config,
+                                                ColliderDef2D &collider) const {
+    if (config.hasKey("collisionLayer"))
+        collider.layer = config.getInt("collisionLayer");
+    
+    return true;
+}
+
 bool Diamond::ResourceLoader2D::loadAABBDef(const ConfigTable &config,
-                                            AABBDef2D &aabb) {
+                                            AABBDef2D &aabb) const {
+    if (!loadColliderDef(config, aabb))
+        return false;
+    
     if (!config.hasKey("dimX") || !config.hasKey("dimY")) {
         Log::log("Required AABB dimensions are missing in config");
         return false;
@@ -69,7 +80,10 @@ bool Diamond::ResourceLoader2D::loadAABBDef(const ConfigTable &config,
 }
 
 bool Diamond::ResourceLoader2D::loadCircleDef(const ConfigTable &config,
-                                              CircleDef &circle) {
+                                              CircleDef &circle) const {
+    if (!loadColliderDef(config, circle))
+        return false;
+    
     if (!config.hasKey("radius")) {
         Log::log("Required circle radius is missing in config");
         return false;
@@ -87,7 +101,7 @@ bool Diamond::ResourceLoader2D::loadCircleDef(const ConfigTable &config,
 
 Diamond::PointList2D Diamond::ResourceLoader2D::loadPoints(
         const ConfigTable &config
-) {
+) const {
     PointList2D points;
     int n = 1;
 
@@ -110,12 +124,12 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genRenderConfig(
         const RenderDef2D &renderDef,
         const std::string &texturePath,
         const Vector2<tD_real> &scale
-) {
+) const {
     ConfigTable config;
 
     config.set("texture", texturePath);
 
-    config.set("layer", renderDef.layer);
+    config.set("renderLayer", renderDef.layer);
 
     config.set("pivotX", renderDef.pivot.x);
     config.set("pivotY", renderDef.pivot.y);
@@ -128,8 +142,10 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genRenderConfig(
 
 Diamond::ConfigTable Diamond::ResourceLoader2D::genAABBConfig(
         const AABBDef2D &aabb
-) {
+) const {
     ConfigTable config;
+    
+    config.set("collisionLayer", aabb.layer);
 
     config.set("dimX", aabb.dims.x);
     config.set("dimY", aabb.dims.y);
@@ -142,8 +158,10 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genAABBConfig(
 
 Diamond::ConfigTable Diamond::ResourceLoader2D::genCircleConfig(
         const CircleDef &circle
-) {
+) const {
     ConfigTable config;
+    
+    config.set("collisionLayer", circle.layer);
 
     config.set("centerX", circle.center.x);
     config.set("centerY", circle.center.y);
@@ -155,7 +173,7 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genCircleConfig(
 
 Diamond::ConfigTable Diamond::ResourceLoader2D::genPointsConfig(
         const PointList2D &points
-) {
+) const {
     ConfigTable config;
 
     for (int i = 0; i < points.size(); ++i) {
@@ -168,3 +186,4 @@ Diamond::ConfigTable Diamond::ResourceLoader2D::genPointsConfig(
 
     return config;
 }
+

@@ -30,6 +30,14 @@ namespace Diamond {
         
         collider2_id getColliderID() const { return collider; }
         
+        CollisionLayer getLayer() const override {
+            return circle->getLayer();
+        }
+        
+        void setLayer(CollisionLayer layer) override {
+            circle->setLayer(layer);
+        }
+        
         void setColFunc(const std::function<void(void *other)> &onCollision) override {
             circle->setColFunc(onCollision);
         }

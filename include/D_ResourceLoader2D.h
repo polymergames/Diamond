@@ -37,30 +37,33 @@ namespace Diamond {
         bool loadRenderDef(const ConfigTable &config,
                            RenderDef2D &renderDef,
                            std::string &texturePath,
-                           Vector2<tD_real> &scale);
+                           Vector2<tD_real> &scale) const;
 
         bool loadAABBDef(const ConfigTable &config,
-                         AABBDef2D &aabb);
+                         AABBDef2D &aabb) const;
 
         bool loadCircleDef(const ConfigTable &config,
-                           CircleDef &circle);
+                           CircleDef &circle) const;
 
 
-        PointList2D loadPoints(const ConfigTable &config);
+        PointList2D loadPoints(const ConfigTable &config) const;
 
 
         ConfigTable genRenderConfig(
                 const RenderDef2D &renderDef,
                 const std::string &texturePath,
                 const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1)
-        );
+        ) const;
 
-        ConfigTable genAABBConfig(const AABBDef2D &aabb);
+        ConfigTable genAABBConfig(const AABBDef2D &aabb) const;
 
-        ConfigTable genCircleConfig(const CircleDef &circle);
+        ConfigTable genCircleConfig(const CircleDef &circle) const;
 
-        ConfigTable genPointsConfig(const PointList2D &points);
-
+        ConfigTable genPointsConfig(const PointList2D &points) const;
+        
+    protected:
+        bool loadColliderDef(const ConfigTable &config,
+                             ColliderDef2D &collider) const;
     };
 }
 

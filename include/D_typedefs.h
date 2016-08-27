@@ -50,8 +50,9 @@ namespace Diamond {
     
     using PointList2D = std::vector<Vector2<tD_pos> >;
 
-    // Renderer
+    // Layers
     using RenderLayer = uint8_t;
+    using CollisionLayer = uint8_t;
 }
 
 #endif // D_TYPEDEFS_H

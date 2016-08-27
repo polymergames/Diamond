@@ -31,6 +31,14 @@ namespace Diamond {
         // TODO: Make a QuantumCollider base class with collider ID and colFunc functions!
         collider2_id getColliderID() const { return collider; }
         
+        CollisionLayer getLayer() const override {
+            return aabb->getLayer();
+        }
+        
+        void setLayer(CollisionLayer layer) override {
+            aabb->setLayer(layer);
+        }
+        
         void setColFunc(const std::function<void(void *other)> &onCollision) override {
             aabb->setColFunc(onCollision);
         }

@@ -37,9 +37,12 @@ namespace Quantum2D {
     class Rigidbody2D;
     class Collider2D;
 
-    using BodyList     = Diamond::SwapVector<Rigidbody2D>;
-    using ColliderList = Diamond::SwapVector<std::unique_ptr<Collider2D> >;
-    using PointList2D  = std::vector<Diamond::Vector2<tQ_pos> >;
+    using BodyList       = Diamond::SwapVector<Rigidbody2D>;
+    using ColliderList   = Diamond::SwapVector<std::unique_ptr<Collider2D> >;
+    using PointList2D    = std::vector<Diamond::Vector2<tQ_pos> >;
+    
+    using QLayer         = uint8_t;
+    const int MAX_LAYERS = 1 << (8 * sizeof(QLayer));
     
     // change based on the unit you are using for angles
     // ex. if you are storing radians in rigidbodies,

@@ -28,16 +28,26 @@ namespace Quantum2D {
 
     class Collider2D {
     public:
-        Collider2D(const BodyList &bodylist, 
-                   Coltype type, 
+        Collider2D(const BodyList &bodylist,
+                   Coltype type,
                    body2d_id body,
-                   void *parent, 
-                   const std::function<void(void *other)> &onCollision) 
-            : bodylist(bodylist), type(type), body(body), parent(parent), onCollision(onCollision) {};
+                   void *parent,
+                   const std::function<void(void *other)> &onCollision,
+                   QLayer layer = 0)
+            : bodylist(bodylist),
+              type(type),
+              body(body),
+              parent(parent),
+              onCollision(onCollision),
+              layer(layer) {};
+        
         
         virtual ~Collider2D() {};
 
         Coltype getType() const { return type; }
+        
+        QLayer getLayer() const { return layer; }
+        void setLayer(QLayer newlayer) { layer = newlayer; }
         
         body2d_id getBodyID() const { return body; }
 
@@ -53,9 +63,12 @@ namespace Quantum2D {
         virtual void update(tQ_delta delta) = 0;
 
     protected:
-        const BodyList &bodylist;
         Coltype type;
+        QLayer layer;
+        
+        const BodyList &bodylist;
         body2d_id body;
+        
         void *parent;
         std::function<void(void *other)> onCollision;
     };

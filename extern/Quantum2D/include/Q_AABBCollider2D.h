@@ -28,7 +28,8 @@ namespace Quantum2D {
                        void *parent,
                        const std::function<void(void *other)> &onCollision,
                        const Diamond::Vector2<tQ_num> &dims, 
-                       const Diamond::Vector2<tQ_num> &origin = Diamond::Vector2<tQ_num>(0, 0));
+                       const Diamond::Vector2<tQ_num> &origin = Diamond::Vector2<tQ_num>(0, 0),
+                       QLayer layer = 0);
 
         /**
          Get the origin point of this AABB in the parent rigidbody's local space.

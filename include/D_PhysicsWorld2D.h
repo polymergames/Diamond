@@ -31,12 +31,16 @@ namespace Diamond {
         // TODO: mass, etc.
     };
 
-    struct AABBDef2D {
+    struct ColliderDef2D {
+        CollisionLayer layer = 0;
+    };
+    
+    struct AABBDef2D : public ColliderDef2D {
         Vector2<tD_pos> dims = Vector2<tD_pos>(1, 1);
         Vector2<tD_pos> origin;
     };
 
-    struct CircleDef {
+    struct CircleDef : public ColliderDef2D {
         tD_pos radius = 1;
         Vector2<tD_pos> center;
     };
@@ -52,6 +56,26 @@ namespace Diamond {
          */
         virtual bool init(const Config &config) = 0;
 
+
+        /**
+         * Turns collision between the given layers
+         * on (if collides = true) or off (collides = false)
+         */
+        virtual void setLayersCollide(CollisionLayer layer1,
+                                      CollisionLayer layer2,
+                                      bool collides) = 0;
+        
+        /**
+         * Checks if collision between the given layers is on.
+         */
+        virtual bool doLayersCollide(CollisionLayer layer1,
+                                     CollisionLayer layer2) const = 0;
+        
+        
+        virtual void allLayersCollideOn() = 0;
+        virtual void allLayersCollideOff() = 0;
+        
+        
         /**
          * Steps the physics simulation by the number of milliseconds given
          * and syncs physics and Diamond transform data.
@@ -77,7 +101,8 @@ namespace Diamond {
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 const Vector2<tD_pos> &dims,
-                const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0)
+                const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0),
+                CollisionLayer layer = 0
         ) = 0;
 
         SharedPtr<AABBCollider2D> makeAABBCollider(
@@ -87,7 +112,7 @@ namespace Diamond {
                 const AABBDef2D &colDef
         ) {
             return makeAABBCollider(body, parent, onCollision,
-                                    colDef.dims, colDef.origin);
+                                    colDef.dims, colDef.origin, colDef.layer);
         }
 
 
@@ -100,7 +125,8 @@ namespace Diamond {
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 tD_pos radius,
-                const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0)
+                const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0),
+                CollisionLayer layer = 0
         ) = 0;
 
         SharedPtr<CircleCollider> makeCircleCollider(
@@ -110,7 +136,7 @@ namespace Diamond {
                 const CircleDef &colDef
         ) {
             return makeCircleCollider(body, parent, onCollision,
-                                      colDef.radius, colDef.center);
+                                      colDef.radius, colDef.center, colDef.layer);
         }
 
 
@@ -122,7 +148,8 @@ namespace Diamond {
                 const SharedPtr<Rigidbody2D> &body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
-                const PointList2D &points
+                const PointList2D &points,
+                CollisionLayer layer = 0
         ) = 0;
     };
 }
