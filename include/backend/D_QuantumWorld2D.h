@@ -18,6 +18,7 @@
 #define D_QUANTUM_WORLD_2D_H
 
 #include <map>
+#include "duMemPool.h"
 #include "Q_DynamicWorld2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_QuantumBody2D.h"
@@ -29,61 +30,38 @@
 namespace Diamond {
     class QuantumBodyDeleter {
     public:
-        QuantumBodyDeleter(std::map<body2d_id, DTransform2*> &pairs) : m_pairs(pairs) {}
+        QuantumBodyDeleter(MemPool<QuantumBody2D>            &bodyPool,
+                           std::map<body2d_id, DTransform2*> &pairs);
 
-        void operator() (Rigidbody2D *body) const {
-            QuantumBody2D *qbody = dynamic_cast<QuantumBody2D*>(body);
-            if (qbody) {
-                m_pairs.erase(qbody->getID());
-            }
-            delete body;
-            // DEBUG
-            // Log::log("Quantumbody deleted");
-        }
+        void operator() (Rigidbody2D *body) const;
 
     private:
+        MemPool<QuantumBody2D>            &m_bodyPool;
         std::map<body2d_id, DTransform2*> &m_pairs;
     };
 
 
     class QuantumColliderDeleter {
     public:
-        QuantumColliderDeleter(Quantum2D::DynamicWorld2D &world) : m_world(world) {}
+        QuantumColliderDeleter(Quantum2D::DynamicWorld2D      &world, 
+                               MemPool<QuantumAABBCollider2D> &aabbPool, 
+                               MemPool<QuantumCircleCollider> &circlePool,
+                               MemPool<QuantumPolyCollider>   &polyPool) ;
 
-        void operator() (Collider2D *collider) const {
-            QuantumAABBCollider2D *qaabb = nullptr;
-            QuantumCircleCollider *qcircle = nullptr;
-            QuantumPolyCollider *qpoly = nullptr;
+        void operator() (Collider2D *collider) const;
 
-            // TODO: create a base quantum collider class
-            // and use it to get the collider ID,
-            // don't need these conditionals
-
-            // Try aabb
-            if (qaabb = dynamic_cast<QuantumAABBCollider2D*>(collider))
-                m_world.freeCollider(qaabb->getColliderID());
-            // try circle
-            else if (qcircle = dynamic_cast<QuantumCircleCollider*>(collider))
-                m_world.freeCollider(qcircle->getColliderID());
-            // try poly
-            else if (qpoly = dynamic_cast<QuantumPolyCollider*>(collider))
-                m_world.freeCollider(qpoly->getColliderID());
-
-            delete collider;
-            // DEBUG
-            // Log::log("QuantumCollider deleted");
-        }
     private:
-        Quantum2D::DynamicWorld2D &m_world;
+        Quantum2D::DynamicWorld2D      &m_world;
+
+        MemPool<QuantumAABBCollider2D> &m_aabbPool;
+        MemPool<QuantumCircleCollider> &m_circlePool;
+        MemPool<QuantumPolyCollider>   &m_polyPool;
     };
 
 
-    // TODO: get rid of dynamic allocation, in this and other classes, and just return IDs
-    // (or ID containers) ex. in makeRigidbody, etc.
-    // or use memory pools
     class QuantumWorld2D : public PhysicsWorld2D {
     public:
-        QuantumWorld2D() : m_bodyDeleter(m_pairs), m_colliderDeleter(m_world) {}
+        QuantumWorld2D();
 
         bool init(const Config &config) override { return m_world.init(); }
         
@@ -100,60 +78,19 @@ namespace Diamond {
         }
         
         
-        void allLayersCollideOn() override {
-            m_world.allLayersCollideOn();
-        }
+        void allLayersCollideOn() override { m_world.allLayersCollideOn(); }
         
-        void allLayersCollideOff() override {
-            m_world.allLayersCollideOff();
-        }
+        void allLayersCollideOff() override { m_world.allLayersCollideOff(); }
         
         
-        void update(tD_delta delta_ms) override { 
-            updateBodies();
-            
-            m_world.step(delta_ms);
-            
-            // Sync diamond transforms with physics transforms
-            // BEFORE calling collision callbacks
-            // in case the collision callbacks make any changes to
-            // diamond transforms which would then be lost
-            // if syncing transforms was done afterwards.
-            updateTransforms();
-            
-            m_world.callbackCollisions();
-        }
+        void update(tD_delta delta_ms) override;
         
-        void updateBodies() {
-            for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
-                Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
-                rbody.position() = i->second->position;
-                rbody.rotation() = i->second->rotation;
-            }
-        }
+        void updateBodies();
 
-        void updateTransforms() {
-            for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
-                Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
-                i->second->position = rbody.position();
-                // TODO: test!
-                i->second->rotation = rbody.rotation();
-            }
-        }
+        void updateTransforms();
         
 
-        SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) override {
-            QuantumBody2D *body = new QuantumBody2D(&m_world);
-
-            // Add to rigibody-entity pairs so they can be synchronized
-            m_pairs[body->getID()] = &transform;
-
-            // Initialize the new rigidbody with the parent entity's world transform
-            Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(body->getID());
-            rbody.position() = transform.position;
-            rbody.rotation() = transform.rotation;
-            return SharedPtr<Rigidbody2D>(body, m_bodyDeleter);
-        }
+        SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) override;
         
         
         SharedPtr<AABBCollider2D> makeAABBCollider(const SharedPtr<Rigidbody2D> &body,
@@ -161,71 +98,38 @@ namespace Diamond {
                                                    const std::function<void(void *other)> &onCollision,
                                                    const Vector2<tD_pos> &dims,
                                                    const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0),
-                                                   CollisionLayer layer = 0) override {
-            const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
-            if (qbody) {
-                collider2_id col = m_world.genCollider<Quantum2D::AABBCollider2D>(qbody->getID(),
-                                                                                  parent,
-                                                                                  onCollision,
-                                                                                  dims,
-                                                                                  origin,
-                                                                                  layer);
-                Quantum2D::AABBCollider2D *aabb = dynamic_cast<Quantum2D::AABBCollider2D*>(m_world.getCollider(col));
-                if (aabb)
-                    return SharedPtr<AABBCollider2D>(new QuantumAABBCollider2D(col, aabb),
-                                                     m_colliderDeleter);
-            }
-            return nullptr;
-        }
+                                                   CollisionLayer layer = 0) override;
         
+
         SharedPtr<CircleCollider> makeCircleCollider(const SharedPtr<Rigidbody2D> &body,
                                                      void *parent,
                                                      const std::function<void(void *other)> &onCollision,
                                                      tD_pos radius,
                                                      const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0),
-                                                     CollisionLayer layer = 0) override {
-            const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
-            if (qbody) {
-                collider2_id col = m_world.genCollider<Quantum2D::CircleCollider>(qbody->getID(),
-                                                                                  parent,
-                                                                                  onCollision,
-                                                                                  radius,
-                                                                                  center,
-                                                                                  layer);
-                Quantum2D::CircleCollider *circle = dynamic_cast<Quantum2D::CircleCollider*>(m_world.getCollider(col));
-                if (circle)
-                    return SharedPtr<CircleCollider>(new QuantumCircleCollider(col, circle),
-                                                     m_colliderDeleter);
-            }
-            return nullptr;
-        }
+                                                     CollisionLayer layer = 0) override;
+
         
         SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
                                                  void *parent,
                                                  const std::function<void(void *other)> &onCollision,
                                                  const PointList2D &points,
-                                                 CollisionLayer layer = 0) override {
-            const QuantumBody2D *qbody = dynamic_cast<const QuantumBody2D*>(body.get());
-            if (qbody) {
-                collider2_id col = m_world.genCollider<Quantum2D::PolyCollider>(qbody->getID(),
-                                                                                parent,
-                                                                                onCollision,
-                                                                                points,
-                                                                                layer);
-                Quantum2D::PolyCollider *poly = dynamic_cast<Quantum2D::PolyCollider*>(m_world.getCollider(col));
-                if (poly)
-                    return SharedPtr<PolyCollider>(new QuantumPolyCollider(col, poly),
-                                                   m_colliderDeleter);
-            }
-            return nullptr;
-        }
+                                                 CollisionLayer layer = 0) override;
 
     private:
-        Quantum2D::DynamicWorld2D m_world;
+        Quantum2D::DynamicWorld2D         m_world;
         std::map<body2d_id, DTransform2*> m_pairs;
 
-        QuantumBodyDeleter m_bodyDeleter;
-        QuantumColliderDeleter m_colliderDeleter;
+        // Rigidbody pool
+        MemPool<QuantumBody2D>            m_bodyPool;
+
+        // Collider pools
+        MemPool<QuantumAABBCollider2D>    m_aabbPool;
+        MemPool<QuantumCircleCollider>    m_circlePool;
+        MemPool<QuantumPolyCollider>      m_polyPool;
+
+        // Deleters
+        QuantumBodyDeleter                m_bodyDeleter;
+        QuantumColliderDeleter            m_colliderDeleter;
     };
 }
 

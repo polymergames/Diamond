@@ -31,13 +31,15 @@
 #include "D_QuantumWorld2D.h"
 
 Diamond::Engine2D::Engine2D(const Config &config, bool &success)
-    : is_running(false), 
-      config(config), 
-      renderer(nullptr), 
-      dj(nullptr), 
-      timer(nullptr), 
-      event_handler(nullptr), 
-      phys_world(nullptr) {
+    : is_running(false),
+      config(config),
+      renderer(nullptr),
+      dj(nullptr),
+      timer(nullptr),
+      event_handler(nullptr),
+      phys_world(nullptr),
+      // TODO: construct transformPool with given estimate of how many transforms max would ever be onscreen
+      transformPool(200) {
 
     success = false;
 

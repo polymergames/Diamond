@@ -25,7 +25,11 @@
 
 
 Diamond::SDLRenderer2D::SDLRenderer2D() 
-    : m_window(nullptr), m_renderer(nullptr), m_bgColor({0, 0, 0, 100}) {}
+    : m_window(nullptr),
+      m_renderer(nullptr),
+      m_bgColor({0, 0, 0, 100}),
+      // TODO: construct renderCompPool with given estimate of how many renderables max would ever be onscreen
+      m_renderCompPool(200) {}
 
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
     SDL_DestroyRenderer(m_renderer);
@@ -58,8 +62,8 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
     }
 
     // Create renderer
-    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED
-                                              | (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | 
+                                                  (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
     if (m_renderer == nullptr) {
         Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
         return false;
@@ -87,7 +91,6 @@ void Diamond::SDLRenderer2D::renderAll() {
     // Render sprites
     for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
         for (auto i = l->begin(); i != l->end(); ++i) {
-            //Log::log(i->transform.position.x + " and " + i->transform.position.y + " and " + i->transform.scale); // DEBUG
             Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> transform = (*i).getTransform();
 
             SDL_Point pivot = (*i).pivot();
@@ -99,18 +102,18 @@ void Diamond::SDLRenderer2D::renderAll() {
             SDL_Rect render_rect = {
                 (int)(transform.position.x - pivot.x), // render position x
                 (int)(transform.position.y - pivot.y), // render position y
-                (int)(clip.w * transform.scale.x), // render width
-                (int)(clip.h * transform.scale.y) // render height
+                (int)(clip.w * transform.scale.x),     // render width
+                (int)(clip.h * transform.scale.y)      // render height
             };
 
             SDL_RenderCopyEx(
-                m_renderer, // The SDL backend renderer for this SDL instance.
+                m_renderer,              // The SDL backend renderer for this SDL instance.
                 (*i).texture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
-                &clip, // source rect
-                &render_rect, // destination rect
-                transform.rotation, // rotation for destination rect in degrees
-                &pivot, // rotation pivot location in local space
-                (*i).getFlip() // current flip status
+                &clip,                   // source rect
+                &render_rect,            // destination rect
+                transform.rotation,      // rotation for destination rect in degrees
+                &pivot,                  // rotation pivot location in local space
+                (*i).getFlip()           // current flip status
             );
         }
     }
@@ -188,7 +191,7 @@ Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRende
     const SharedPtr<const Texture> &texture,
     RenderLayer layer,
     const Vector2<tD_pos> &pivot
-    ) {
+) {
     // Make room for a new layer if necessary
     if ((int)layer > (int)m_render_objects.size() - 1) {
         m_render_objects.resize(layer + 1);
@@ -198,7 +201,7 @@ Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRende
         transform, std::dynamic_pointer_cast<const SDLTexture>(texture), pivot
     );
 
-    return makeShared<SDLRenderComponent2D>(*this, robj, layer);
+    return m_renderCompPool.make(*this, robj, layer);
 }
 
 

@@ -22,6 +22,7 @@
 #endif
 
 #include <fstream>
+#include "duPoolManager.h"
 #include "D_Component.h"
 #include "D_Config.h"
 #include "D_DiskJockey2D.h"
@@ -61,7 +62,7 @@ namespace Diamond {
         Transform2Ptr makeTransform(const Vector2<tD_pos> &pos = Vector2<tD_pos>(0, 0),
                                     tD_rot rot = 0,
                                     const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1)) {
-            return makeShared<DTransform2>(pos, rot, scale);
+            return transformPool.make(pos, rot, scale);
         }
 
     protected:
@@ -76,6 +77,7 @@ namespace Diamond {
         
         std::ofstream       logstream;
 
+        PoolManager<DTransform2, Transform2Ptr> transformPool;
 
         virtual bool initSDL();
         virtual bool initQuantum();

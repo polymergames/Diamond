@@ -19,7 +19,7 @@
 
 #include <vector>
 #include "SDL.h"
-
+#include "duPoolManager.h"
 #include "D_Renderer2D.h"
 #include "D_SDLRenderObj2D.h"
 #include "D_SDLtypedefs.h"
@@ -38,6 +38,8 @@ namespace Diamond {
     };
     
     
+    class SDLRenderComponent2D;
+
     class SDLRenderer2D : public Renderer2D {
     public:
         SDLRenderer2D();
@@ -97,15 +99,17 @@ namespace Diamond {
                                     RenderLayer newLayer);
 
     private:
-        SDL_Window *m_window;
+        SDL_Window   *m_window;
         SDL_Renderer *m_renderer;
         
-        RGBA m_bgColor;
+        RGBA          m_bgColor;
 
         std::vector<SwapVector<SDLRenderObj2D> > m_render_objects;
         
-        std::vector<SDLRenderablePoint> m_render_points_queue;
-        std::vector<SDLRenderableLine> m_render_lines_queue;
+        std::vector<SDLRenderablePoint>          m_render_points_queue;
+        std::vector<SDLRenderableLine>           m_render_lines_queue;
+
+        PoolManager<SDLRenderComponent2D, SharedPtr<SDLRenderComponent2D> > m_renderCompPool;
     };
 }
 
