@@ -18,9 +18,11 @@
 #define D_RESOURCE_LOADER2D_H
 
 #include <unordered_map>
+#include "D_AnimationSheet.h"
 #include "D_ConfigTable.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
+#include "D_TextureFactory.h"
 
 
 namespace Diamond {
@@ -44,6 +46,10 @@ namespace Diamond {
 
         bool loadCircleDef(const ConfigTable &config,
                            CircleDef &circle) const;
+
+        bool loadAnimationSheet(const ConfigTable &config, 
+                                TextureFactory &textureFactory, 
+                                AnimationSheet &animationSheet) const;
 
 
         PointList2D loadPoints(const ConfigTable &config) const;

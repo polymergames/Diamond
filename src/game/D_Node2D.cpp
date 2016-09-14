@@ -20,7 +20,7 @@
 
 
 Diamond::Node2D::Node2D(const Transform2Ptr &world_transform)
-    : m_localTransform(), 
+    : m_localTransform(*world_transform), 
       m_worldTransform(world_transform),
       m_parent_transform(), 
       m_parent_trans_mat{ { {1, 0}, {0, 1} } } {}

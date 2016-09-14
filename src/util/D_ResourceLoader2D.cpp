@@ -99,6 +99,37 @@ bool Diamond::ResourceLoader2D::loadCircleDef(const ConfigTable &config,
     return true;
 }
 
+bool Diamond::ResourceLoader2D::loadAnimationSheet(const ConfigTable &config,
+                                                   TextureFactory &textureFactory,
+                                                   AnimationSheet &animationSheet) const {
+    if (!config.hasKey("texture")) {
+        Log::log("Required animation sheet texture is missing in config");
+        return false;
+    }
+    
+    animationSheet.sprite_sheet = textureFactory.loadTexture(config.get("texture"));
+
+    if (!animationSheet.sprite_sheet)
+    {
+        Log::log("Failed to load texture " + config.get("texture"));
+        return false;
+    }
+
+    if (config.hasKey("frameLength"))
+        animationSheet.frame_length = config.getFloat("frameLength");
+
+    if (config.hasKey("numFrames"))
+        animationSheet.num_frames = config.getInt("numFrames");
+
+    if (config.hasKey("numRows"))
+        animationSheet.rows = config.getInt("numRows");
+
+    if (config.hasKey("numColumns"))
+        animationSheet.columns = config.getInt("numColumns");
+
+    return true;
+}
+
 Diamond::PointList2D Diamond::ResourceLoader2D::loadPoints(
         const ConfigTable &config
 ) const {

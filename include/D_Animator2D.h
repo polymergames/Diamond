@@ -38,6 +38,11 @@ namespace Diamond {
         void                                setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp);
 
 
+        tD_index                            getCurFrame() const { return m_cur_frame; }
+
+        tD_delta                            getCurFrameElapsed() const { return m_elapsed; }
+
+
         void                                update(tD_delta delta) override;
 
 

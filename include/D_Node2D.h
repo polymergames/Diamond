@@ -28,6 +28,7 @@ namespace Diamond {
 
     class Node2D {
     public:
+        // TODO: use reference to a transform, not pointer!
         Node2D(const Transform2Ptr &world_transform);
 
         // Parenting troubles
