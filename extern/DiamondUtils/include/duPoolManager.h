@@ -41,7 +41,7 @@ namespace Diamond {
 
     /**
      Memory pool container that generates smart pointers of
-     the pooled object with a given pool deleter.
+     the pooled object with a pool deleter.
     */
     template <typename ElemType, 
               class PtrType, 
