@@ -89,6 +89,7 @@ void Diamond::SDLEventHandler::update() {
     Input::touch_drag = false;
     Input::touch_up = false;
 
+    // TODO: try using SDL get state for keys instead of event polling
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {

@@ -24,7 +24,7 @@ namespace Diamond {
     public:
         virtual ~Timer() {};
 
-        virtual tD_time msElapsed() = 0;
+        virtual tD_time msElapsed() const = 0;
 
         tD_delta getDelta() const { return delta; }
 
