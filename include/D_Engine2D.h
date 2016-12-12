@@ -59,10 +59,18 @@ namespace Diamond {
 
         virtual void        quit() { is_running = false; }
 
-        Transform2Ptr makeTransform(const Vector2<tD_pos> &pos = Vector2<tD_pos>(0, 0),
-                                    tD_rot rot = 0,
-                                    const Vector2<tD_real> &scale = Vector2<tD_real>(1, 1)) {
-            return transformPool.make(pos, rot, scale);
+        /**
+         * The transform pointers generated here are automatically freed when there are no longer
+         * any references to them. Therefore, it is important to keep at least one copy
+         * of the smart pointer somewhere for the duration of the transform's use 
+         * as other subsystems (ex. rendering, physics) may not make their own copy of the smart pointer
+         * (ie. they might use a reference or raw pointer instead).
+         * A wrapper gameobject class (like an Entity2D) that manages the lifetime of 
+         * a transform and associated components takes care of this.
+         */
+        template <typename... Args>
+        SharedPtr<DTransform2> makeTransform(Args&&... args) {
+            return transformPool.make(std::forward<Args>(args)...);
         }
 
     protected:
@@ -77,7 +85,7 @@ namespace Diamond {
         
         std::ofstream       logstream;
 
-        PoolManager<DTransform2, Transform2Ptr> transformPool;
+        PoolManager<DTransform2, SharedPtr<DTransform2> > transformPool;
 
         virtual bool initSDL();
         virtual bool initQuantum();

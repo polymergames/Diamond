@@ -1,5 +1,5 @@
 /*
-    Copyright 2015 Ahnaf Siddiqui
+    Copyright 2016 Ahnaf Siddiqui
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,11 +17,14 @@
 #ifndef D_PARTICLE_SYSTEM_H
 #define D_PARTICLE_SYSTEM_H
 
+#include <deque>
 #include <functional>
+#include "D_Component.h"
 #include "D_RenderComponent2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_Timer.h"
 #include "D_Transform2.h"
+#include "D_typedefs.h"
 
 namespace Diamond {
 
@@ -59,8 +62,8 @@ namespace Diamond {
                  const SharedPtr<RenderComponent2D> &renderComp, 
                  const SharedPtr<Rigidbody2D> &rigidBody, 
                  void *data = nullptr)
-            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), data(data), 
-              mBirthTime(0), mLifeTime(0) {}
+            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), data(data),  
+              mLifeTime(0), mBirthTime(0) {}
         
 
         // These functions are used by the particle system
@@ -71,19 +74,20 @@ namespace Diamond {
 
         bool isAlive(tD_time currentTime) { return currentTime - mBirthTime <= mLifeTime; }
 
+
     private:
         tD_time mLifeTime; // how long this particle should live
         tD_time mBirthTime; // when this particle was born
     };
 
 
-    class ParticleSystem {
+
+    class ParticleSystem : public Component {
     public:
         // callback function typedefs
         
         using SpawnFunc = std::function<
-            Particle(const DTransform2 &transform,
-                     const Vector2<float> &velocity)
+            Particle(void)
         >;
 
         using DestroyFunc = std::function<
@@ -92,16 +96,26 @@ namespace Diamond {
 
 
         ParticleSystem(const ParticleSystemDef &def,
-                       const SpawnFunc &spawnFunc, 
-                       const DestroyFunc &destroyFunc, 
-                       const Timer *timer);
+                       const ConstTransform2Ptr &transform,
+                       const SpawnFunc &spawnParticle,
+                       const DestroyFunc &destroyParticle);
+
+
+        void update(tD_delta delta) override;
 
     private:
-        ParticleSystemDef mDef;
+        ParticleSystemDef  mDef;
+        ConstTransform2Ptr mTransform;
+
         SpawnFunc         mSpawnParticle;
         DestroyFunc       mDestroyParticle;
 
-        const Timer *mTimer;
+        tD_time mTimeElapsed;
+        std::deque<Particle> mParticles;
+
+
+        Particle &generateParticle(tD_delta delta);
+        void initParticle(Particle &particle, tD_delta delta);
     };
 }
 
