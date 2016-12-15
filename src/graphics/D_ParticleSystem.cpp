@@ -16,6 +16,8 @@
 
 #include "D_ParticleSystem.h"
 
+#include "duMath.h"
+
 Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
                                         const ConstTransform2Ptr &transform,
                                         const SpawnFunc &spawnParticle,
@@ -29,7 +31,7 @@ Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
     
     mParticles.reserve(config.particlePoolSize);
 
-    mEmitInterval = nextEmitInterval();
+    mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
 
     // immediately emit some particles if configured to do so
     if (mConfig.emitOnWake)
@@ -68,8 +70,11 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
         }
     }
 
-    // TODO: only generate particles at certain times depending on settings
-    emitParticles();
+    // emit new particles
+    if (mTimeElapsed - mLastParticleSpawnTime >= mEmitInterval) {
+        emitParticles();
+        mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
+    }
 
     // update the time since the particle system was created
     mTimeElapsed += delta;
@@ -77,7 +82,8 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
 
 
 void Diamond::ParticleSystem::emitParticles() {
-    Particle& particle = generateParticle(0); // TODO: pass in particle's lifetime
+    Particle& particle = generateParticle(Math::random((double)mConfig.minParticleLifeTime, 
+                                                       (double)mConfig.maxParticleLifeTime));
     initParticle(particle);
     mLastParticleSpawnTime = mTimeElapsed;
 }

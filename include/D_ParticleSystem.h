@@ -33,11 +33,47 @@ namespace Diamond {
         // at any one time in this particle system (used for pre-allocating memory).
         size_t particlePoolSize = 0;
         
+        // the number of particles that will be emitted at the same time.
+        // can give a range for a random number of particles each time,
+        // otherwise set both min and max to the same value.
+        int minParticlesPerEmission = 1;
+        int maxParticlesPerEmission = 1;
+
         // time between particle emissions.
         // can give a range for random interval each time,
-        // otherwise set both to same value
+        // otherwise set both min and max to the same value.
         tD_delta minEmitInterval = 1;
         tD_delta maxEmitInterval = 1;
+
+        // how long after each particle is emitted before the particle is destroyed.
+        // can give a range for a random lifetime for each particle,
+        // otherwise set both min and max to the same value.
+        tD_time minParticleLifeTime = 1;
+        tD_time maxParticleLifeTime = 1;
+
+        // TODO: allow for various shapes of emission source,
+        // like circle, cone, etc. in addition to rectangle.
+        //
+        // The lower-left and upper-right corners of the rectangle that defines
+        // the particle system's emission space.
+        // These coordinates are in the particle system's local space.
+        Vector2<tD_pos> minEmitPoint = Vector2<tD_pos>(-1, -1);
+        Vector2<tD_pos> maxEmitPoint = Vector2<tD_pos>(1, 1);
+
+        // Angle (range) in degrees at which a particle is emitted from its emission point.
+        tD_rot minEmitAngleDeg = 0;
+        tD_rot maxEmitAngleDeg = 180;
+
+        // The speed (range) at which a particle travels after it is emitted.
+        // If negative, particle will travel in the opposite direction of its emission angle.
+        tD_real minParticleSpeed = -1;
+        tD_real maxParticleSpeed = 1;
+
+        // If animateColor = true, each particle's color and transparency will change smoothly
+        // through its lifetime from birthColor to deathColor.
+        bool animateColor = false;
+        RGBA birthColor = RGBA{ 255, 255, 255, 255 };
+        RGBA deathColor = RGBA{ 255, 255, 255, 255 };
 
         // if true, the particle system will emit its first batch of particles
         // as soon as it is constructed. Otherwise, the first emission will happen
@@ -86,7 +122,11 @@ namespace Diamond {
     };
 
 
-
+    /**
+     * Construct an object of this class to create a configurable particle system.
+     * The system will follow a transform that you provide, allowing you to play 
+     * with the particle system as you please. It will do fancy things for you.
+     */
     class ParticleSystem : public Component {
     public:
         // callback function typedefs
@@ -124,16 +164,12 @@ namespace Diamond {
         SpawnFunc   mSpawnParticle;
         DestroyFunc mDestroyParticle;
 
-        tD_time mTimeElapsed;
-        tD_time mLastParticleSpawnTime;
+        tD_time  mTimeElapsed;
+        tD_time  mLastParticleSpawnTime;
         tD_delta mEmitInterval;
 
         std::vector<Particle> mParticles;
 
-
-        tD_delta nextEmitInterval() const {
-            return mConfig.minEmitInterval; // TODO
-        }
 
         void emitParticles();
         Particle &generateParticle(tD_time particleLifeTime);
