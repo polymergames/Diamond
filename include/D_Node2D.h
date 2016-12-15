@@ -68,7 +68,7 @@ namespace Diamond {
         void updateAllWorldTransforms();
 
         /**
-         Updates all local transforms based on world transforms in the tree rooted at this node. 
+         Updates all local transforms based on world transforms in the tree rooted at this node.
         */
         void updateAllLocalTransforms();
 
@@ -93,8 +93,8 @@ namespace Diamond {
         template <typename P, typename R, typename S>
         Transform2<P, R, S> localToWorldSpace(const Transform2<P, R, S> &local_trans) const {
             return Transform2<P, R, S>(
-                localToWorldSpace(local_trans.position), 
-                localToWorldRotation(local_trans.rotation), 
+                localToWorldSpace(local_trans.position),
+                localToWorldRotation(local_trans.rotation),
                 localToWorldScale(local_trans.scale)
             );
         }
@@ -134,7 +134,7 @@ namespace Diamond {
         Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
             return Transform2<P, R, S>(
                 worldToLocalSpace(world_trans.position),
-                worldToLocalRotation(world_trans.rotation), 
+                worldToLocalRotation(world_trans.rotation),
                 worldToLocalScale(world_trans.scale)
             );
         }
@@ -147,7 +147,7 @@ namespace Diamond {
         Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords) const {
             return (world_coords - m_parent_transform.position).mul(m_parent_trans_mat.inv().m);
         }
-        
+
         /**
          Transforms a given rotation from world space to this node's local space.
         */
@@ -169,9 +169,9 @@ namespace Diamond {
          Get this node's world transformation matrix (not including translation).
         */
         Matrix<tD_real, 2, 2> getTransMat() const {
-            return Math::transMat(Math::deg2rad(m_worldTransform->rotation), 
-                                  m_worldTransform->scale.x, 
-                                  m_worldTransform->scale.y);
+            return Math::transMat((tD_real)Math::deg2rad(m_worldTransform->rotation),
+                                  (tD_real)m_worldTransform->scale.x,
+                                  (tD_real)m_worldTransform->scale.y);
         }
 
 

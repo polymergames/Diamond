@@ -17,8 +17,8 @@
 #ifndef D_PARTICLE_SYSTEM_H
 #define D_PARTICLE_SYSTEM_H
 
-#include <deque>
 #include <functional>
+#include <vector>
 #include "D_Component.h"
 #include "D_RenderComponent2D.h"
 #include "D_Rigidbody2D.h"
@@ -28,8 +28,21 @@
 
 namespace Diamond {
 
-    struct ParticleSystemDef {
-        //
+    struct ParticleSystemConfig {
+        // estimate for the max number of particles that will be live
+        // at any one time in this particle system (used for pre-allocating memory).
+        size_t particlePoolSize = 0;
+        
+        // time between particle emissions.
+        // can give a range for random interval each time,
+        // otherwise set both to same value
+        tD_delta minEmitInterval = 1;
+        tD_delta maxEmitInterval = 1;
+
+        // if true, the particle system will emit its first batch of particles
+        // as soon as it is constructed. Otherwise, the first emission will happen
+        // after the first emit time interval passes.
+        bool emitOnWake = false;
     };
 
 
@@ -38,8 +51,7 @@ namespace Diamond {
      * particle is freed by the particle system, its components will
      * automatically be freed if they're not being used elsewhere.
      */
-    class Particle {
-    public:
+    struct Particle {
         Transform2Ptr transform  = nullptr;
 
         /**
@@ -49,6 +61,9 @@ namespace Diamond {
         SharedPtr<RenderComponent2D> renderComp = nullptr;
 
         SharedPtr<Rigidbody2D> rigidBody  = nullptr;
+
+        tD_time mBirthTime; // when this particle was born
+        tD_time mLifeTime; // how long this particle should live        
 
         /**
          * Anything can be stored here by the particle system's user
@@ -61,23 +76,13 @@ namespace Diamond {
         Particle(const Transform2Ptr &transform,
                  const SharedPtr<RenderComponent2D> &renderComp, 
                  const SharedPtr<Rigidbody2D> &rigidBody, 
+                 tD_time birthTime, tD_time lifeTime,
                  void *data = nullptr)
-            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), data(data),  
-              mLifeTime(0), mBirthTime(0) {}
-        
-
-        // These functions are used by the particle system
-
-        void setLifeTime(tD_time lifeTime) { mLifeTime = lifeTime; }
-
-        void initTime(tD_time currentTime) { mBirthTime = currentTime; }
-
-        bool isAlive(tD_time currentTime) { return currentTime - mBirthTime <= mLifeTime; }
+            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), 
+              mBirthTime(birthTime), mLifeTime(lifeTime), data(data) {}
 
 
-    private:
-        tD_time mLifeTime; // how long this particle should live
-        tD_time mBirthTime; // when this particle was born
+        bool isAlive(tD_time currentTime) const { return currentTime - mBirthTime <= mLifeTime; }
     };
 
 
@@ -87,35 +92,52 @@ namespace Diamond {
         // callback function typedefs
         
         using SpawnFunc = std::function<
-            Particle(void)
+            Particle(tD_time particleBirthTime, tD_time particleLifeTime)
         >;
 
         using DestroyFunc = std::function<
-            void(const Particle &particle)
+            void(Particle &particle)
         >;
 
 
-        ParticleSystem(const ParticleSystemDef &def,
+        ParticleSystem(const ParticleSystemConfig &config,
                        const ConstTransform2Ptr &transform,
                        const SpawnFunc &spawnParticle,
-                       const DestroyFunc &destroyParticle);
+                       const DestroyFunc &destroyParticle = [] (Particle &particle) {});
 
 
         void update(tD_delta delta) override;
 
-    private:
-        ParticleSystemDef  mDef;
-        ConstTransform2Ptr mTransform;
+        // can access and change particle system configuration at any time.
+        ParticleSystemConfig &config() { return mConfig; }
+        const ParticleSystemConfig &config() const { return mConfig; }
 
-        SpawnFunc         mSpawnParticle;
-        DestroyFunc       mDestroyParticle;
+        // Returns the number of particles currently spawned in this particle system.
+        // This could be used, for example, to smoothly destroy a particle system
+        // at a moment when there are no particles (ie. this function returns 0).
+        size_t particleCount() const { return mParticles.size(); }
+
+    private:
+        ParticleSystemConfig mConfig;
+        ConstTransform2Ptr   mTransform;
+
+        SpawnFunc   mSpawnParticle;
+        DestroyFunc mDestroyParticle;
 
         tD_time mTimeElapsed;
-        std::deque<Particle> mParticles;
+        tD_time mLastParticleSpawnTime;
+        tD_delta mEmitInterval;
+
+        std::vector<Particle> mParticles;
 
 
-        Particle &generateParticle(tD_delta delta);
-        void initParticle(Particle &particle, tD_delta delta);
+        tD_delta nextEmitInterval() const {
+            return mConfig.minEmitInterval; // TODO
+        }
+
+        void emitParticles();
+        Particle &generateParticle(tD_time particleLifeTime);
+        void initParticle(Particle &particle);
     };
 }
 

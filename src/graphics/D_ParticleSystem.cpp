@@ -16,46 +16,77 @@
 
 #include "D_ParticleSystem.h"
 
-Diamond::ParticleSystem::ParticleSystem(const ParticleSystemDef &def,
+Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
                                         const ConstTransform2Ptr &transform,
                                         const SpawnFunc &spawnParticle,
                                         const DestroyFunc &destroyParticle)
-    : mDef(def), 
+    : mConfig(config),
       mTransform(transform), 
       mSpawnParticle(spawnParticle), 
       mDestroyParticle(destroyParticle), 
-      mTimeElapsed(0) {};
+      mTimeElapsed(0), 
+      mLastParticleSpawnTime(0) { 
+    
+    mParticles.reserve(config.particlePoolSize);
+
+    mEmitInterval = nextEmitInterval();
+
+    // immediately emit some particles if configured to do so
+    if (mConfig.emitOnWake)
+        emitParticles();
+}
 
 
 void Diamond::ParticleSystem::update(tD_delta delta) {
     // do fancy particul effx!    
 
     // update particles based on the particle system's settings
-    for (auto particle : mParticles) {
-        // TODO
+    // and remove dead particles.
+    for (auto i = mParticles.begin(); i != mParticles.end();) {
+        if (!i->isAlive(mTimeElapsed)) {
+
+            // If the current particle is dead, it is replaced
+            // by the last particle in the list, which is then destroyed.
+            // This allows O(1) removal from the middle of the vector, at the
+            // expense of changing the order of the vector. However, changing the order
+            // is ok, and the iterator is not advanced in this case so that the
+            // replacement particle now at this position can also be processed before moving on.
+
+            mDestroyParticle(*i);
+
+            if (i < mParticles.end() - 1)
+                *i = std::move(mParticles.back());
+
+            mParticles.pop_back();
+        }
+        else {
+            // TODO: update particle according to settings
+
+            // since no particle has been removed in this case, 
+            // we can advance the iterator. 
+            ++i;
+        }
     }
 
     // TODO: only generate particles at certain times depending on settings
-    Particle& particle = generateParticle(delta);
-    initParticle(particle, delta);
+    emitParticles();
 
-    // remove dead particles.
-    // assumes that particles are ordered from oldest to newest
-    // and all have the same lifetime.
-    // TODO: consider non-consistent lifetimes? ex. what if each particle has a random lifetime?
-    while (!mParticles.front().isAlive(mTimeElapsed)) {
-        mParticles.pop_front();
-    }
-
+    // update the time since the particle system was created
     mTimeElapsed += delta;
 }
 
 
-Diamond::Particle &Diamond::ParticleSystem::generateParticle(tD_delta delta) {
-    mParticles.emplace_back(mSpawnParticle());
+void Diamond::ParticleSystem::emitParticles() {
+    Particle& particle = generateParticle(0); // TODO: pass in particle's lifetime
+    initParticle(particle);
+    mLastParticleSpawnTime = mTimeElapsed;
+}
+
+Diamond::Particle &Diamond::ParticleSystem::generateParticle(tD_time particleLifeTime) {
+    mParticles.emplace_back(mSpawnParticle(mTimeElapsed, particleLifeTime));
     return mParticles.back();
 }
 
-void Diamond::ParticleSystem::initParticle(Particle &particle, tD_delta delta) {
+void Diamond::ParticleSystem::initParticle(Particle &particle) {
     // TODO: set particle's transform, velocity, etc. according to settings
 }
