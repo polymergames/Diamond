@@ -21,7 +21,9 @@
 
 Diamond::Node2D::Node2D(DTransform2 &world_transform)
     : m_localTransform(world_transform), 
-      m_worldTransform(world_transform) {}
+      m_worldTransform(world_transform),
+      m_cachedWorldTransform(world_transform), 
+      m_cachedTransformationMatrix(transformationMatrix()) {}
 
 
 
@@ -33,7 +35,7 @@ Diamond::Node2D *Diamond::Node2D::addChild(Node2D *child) {
     if (child && child != this)
         m_children.push_back(child);
 
-    child->updateLocalTransform(m_worldTransform, transformationMatrix());
+    child->updateLocalTransform(m_cachedWorldTransform, m_cachedTransformationMatrix);
 
     return child;
 }
@@ -58,10 +60,8 @@ void Diamond::Node2D::updateAllWorldTransforms(const DTransform2 &parent_transfo
                                                const Matrix<tD_real, 2, 2> &parent_trans_mat) {
     updateWorldTransform(parent_transform, parent_trans_mat);
 
-    auto transMat = transformationMatrix();
-
     for (auto child : m_children) {
-        child->updateAllWorldTransforms(m_worldTransform, transMat);
+        child->updateAllWorldTransforms(m_cachedWorldTransform, m_cachedTransformationMatrix);
     }
 }
 
@@ -70,9 +70,7 @@ void Diamond::Node2D::updateAllLocalTransforms(const DTransform2 &parent_transfo
                                                const Matrix<tD_real, 2, 2> &parent_trans_mat) {
     updateLocalTransform(parent_transform, parent_trans_mat);
 
-    auto transMat = transformationMatrix();
-
     for (auto child : m_children) {
-        child->updateAllLocalTransforms(m_worldTransform, transMat);
+        child->updateAllLocalTransforms(m_cachedWorldTransform, m_cachedTransformationMatrix);
     }
 }

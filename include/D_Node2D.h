@@ -26,11 +26,18 @@ namespace Diamond {
     class Node2D;
     typedef std::vector<Node2D*> ChildList;
 
-    // TODO: how can we make Node transformations cooperate with physics engine-driven movements?
-    // since physics engine ignores node relationships and moves everything in world space
-    // perhaps require a separate physics engine for tree-aware physics?
-    // otherwise, have to do manual syncing of local and world transforms of tree nodes with physics engine
-    // at different times, not elegant or user friendly
+    /**
+     To keep a Node2D tree synced properly with external sytems that modify world transforms,
+     it is suggested that the tree root's updateAllWorldTransforms() is called
+     after every set of modifications to node local transforms,
+     and that the root's updateAllLocalTransforms() is called after every set of external
+     modifications to world local transforms followed by updateAllWorldTransforms() again
+     to make the world transforms reflect the newly synced local transforms.
+     ex. in a Diamond game, could move characters by local transforms in the game's update() function
+     and call root.updateAllWorldTransforms() at the end of update,
+     then call root.updateAllLocalTransforms() and root.updateAllWorldTransforms()
+     at the beginning of postPhysicsUpdate().
+    */
     class Node2D {
     public:
         Node2D(DTransform2 &world_transform);
@@ -96,13 +103,19 @@ namespace Diamond {
          Updates this node's world transform based on its local transform and the given parent world transform.
         */
         void updateWorldTransform(const DTransform2 &parent_transform, 
-                                  const Matrix<tD_real, 2, 2> &parent_trans_mat)
-        { m_worldTransform = Node2D::localToWorldSpace(m_localTransform, parent_transform, parent_trans_mat); }
+                                  const Matrix<tD_real, 2, 2> &parent_trans_mat) { 
+            m_worldTransform = Node2D::localToWorldSpace(m_localTransform, parent_transform, parent_trans_mat);
+            m_cachedWorldTransform = m_worldTransform;
+            m_cachedTransformationMatrix = transformationMatrix();
+        }
 
 
         /**
          Updates all local transforms based on world transforms and parent world transforms
-         in the tree rooted at this node.
+         in the tree rooted at this node. Use cached parent world transform to sync local
+         transforms with external changes to world transforms (ex. from a physics engine)
+         without affecting node tree relationships in local transforms.
+         ie, call this in postPhysicsUpdate() or after any set of external changes to world transforms.
         */
         void updateAllLocalTransforms(const DTransform2 &parent_transform = DTransform2(),
                                       const Matrix<tD_real, 2, 2> &parent_trans_mat = { { { 1, 0 },{ 0, 1 } } });
@@ -173,7 +186,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given point from this node's parent's local space to world space.
+         Transforms a given point from this node's local space to world space.
         */
         template <typename P>
         Vector2<P> localToWorldSpace(const Vector2<P> &local_coords) const {
@@ -181,7 +194,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given rotation from this node's parent's local space to world space.
+         Transforms a given rotation from this node's local space to world space.
         */
         template <typename R>
         R localToWorldRotation(R local_rot) const {
@@ -189,7 +202,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given scale vector from this node's parent's local space to world space.
+         Transforms a given scale vector from this node's local space to world space.
         */
         template <typename S>
         Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
@@ -247,7 +260,7 @@ namespace Diamond {
 
 
         /**
-         Transforms a given transform object from world space to this node's parent's local space.
+         Transforms a given transform object from world space to this node's local space.
         */
         template <typename P, typename R, typename S>
         Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
@@ -255,7 +268,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given point from world space to this node's parent's local space.
+         Transforms a given point from world space to this node's local space.
         */
         template <typename P>
         Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords) const {
@@ -263,7 +276,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given rotation from world space to this node's parent's local space.
+         Transforms a given rotation from world space to this node's local space.
         */
         template <typename R>
         R worldToLocalRotation(R world_rot) const {
@@ -271,7 +284,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given scale vector from world space to this node's parent's local space.
+         Transforms a given scale vector from world space to this node's local space.
         */
         template <typename S>
         Vector2<S> worldToLocalScale(const Vector2<S> &world_scale) const {
@@ -282,7 +295,19 @@ namespace Diamond {
     protected:
         DTransform2 m_localTransform;
         DTransform2 &m_worldTransform;
-        ChildList   m_children;
+
+        // using cached world transforms allows for using updateAllLocalTransform()
+        // to sync local transforms with
+        // external changes in world transforms (ex. from a physics engine)
+        // only for the nodes for which their world transform changed, without changing
+        // the local transforms of children. This is possible because
+        // while m_worldTransform is an external reference that changes whenever anything out
+        // there changes it, the cached transforms stay consistent until explicitly updated
+        // by the node, and can therefore be used as a sort of snapshot of the past.
+        DTransform2 m_cachedWorldTransform;
+        Matrix<tD_real, 2, 2> m_cachedTransformationMatrix;
+
+        ChildList m_children;
     };
 }
 

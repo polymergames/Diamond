@@ -300,7 +300,9 @@ void RandomDemo::postPhysicsUpdate(tD_delta delta) {
     spike.postPhysicsUpdateComponents(delta);
     spike2.postPhysicsUpdateComponents(delta);
     zapper.postPhysicsUpdateComponents(delta);
-    zapper2.postPhysicsUpdateComponents(delta);    
+    zapper2.postPhysicsUpdateComponents(delta);
+
+    root.updateAllWorldTransforms();
 }
 
 void RandomDemo::quit() {};

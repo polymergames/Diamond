@@ -19,6 +19,7 @@
 
 #include <functional>
 #include <vector>
+#include "duMatrix.h"
 #include "D_Component.h"
 #include "D_Config.h"
 #include "D_Transform2.h"
