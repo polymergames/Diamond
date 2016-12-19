@@ -27,7 +27,9 @@ Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
       mSpawnParticle(spawnParticle), 
       mDestroyParticle(destroyParticle), 
       mTimeElapsed(0), 
-      mLastParticleSpawnTime(0) { 
+      mLastParticleSpawnTime(0),
+      mTempTransform(*mTransform),
+      mNode(mTempTransform) {
     
     mParticles.reserve(config.particlePoolSize);
 
@@ -41,6 +43,9 @@ Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
 
 void Diamond::ParticleSystem::update(tD_delta delta) {
     // do fancy particul effx!    
+
+    // update the time since the particle system was created
+    mTimeElapsed += delta;
 
     // update particles based on the particle system's settings
     // and remove dead particles.
@@ -72,19 +77,27 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
 
     // emit new particles
     if (mTimeElapsed - mLastParticleSpawnTime >= mEmitInterval) {
+        // update mTempTransform so that new transform is reflected in mNode
+        // which will be used to set particle transforms in this particle system's local space.
+        mTempTransform = *mTransform;
+
         emitParticles();
+
+        // update the time interval until the next emission
         mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
     }
-
-    // update the time since the particle system was created
-    mTimeElapsed += delta;
 }
 
 
 void Diamond::ParticleSystem::emitParticles() {
-    Particle& particle = generateParticle(Math::random((double)mConfig.minParticleLifeTime, 
-                                                       (double)mConfig.maxParticleLifeTime));
-    initParticle(particle);
+    auto numParticles = Math::random(mConfig.maxParticlesPerEmission, mConfig.maxParticlesPerEmission);
+
+    // generate and initialize numParticles particles
+    for (int i = 0; i < numParticles; ++i) {
+        initParticle(generateParticle(Math::random((double)mConfig.minParticleLifeTime, 
+                                                   (double)mConfig.maxParticleLifeTime)));
+    }
+
     mLastParticleSpawnTime = mTimeElapsed;
 }
 
@@ -95,4 +108,10 @@ Diamond::Particle &Diamond::ParticleSystem::generateParticle(tD_time particleLif
 
 void Diamond::ParticleSystem::initParticle(Particle &particle) {
     // TODO: set particle's transform, velocity, etc. according to settings
+
+    if (particle.transform) {
+        auto x = Math::random(mConfig.minEmitPoint.x, mConfig.maxEmitPoint.x);
+        auto y = Math::random(mConfig.minEmitPoint.y, mConfig.maxEmitPoint.y);
+    }
+
 }

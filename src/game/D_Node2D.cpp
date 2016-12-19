@@ -19,8 +19,8 @@
 #include <algorithm> // ?
 
 
-Diamond::Node2D::Node2D(const Transform2Ptr &world_transform)
-    : m_localTransform(*world_transform), 
+Diamond::Node2D::Node2D(DTransform2 &world_transform)
+    : m_localTransform(world_transform), 
       m_worldTransform(world_transform),
       m_parent_transform(), 
       m_parent_trans_mat{ { {1, 0}, {0, 1} } } {}
@@ -35,7 +35,7 @@ Diamond::Node2D *Diamond::Node2D::addChild(Node2D *child) {
     if (child && child != this)
         m_children.push_back(child);
 
-    child->updateParentTransform(*m_worldTransform, getTransMat());
+    child->updateParentTransform(m_worldTransform, getTransMat());
     child->updateLocalTransform();
 
     return child;
@@ -63,7 +63,7 @@ void Diamond::Node2D::updateAllWorldTransforms() {
     Matrix<tD_real, 2, 2> trans_mat = getTransMat();
 
     for (Node2D *child : m_children) {
-        child->updateParentTransform(*m_worldTransform, trans_mat);
+        child->updateParentTransform(m_worldTransform, trans_mat);
         child->updateAllWorldTransforms();
     }
 }

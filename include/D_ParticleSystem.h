@@ -20,6 +20,7 @@
 #include <functional>
 #include <vector>
 #include "D_Component.h"
+#include "D_Node2D.h"
 #include "D_RenderComponent2D.h"
 #include "D_Rigidbody2D.h"
 #include "D_Timer.h"
@@ -60,20 +61,43 @@ namespace Diamond {
         Vector2<tD_pos> minEmitPoint = Vector2<tD_pos>(-1, -1);
         Vector2<tD_pos> maxEmitPoint = Vector2<tD_pos>(1, 1);
 
-        // Angle (range) in degrees at which a particle is emitted from its emission point.
+        // Angle (range) in degrees towards which a particle is emitted from its emission point.
         tD_rot minEmitAngleDeg = 0;
         tD_rot maxEmitAngleDeg = 180;
+
+        // Angle (range) in degrees of particle's local rotation at the beginning of its life.
+        tD_rot minBirthRotationDeg = 0;
+        tD_rot maxBirthRotationDeg = 0;
+
+        // If animateScale = true, each particle's size will change smoothly
+        // through its lifetime from birthScale to deathScale.
+        bool animateScale = false;
+        Vector2<tD_real> minBirthScale = Vector2<tD_real>(1, 1);
+        Vector2<tD_real> maxBirthScale = Vector2<tD_real>(1, 1);
+        Vector2<tD_real> minDeathScale = Vector2<tD_real>(1, 1);
+        Vector2<tD_real> maxDeathScale = Vector2<tD_real>(1, 1);
 
         // The speed (range) at which a particle travels after it is emitted.
         // If negative, particle will travel in the opposite direction of its emission angle.
         tD_real minParticleSpeed = -1;
         tD_real maxParticleSpeed = 1;
 
+        // The acceleration (range) of a particle.
+        bool accelerate = false;
+        Vector2<tD_real> minParticleAcceleration = Vector2<tD_real>(0, 0);
+        Vector2<tD_real> maxParticleAcceleration = Vector2<tD_real>(0, 0);
+
+        // The angular speed (range) at which a particle spins after it is emitted.
+        tD_real minParticleAngularSpeed = -1;
+        tD_real maxParticleAngularSpeed = 1;        
+
         // If animateColor = true, each particle's color and transparency will change smoothly
         // through its lifetime from birthColor to deathColor.
         bool animateColor = false;
-        RGBA birthColor = RGBA{ 255, 255, 255, 255 };
-        RGBA deathColor = RGBA{ 255, 255, 255, 255 };
+        RGBA minBirthColor = RGBA{ 255, 255, 255, 255 };
+        RGBA maxBirthColor = RGBA{ 255, 255, 255, 255 };
+        RGBA minDeathColor = RGBA{ 255, 255, 255, 255 };
+        RGBA maxDeathColor = RGBA{ 255, 255, 255, 255 };
 
         // if true, the particle system will emit its first batch of particles
         // as soon as it is constructed. Otherwise, the first emission will happen
@@ -88,7 +112,21 @@ namespace Diamond {
      * automatically be freed if they're not being used elsewhere.
      */
     struct Particle {
-        Transform2Ptr transform  = nullptr;
+        Particle(const Transform2Ptr &transform,
+                 const SharedPtr<RenderComponent2D> &renderComp, 
+                 const SharedPtr<Rigidbody2D> &rigidBody, 
+                 tD_time birthTime, tD_time lifeTime,
+                 void *data = nullptr)
+            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), 
+              data(data), mBirthTime(birthTime), mLifeTime(lifeTime), origTransform(*transform) {}
+
+
+        bool isAlive(tD_time currentTime) const { return currentTime - mBirthTime <= mLifeTime; }
+
+
+        // members
+
+        Transform2Ptr transform  = nullptr;        
 
         /**
          * The particle system will only modify effects on a render component, and will not change
@@ -96,10 +134,7 @@ namespace Diamond {
          */
         SharedPtr<RenderComponent2D> renderComp = nullptr;
 
-        SharedPtr<Rigidbody2D> rigidBody  = nullptr;
-
-        tD_time mBirthTime; // when this particle was born
-        tD_time mLifeTime; // how long this particle should live        
+        SharedPtr<Rigidbody2D> rigidBody  = nullptr;                
 
         /**
          * Anything can be stored here by the particle system's user
@@ -109,16 +144,12 @@ namespace Diamond {
         void *data = nullptr;
 
 
-        Particle(const Transform2Ptr &transform,
-                 const SharedPtr<RenderComponent2D> &renderComp, 
-                 const SharedPtr<Rigidbody2D> &rigidBody, 
-                 tD_time birthTime, tD_time lifeTime,
-                 void *data = nullptr)
-            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), 
-              mBirthTime(birthTime), mLifeTime(lifeTime), data(data) {}
+        tD_time mBirthTime; // when this particle was born
+        tD_time mLifeTime; // how long this particle should live
 
-
-        bool isAlive(tD_time currentTime) const { return currentTime - mBirthTime <= mLifeTime; }
+        // a copy of the particle's transform value when it was first created.
+        // used as the base for things like animating the particle's scale.
+        DTransform2 origTransform;
     };
 
 
@@ -160,6 +191,9 @@ namespace Diamond {
     private:
         ParticleSystemConfig mConfig;
         ConstTransform2Ptr   mTransform;
+        // holds a temporary non-const copy of mTransform for use with mNode
+        DTransform2          mTempTransform;
+        Node2D               mNode;
 
         SpawnFunc   mSpawnParticle;
         DestroyFunc mDestroyParticle;

@@ -29,7 +29,7 @@ namespace Diamond {
     class Node2D {
     public:
         // TODO: use reference to a transform, not pointer!
-        Node2D(const Transform2Ptr &world_transform);
+        Node2D(DTransform2 &world_transform);
 
         // Parenting troubles
 
@@ -54,10 +54,8 @@ namespace Diamond {
         const DTransform2 &localTransform() const { return m_localTransform; }
 
         // world transform
-        DTransform2 &worldTransform() { return *m_worldTransform; }
-        const DTransform2 &worldTransform() const { return *m_worldTransform; }
-
-        const Transform2Ptr &getWorldTransformPtr() const { return m_worldTransform; }
+        DTransform2 &worldTransform() { return m_worldTransform; }
+        const DTransform2 &worldTransform() const { return m_worldTransform; }
 
         // update transforms
 
@@ -73,9 +71,9 @@ namespace Diamond {
         void updateAllLocalTransforms();
 
 
-        void updateWorldTransform() { *m_worldTransform = localToWorldSpace(m_localTransform); }
+        void updateWorldTransform() { m_worldTransform = localToWorldSpace(m_localTransform); }
 
-        void updateLocalTransform() { m_localTransform = worldToLocalSpace(*m_worldTransform); }
+        void updateLocalTransform() { m_localTransform = worldToLocalSpace(m_worldTransform); }
 
         void updateParentTransform(const DTransform2 &parent_transform,
                                    const Matrix<tD_real, 2, 2> &parent_trans_mat) {
@@ -88,7 +86,29 @@ namespace Diamond {
         // transform conversion local->world
 
         /**
-         Transforms a given transform object from this node's local space to world space.
+         Transforms a given point from the given local space 
+         (specified by local space's origin in world space and transformation matrix) to world space.
+        */
+        template <typename P>
+        static Vector2<P> localToWorldSpace(const Vector2<P> &local_coords, 
+                                            const Vector2<P> &space_origin,
+                                            const Matrix<tD_real, 2, 2> &space_trans_mat) {
+            return local_coords.mul(space_trans_mat.m) + space_origin;
+        }
+
+        /**
+         Transforms a given point from world space to the given local space 
+         (specified by local space's origin in world space and transformation matrix).
+        */
+        template <typename P>
+        static Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords,
+                                            const Vector2<P> &space_origin,
+                                            const Matrix<tD_real, 2, 2> &space_trans_mat) {
+            return (world_coords - space_origin.position).mul(space_trans_mat.inv().m);
+        }
+
+        /**
+         Transforms a given transform object from this node's parent's local space to world space.
         */
         template <typename P, typename R, typename S>
         Transform2<P, R, S> localToWorldSpace(const Transform2<P, R, S> &local_trans) const {
@@ -100,16 +120,16 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given point from this node's local space to world space.
+         Transforms a given point from this node's parent's local space to world space.
          TODO: test
         */
         template <typename P>
         Vector2<P> localToWorldSpace(const Vector2<P> &local_coords) const {
-            return local_coords.mul(m_parent_trans_mat.m) + m_parent_transform.position;
+            return localToWorldSpace(local_coords, m_parent_transform.position, m_parent_trans_mat);
         }
 
         /**
-         Transforms a given rotation from this node's local space to world space.
+         Transforms a given rotation from this node's parent's local space to world space.
         */
         template <typename R>
         R localToWorldRotation(R local_rot) const {
@@ -117,7 +137,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given scale vector from this node's local space to world space.
+         Transforms a given scale vector from this node's parent's local space to world space.
         */
         template <typename S>
         Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
@@ -128,7 +148,7 @@ namespace Diamond {
         // Transform conversion world->local
 
         /**
-         Transforms a given transform object from world space to this node's local space.
+         Transforms a given transform object from world space to this node's parent's local space.
         */
         template <typename P, typename R, typename S>
         Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
@@ -140,7 +160,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given point from world space to this node's local space.
+         Transforms a given point from world space to this node's parent's local space.
          TODO: test
         */
         template <typename P>
@@ -149,7 +169,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given rotation from world space to this node's local space.
+         Transforms a given rotation from world space to this node's parent's local space.
         */
         template <typename R>
         R worldToLocalRotation(R world_rot) const {
@@ -157,7 +177,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given scale vector from world space to this node's local space.
+         Transforms a given scale vector from world space to this node's parent's local space.
         */
         template <typename S>
         Vector2<S> worldToLocalScale(const Vector2<S> &world_scale) const {
@@ -169,16 +189,16 @@ namespace Diamond {
          Get this node's world transformation matrix (not including translation).
         */
         Matrix<tD_real, 2, 2> getTransMat() const {
-            return Math::transMat((tD_real)Math::deg2rad(m_worldTransform->rotation),
-                                  (tD_real)m_worldTransform->scale.x,
-                                  (tD_real)m_worldTransform->scale.y);
+            return Math::transMat((tD_real)Math::deg2rad(m_worldTransform.rotation),
+                                  (tD_real)m_worldTransform.scale.x,
+                                  (tD_real)m_worldTransform.scale.y);
         }
 
 
 
     protected:
         DTransform2             m_localTransform;
-        Transform2Ptr           m_worldTransform;
+        DTransform2             &m_worldTransform;
 
         DTransform2             m_parent_transform;
         Matrix<tD_real, 2, 2>   m_parent_trans_mat;

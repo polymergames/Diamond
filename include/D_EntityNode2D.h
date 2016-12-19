@@ -28,7 +28,22 @@ namespace Diamond {
     class EntityNode2D : public Entity, public Node2D {
     public:
         EntityNode2D(const Transform2Ptr &world_transform)
-            : Node2D(world_transform) {}
+            : Node2D(*world_transform), m_transform(world_transform) {}
+
+        virtual ~EntityNode2D() {}
+
+
+        const Transform2Ptr &getTransformPtr() {
+            return m_transform;
+        }
+
+        const ConstTransform2Ptr &getTransformPtr() const {
+            return m_transform;
+        }
+
+    protected:
+        // Entity is responsible for managing the lifetime of a given transform
+        Transform2Ptr m_transform;
     };
 }
 
