@@ -292,14 +292,15 @@ void RandomDemo::update(tD_delta delta) {
 }
 
 void RandomDemo::postPhysicsUpdate(tD_delta delta) {
+    // Because physics engine externally changed world transforms,
+    // we have to manually sync local transforms to the new world transforms.
+    root.updateAllLocalTransforms();
+
     root.postPhysicsUpdateComponents(delta);
     spike.postPhysicsUpdateComponents(delta);
     spike2.postPhysicsUpdateComponents(delta);
     zapper.postPhysicsUpdateComponents(delta);
-    zapper2.postPhysicsUpdateComponents(delta);
-
-    root.updateAllLocalTransforms();
-    root.updateAllWorldTransforms();
+    zapper2.postPhysicsUpdateComponents(delta);    
 }
 
 void RandomDemo::quit() {};

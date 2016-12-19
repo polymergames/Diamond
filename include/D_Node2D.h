@@ -72,7 +72,7 @@ namespace Diamond {
         /**
          This node's world transformation matrix (not including translation).
         */
-        const Matrix<tD_real, 2, 2> &transMat() const {
+        Matrix<tD_real, 2, 2> transformationMatrix() const {
             return Math::transMat((tD_real)Math::deg2rad(m_worldTransform.rotation),
                                   (tD_real)m_worldTransform.scale.x,
                                   (tD_real)m_worldTransform.scale.y);
@@ -81,33 +81,7 @@ namespace Diamond {
 
 
         // ======= Update transforms =======
-
         
-        ///**
-        // Performs copyWorldTransform() on all nodes in the tree rooted at this node.
-        //*/
-        //void copyAllWorldTransforms();
-
-        ///**
-        // Call this function to update the node's copy of the external world transform.
-        // This cached world transform is what's used to update children transforms.
-        // This allows for choosing not to keep the node transformations in sync with the actual
-        // external world transformations, allowing for, for example, letting a physics engine update the
-        // external world transforms and then updating the node tree transforms based on the
-        // previously cached (pre-physics update) world transforms 
-        // before syncing the tree with the post-physics transforms, thereby causing node children
-        // to follow their parent's physics-driven movements.
-
-        // Otherwise, call this (or copyAllWorldTransforms to act on the entire tree) before every
-        // update of local transforms and/or world transforms.
-        //*/
-        //void copyWorldTransform() {
-        //    m_cachedWorldTransform = m_worldTransform;
-        //    m_transMat = Math::transMat((tD_real)Math::deg2rad(m_worldTransform.rotation),
-        //                                (tD_real)m_worldTransform.scale.x,
-        //                                (tD_real)m_worldTransform.scale.y);
-        //}
-
         /**
          Updates all world transforms based on local transforms and parent world transforms
          in the tree rooted at this node.
@@ -120,7 +94,7 @@ namespace Diamond {
         */
         void updateWorldTransform(const DTransform2 &parent_transform, 
                                   const Matrix<tD_real, 2, 2> &parent_trans_mat)
-        { m_worldTransform = localToWorldSpace(m_localTransform, parent_transform, parent_trans_mat); }
+        { m_worldTransform = Node2D::localToWorldSpace(m_localTransform, parent_transform, parent_trans_mat); }
 
 
         /**
@@ -135,7 +109,7 @@ namespace Diamond {
         */
         void updateLocalTransform(const DTransform2 &parent_transform,
                                   const Matrix<tD_real, 2, 2> &parent_trans_mat) 
-        { m_localTransform = worldToLocalSpace(m_worldTransform, parent_transform, parent_trans_mat); }
+        { m_localTransform = Node2D::worldToLocalSpace(m_worldTransform, parent_transform, parent_trans_mat); }
 
 
 
@@ -187,37 +161,37 @@ namespace Diamond {
         }
 
 
-        ///**
-        // Transforms a given transform object from this node's local space to world space.
-        //*/
-        //template <typename P, typename R, typename S>
-        //Transform2<P, R, S> localToWorldSpace(const Transform2<P, R, S> &local_trans) const {
-        //    return Node2D::localToWorldSpace(local_trans, m_parent_transform, m_parent_trans_mat);
-        //}
+        /**
+         Transforms a given transform object from this node's local space to world space.
+        */
+        template <typename P, typename R, typename S>
+        Transform2<P, R, S> localToWorldSpace(const Transform2<P, R, S> &local_trans) const {
+            return Node2D::localToWorldSpace(local_trans, m_worldTransform, transformationMatrix());
+        }
 
-        ///**
-        // Transforms a given point from this node's parent's local space to world space.
-        //*/
-        //template <typename P>
-        //Vector2<P> localToWorldSpace(const Vector2<P> &local_coords) const {
-        //    return Node2D::localToWorldSpace(local_coords, m_parent_transform.position, m_parent_trans_mat);
-        //}
+        /**
+         Transforms a given point from this node's parent's local space to world space.
+        */
+        template <typename P>
+        Vector2<P> localToWorldSpace(const Vector2<P> &local_coords) const {
+            return Node2D::localToWorldSpace(local_coords, m_worldTransform.position, transformationMatrix());
+        }
 
-        ///**
-        // Transforms a given rotation from this node's parent's local space to world space.
-        //*/
-        //template <typename R>
-        //R localToWorldRotation(R local_rot) const {
-        //    return Node2D::localToWorldRotation(local_rot, m_parent_transform.rotation);
-        //}
+        /**
+         Transforms a given rotation from this node's parent's local space to world space.
+        */
+        template <typename R>
+        R localToWorldRotation(R local_rot) const {
+            return Node2D::localToWorldRotation(local_rot, m_worldTransform.rotation);
+        }
 
-        ///**
-        // Transforms a given scale vector from this node's parent's local space to world space.
-        //*/
-        //template <typename S>
-        //Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
-        //    return Node2D::localToWorldScale(local_scale, m_parent_transform.scale);
-        //}
+        /**
+         Transforms a given scale vector from this node's parent's local space to world space.
+        */
+        template <typename S>
+        Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
+            return Node2D::localToWorldScale(local_scale, m_worldTransform.scale);
+        }
 
 
 
@@ -269,48 +243,43 @@ namespace Diamond {
         }
 
 
-        ///**
-        // Transforms a given transform object from world space to this node's parent's local space.
-        //*/
-        //template <typename P, typename R, typename S>
-        //Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
-        //    return Node2D::worldToLocalSpace(world_trans, m_parent_transform.position, m_parent_trans_mat);
-        //}
+        /**
+         Transforms a given transform object from world space to this node's parent's local space.
+        */
+        template <typename P, typename R, typename S>
+        Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
+            return Node2D::worldToLocalSpace(world_trans, m_worldTransform.position, transformationMatrix());
+        }
 
-        ///**
-        // Transforms a given point from world space to this node's parent's local space.
-        //*/
-        //template <typename P>
-        //Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords) const {
-        //    return Node2D::worldToLocalSpace(world_coords, m_parent_transform.position, m_parent_trans_mat);
-        //}
+        /**
+         Transforms a given point from world space to this node's parent's local space.
+        */
+        template <typename P>
+        Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords) const {
+            return Node2D::worldToLocalSpace(world_coords, m_worldTransform.position, transformationMatrix());
+        }
 
-        ///**
-        // Transforms a given rotation from world space to this node's parent's local space.
-        //*/
-        //template <typename R>
-        //R worldToLocalRotation(R world_rot) const {
-        //    return Node2D::worldToLocalRotation(world_rot, m_parent_transform.rotation);
-        //}
+        /**
+         Transforms a given rotation from world space to this node's parent's local space.
+        */
+        template <typename R>
+        R worldToLocalRotation(R world_rot) const {
+            return Node2D::worldToLocalRotation(world_rot, m_worldTransform.rotation);
+        }
 
-        ///**
-        // Transforms a given scale vector from world space to this node's parent's local space.
-        //*/
-        //template <typename S>
-        //Vector2<S> worldToLocalScale(const Vector2<S> &world_scale) const {
-        //    return Node2D::worldToLocalScale(world_scale, m_parent_transform.scale);
-        //}
+        /**
+         Transforms a given scale vector from world space to this node's parent's local space.
+        */
+        template <typename S>
+        Vector2<S> worldToLocalScale(const Vector2<S> &world_scale) const {
+            return Node2D::worldToLocalScale(world_scale, m_worldTransform.scale);
+        }
 
 
     protected:
-        DTransform2             m_localTransform;
-        DTransform2             &m_worldTransform;
-
-        // see comment on copyWorldTransform()
-        //DTransform2             m_cachedWorldTransform;
-        Matrix<tD_real, 2, 2>   m_transMat;
-
-        ChildList m_children;
+        DTransform2 m_localTransform;
+        DTransform2 &m_worldTransform;
+        ChildList   m_children;
     };
 }
 
