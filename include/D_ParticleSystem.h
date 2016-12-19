@@ -20,10 +20,7 @@
 #include <functional>
 #include <vector>
 #include "D_Component.h"
-#include "D_Node2D.h"
-#include "D_RenderComponent2D.h"
-#include "D_Rigidbody2D.h"
-#include "D_Timer.h"
+#include "D_Config.h"
 #include "D_Transform2.h"
 #include "D_typedefs.h"
 
@@ -65,9 +62,9 @@ namespace Diamond {
         tD_rot minEmitAngleDeg = 0;
         tD_rot maxEmitAngleDeg = 180;
 
-        // Angle (range) in degrees of particle's local rotation at the beginning of its life.
-        tD_rot minBirthRotationDeg = 0;
-        tD_rot maxBirthRotationDeg = 0;
+        // Angle (range) of particle's local rotation at the beginning of its life.
+        tD_rot minBirthRotation = 0;
+        tD_rot maxBirthRotation = 0;
 
         // If animateScale = true, each particle's size will change smoothly
         // through its lifetime from birthScale to deathScale.
@@ -106,97 +103,104 @@ namespace Diamond {
     };
 
 
-    /**
-     * Particles use shared pointers to their components so that when a
-     * particle is freed by the particle system, its components will
-     * automatically be freed if they're not being used elsewhere.
-     */
+
     struct Particle {
-        Particle(const Transform2Ptr &transform,
-                 const SharedPtr<RenderComponent2D> &renderComp, 
-                 const SharedPtr<Rigidbody2D> &rigidBody, 
-                 tD_time birthTime, tD_time lifeTime,
-                 void *data = nullptr)
-            : transform(transform), renderComp(renderComp), rigidBody(rigidBody), 
-              data(data), mBirthTime(birthTime), mLifeTime(lifeTime), origTransform(*transform) {}
+        /**
+         * Anything can be stored in data by the particle system's user
+         * ex. an Entity object that holds the components of this particle
+         * and is destroyed when this particle is destroyed.
+         */
+        void init(void *data, const Transform2Ptr &transform)
+        { this->data = data; this->transform = transform; }
 
 
+        void *data = nullptr;
+
+        Transform2Ptr transform = nullptr;
+
+
+        // ======= These are used by the particle engine =======
+        
         bool isAlive(tD_time currentTime) const { return currentTime - mBirthTime <= mLifeTime; }
 
 
-        // members
+        Vector2<tD_real> acceleration = Vector2<tD_real>(0, 0);
 
-        Transform2Ptr transform  = nullptr;        
+        tD_time mBirthTime = 0; // when this particle was born
+        tD_time mLifeTime = 0; // how long this particle should live
 
-        /**
-         * The particle system will only modify effects on a render component, and will not change
-         * the texture itself. Therefore, the texture can be externally set and animated.
-         */
-        SharedPtr<RenderComponent2D> renderComp = nullptr;
-
-        SharedPtr<Rigidbody2D> rigidBody  = nullptr;                
-
-        /**
-         * Anything can be stored here by the particle system's user
-         * ex. an Entity object that holds the components of this particle
-         * and is destroyed when this particle is destroyed.
-         */        
-        void *data = nullptr;
-
-
-        tD_time mBirthTime; // when this particle was born
-        tD_time mLifeTime; // how long this particle should live
-
-        // a copy of the particle's transform value when it was first created.
-        // used as the base for things like animating the particle's scale.
-        DTransform2 origTransform;
+        Vector2<tD_real> deathScale = Vector2<tD_real>(1, 1);
     };
+
 
 
     /**
      * Construct an object of this class to create a configurable particle system.
-     * The system will follow a transform that you provide, allowing you to play 
-     * with the particle system as you please. It will do fancy things for you.
+     * It will do fancy things for you.
      */
     class ParticleSystem : public Component {
     public:
         // callback function typedefs
         
-        using SpawnFunc = std::function<
-            Particle(tD_time particleBirthTime, tD_time particleLifeTime)
+        using InitSpawnFunc = std::function<
+            void(Particle &particle)
         >;
 
-        using DestroyFunc = std::function<
+        using OnSpawnFunc = std::function<
+            void(Particle &particle)
+        >;
+
+        using OnDestroyFunc = std::function<
             void(Particle &particle)
         >;
 
 
+        /**
+         The initSpawnedParticle function is called after a particle is constructed but before setup,
+         and is responsible for calling the particle's init function (see Particle.init comment).
+
+         The onSpawnParticle function is called after a particle is setup, and can be used
+         to customize the particle and perform whatever other mischief the user desires.
+         Don't use this callback if you don't know what you're doing.
+
+         The onDestroyParticle function is called when a particle is about to be destroyed.
+         This allows the user to, for example, free any resources associated with the particle
+         (as indicated by the particle's user-set data pointer), or anything else that the user
+         wants to do when a particle is destroyed.
+        */
         ParticleSystem(const ParticleSystemConfig &config,
-                       const ConstTransform2Ptr &transform,
-                       const SpawnFunc &spawnParticle,
-                       const DestroyFunc &destroyParticle = [] (Particle &particle) {});
+                       const InitSpawnFunc &initSpawnedParticle,
+                       const OnSpawnFunc &onSpawnParticle = [] (Particle &particle) {},
+                       const OnDestroyFunc &onDestroyParticle = [] (Particle &particle) {},
+                       const DTransform2 &transform = DTransform2() );
 
 
         void update(tD_delta delta) override;
 
-        // can access and change particle system configuration at any time.
+        // access and change particle system configuration at any time.
         ParticleSystemConfig &config() { return mConfig; }
         const ParticleSystemConfig &config() const { return mConfig; }
+
+        // the particle system's transform (which is the parent of all of its particles in a scene graph)
+        DTransform2 &transform() { return mTransform; }
+        const DTransform2 &transform() const { return mTransform; }
 
         // Returns the number of particles currently spawned in this particle system.
         // This could be used, for example, to smoothly destroy a particle system
         // at a moment when there are no particles (ie. this function returns 0).
         size_t particleCount() const { return mParticles.size(); }
 
-    private:
-        ParticleSystemConfig mConfig;
-        ConstTransform2Ptr   mTransform;
-        // holds a temporary non-const copy of mTransform for use with mNode
-        DTransform2          mTempTransform;
-        Node2D               mNode;
+        std::vector<Particle> &particles() { return mParticles; }
+        const std::vector<Particle> &particles() const { return mParticles; }
 
-        SpawnFunc   mSpawnParticle;
-        DestroyFunc mDestroyParticle;
+    private:
+        ParticleSystemConfig  mConfig;
+        DTransform2           mTransform;
+        Matrix<tD_real, 2, 2> mTransMat;
+
+        InitSpawnFunc mInitSpawnedParticle;
+        OnSpawnFunc   mOnSpawnParticle;
+        OnDestroyFunc mOnDestroyParticle;
 
         tD_time  mTimeElapsed;
         tD_time  mLastParticleSpawnTime;
@@ -206,7 +210,7 @@ namespace Diamond {
 
 
         void emitParticles();
-        Particle &generateParticle(tD_time particleLifeTime);
+        Particle &generateParticle();
         void initParticle(Particle &particle);
     };
 }

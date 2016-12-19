@@ -17,19 +17,20 @@
 #include "D_ParticleSystem.h"
 
 #include "duMath.h"
+#include "D_Node2D.h"
 
 Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
-                                        const ConstTransform2Ptr &transform,
-                                        const SpawnFunc &spawnParticle,
-                                        const DestroyFunc &destroyParticle)
+                                        const InitSpawnFunc &initSpawnedParticle,
+                                        const OnSpawnFunc &onSpawnParticle,
+                                        const OnDestroyFunc &onDestroyParticle,
+                                        const DTransform2 &transform)
     : mConfig(config),
-      mTransform(transform), 
-      mSpawnParticle(spawnParticle), 
-      mDestroyParticle(destroyParticle), 
+      mTransform(transform),
+      mInitSpawnedParticle(initSpawnedParticle),
+      mOnSpawnParticle(onSpawnParticle),
+      mOnDestroyParticle(onDestroyParticle),
       mTimeElapsed(0), 
-      mLastParticleSpawnTime(0),
-      mTempTransform(*mTransform),
-      mNode(mTempTransform) {
+      mLastParticleSpawnTime(0) {
     
     mParticles.reserve(config.particlePoolSize);
 
@@ -59,7 +60,7 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
             // is ok, and the iterator is not advanced in this case so that the
             // replacement particle now at this position can also be processed before moving on.
 
-            mDestroyParticle(*i);
+            mOnDestroyParticle(*i);
 
             if (i < mParticles.end() - 1)
                 *i = std::move(mParticles.back());
@@ -77,10 +78,6 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
 
     // emit new particles
     if (mTimeElapsed - mLastParticleSpawnTime >= mEmitInterval) {
-        // update mTempTransform so that new transform is reflected in mNode
-        // which will be used to set particle transforms in this particle system's local space.
-        mTempTransform = *mTransform;
-
         emitParticles();
 
         // update the time interval until the next emission
@@ -92,26 +89,63 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
 void Diamond::ParticleSystem::emitParticles() {
     auto numParticles = Math::random(mConfig.maxParticlesPerEmission, mConfig.maxParticlesPerEmission);
 
+    // update the particle system's transformation matrix so it can be used to transform
+    // the newly emitted particles.
+    mTransMat = Math::transMat((tD_real)Math::deg2rad(mTransform.rotation), 
+                               (tD_real)mTransform.scale.x, 
+                               (tD_real)mTransform.scale.y);
+
     // generate and initialize numParticles particles
     for (int i = 0; i < numParticles; ++i) {
-        initParticle(generateParticle(Math::random((double)mConfig.minParticleLifeTime, 
-                                                   (double)mConfig.maxParticleLifeTime)));
+        initParticle(generateParticle());
     }
 
     mLastParticleSpawnTime = mTimeElapsed;
 }
 
-Diamond::Particle &Diamond::ParticleSystem::generateParticle(tD_time particleLifeTime) {
-    mParticles.emplace_back(mSpawnParticle(mTimeElapsed, particleLifeTime));
+Diamond::Particle &Diamond::ParticleSystem::generateParticle() {
+    mParticles.emplace_back();
     return mParticles.back();
 }
 
 void Diamond::ParticleSystem::initParticle(Particle &particle) {
-    // TODO: set particle's transform, velocity, etc. according to settings
+    // life
+    particle.mBirthTime = mTimeElapsed;
+    particle.mLifeTime = Math::random((double)mConfig.minParticleLifeTime,
+                                      (double)mConfig.maxParticleLifeTime);
 
+    // transform
     if (particle.transform) {
-        auto x = Math::random(mConfig.minEmitPoint.x, mConfig.maxEmitPoint.x);
-        auto y = Math::random(mConfig.minEmitPoint.y, mConfig.maxEmitPoint.y);
+        DTransform2 transform(
+            // position
+            Vector2<tD_pos>(Math::random(mConfig.minEmitPoint.x, mConfig.maxEmitPoint.x),
+                            Math::random(mConfig.minEmitPoint.y, mConfig.maxEmitPoint.y)),
+            // rotation
+            Math::random(mConfig.minBirthRotation, mConfig.maxBirthRotation),
+            // scale
+            Vector2<tD_real>(Math::random(mConfig.minBirthScale.x, mConfig.maxBirthScale.x),
+                             Math::random(mConfig.minBirthScale.y, mConfig.maxBirthScale.y))
+        );
+
+        // particle's transform is relative to the particle system
+        // this converts it to a world transform
+        *particle.transform = Node2D::localToWorldSpace(transform, mTransform, mTransMat);
+
+        // death scale
+        if (mConfig.animateScale) {            
+            particle.deathScale.set(Math::random(mConfig.minDeathScale.x, mConfig.maxDeathScale.x),
+                                    Math::random(mConfig.minDeathScale.y, mConfig.maxDeathScale.y));
+        }
+        else {
+            particle.deathScale = particle.transform->scale;
+        }
+        // convert particle system-local scale to world scale
+        particle.deathScale = Node2D::localToWorldScale(particle.deathScale, mTransform.scale);
     }
 
+    // physics
+    // TODO
+
+    // user customization
+    mOnSpawnParticle(particle);
 }
