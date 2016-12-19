@@ -182,7 +182,7 @@ namespace Diamond {
         */
         template <typename P, typename R, typename S>
         Transform2<P, R, S> localToWorldSpace(const Transform2<P, R, S> &local_trans) const {
-            return Node2D::localToWorldSpace(local_trans, m_worldTransform, transformationMatrix());
+            return Node2D::localToWorldSpace(local_trans, m_cachedWorldTransform, m_cachedTransformationMatrix);
         }
 
         /**
@@ -190,7 +190,7 @@ namespace Diamond {
         */
         template <typename P>
         Vector2<P> localToWorldSpace(const Vector2<P> &local_coords) const {
-            return Node2D::localToWorldSpace(local_coords, m_worldTransform.position, transformationMatrix());
+            return Node2D::localToWorldSpace(local_coords, m_cachedWorldTransform.position, m_cachedTransformationMatrix);
         }
 
         /**
@@ -198,7 +198,7 @@ namespace Diamond {
         */
         template <typename R>
         R localToWorldRotation(R local_rot) const {
-            return Node2D::localToWorldRotation(local_rot, m_worldTransform.rotation);
+            return Node2D::localToWorldRotation(local_rot, m_cachedWorldTransform.rotation);
         }
 
         /**
@@ -206,7 +206,7 @@ namespace Diamond {
         */
         template <typename S>
         Vector2<S> localToWorldScale(const Vector2<S> &local_scale) const {
-            return Node2D::localToWorldScale(local_scale, m_worldTransform.scale);
+            return Node2D::localToWorldScale(local_scale, m_cachedWorldTransform.scale);
         }
 
 
@@ -264,7 +264,7 @@ namespace Diamond {
         */
         template <typename P, typename R, typename S>
         Transform2<P, R, S> worldToLocalSpace(const Transform2<P, R, S> &world_trans) const {
-            return Node2D::worldToLocalSpace(world_trans, m_worldTransform.position, transformationMatrix());
+            return Node2D::worldToLocalSpace(world_trans, m_cachedWorldTransform.position, m_cachedTransformationMatrix);
         }
 
         /**
@@ -272,7 +272,7 @@ namespace Diamond {
         */
         template <typename P>
         Vector2<P> worldToLocalSpace(const Vector2<P> &world_coords) const {
-            return Node2D::worldToLocalSpace(world_coords, m_worldTransform.position, transformationMatrix());
+            return Node2D::worldToLocalSpace(world_coords, m_cachedWorldTransform.position, m_cachedTransformationMatrix);
         }
 
         /**
@@ -280,7 +280,7 @@ namespace Diamond {
         */
         template <typename R>
         R worldToLocalRotation(R world_rot) const {
-            return Node2D::worldToLocalRotation(world_rot, m_worldTransform.rotation);
+            return Node2D::worldToLocalRotation(world_rot, m_cachedWorldTransform.rotation);
         }
 
         /**
@@ -288,7 +288,7 @@ namespace Diamond {
         */
         template <typename S>
         Vector2<S> worldToLocalScale(const Vector2<S> &world_scale) const {
-            return Node2D::worldToLocalScale(world_scale, m_worldTransform.scale);
+            return Node2D::worldToLocalScale(world_scale, m_cachedWorldTransform.scale);
         }
 
 
