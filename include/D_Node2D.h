@@ -42,6 +42,9 @@ namespace Diamond {
 
         /**
          Returns the given child after adding it to children.
+         Note: this will overwrite the child's previous local transform,
+         replacing it with the child's world transform converted to 
+         its local transform in this node's coordinate space.
         */
         Node2D &addChild(Node2D &child);
         Node2D *addChild(Node2D *child);
