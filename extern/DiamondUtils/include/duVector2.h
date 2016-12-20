@@ -29,7 +29,10 @@ namespace Diamond {
         Vector2() : x(), y() {}
         Vector2(T x, T y) : x(x), y(y) {}
 
-        void set(T x, T y) { this->x = x, this->y = y; }
+        Vector2 set(T x, T y) { 
+            this->x = x, this->y = y;
+            return *this;
+        }
 
         Vector2 &normalize() {
             T m = magnitude();

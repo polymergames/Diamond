@@ -22,6 +22,7 @@
 #include "duMatrix.h"
 #include "D_Component.h"
 #include "D_Config.h"
+#include "D_RenderComponent2D.h"
 #include "D_Transform2.h"
 #include "D_typedefs.h"
 
@@ -86,8 +87,8 @@ namespace Diamond {
         Vector2<tD_real> maxParticleAcceleration = Vector2<tD_real>(0, 0);
 
         // The angular speed (range) at which a particle spins after it is emitted.
-        tD_real minParticleAngularSpeed = -1;
-        tD_real maxParticleAngularSpeed = 1;        
+        tD_real minParticleAngularSpeed = 0;
+        tD_real maxParticleAngularSpeed = 0;        
 
         // If animateColor = true, each particle's color and transparency will change smoothly
         // through its lifetime from birthColor to deathColor.
@@ -106,31 +107,53 @@ namespace Diamond {
 
 
     struct Particle {
+        
+        void init(const Transform2Ptr &transform, 
+                  const SharedPtr<RenderComponent2D> &renderComponent,
+                  void *data)
+        { this->transform = transform; this->renderComponent = renderComponent; this->data = data; }
+
+
+        Transform2Ptr transform = nullptr;
+
+        /**
+         * The particle system will only modify effects on a render component, and will not change
+         * the texture itself. Therefore, the texture can be externally set and animated.
+         */
+        SharedPtr<RenderComponent2D> renderComponent = nullptr;
+
         /**
          * Anything can be stored in data by the particle system's user
          * ex. an Entity object that holds the components of this particle
          * and is destroyed when this particle is destroyed.
          */
-        void init(void *data, const Transform2Ptr &transform)
-        { this->data = data; this->transform = transform; }
-
-
         void *data = nullptr;
 
-        Transform2Ptr transform = nullptr;
 
 
         // ======= These are used by the particle engine =======
         
+        // life
+        
         bool isAlive(tD_time currentTime) const { return currentTime - mBirthTime <= mLifeTime; }
-
-
-        Vector2<tD_real> acceleration = Vector2<tD_real>(0, 0);
 
         tD_time mBirthTime = 0; // when this particle was born
         tD_time mLifeTime = 0; // how long this particle should live
 
+
+        // physics
+        Vector2<tD_real> velocity = Vector2<tD_real>(0, 0);
+        Vector2<tD_real> acceleration = Vector2<tD_real>(0, 0);
+        tD_real angularSpeed = 0;        
+
+        // scale
+        bool animateScale = false;
+        Vector2<tD_real> startScale = Vector2<tD_real>(1, 1);
         Vector2<tD_real> deathScale = Vector2<tD_real>(1, 1);
+
+        // colors
+        bool animateColor = false;
+        RGBA deathColor = RGBA{ 255, 255, 255, 255 };
     };
 
 
@@ -157,46 +180,54 @@ namespace Diamond {
 
 
         /**
-         The initSpawnedParticle function is called after a particle is constructed but before setup,
-         and is responsible for calling the particle's init function (see Particle.init comment).
+         The required initSpawnedParticle function is called after a particle is constructed but before setup,
+         and is responsible for calling the particle's init function (see Particle.init).
 
-         The onSpawnParticle function is called after a particle is setup, and can be used
+         The optional onSpawnParticle function is called after a particle is setup, and can be used
          to customize the particle and perform whatever other mischief the user desires.
          Don't use this callback if you don't know what you're doing.
 
-         The onDestroyParticle function is called when a particle is about to be destroyed.
+         The optional onDestroyParticle function is called when a particle is about to be destroyed.
          This allows the user to, for example, free any resources associated with the particle
          (as indicated by the particle's user-set data pointer), or anything else that the user
-         wants to do when a particle is destroyed.
+         wants to do when a particle is destroyed. 
         */
         ParticleSystem(const ParticleSystemConfig &config,
+                       const Transform2Ptr &transform,
                        const InitSpawnFunc &initSpawnedParticle,
-                       const OnSpawnFunc &onSpawnParticle = [] (Particle &particle) {},
-                       const OnDestroyFunc &onDestroyParticle = [] (Particle &particle) {},
-                       const DTransform2 &transform = DTransform2() );
+                       const OnSpawnFunc &onSpawnParticle = nullptr,
+                       const OnDestroyFunc &onDestroyParticle = nullptr);
 
 
         void update(tD_delta delta) override;
+
 
         // access and change particle system configuration at any time.
         ParticleSystemConfig &config() { return mConfig; }
         const ParticleSystemConfig &config() const { return mConfig; }
 
+
         // the particle system's transform (which is the parent of all of its particles in a scene graph)
-        DTransform2 &transform() { return mTransform; }
-        const DTransform2 &transform() const { return mTransform; }
+        DTransform2 &transform() { return *mTransform; }
+        const DTransform2 &transform() const { return *mTransform; }
+
+        const Transform2Ptr &getTransformPtr() { return mTransform; }
+        const ConstTransform2Ptr &getTransformPtr() const { return mTransform; }
+
 
         // Returns the number of particles currently spawned in this particle system.
         // This could be used, for example, to smoothly destroy a particle system
         // at a moment when there are no particles (ie. this function returns 0).
         size_t particleCount() const { return mParticles.size(); }
 
+
+        // Get the array of currently active particles
         std::vector<Particle> &particles() { return mParticles; }
         const std::vector<Particle> &particles() const { return mParticles; }
 
     private:
         ParticleSystemConfig  mConfig;
-        DTransform2           mTransform;
+        Transform2Ptr         mTransform;
         Matrix<tD_real, 2, 2> mTransMat;
 
         InitSpawnFunc mInitSpawnedParticle;

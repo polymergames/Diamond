@@ -41,6 +41,11 @@ namespace Diamond {
             return min + ((double)std::rand() / RAND_MAX) * (max - min);
         }
 
+        template <typename T, typename S>
+        inline T lerp(T a, T b, S t) {
+            return (1 - t)*a + t*b;
+        }
+
         // Geometry
         template <typename A, typename B, typename C>
         inline bool leftOf(const Vector2<C> &x,
