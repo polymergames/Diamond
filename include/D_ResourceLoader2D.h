@@ -20,6 +20,7 @@
 #include <unordered_map>
 #include "D_AnimationSheet.h"
 #include "D_ConfigTable.h"
+#include "D_ParticleSystem2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_TextureFactory.h"
@@ -27,12 +28,16 @@
 
 namespace Diamond {
     /**
-     * These functions construct resource definitions
-     * from configuration tables. The resource definitions
-     * can in turn be used to construct Diamond components.
+     * These functions construct resource definition structs from configuration tables 
+     * (that are often loaded from config files using ConfigLoader::load). 
+     * The resource definitions can in turn be used to construct Diamond components.
      *
      * The functions return true if a valid definition was stored
-     * in the output parameter, otherwise they return false.
+     * in the output parameter(s), otherwise they return false.
+     *
+     * The gen___Config functions do the opposite- they take
+     * a resource definition struct and output a configuration table
+     * (which could, for ex., be written to a config file using ConfigLoader::write).
      */
     class ResourceLoader2D {
     public:
@@ -51,7 +56,14 @@ namespace Diamond {
                                 TextureFactory &textureFactory, 
                                 AnimationSheet &animationSheet) const;
 
+        // note: this returns success even if the given config is empty,
+        // since default values are assumed for all particle system parameters.
+        bool loadParticleSystem(const ConfigTable &config,
+                                TextureFactory &textureFactory,
+                                ParticleSystem2DConfig &particleSystemConfig) const;
 
+        // This does not return a bool, but you can check if it was successful
+        // by checking if the returned point list is empty.
         PointList2D loadPoints(const ConfigTable &config) const;
 
 

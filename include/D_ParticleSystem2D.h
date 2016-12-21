@@ -28,11 +28,14 @@
 
 namespace Diamond {
 
-    struct ParticleSystemConfig {
+    struct ParticleSystem2DConfig {
         // estimate for the max number of particles that will be live
         // at any one time in this particle system (used for pre-allocating memory).
         size_t particlePoolSize = 0;
         
+        // the texture used to render each particle
+        SharedPtr<Texture> particleTexture = nullptr;
+
         // the number of particles that will be emitted at the same time.
         // can give a range for a random number of particles each time,
         // otherwise set both min and max to the same value.
@@ -106,8 +109,11 @@ namespace Diamond {
 
 
 
-    struct Particle {
-        
+    struct Particle2D {
+        /**
+         * User is responsible for constructing and providing an external transform 
+         * and render component that will be used by the particle.
+         */
         void init(const Transform2Ptr &transform, 
                   const SharedPtr<RenderComponent2D> &renderComponent,
                   void *data)
@@ -135,10 +141,10 @@ namespace Diamond {
         
         // life
         
-        bool isAlive(tD_time currentTime) const { return currentTime - mBirthTime <= mLifeTime; }
+        bool isAlive(tD_time currentTime) const { return currentTime < mDeathTime; }
 
         tD_time mBirthTime = 0; // when this particle was born
-        tD_time mLifeTime = 0; // how long this particle should live
+        tD_time mDeathTime = 0; // when this particle should die
 
 
         // physics
@@ -148,7 +154,6 @@ namespace Diamond {
 
         // scale
         bool animateScale = false;
-        Vector2<tD_real> startScale = Vector2<tD_real>(1, 1);
         Vector2<tD_real> deathScale = Vector2<tD_real>(1, 1);
 
         // colors
@@ -162,20 +167,20 @@ namespace Diamond {
      * Construct an object of this class to create a configurable particle system.
      * It will do fancy things for you.
      */
-    class ParticleSystem : public Component {
+    class ParticleSystem2D : public Component {
     public:
         // callback function typedefs
         
         using InitSpawnFunc = std::function<
-            void(Particle &particle)
+            void(Particle2D &particle, const ParticleSystem2DConfig &config)
         >;
 
         using OnSpawnFunc = std::function<
-            void(Particle &particle)
+            void(Particle2D &particle, const ParticleSystem2DConfig &config)
         >;
 
         using OnDestroyFunc = std::function<
-            void(Particle &particle)
+            void(Particle2D &particle, const ParticleSystem2DConfig &config)
         >;
 
 
@@ -192,19 +197,19 @@ namespace Diamond {
          (as indicated by the particle's user-set data pointer), or anything else that the user
          wants to do when a particle is destroyed. 
         */
-        ParticleSystem(const ParticleSystemConfig &config,
-                       const Transform2Ptr &transform,
-                       const InitSpawnFunc &initSpawnedParticle,
-                       const OnSpawnFunc &onSpawnParticle = nullptr,
-                       const OnDestroyFunc &onDestroyParticle = nullptr);
+        ParticleSystem2D(const ParticleSystem2DConfig &config,
+                         const Transform2Ptr &transform,
+                         const InitSpawnFunc &initSpawnedParticle,
+                         const OnSpawnFunc &onSpawnParticle = nullptr,
+                         const OnDestroyFunc &onDestroyParticle = nullptr);
 
 
         void update(tD_delta delta) override;
 
 
         // access and change particle system configuration at any time.
-        ParticleSystemConfig &config() { return mConfig; }
-        const ParticleSystemConfig &config() const { return mConfig; }
+        ParticleSystem2DConfig &config() { return mConfig; }
+        const ParticleSystem2DConfig &config() const { return mConfig; }
 
 
         // the particle system's transform (which is the parent of all of its particles in a scene graph)
@@ -222,13 +227,13 @@ namespace Diamond {
 
 
         // Get the array of currently active particles
-        std::vector<Particle> &particles() { return mParticles; }
-        const std::vector<Particle> &particles() const { return mParticles; }
+        std::vector<Particle2D> &particles() { return mParticles; }
+        const std::vector<Particle2D> &particles() const { return mParticles; }
 
     private:
-        ParticleSystemConfig  mConfig;
-        Transform2Ptr         mTransform;
-        Matrix<tD_real, 2, 2> mTransMat;
+        ParticleSystem2DConfig mConfig;
+        Transform2Ptr          mTransform;
+        Matrix<tD_real, 2, 2>  mTransMat;
 
         InitSpawnFunc mInitSpawnedParticle;
         OnSpawnFunc   mOnSpawnParticle;
@@ -238,12 +243,12 @@ namespace Diamond {
         tD_time  mLastParticleSpawnTime;
         tD_delta mEmitInterval;
 
-        std::vector<Particle> mParticles;
+        std::vector<Particle2D> mParticles;
 
 
         void emitParticles();
-        Particle &generateParticle();
-        void initParticle(Particle &particle);
+        Particle2D &generateParticle();
+        void initParticle(Particle2D &particle);
     };
 }
 

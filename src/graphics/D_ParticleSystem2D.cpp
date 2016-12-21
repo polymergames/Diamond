@@ -14,16 +14,16 @@
     limitations under the License.
 */
 
-#include "D_ParticleSystem.h"
+#include "D_ParticleSystem2D.h"
 
 #include "duMath.h"
 #include "D_Node2D.h"
 
-Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
-                                        const Transform2Ptr &transform,
-                                        const InitSpawnFunc &initSpawnedParticle,
-                                        const OnSpawnFunc &onSpawnParticle,
-                                        const OnDestroyFunc &onDestroyParticle)
+Diamond::ParticleSystem2D::ParticleSystem2D(const ParticleSystem2DConfig &config,
+                                            const Transform2Ptr &transform,
+                                            const InitSpawnFunc &initSpawnedParticle,
+                                            const OnSpawnFunc &onSpawnParticle,
+                                            const OnDestroyFunc &onDestroyParticle)
     : mConfig(config),
       mTransform(transform),
       mInitSpawnedParticle(initSpawnedParticle),
@@ -42,7 +42,8 @@ Diamond::ParticleSystem::ParticleSystem(const ParticleSystemConfig &config,
 }
 
 
-void Diamond::ParticleSystem::update(tD_delta delta) {
+
+void Diamond::ParticleSystem2D::update(tD_delta delta) {
     // do fancy particul effx!    
 
     // update the time since the particle system was created
@@ -61,7 +62,7 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
             // replacement particle now at this position can also be processed before moving on.
 
             if (mOnDestroyParticle)
-                mOnDestroyParticle(*i);
+                mOnDestroyParticle(*i, mConfig);
 
             if (i < mParticles.end() - 1)
                 *i = std::move(mParticles.back());
@@ -70,12 +71,14 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
         }
         else {
             // lerp factor
-            auto lifeProgress = (mTimeElapsed - i->mBirthTime) / (float)i->mLifeTime;
+            // auto lifeProgress = (mTimeElapsed - i->mBirthTime) / (float)i->mLifeTime;
+            auto t = delta / (float)(i->mDeathTime - mTimeElapsed + delta);
 
             if (i->transform) {
                 // animate scale
                 if (i->animateScale) {
-                    i->transform->scale = Math::lerp(i->startScale, i->deathScale, lifeProgress);
+                    // i->transform->scale = Math::lerp(i->startScale, i->deathScale, lifeProgress);
+                    i->transform->scale = Math::lerp(i->transform->scale, i->deathScale, t);
                 }
 
                 // accelerate and move
@@ -104,7 +107,8 @@ void Diamond::ParticleSystem::update(tD_delta delta) {
 }
 
 
-void Diamond::ParticleSystem::emitParticles() {
+
+void Diamond::ParticleSystem2D::emitParticles() {
     auto numParticles = Math::random(mConfig.maxParticlesPerEmission, mConfig.maxParticlesPerEmission);
 
     // update the particle system's transformation matrix so it can be used to transform
@@ -123,19 +127,23 @@ void Diamond::ParticleSystem::emitParticles() {
     mLastParticleSpawnTime = mTimeElapsed;
 }
 
-Diamond::Particle &Diamond::ParticleSystem::generateParticle() {
+
+
+Diamond::Particle2D &Diamond::ParticleSystem2D::generateParticle() {
     mParticles.emplace_back();
     return mParticles.back();
 }
 
-void Diamond::ParticleSystem::initParticle(Particle &particle) {
+
+
+void Diamond::ParticleSystem2D::initParticle(Particle2D &particle) {
     // let user init particle (ie with transform, rendercomponent, and custom data)
     if (mInitSpawnedParticle)
-        mInitSpawnedParticle(particle);
+        mInitSpawnedParticle(particle, mConfig);
 
     // life
     particle.mBirthTime = mTimeElapsed;
-    particle.mLifeTime = Math::random(
+    particle.mDeathTime = mTimeElapsed + Math::random(
         (double)mConfig.minParticleLifeTime,
         (double)mConfig.maxParticleLifeTime
     );
@@ -165,8 +173,6 @@ void Diamond::ParticleSystem::initParticle(Particle &particle) {
         // scale animation
         if (mConfig.animateScale) {
             particle.animateScale = true;
-
-            particle.startScale = particle.transform->scale;
 
             particle.deathScale.set(
                 Math::random(mConfig.minDeathScale.x, mConfig.maxDeathScale.x),
@@ -206,20 +212,24 @@ void Diamond::ParticleSystem::initParticle(Particle &particle) {
     particle.angularSpeed = Math::random(mConfig.minParticleAngularSpeed, mConfig.maxParticleAngularSpeed);
 
     // pretty colors!
-    if (mConfig.animateColor && particle.renderComponent) {
-        particle.animateColor = true;
+    if (particle.renderComponent) {
 
         // TODO: initialize render component's color to birth color
 
-        particle.deathColor = RGBA{ 
-            (uint8_t)Math::random(mConfig.minDeathColor.r, mConfig.maxDeathColor.r),
-            (uint8_t)Math::random(mConfig.minDeathColor.g, mConfig.maxDeathColor.g),
-            (uint8_t)Math::random(mConfig.minDeathColor.b, mConfig.maxDeathColor.b),
-            (uint8_t)Math::random(mConfig.minDeathColor.a, mConfig.maxDeathColor.a)
-        };
+        if (mConfig.animateColor) {
+            particle.animateColor = true;
+
+            particle.deathColor.r = (uint8_t)Math::random(mConfig.minDeathColor.r, mConfig.maxDeathColor.r);
+            particle.deathColor.g = (uint8_t)Math::random(mConfig.minDeathColor.g, mConfig.maxDeathColor.g);
+            particle.deathColor.b = (uint8_t)Math::random(mConfig.minDeathColor.b, mConfig.maxDeathColor.b);
+            particle.deathColor.a = (uint8_t)Math::random(mConfig.minDeathColor.a, mConfig.maxDeathColor.a);
+        }
+        else {
+            // TODO: set particle's death color to the render component's current color
+        }
     }
 
     // user customization
     if (mOnSpawnParticle)
-        mOnSpawnParticle(particle);
+        mOnSpawnParticle(particle, mConfig);
 }

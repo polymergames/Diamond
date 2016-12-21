@@ -103,3 +103,7 @@ TEST(Resource2DTest, PointList) {
         EXPECT_TRUE(std::find(pointsA.begin(), pointsA.end(), point) != pointsA.end());
     }
 }
+
+TEST(Resource2DTest, ParticleSystem) {
+    // TODO
+}
