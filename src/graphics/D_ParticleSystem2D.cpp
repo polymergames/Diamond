@@ -19,6 +19,293 @@
 #include "duMath.h"
 #include "D_Node2D.h"
 
+
+// Particle system config
+
+Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &configTable,
+                                                        const SharedPtr<Texture> &particleTexture) 
+    : particleTexture(particleTexture) {
+
+    if (configTable.hasKey("particlePoolSize"))
+        particlePoolSize = configTable.getInt("particlePoolSize");
+
+
+    if (configTable.hasKey("minParticlesPerEmission"))
+        minParticlesPerEmission = configTable.getInt("minParticlesPerEmission");
+
+    if (configTable.hasKey("maxParticlesPerEmission"))
+        maxParticlesPerEmission = configTable.getInt("maxParticlesPerEmission");
+
+
+    if (configTable.hasKey("minEmitInterval"))
+        minEmitInterval = configTable.getFloat("minEmitInterval");
+
+    if (configTable.hasKey("maxEmitInterval"))
+        maxEmitInterval = configTable.getFloat("maxEmitInterval");
+
+
+    if (configTable.hasKey("minParticleLifeTime"))
+        minParticleLifeTime = configTable.getFloat("minParticleLifeTime");
+
+    if (configTable.hasKey("maxParticleLifeTime"))
+        maxParticleLifeTime = configTable.getFloat("maxParticleLifeTime");
+
+
+    if (configTable.hasKey("minEmitPointX"))
+        minEmitPoint.x = configTable.getFloat("minEmitPointX");
+
+    if (configTable.hasKey("minEmitPointY"))
+        minEmitPoint.y = configTable.getFloat("minEmitPointY");
+
+
+    if (configTable.hasKey("maxEmitPointX"))
+        maxEmitPoint.x = configTable.getFloat("maxEmitPointX");
+
+    if (configTable.hasKey("maxEmitPointY"))
+        maxEmitPoint.y = configTable.getFloat("maxEmitPointY");
+
+
+    if (configTable.hasKey("minEmitAngleDeg"))
+        minEmitAngleDeg = configTable.getFloat("minEmitAngleDeg");
+
+    if (configTable.hasKey("maxEmitAngleDeg"))
+        maxEmitAngleDeg = configTable.getFloat("maxEmitAngleDeg");
+
+
+    if (configTable.hasKey("minBirthRotation"))
+        minBirthRotation = configTable.getFloat("minBirthRotation");
+
+    if (configTable.hasKey("maxBirthRotation"))
+        maxBirthRotation = configTable.getFloat("maxBirthRotation");
+
+
+    if (configTable.hasKey("animateScale"))
+        animateScale = configTable.getBool("animateScale");
+
+
+    if (configTable.hasKey("minBirthScaleX"))
+        minBirthScale.x = configTable.getFloat("minBirthScaleX");
+
+    if (configTable.hasKey("minBirthScaleY"))
+        minBirthScale.y = configTable.getFloat("minBirthScaleY");
+
+    if (configTable.hasKey("maxBirthScaleX"))
+        maxBirthScale.x = configTable.getFloat("maxBirthScaleX");
+
+    if (configTable.hasKey("maxBirthScaleY"))
+        maxBirthScale.y = configTable.getFloat("maxBirthScaleY");
+
+
+    if (configTable.hasKey("minDeathScaleX"))
+        minDeathScale.x = configTable.getFloat("minDeathScaleX");
+
+    if (configTable.hasKey("minDeathScaleY"))
+        minDeathScale.y = configTable.getFloat("minDeathScaleY");
+
+    if (configTable.hasKey("maxDeathScaleX"))
+        maxDeathScale.x = configTable.getFloat("maxDeathScaleX");
+
+    if (configTable.hasKey("maxDeathScaleY"))
+        maxDeathScale.y = configTable.getFloat("maxDeathScaleY");
+
+
+    if (configTable.hasKey("minParticleSpeed"))
+        minParticleSpeed = configTable.getFloat("minParticleSpeed");
+
+    if (configTable.hasKey("maxParticleSpeed"))
+        maxParticleSpeed = configTable.getFloat("maxParticleSpeed");
+
+
+    if (configTable.hasKey("accelerate"))
+        accelerate = configTable.getBool("accelerate");
+
+
+    if (configTable.hasKey("minParticleAccelerationX"))
+        minParticleAcceleration.x = configTable.getFloat("minParticleAccelerationX");
+
+    if (configTable.hasKey("minParticleAccelerationY"))
+        minParticleAcceleration.y = configTable.getFloat("minParticleAccelerationY");
+
+    if (configTable.hasKey("maxParticleAccelerationX"))
+        maxParticleAcceleration.x = configTable.getFloat("maxParticleAccelerationX");
+
+    if (configTable.hasKey("maxParticleAccelerationY"))
+        maxParticleAcceleration.y = configTable.getFloat("maxParticleAccelerationY");
+
+
+    if (configTable.hasKey("minParticleAngularSpeed"))
+        minParticleAngularSpeed = configTable.getFloat("minParticleAngularSpeed");
+
+    if (configTable.hasKey("maxParticleAngularSpeed"))
+        maxParticleAngularSpeed = configTable.getFloat("maxParticleAngularSpeed");
+
+
+    if (configTable.hasKey("animateColor"))
+        animateColor = configTable.getBool("animateColor");
+
+
+    if (configTable.hasKey("minBirthColorR"))
+        minBirthColor.r = configTable.getInt("minBirthColorR");
+
+    if (configTable.hasKey("minBirthColorG"))
+        minBirthColor.g = configTable.getInt("minBirthColorG");
+
+    if (configTable.hasKey("minBirthColorB"))
+        minBirthColor.b = configTable.getInt("minBirthColorB");
+
+    if (configTable.hasKey("minBirthColorA"))
+        minBirthColor.a = configTable.getInt("minBirthColorA");
+
+
+    if (configTable.hasKey("maxBirthColorR"))
+        maxBirthColor.r = configTable.getInt("maxBirthColorR");
+
+    if (configTable.hasKey("maxBirthColorG"))
+        maxBirthColor.g = configTable.getInt("maxBirthColorG");
+
+    if (configTable.hasKey("maxBirthColorB"))
+        maxBirthColor.b = configTable.getInt("maxBirthColorB");
+
+    if (configTable.hasKey("maxBirthColorA"))
+        maxBirthColor.a = configTable.getInt("maxBirthColorA");
+
+
+    if (configTable.hasKey("minDeathColorR"))
+        minDeathColor.r = configTable.getInt("minDeathColorR");
+
+    if (configTable.hasKey("minDeathColorG"))
+        minDeathColor.g = configTable.getInt("minDeathColorG");
+
+    if (configTable.hasKey("minDeathColorB"))
+        minDeathColor.b = configTable.getInt("minDeathColorB");
+
+    if (configTable.hasKey("minDeathColorA"))
+        minDeathColor.a = configTable.getInt("minDeathColorA");
+
+
+    if (configTable.hasKey("maxDeathColorR"))
+        maxDeathColor.r = configTable.getInt("maxDeathColorR");
+
+    if (configTable.hasKey("maxDeathColorG"))
+        maxDeathColor.g = configTable.getInt("maxDeathColorG");
+
+    if (configTable.hasKey("maxDeathColorB"))
+        maxDeathColor.b = configTable.getInt("maxDeathColorB");
+
+    if (configTable.hasKey("maxDeathColorA"))
+        maxDeathColor.a = configTable.getInt("maxDeathColorA");
+
+
+    if (configTable.hasKey("emitOnWake"))
+        emitOnWake = configTable.getBool("emitOnWake");
+}
+
+
+Diamond::ConfigTable Diamond::ParticleSystem2DConfig::genTable(const std::string &particleTexturePath) const {
+    ConfigTable config;
+
+    config.set("particlePoolSize", (int)particlePoolSize);
+
+
+    config.set("particleTexture", particleTexturePath);
+
+
+    config.set("minParticlesPerEmission", minParticlesPerEmission);
+    config.set("maxParticlesPerEmission", maxParticlesPerEmission);
+
+
+    config.set("minEmitInterval", minEmitInterval);
+    config.set("maxEmitInterval", maxEmitInterval);
+
+
+    config.set("minParticleLifeTime", (float)minParticleLifeTime);
+    config.set("maxParticleLifeTime", (float)maxParticleLifeTime);
+
+
+    config.set("minEmitPointX", minEmitPoint.x);
+    config.set("minEmitPointY", minEmitPoint.y);
+
+
+    config.set("maxEmitPointX", maxEmitPoint.x);
+    config.set("maxEmitPointY", maxEmitPoint.y);
+
+
+    config.set("minEmitAngleDeg", minEmitAngleDeg);
+    config.set("maxEmitAngleDeg", maxEmitAngleDeg);
+
+
+    config.set("minBirthRotation", minBirthRotation);
+    config.set("maxBirthRotation", maxBirthRotation);
+
+
+    config.set("animateScale", animateScale);
+
+
+    config.set("minBirthScaleX", minBirthScale.x);
+    config.set("minBirthScaleY", minBirthScale.y);
+
+    config.set("maxBirthScaleX", maxBirthScale.x);
+    config.set("maxBirthScaleY", maxBirthScale.y);
+
+
+    config.set("minDeathScaleX", minDeathScale.x);
+    config.set("minDeathScaleY", minDeathScale.y);
+
+    config.set("maxDeathScaleX", maxDeathScale.x);
+    config.set("maxDeathScaleY", maxDeathScale.y);
+
+
+    config.set("minParticleSpeed", minParticleSpeed);
+    config.set("maxParticleSpeed", maxParticleSpeed);
+
+
+    config.set("accelerate", accelerate);
+
+
+    config.set("minParticleAccelerationX", minParticleAcceleration.x);
+    config.set("minParticleAccelerationY", minParticleAcceleration.y);
+
+    config.set("maxParticleAccelerationX", maxParticleAcceleration.x);
+    config.set("maxParticleAccelerationY", maxParticleAcceleration.y);
+
+
+    config.set("minParticleAngularSpeed", minParticleAngularSpeed);
+    config.set("maxParticleAngularSpeed", maxParticleAngularSpeed);
+
+
+    config.set("animateColor", animateColor);
+
+
+    config.set("minBirthColorR", minBirthColor.r);
+    config.set("minBirthColorG", minBirthColor.g);
+    config.set("minBirthColorB", minBirthColor.b);
+    config.set("minBirthColorA", minBirthColor.a);
+
+    config.set("maxBirthColorR", maxBirthColor.r);
+    config.set("maxBirthColorG", maxBirthColor.g);
+    config.set("maxBirthColorB", maxBirthColor.b);
+    config.set("maxBirthColorA", maxBirthColor.a);
+
+    config.set("minDeathColorR", minDeathColor.r);
+    config.set("minDeathColorG", minDeathColor.g);
+    config.set("minDeathColorB", minDeathColor.b);
+    config.set("minDeathColorA", minDeathColor.a);
+    
+    config.set("maxDeathColorR", maxDeathColor.r);
+    config.set("maxDeathColorG", maxDeathColor.g);
+    config.set("maxDeathColorB", maxDeathColor.b);
+    config.set("maxDeathColorA", maxDeathColor.a);
+
+
+    config.set("emitOnWake", emitOnWake);
+
+    return config;
+}
+
+
+
+// Particle system
+
 Diamond::ParticleSystem2D::ParticleSystem2D(const ParticleSystem2DConfig &config,
                                             const Transform2Ptr &transform,
                                             const InitSpawnFunc &initSpawnedParticle,

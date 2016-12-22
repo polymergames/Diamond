@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include "gtest/gtest.h"
+#include "D_ParticleSystem2D.h"
 #include "D_ResourceLoader2D.h"
 
 using namespace Diamond;
@@ -105,5 +106,55 @@ TEST(Resource2DTest, PointList) {
 }
 
 TEST(Resource2DTest, ParticleSystem) {
-    // TODO
+    ParticleSystem2DConfig particlesA;
+
+    particlesA.particlePoolSize = 100;
+    particlesA.maxParticlesPerEmission = 10;
+    particlesA.minEmitInterval = 50;
+    particlesA.maxEmitInterval = 115;
+    particlesA.minParticleLifeTime = 1000;
+    particlesA.maxParticleLifeTime = 2345;
+    particlesA.minEmitPoint.scalar(32);
+    particlesA.maxEmitPoint.scalar(43);
+    particlesA.maxBirthRotation = 50;
+    particlesA.maxBirthScale.scalar(10);
+    particlesA.maxParticleSpeed = 20;
+    particlesA.accelerate = true;
+    particlesA.maxParticleAcceleration.set(9, 9);
+    particlesA.maxParticleAngularSpeed = 20;
+    particlesA.minBirthColor = RGBA{ 120, 22, 230, 0 };
+    particlesA.maxDeathColor = RGBA{ 255, 255, 255, 30 };
+    particlesA.emitOnWake = true;
+
+    auto config = particlesA.genTable("swagTexture");
+
+    auto particlesB = ParticleSystem2DConfig(config, nullptr);
+
+    EXPECT_EQ(particlesB.particlePoolSize, particlesA.particlePoolSize);
+    EXPECT_EQ(particlesB.maxParticlesPerEmission, particlesA.maxParticlesPerEmission);
+    EXPECT_FLOAT_EQ(particlesB.minEmitInterval, particlesA.minEmitInterval);
+    EXPECT_FLOAT_EQ(particlesB.maxEmitInterval, particlesA.maxEmitInterval);
+    EXPECT_FLOAT_EQ(particlesB.minParticleLifeTime, particlesA.minParticleLifeTime);
+    EXPECT_FLOAT_EQ(particlesB.maxParticleLifeTime, particlesA.maxParticleLifeTime);
+    EXPECT_FLOAT_EQ(particlesB.minEmitPoint.x, particlesA.minEmitPoint.x);
+    EXPECT_FLOAT_EQ(particlesB.minEmitPoint.y, particlesA.minEmitPoint.y);
+    EXPECT_FLOAT_EQ(particlesB.maxEmitPoint.x, particlesA.maxEmitPoint.x);
+    EXPECT_FLOAT_EQ(particlesB.maxEmitPoint.y, particlesA.maxEmitPoint.y);
+    EXPECT_FLOAT_EQ(particlesB.maxBirthRotation, particlesA.maxBirthRotation);
+    EXPECT_FLOAT_EQ(particlesB.maxBirthScale.x, particlesA.maxBirthScale.x);
+    EXPECT_FLOAT_EQ(particlesB.maxBirthScale.y, particlesA.maxBirthScale.y);
+    EXPECT_FLOAT_EQ(particlesB.maxParticleSpeed, particlesA.maxParticleSpeed);
+    EXPECT_EQ(particlesB.accelerate, particlesA.accelerate);
+    EXPECT_FLOAT_EQ(particlesB.maxParticleAcceleration.x, particlesA.maxParticleAcceleration.x);
+    EXPECT_FLOAT_EQ(particlesB.maxParticleAcceleration.y, particlesA.maxParticleAcceleration.y);
+    EXPECT_FLOAT_EQ(particlesB.maxParticleAngularSpeed, particlesA.maxParticleAngularSpeed);
+    EXPECT_EQ(particlesB.minBirthColor.r, particlesA.minBirthColor.r);
+    EXPECT_EQ(particlesB.minBirthColor.g, particlesA.minBirthColor.g);
+    EXPECT_EQ(particlesB.minBirthColor.b, particlesA.minBirthColor.b);
+    EXPECT_EQ(particlesB.minBirthColor.a, particlesA.minBirthColor.a);
+    EXPECT_EQ(particlesB.maxDeathColor.r, particlesA.maxDeathColor.r);
+    EXPECT_EQ(particlesB.maxDeathColor.g, particlesA.maxDeathColor.g);
+    EXPECT_EQ(particlesB.maxDeathColor.b, particlesA.maxDeathColor.b);
+    EXPECT_EQ(particlesB.maxDeathColor.a, particlesA.maxDeathColor.a);
+    EXPECT_EQ(particlesB.emitOnWake, particlesA.emitOnWake);
 }

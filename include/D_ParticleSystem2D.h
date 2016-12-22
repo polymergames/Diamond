@@ -22,6 +22,7 @@
 #include "duMatrix.h"
 #include "D_Component.h"
 #include "D_Config.h"
+#include "D_ConfigTable.h"
 #include "D_RenderComponent2D.h"
 #include "D_Transform2.h"
 #include "D_typedefs.h"
@@ -29,6 +30,16 @@
 namespace Diamond {
 
     struct ParticleSystem2DConfig {
+        
+
+        ParticleSystem2DConfig() {}
+
+        ParticleSystem2DConfig(const ConfigTable &configTable,
+                               const SharedPtr<Texture> &particleTexture);
+
+        ConfigTable genTable(const std::string &particleTexturePath) const;
+
+
         // estimate for the max number of particles that will be live
         // at any one time in this particle system (used for pre-allocating memory).
         size_t particlePoolSize = 0;
@@ -91,7 +102,7 @@ namespace Diamond {
 
         // The angular speed (range) at which a particle spins after it is emitted.
         tD_real minParticleAngularSpeed = 0;
-        tD_real maxParticleAngularSpeed = 0;        
+        tD_real maxParticleAngularSpeed = 0;
 
         // If animateColor = true, each particle's color and transparency will change smoothly
         // through its lifetime from birthColor to deathColor.

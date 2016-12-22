@@ -56,12 +56,6 @@ namespace Diamond {
                                 TextureFactory &textureFactory, 
                                 AnimationSheet &animationSheet) const;
 
-        // note: this returns success even if the given config is empty,
-        // since default values are assumed for all particle system parameters.
-        bool loadParticleSystem(const ConfigTable &config,
-                                TextureFactory &textureFactory,
-                                ParticleSystem2DConfig &particleSystemConfig) const;
-
         // This does not return a bool, but you can check if it was successful
         // by checking if the returned point list is empty.
         PointList2D loadPoints(const ConfigTable &config) const;
