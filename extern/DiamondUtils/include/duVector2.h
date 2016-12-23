@@ -29,7 +29,7 @@ namespace Diamond {
         Vector2() : x(), y() {}
         Vector2(T x, T y) : x(x), y(y) {}
 
-        Vector2 set(T x, T y) { 
+        Vector2 &set(T x, T y) { 
             this->x = x, this->y = y;
             return *this;
         }

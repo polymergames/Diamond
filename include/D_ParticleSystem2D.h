@@ -24,15 +24,17 @@
 #include "D_Config.h"
 #include "D_ConfigTable.h"
 #include "D_RenderComponent2D.h"
+#include "D_TextureFactory.h"
 #include "D_Transform2.h"
 #include "D_typedefs.h"
 
 namespace Diamond {
 
     struct ParticleSystem2DConfig {
-        
-
         ParticleSystem2DConfig() {}
+
+        ParticleSystem2DConfig(const ConfigTable &configTable,
+                               TextureFactory &textureFactory);
 
         ParticleSystem2DConfig(const ConfigTable &configTable,
                                const SharedPtr<Texture> &particleTexture);
@@ -85,10 +87,10 @@ namespace Diamond {
         // If animateScale = true, each particle's size will change smoothly
         // through its lifetime from birthScale to deathScale.
         bool animateScale = false;
-        Vector2<tD_real> minBirthScale = Vector2<tD_real>(1, 1);
-        Vector2<tD_real> maxBirthScale = Vector2<tD_real>(1, 1);
-        Vector2<tD_real> minDeathScale = Vector2<tD_real>(1, 1);
-        Vector2<tD_real> maxDeathScale = Vector2<tD_real>(1, 1);
+        tD_real minBirthScale = 1;
+        tD_real maxBirthScale = 1;
+        tD_real minDeathScale = 1;
+        tD_real maxDeathScale = 1;
 
         // The speed (range) at which a particle travels after it is emitted.
         // If negative, particle will travel in the opposite direction of its emission angle.
@@ -127,7 +129,7 @@ namespace Diamond {
          */
         void init(const Transform2Ptr &transform, 
                   const SharedPtr<RenderComponent2D> &renderComponent,
-                  void *data)
+                  void *data = nullptr)
         { this->transform = transform; this->renderComponent = renderComponent; this->data = data; }
 
 

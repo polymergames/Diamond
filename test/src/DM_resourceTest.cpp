@@ -117,7 +117,7 @@ TEST(Resource2DTest, ParticleSystem) {
     particlesA.minEmitPoint.scalar(32);
     particlesA.maxEmitPoint.scalar(43);
     particlesA.maxBirthRotation = 50;
-    particlesA.maxBirthScale.scalar(10);
+    particlesA.maxBirthScale = 10;
     particlesA.maxParticleSpeed = 20;
     particlesA.accelerate = true;
     particlesA.maxParticleAcceleration.set(9, 9);
@@ -141,8 +141,7 @@ TEST(Resource2DTest, ParticleSystem) {
     EXPECT_FLOAT_EQ(particlesB.maxEmitPoint.x, particlesA.maxEmitPoint.x);
     EXPECT_FLOAT_EQ(particlesB.maxEmitPoint.y, particlesA.maxEmitPoint.y);
     EXPECT_FLOAT_EQ(particlesB.maxBirthRotation, particlesA.maxBirthRotation);
-    EXPECT_FLOAT_EQ(particlesB.maxBirthScale.x, particlesA.maxBirthScale.x);
-    EXPECT_FLOAT_EQ(particlesB.maxBirthScale.y, particlesA.maxBirthScale.y);
+    EXPECT_FLOAT_EQ(particlesB.maxBirthScale, particlesA.maxBirthScale);
     EXPECT_FLOAT_EQ(particlesB.maxParticleSpeed, particlesA.maxParticleSpeed);
     EXPECT_EQ(particlesB.accelerate, particlesA.accelerate);
     EXPECT_FLOAT_EQ(particlesB.maxParticleAcceleration.x, particlesA.maxParticleAcceleration.x);

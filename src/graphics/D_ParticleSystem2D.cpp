@@ -23,6 +23,10 @@
 // Particle system config
 
 Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &configTable,
+                                                        TextureFactory &textureFactory)
+    : ParticleSystem2DConfig(configTable, textureFactory.loadTexture(configTable.get("particleTexture"))) {}
+
+Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &configTable,
                                                         const SharedPtr<Texture> &particleTexture) 
     : particleTexture(particleTexture) {
 
@@ -83,30 +87,18 @@ Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &confi
         animateScale = configTable.getBool("animateScale");
 
 
-    if (configTable.hasKey("minBirthScaleX"))
-        minBirthScale.x = configTable.getFloat("minBirthScaleX");
+    if (configTable.hasKey("minBirthScale"))
+        minBirthScale = configTable.getFloat("minBirthScale");
 
-    if (configTable.hasKey("minBirthScaleY"))
-        minBirthScale.y = configTable.getFloat("minBirthScaleY");
-
-    if (configTable.hasKey("maxBirthScaleX"))
-        maxBirthScale.x = configTable.getFloat("maxBirthScaleX");
-
-    if (configTable.hasKey("maxBirthScaleY"))
-        maxBirthScale.y = configTable.getFloat("maxBirthScaleY");
+    if (configTable.hasKey("maxBirthScale"))
+        maxBirthScale = configTable.getFloat("maxBirthScale");
 
 
-    if (configTable.hasKey("minDeathScaleX"))
-        minDeathScale.x = configTable.getFloat("minDeathScaleX");
+    if (configTable.hasKey("minDeathScale"))
+        minDeathScale = configTable.getFloat("minDeathScale");
 
-    if (configTable.hasKey("minDeathScaleY"))
-        minDeathScale.y = configTable.getFloat("minDeathScaleY");
-
-    if (configTable.hasKey("maxDeathScaleX"))
-        maxDeathScale.x = configTable.getFloat("maxDeathScaleX");
-
-    if (configTable.hasKey("maxDeathScaleY"))
-        maxDeathScale.y = configTable.getFloat("maxDeathScaleY");
+    if (configTable.hasKey("maxDeathScale"))
+        maxDeathScale = configTable.getFloat("maxDeathScale");
 
 
     if (configTable.hasKey("minParticleSpeed"))
@@ -241,18 +233,11 @@ Diamond::ConfigTable Diamond::ParticleSystem2DConfig::genTable(const std::string
     config.set("animateScale", animateScale);
 
 
-    config.set("minBirthScaleX", minBirthScale.x);
-    config.set("minBirthScaleY", minBirthScale.y);
+    config.set("minBirthScale", minBirthScale);
+    config.set("maxBirthScale", maxBirthScale);
 
-    config.set("maxBirthScaleX", maxBirthScale.x);
-    config.set("maxBirthScaleY", maxBirthScale.y);
-
-
-    config.set("minDeathScaleX", minDeathScale.x);
-    config.set("minDeathScaleY", minDeathScale.y);
-
-    config.set("maxDeathScaleX", maxDeathScale.x);
-    config.set("maxDeathScaleY", maxDeathScale.y);
+    config.set("minDeathScale", minDeathScale);
+    config.set("maxDeathScale", maxDeathScale);
 
 
     config.set("minParticleSpeed", minParticleSpeed);
@@ -338,8 +323,8 @@ void Diamond::ParticleSystem2D::update(tD_delta delta) {
 
     // update particles based on the particle system's settings
     // and remove dead particles.
-    for (auto i = mParticles.begin(); i != mParticles.end();) {
-        if (!i->isAlive(mTimeElapsed)) {
+    for (int i = 0; i < mParticles.size();) {
+        if (!mParticles[i].isAlive(mTimeElapsed)) {
 
             // If the current particle is dead, it is replaced
             // by the last particle in the list, which is then destroyed.
@@ -349,32 +334,32 @@ void Diamond::ParticleSystem2D::update(tD_delta delta) {
             // replacement particle now at this position can also be processed before moving on.
 
             if (mOnDestroyParticle)
-                mOnDestroyParticle(*i, mConfig);
+                mOnDestroyParticle(mParticles[i], mConfig);
 
-            if (i < mParticles.end() - 1)
-                *i = std::move(mParticles.back());
+            if (i + 1 < mParticles.size())
+                mParticles[i] = std::move(mParticles.back());
 
             mParticles.pop_back();
         }
         else {
             // lerp factor
-            // auto lifeProgress = (mTimeElapsed - i->mBirthTime) / (float)i->mLifeTime;
-            auto t = delta / (float)(i->mDeathTime - mTimeElapsed + delta);
+            // auto lifeProgress = (mTimeElapsed - mParticles[i].mBirthTime) / (float)mParticles[i].mLifeTime;
+            auto t = delta / (float)(mParticles[i].mDeathTime - mTimeElapsed + delta);
 
-            if (i->transform) {
+            if (mParticles[i].transform) {
                 // animate scale
-                if (i->animateScale) {
-                    // i->transform->scale = Math::lerp(i->startScale, i->deathScale, lifeProgress);
-                    i->transform->scale = Math::lerp(i->transform->scale, i->deathScale, t);
+                if (mParticles[i].animateScale) {
+                    // mParticles[i].transform->scale = Math::lerp(mParticles[i].startScale, mParticles[i].deathScale, lifeProgress);
+                    mParticles[i].transform->scale = Math::lerp(mParticles[i].transform->scale, mParticles[i].deathScale, t);
                 }
 
                 // accelerate and move
-                i->velocity.add(delta * i->acceleration);
-                i->transform->position.add(delta * i->velocity);
-                i->transform->rotation += delta * i->angularSpeed;
+                mParticles[i].velocity.add(delta * mParticles[i].acceleration);
+                mParticles[i].transform->position.add(delta * mParticles[i].velocity);
+                mParticles[i].transform->rotation += delta * mParticles[i].angularSpeed;
             }
 
-            if (i->animateColor && i->renderComponent) {
+            if (mParticles[i].animateColor && mParticles[i].renderComponent) {
                 // TODO: lerp render component's color
             }
 
@@ -448,10 +433,8 @@ void Diamond::ParticleSystem2D::initParticle(Particle2D &particle) {
             Math::random(mConfig.minBirthRotation, mConfig.maxBirthRotation);
 
         // scale
-        particle.transform->scale.set(
-            Math::random(mConfig.minBirthScale.x, mConfig.maxBirthScale.x),
-            Math::random(mConfig.minBirthScale.y, mConfig.maxBirthScale.y)
-        );
+        auto scale = Math::random(mConfig.minBirthScale, mConfig.maxBirthScale);
+        particle.transform->scale.set(scale, scale);
 
         // particle's transform is relative to the particle system
         // this converts it to a world transform
@@ -461,10 +444,8 @@ void Diamond::ParticleSystem2D::initParticle(Particle2D &particle) {
         if (mConfig.animateScale) {
             particle.animateScale = true;
 
-            particle.deathScale.set(
-                Math::random(mConfig.minDeathScale.x, mConfig.maxDeathScale.x),
-                Math::random(mConfig.minDeathScale.y, mConfig.maxDeathScale.y)
-            );
+            scale = Math::random(mConfig.minDeathScale, mConfig.maxDeathScale);
+            particle.deathScale.set(scale, scale);
 
             // convert particle system-local scale to world scale
             particle.deathScale = Node2D::localToWorldScale(particle.deathScale, mTransform->scale);

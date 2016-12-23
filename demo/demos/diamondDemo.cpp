@@ -16,6 +16,7 @@
 
 #include "D_Engine2D.h"
 #include "CollideDemo.h"
+#include "ParticleDemo.h"
 #include "RandomDemo.h"
 
 
@@ -25,13 +26,27 @@ int main(int argc, char *argv[]) {
     //config.bg_color = { 0, 128, 255, 255 };
 
     // Thank you Joey de Vries for this color :P
-    config.bg_color = { 50, 76, 76, 255 };
+    // config.bg_color = { 50, 76, 76, 255 };
+    // config.fullscreen = true;
+    config.window_width = 1920;
+    config.window_height = 1080;
     
     bool success;
     Diamond::Engine2D engine(config, success);
     
     if (success) {
         {
+            bool play = true;
+
+            while (play) {
+                ParticleDemo demo(engine, 0.75, 0.25);
+                engine.launch(demo);
+
+                play = demo.willPlayAgain();
+            }
+        }
+
+        /*{
             RandomDemo demo(engine);
             engine.launch(demo);
         }
@@ -39,7 +54,7 @@ int main(int argc, char *argv[]) {
         {
             CollideDemo demo(engine);
             engine.launch(demo);
-        }
+        }*/
     }
     else {
         std::cout << "Diamond Engine failed to initialize!" << std::endl;
