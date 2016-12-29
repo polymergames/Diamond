@@ -20,7 +20,6 @@
 #include <unordered_map>
 #include "D_AnimationSheet.h"
 #include "D_ConfigTable.h"
-#include "D_ParticleSystem2D.h"
 #include "D_PhysicsWorld2D.h"
 #include "D_Renderer2D.h"
 #include "D_TextureFactory.h"

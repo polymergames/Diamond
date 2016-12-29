@@ -16,7 +16,7 @@
 
 #include "D_Game2D.h"
 #include "D_SDLConfigLoader.h"
-#include "D_ParticleSystem2D.h"
+#include "D_ParticleManager2D.h"
 
 class ParticleDemo : public Diamond::Game2D {
 public:
@@ -32,7 +32,8 @@ private:
     float movespeed, spinspeed;
     bool again;
 
-    Diamond::SDLConfigLoader configLoader;
-    Diamond::TextureFactory textureFactory;
-    Diamond::ParticleSystem2D particleSystem;
+    Diamond::SDLConfigLoader   configLoader;
+    Diamond::TextureFactory    textureFactory;
+    Diamond::ParticleManager2D particleManager;
+    Diamond::ParticleEmitter2D particleEmitter;
 };

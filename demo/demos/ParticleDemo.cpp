@@ -23,39 +23,44 @@ ParticleDemo::ParticleDemo(Engine2D &engine, float movespeed, float spinspeed)
     : Game2D(engine),
       movespeed(movespeed), spinspeed(spinspeed), again(false),
       configLoader(),
-      textureFactory(engine.getRenderer()), 
-      particleSystem(ParticleSystem2DConfig(configLoader.load(PARTICLE_CONFIG_FILE), textureFactory), 
-                     engine.makeTransform(engine.getRenderer()->getResolution().scalar(0.5)),
-                     [&] (Particle2D &particle, const ParticleSystem2DConfig &config) {
-    auto transform = engine.makeTransform();
-    particle.init(transform, engine.getRenderer()->makeRenderComponent(transform, config.particleTexture));
-}) {}
+      textureFactory(engine.getRenderer()),
+      particleEmitter(
+          particleManager.makeEmitter(
+              ParticleSystem2DConfig(configLoader.load(PARTICLE_CONFIG_FILE), textureFactory),
+              engine.makeTransform(engine.getRenderer()->getResolution().scalar(0.5)),
+              [&](Particle2D &particle, const ParticleSystem2DConfig &config) {
+                  particle.transform = engine.makeTransform();
+                  particle.renderComponent = engine.getRenderer()->makeRenderComponent(particle.transform, config.particleTexture);
+              }
+          )
+      ) {}
 
 
 void ParticleDemo::update(tD_delta delta) {
     // particle system movement
     if (Input::keydown[Input::K_W]) {
-        particleSystem.transform().position.y -= movespeed * delta;
+        particleEmitter.transform().position.y -= movespeed * delta;
     }
     if (Input::keydown[Input::K_S]) {
-        particleSystem.transform().position.y += movespeed * delta;
+        particleEmitter.transform().position.y += movespeed * delta;
     }
     if (Input::keydown[Input::K_A]) {
-        particleSystem.transform().position.x -= movespeed * delta;
+        particleEmitter.transform().position.x -= movespeed * delta;
     }
     if (Input::keydown[Input::K_D]) {
-        particleSystem.transform().position.x += movespeed * delta;
+        particleEmitter.transform().position.x += movespeed * delta;
     }
 
     // particle system rotation
     if (Input::keydown[Input::K_LEFT]) {
-        particleSystem.transform().rotation -= spinspeed * delta;
+        particleEmitter.transform().rotation -= spinspeed * delta;
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        particleSystem.transform().rotation += spinspeed * delta;
+        particleEmitter.transform().rotation += spinspeed * delta;
     }
 
-    particleSystem.update(delta);
+    particleEmitter.update(delta); // update emitter
+    particleManager.update(delta); // update particles
 
     // restart
     if (Input::keyup[Input::K_R])
