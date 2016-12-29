@@ -16,7 +16,7 @@
 
 #include <algorithm>
 #include "gtest/gtest.h"
-#include "D_ParticleSystem2D.h"
+#include "D_ParticleEngine2D.h"
 #include "D_ResourceLoader2D.h"
 
 using namespace Diamond;
