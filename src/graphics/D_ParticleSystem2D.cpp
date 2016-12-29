@@ -289,22 +289,48 @@ Diamond::ConfigTable Diamond::ParticleSystem2DConfig::genTable(const std::string
 
 
 
-// Particle system
+// Particle
 
-Diamond::ParticleSystem2D::ParticleSystem2D(const ParticleSystem2DConfig &config,
-                                            const Transform2Ptr &transform,
-                                            const InitSpawnFunc &initSpawnedParticle,
-                                            const OnSpawnFunc &onSpawnParticle,
-                                            const OnDestroyFunc &onDestroyParticle)
+void Diamond::Particle2D::update(tD_delta delta) {
+    // lerp factor
+    // the length of this frame over the time remaining until death
+    auto t = delta / (float)(lifeTime - age);
+
+    // they grow up so fast :')
+    age += delta;
+
+    if (transform) {
+        // animate scale
+        if (animateScale) {
+            // transform->scale = Math::lerp(startScale, deathScale, lifeProgress);
+            transform->scale = Math::lerp(transform->scale, deathScale, t);
+        }
+
+        // accelerate and move
+        velocity.add(delta * acceleration);
+        transform->position.add(delta * velocity);
+        transform->rotation += delta * angularSpeed;
+    }
+
+    if (animateColor && renderComponent) {
+        // TODO: lerp render component's color
+    }
+}
+
+
+
+// Particle Emitter
+
+Diamond::ParticleEmitter2D::ParticleEmitter2D(const ParticleSystem2DConfig &config,
+                                              const Transform2Ptr &transform,
+                                              const SpawnParticleFunc &spawnParticle,
+                                              const InitParticleFunc &onInitParticle)
     : mConfig(config),
       mTransform(transform),
-      mInitSpawnedParticle(initSpawnedParticle),
-      mOnSpawnParticle(onSpawnParticle),
-      mOnDestroyParticle(onDestroyParticle),
+      mSpawnParticle(spawnParticle),
+      mOnInitParticle(onInitParticle),
       mTimeElapsed(0), 
       mLastParticleSpawnTime(0) {
-    
-    mParticles.reserve(config.particlePoolSize);
 
     mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
 
@@ -314,108 +340,44 @@ Diamond::ParticleSystem2D::ParticleSystem2D(const ParticleSystem2DConfig &config
 }
 
 
-
-void Diamond::ParticleSystem2D::update(tD_delta delta) {
-    // do fancy particul effx!    
-
-    // update the time since the particle system was created
+void Diamond::ParticleEmitter2D::update(tD_delta delta) {
+    // update the time since the particle emitter was created
     mTimeElapsed += delta;
 
-    // update particles based on the particle system's settings
-    // and remove dead particles.
-    for (int i = 0; i < mParticles.size();) {
-        if (!mParticles[i].isAlive(mTimeElapsed)) {
-
-            // If the current particle is dead, it is replaced
-            // by the last particle in the list, which is then destroyed.
-            // This allows O(1) removal from the middle of the vector, at the
-            // expense of changing the order of the vector. However, changing the order
-            // is ok, and the iterator is not advanced in this case so that the
-            // replacement particle now at this position can also be processed before moving on.
-
-            if (mOnDestroyParticle)
-                mOnDestroyParticle(mParticles[i], mConfig);
-
-            if (i + 1 < mParticles.size())
-                mParticles[i] = std::move(mParticles.back());
-
-            mParticles.pop_back();
-        }
-        else {
-            // lerp factor
-            // auto lifeProgress = (mTimeElapsed - mParticles[i].mBirthTime) / (float)mParticles[i].mLifeTime;
-            auto t = delta / (float)(mParticles[i].mDeathTime - mTimeElapsed + delta);
-
-            if (mParticles[i].transform) {
-                // animate scale
-                if (mParticles[i].animateScale) {
-                    // mParticles[i].transform->scale = Math::lerp(mParticles[i].startScale, mParticles[i].deathScale, lifeProgress);
-                    mParticles[i].transform->scale = Math::lerp(mParticles[i].transform->scale, mParticles[i].deathScale, t);
-                }
-
-                // accelerate and move
-                mParticles[i].velocity.add(delta * mParticles[i].acceleration);
-                mParticles[i].transform->position.add(delta * mParticles[i].velocity);
-                mParticles[i].transform->rotation += delta * mParticles[i].angularSpeed;
-            }
-
-            if (mParticles[i].animateColor && mParticles[i].renderComponent) {
-                // TODO: lerp render component's color
-            }
-
-            // since no particle has been removed in this case, 
-            // we can advance the iterator. 
-            ++i;
-        }
-    }
-
-    // emit new particles
     if (mTimeElapsed - mLastParticleSpawnTime >= mEmitInterval) {
-        emitParticles();
-
         // update the time interval until the next emission
         mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
+
+        // emit particles each mEmitInterval length time interval
+        emitParticles();
     }
 }
 
 
-
-void Diamond::ParticleSystem2D::emitParticles() {
+void Diamond::ParticleEmitter2D::emitParticles() {
     auto numParticles = Math::random(mConfig.maxParticlesPerEmission, mConfig.maxParticlesPerEmission);
 
-    // update the particle system's transformation matrix so it can be used to transform
+    // update the particle emitter's transformation matrix so it can be used to transform
     // the newly emitted particles.
     mTransMat = Math::transMat(
-        (tD_real)Math::deg2rad(mTransform->rotation), 
-        (tD_real)mTransform->scale.x, 
+        (tD_real)Math::deg2rad(mTransform->rotation),
+        (tD_real)mTransform->scale.x,
         (tD_real)mTransform->scale.y
     );
 
     // generate and initialize numParticles particles
     for (int i = 0; i < numParticles; ++i) {
-        initParticle(generateParticle());
+        initParticle(mSpawnParticle(mConfig));
     }
 
+    // so we can figure out when to emit particles again
     mLastParticleSpawnTime = mTimeElapsed;
 }
 
 
-
-Diamond::Particle2D &Diamond::ParticleSystem2D::generateParticle() {
-    mParticles.emplace_back();
-    return mParticles.back();
-}
-
-
-
-void Diamond::ParticleSystem2D::initParticle(Particle2D &particle) {
-    // let user init particle (ie with transform, rendercomponent, and custom data)
-    if (mInitSpawnedParticle)
-        mInitSpawnedParticle(particle, mConfig);
-
+void Diamond::ParticleEmitter2D::initParticle(Particle2D &particle) {
     // life
-    particle.mBirthTime = mTimeElapsed;
-    particle.mDeathTime = mTimeElapsed + Math::random(
+    particle.lifeTime = Math::random(
         (double)mConfig.minParticleLifeTime,
         (double)mConfig.maxParticleLifeTime
     );
@@ -498,6 +460,107 @@ void Diamond::ParticleSystem2D::initParticle(Particle2D &particle) {
     }
 
     // user customization
-    if (mOnSpawnParticle)
-        mOnSpawnParticle(particle, mConfig);
+    if (mOnInitParticle)
+        mOnInitParticle(particle, mConfig);
+}
+
+
+
+// Particle system
+
+Diamond::ParticleSystem2D::ParticleSystem2D(const ParticleSystem2DConfig &config,
+                                            const Transform2Ptr &transform,
+                                            const InitSpawnFunc &initSpawnedParticle,
+                                            const OnSpawnFunc &onSpawnParticle,
+                                            const OnDestroyFunc &onDestroyParticle)
+    : mConfig(config),
+      mTransform(transform),
+      mInitSpawnedParticle(initSpawnedParticle),
+      mOnSpawnParticle(onSpawnParticle),
+      mOnDestroyParticle(onDestroyParticle),
+      mTimeElapsed(0), 
+      mLastParticleSpawnTime(0) {
+    
+    mParticles.reserve(config.particlePoolSize);
+
+    mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
+
+    // immediately emit some particles if configured to do so
+    if (mConfig.emitOnWake)
+        emitParticles();
+}
+
+
+
+void Diamond::ParticleSystem2D::update(tD_delta delta) {
+    // do fancy particul effx!    
+
+    // update the time since the particle system was created
+    mTimeElapsed += delta;
+
+    // update particles based on the particle system's settings
+    // and remove dead particles.
+    for (int i = 0; i < mParticles.size();) {
+        if (!mParticles[i].isAlive(mTimeElapsed)) {
+
+            // If the current particle is dead, it is replaced
+            // by the last particle in the list, which is then destroyed.
+            // This allows O(1) removal from the middle of the vector, at the
+            // expense of changing the order of the vector. However, changing the order
+            // is ok, and the iterator is not advanced in this case so that the
+            // replacement particle now at this position can also be processed before moving on.
+
+            if (mOnDestroyParticle)
+                mOnDestroyParticle(mParticles[i], mConfig);
+
+            if (i + 1 < mParticles.size())
+                mParticles[i] = std::move(mParticles.back());
+
+            mParticles.pop_back();
+        }
+        else {
+            // Particle is still alive, so update it
+            mParticles[i].update(delta);
+
+            // since no particle has been removed in this case, 
+            // we can advance the iterator. 
+            ++i;
+        }
+    }
+
+    // emit new particles
+    if (mTimeElapsed - mLastParticleSpawnTime >= mEmitInterval) {
+        emitParticles();
+
+        // update the time interval until the next emission
+        mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
+    }
+}
+
+
+
+void Diamond::ParticleSystem2D::emitParticles() {
+    auto numParticles = Math::random(mConfig.maxParticlesPerEmission, mConfig.maxParticlesPerEmission);
+
+    // update the particle system's transformation matrix so it can be used to transform
+    // the newly emitted particles.
+    mTransMat = Math::transMat(
+        (tD_real)Math::deg2rad(mTransform->rotation),
+        (tD_real)mTransform->scale.x,
+        (tD_real)mTransform->scale.y
+    );
+
+    // generate and initialize numParticles particles
+    for (int i = 0; i < numParticles; ++i) {
+        initParticle(generateParticle());
+    }
+
+    mLastParticleSpawnTime = mTimeElapsed;
+}
+
+
+
+Diamond::Particle2D &Diamond::ParticleSystem2D::generateParticle() {
+    mParticles.emplace_back();
+    return mParticles.back();
 }

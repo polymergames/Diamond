@@ -93,7 +93,7 @@ namespace Diamond {
         tD_real maxDeathScale = 1;
 
         // The speed (range) at which a particle travels after it is emitted.
-        // If negative, particle will travel in the opposite direction of its emission angle.
+         // If negative, particle will travel in the opposite direction of its emission angle.
         tD_real minParticleSpeed = -1;
         tD_real maxParticleSpeed = 1;
 
@@ -122,17 +122,36 @@ namespace Diamond {
 
 
 
-    struct Particle2D {
+    class Particle2D : public Component {
+    public:
+
         /**
-         * User is responsible for constructing and providing an external transform 
-         * and render component that will be used by the particle.
+         * All paramaters are optional.
          */
-        void init(const Transform2Ptr &transform, 
-                  const SharedPtr<RenderComponent2D> &renderComponent,
-                  void *data = nullptr)
-        { this->transform = transform; this->renderComponent = renderComponent; this->data = data; }
+        Particle2D(const Transform2Ptr &transform = nullptr,
+                   const SharedPtr<RenderComponent2D> &renderComponent = nullptr,
+                   void *data = nullptr)
+            : transform(transform), renderComponent(renderComponent), data(data) {}
 
 
+        /**
+         * If update is called every frame, this function can be used to determine
+         * if the particle is still alive and should be updated again.
+         * When this returns false, the particle and its associated resources
+         * should be destroyed.
+         */
+        bool isAlive() const { return age <= lifeTime; }
+
+        /**
+         * Update is called by whoever is managing updates for particles,
+         * ex. ParticleSystem2D or however the user wants to do it.
+         */
+        void update(tD_delta delta) override;
+
+
+        /**
+         * Particle updates its transform in an external transform object.
+         */
         Transform2Ptr transform = nullptr;
 
         /**
@@ -147,18 +166,14 @@ namespace Diamond {
          * and is destroyed when this particle is destroyed.
          */
         void *data = nullptr;
-
-
-
-        // ======= These are used by the particle engine =======
         
+
+
+        // ======= These are used by the particle engine or the particle itself =======
+
         // life
-        
-        bool isAlive(tD_time currentTime) const { return currentTime < mDeathTime; }
-
-        tD_time mBirthTime = 0; // when this particle was born
-        tD_time mDeathTime = 0; // when this particle should die
-
+        tD_time age = 0;
+        tD_time lifeTime = 0;
 
         // physics
         Vector2<tD_real> velocity = Vector2<tD_real>(0, 0);
@@ -172,6 +187,79 @@ namespace Diamond {
         // colors
         bool animateColor = false;
         RGBA deathColor = RGBA{ 255, 255, 255, 255 };
+    };
+
+
+
+    /**
+     * An object of this class emits particles from its origin transform.
+     * It will do fancy things for you.
+     * User is responsible for allocating, storing, updating, and destroying the emitted particles.
+     */
+    class ParticleEmitter2D : public Diamond::Component {
+    public:
+        // callback function typedefs
+
+        using SpawnParticleFunc = std::function<
+            Particle2D&(const ParticleSystem2DConfig &config)
+        >;
+
+        using InitParticleFunc = std::function<
+            void(Particle2D &particle, const ParticleSystem2DConfig &config)
+        >;
+
+
+        /**
+         * The required spawnParticle function should construct a particle and return
+         * a reference to it.
+         * 
+         * The optional onInitParticle function is called after a particle is initialized and setup for emission, 
+         * and can be used to customize the particle and perform whatever other mischief the user desires. 
+         */
+        ParticleEmitter2D(const ParticleSystem2DConfig &config,
+                          const Transform2Ptr &transform,
+                          const SpawnParticleFunc &spawnParticle,
+                          const InitParticleFunc &onInitParticle = nullptr);
+
+
+        /**
+         * If this is called every frame, it will emit particles
+         * after each time interval (as configured in the emitter's ParticleSystem2DConfig).
+         */
+        void update(tD_delta delta) override;
+
+        /**
+         * Calling this will immediately emit particles.
+         */
+        void emitParticles();
+
+
+        // access and change particle emitter configuration at any time.
+        ParticleSystem2DConfig &config() { return mConfig; }
+        const ParticleSystem2DConfig &config() const { return mConfig; }
+
+
+        // the particle emitter's transform (which is the source of all of its particles in a scene graph)
+        DTransform2              &transform()             { return *mTransform; }
+        const DTransform2        &transform()       const { return *mTransform; }
+        const Transform2Ptr      &getTransformPtr()       { return mTransform; }
+        const ConstTransform2Ptr &getTransformPtr() const { return mTransform; }
+
+
+    private:
+        void initParticle(Particle2D &particle);
+
+
+        ParticleSystem2DConfig mConfig;
+        Transform2Ptr          mTransform;
+        Matrix<tD_real, 2, 2>  mTransMat;
+
+        SpawnParticleFunc mSpawnParticle;
+        InitParticleFunc  mOnInitParticle;
+
+        tD_time  mTimeElapsed;
+        tD_time  mLastParticleSpawnTime;
+        tD_delta mEmitInterval;
     };
 
 
