@@ -17,25 +17,25 @@
 #ifndef D_SDL_EVENT_HANDLER_H
 #define D_SDL_EVENT_HANDLER_H
 
+#include <functional>
 #include <unordered_map>
 #include "SDL.h"
 
 #include "D_EventHandler.h"
 #include "D_Input.h"
-#include "D_Engine2D.h"
 
 namespace Diamond {
     class SDLEventHandler : public EventHandler {
     public:
-        SDLEventHandler(Engine2D *engine);
+        SDLEventHandler(const Vector2<int> &screenResolution,
+                        const std::function<void(void)> &onQuit);
         void update() override;
 
     private:
         std::unordered_map<SDL_Keycode, Input::KEY> keymap;
         Vector2<int> screen;
-        Engine2D *engine;
+        std::function<void(void)> onQuit;
     };
 }
 
 #endif // D_SDL_EVENT_HANDLER_H
-

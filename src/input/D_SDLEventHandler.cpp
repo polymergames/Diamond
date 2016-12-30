@@ -17,8 +17,9 @@
 #include "D_Renderer2D.h"
 #include "D_SDLEventHandler.h"
 
-Diamond::SDLEventHandler::SDLEventHandler(Engine2D *engine) : engine(engine) {
-    screen = engine->getRenderer()->getScreenResolution();
+Diamond::SDLEventHandler::SDLEventHandler(const Vector2<int> &screenResolution,
+                                          const std::function<void(void)> &onQuit)
+    : screen(screenResolution), onQuit(onQuit) {
     keymap = {
         { SDLK_0, Input::K_0 },
         { SDLK_1, Input::K_1 },
@@ -121,7 +122,7 @@ void Diamond::SDLEventHandler::update() {
             SDL_GetMouseState(&(Input::touch_pos.x), &(Input::touch_pos.y));
             break;
         case SDL_QUIT:
-            engine->quit();
+            if (onQuit) onQuit();
             break;
         }
     }

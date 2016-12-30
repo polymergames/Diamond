@@ -97,7 +97,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
         // Catch up on events
         event_handler->update();
-        
+
         // Update game logic
         game.update(delta);
 
@@ -132,7 +132,10 @@ bool Diamond::Engine2D::initSDL() {
     }
 
     timer = new SDLTimer();
-    event_handler = new SDLEventHandler(this);
+    event_handler = new SDLEventHandler(
+        renderer->getScreenResolution(),
+        [this]() { is_running = false; }
+    );
 
     return true;
 }
@@ -170,4 +173,3 @@ bool Diamond::Engine2D::initAndroid() {
 bool Diamond::Engine2D::initIOS() {
     return initAndroid();
 }
-
