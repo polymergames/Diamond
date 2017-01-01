@@ -22,10 +22,10 @@
 
 namespace Diamond {
     /**
-     A contiguous vector data structure with O(1) deletion at any point and 
+     A contiguous vector data structure with O(1) deletion at any point and
      ID references that are guaranteed valid for the lifetime of a referred element.
      Access is O(1) and faster than swapvector by a constant factor (and same as std::vector).
-     Unlike swapvector, maintains order of elements and uses O(1) amortized auxiliary space, but 
+     Unlike swapvector, maintains order of elements and uses O(1) amortized auxiliary space, but
      leaves gaps of invalid data, and therefore should not be iterated directly.
      Please note that when an element is removed from a SparseVector, it is not necessarily
      destroyed / its destructor is not necessarily called immediately
@@ -45,7 +45,7 @@ namespace Diamond {
 
 
         /**
-         Constructs an object and adds it to the collection. 
+         Constructs an object and adds it to the collection.
          Returns an id that can be used to access the emplaced object using [] or at().
         */
         template <typename... Args>
@@ -61,10 +61,10 @@ namespace Diamond {
                 return objects.size() - 1;
             }
         }
-        
+
 
         /**
-         Adds an object to the collection. 
+         Adds an object to the collection.
          Returns an id that can be used to access the new object using [] or at().
         */
         TID insert(const T &obj) {
@@ -105,6 +105,15 @@ namespace Diamond {
          Returns the total number of valid and invalid elements in the vector.
         */
         TID size() { return objects.size(); }
+
+
+        /**
+         Deletes everything.
+        */
+        void clear() {
+            objects.clear();
+            free_id_stack.clear();
+        }
 
     private:
         std::vector<T> objects;

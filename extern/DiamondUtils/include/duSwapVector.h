@@ -22,7 +22,7 @@
 
 namespace Diamond {
     /**
-     A contiguous vector data structure with O(1) deletion at any point and 
+     A contiguous vector data structure with O(1) deletion at any point and
      ID references that are guaranteed valid for the lifetime of a referred element.
      Access is O(1) but with higher constant factor than std::vector.
      Does not maintain order of elements, and uses O(n) auxiliary space.
@@ -46,7 +46,7 @@ namespace Diamond {
 
         typename std::vector<T>::iterator begin() { return objects.begin(); }
         typename std::vector<T>::iterator end() { return objects.end(); }
-        
+
         typename std::vector<T>::const_iterator begin() const { return objects.begin(); }
         typename std::vector<T>::const_iterator end() const { return objects.end(); }
 
@@ -55,7 +55,7 @@ namespace Diamond {
 
 
         /**
-         Constructs an object and adds it to the collection. 
+         Constructs an object and adds it to the collection.
          Returns an id that can be used to access the emplaced object using [] or at().
         */
         template <typename... Args>
@@ -129,6 +129,17 @@ namespace Diamond {
          Returns the number of elements in the vector.
         */
         TID size() { return objects.size(); }
+
+
+        /**
+         Deletes everything.
+        */
+        void clear() {
+            objects.clear();
+            id_index_map.clear();
+            index_id_map.clear();
+            free_id_stack.clear();
+        }
 
 
         /**

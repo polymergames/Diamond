@@ -29,6 +29,8 @@ namespace Diamond {
 
         ConfigTable load(const std::string &path) override;
 
+        // WARNING: this function is NOT implemented for SDLConfigLoader!
+        // Try StdConfigLoader instead (might not work on mobile though)
         bool write(const ConfigTable &table,
                    const std::string &path) override;
 

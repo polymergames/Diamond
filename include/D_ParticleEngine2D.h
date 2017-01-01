@@ -45,7 +45,7 @@ namespace Diamond {
         // estimate for the max number of particles that will be live
         // at any one time in this particle system (used for pre-allocating memory).
         size_t particlePoolSize = 0;
-        
+
         // the texture used to render each particle
         SharedPtr<Texture> particleTexture = nullptr;
 
@@ -166,7 +166,7 @@ namespace Diamond {
          * and is destroyed when this particle is destroyed.
          */
         void *data = nullptr;
-        
+
 
 
         // ======= These are used by the particle engine or the particle itself =======
@@ -178,7 +178,7 @@ namespace Diamond {
         // physics
         Vector2<tD_real> velocity = Vector2<tD_real>(0, 0);
         Vector2<tD_real> acceleration = Vector2<tD_real>(0, 0);
-        tD_real angularSpeed = 0;        
+        tD_real angularSpeed = 0;
 
         // scale
         bool animateScale = false;
@@ -212,9 +212,9 @@ namespace Diamond {
         /**
          * The required spawnParticle function should construct a particle and return
          * a reference to it.
-         * 
-         * The optional onInitParticle function is called after a particle is initialized and setup for emission, 
-         * and can be used to customize the particle and perform whatever other mischief the user desires. 
+         *
+         * The optional onInitParticle function is called after a particle is initialized and setup for emission,
+         * and can be used to customize the particle and perform whatever other mischief the user desires.
          */
         ParticleEmitter2D(const ParticleSystem2DConfig &config,
                           const Transform2Ptr &transform,

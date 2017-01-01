@@ -29,7 +29,7 @@ namespace Diamond {
         Vector2() : x(), y() {}
         Vector2(T x, T y) : x(x), y(y) {}
 
-        Vector2 &set(T x, T y) { 
+        Vector2 &set(T x, T y) {
             this->x = x, this->y = y;
             return *this;
         }
@@ -46,13 +46,13 @@ namespace Diamond {
             x += b.x, y += b.y;
             return *this;
         }
-        
+
         template <typename V>
         Vector2 &sub(const Vector2<V> &b) {
             x -= b.x, y -= b.y;
             return *this;
         }
-        
+
         template <typename S>
         Vector2 &scalar(const S scalar) {
             x *= scalar, y *= scalar;
@@ -87,8 +87,10 @@ namespace Diamond {
         */
         template <typename S>
         Vector2 &rotate(const S radians) {
-            T xp = x * std::cos(radians) - y * std::sin(radians);
-            y = x * std::sin(radians) + y * std::cos(radians);
+            double sinrad = std::sin(radians);
+            double cosrad = std::cos(radians);
+            T xp = x * cosrad - y * sinrad;
+            y = x * sinrad + y * cosrad;
             x = xp;
             return *this;
         }

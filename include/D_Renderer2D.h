@@ -37,9 +37,9 @@ namespace Diamond {
         virtual ~Renderer2D() {}
 
         virtual bool init(const Config &config) = 0;
-        
+
         virtual void renderAll() = 0;
-        
+
         virtual Vector2<int> getResolution() const = 0;
 
         virtual Vector2<int> getScreenResolution() const = 0;
@@ -50,7 +50,7 @@ namespace Diamond {
         */
         virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
 
-        
+
         virtual SharedPtr<RenderComponent2D> makeRenderComponent(
                 const DTransform2 &transform,
                 const SharedPtr<const Texture> &texture,
@@ -85,12 +85,12 @@ namespace Diamond {
             return makeRenderComponent(transform, texture,
                                        renderDef.layer, renderDef.pivot);
         }
-        
-        
+
+
         // Primitives rendering
         virtual void renderPoint(const Vector2<tD_pos> &coords,
                                  const RGBA &color) = 0;
-        
+
         virtual void renderLine(const Vector2<tD_pos> &p1,
                                 const Vector2<tD_pos> &p2,
                                 const RGBA &color) = 0;
