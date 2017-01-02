@@ -27,12 +27,14 @@ Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &confi
     : ParticleSystem2DConfig(configTable, textureFactory.loadTexture(configTable.get("particleTexture"))) {}
 
 Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &configTable,
-                                                        const SharedPtr<Texture> &particleTexture) 
+                                                        const SharedPtr<Texture> &particleTexture)
     : particleTexture(particleTexture) {
 
     if (configTable.hasKey("particlePoolSize"))
         particlePoolSize = configTable.getInt("particlePoolSize");
 
+    if (configTable.hasKey("layer"))
+        layer = configTable.getInt("layer");
 
     if (configTable.hasKey("minParticlesPerEmission"))
         minParticlesPerEmission = configTable.getInt("minParticlesPerEmission");
@@ -200,6 +202,7 @@ Diamond::ConfigTable Diamond::ParticleSystem2DConfig::genTable(const std::string
 
 
     config.set("particleTexture", particleTexturePath);
+    config.set("layer", layer);
 
 
     config.set("minParticlesPerEmission", minParticlesPerEmission);
@@ -275,7 +278,7 @@ Diamond::ConfigTable Diamond::ParticleSystem2DConfig::genTable(const std::string
     config.set("minDeathColorG", minDeathColor.g);
     config.set("minDeathColorB", minDeathColor.b);
     config.set("minDeathColorA", minDeathColor.a);
-    
+
     config.set("maxDeathColorR", maxDeathColor.r);
     config.set("maxDeathColorG", maxDeathColor.g);
     config.set("maxDeathColorB", maxDeathColor.b);
@@ -329,7 +332,7 @@ Diamond::ParticleEmitter2D::ParticleEmitter2D(const ParticleSystem2DConfig &conf
       mTransform(transform),
       mSpawnParticle(spawnParticle),
       mOnInitParticle(onInitParticle),
-      mTimeElapsed(0), 
+      mTimeElapsed(0),
       mLastParticleSpawnTime(0) {
 
     mEmitInterval = Math::random(mConfig.minEmitInterval, mConfig.maxEmitInterval);
@@ -355,7 +358,7 @@ void Diamond::ParticleEmitter2D::update(tD_delta delta) {
 
 
 void Diamond::ParticleEmitter2D::emitParticles() {
-    auto numParticles = Math::random(mConfig.maxParticlesPerEmission, mConfig.maxParticlesPerEmission);
+    auto numParticles = Math::random(mConfig.minParticlesPerEmission, mConfig.maxParticlesPerEmission);
 
     // update the particle emitter's transformation matrix so it can be used to transform
     // the newly emitted particles.
@@ -391,7 +394,7 @@ void Diamond::ParticleEmitter2D::initParticle(Particle2D &particle) {
         );
 
         // rotation
-        particle.transform->rotation = 
+        particle.transform->rotation =
             Math::random(mConfig.minBirthRotation, mConfig.maxBirthRotation);
 
         // scale
@@ -415,7 +418,7 @@ void Diamond::ParticleEmitter2D::initParticle(Particle2D &particle) {
         else {
             particle.deathScale = particle.transform->scale;
         }
-        
+
     }
 
     // physics

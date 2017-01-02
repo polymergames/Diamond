@@ -19,7 +19,7 @@
 #include "D_Input.h"
 using namespace Diamond;
 
-ParticleDemo::ParticleDemo(Engine2D &engine, float movespeed, float spinspeed) 
+ParticleDemo::ParticleDemo(Engine2D &engine, float movespeed, float spinspeed)
     : Game2D(engine),
       movespeed(movespeed), spinspeed(spinspeed), again(false),
       configLoader(),
@@ -30,7 +30,9 @@ ParticleDemo::ParticleDemo(Engine2D &engine, float movespeed, float spinspeed)
               engine.makeTransform(engine.getRenderer()->getResolution().scalar(0.5)),
               [&](Particle2D &particle, const ParticleSystem2DConfig &config) {
                   particle.transform = engine.makeTransform();
-                  particle.renderComponent = engine.getRenderer()->makeRenderComponent(particle.transform, config.particleTexture);
+                  particle.renderComponent = engine.getRenderer()->makeRenderComponent(
+                      particle.transform, config.particleTexture, config.layer
+                  );
               }
           )
       ) {}

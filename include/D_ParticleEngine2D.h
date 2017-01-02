@@ -49,6 +49,9 @@ namespace Diamond {
         // the texture used to render each particle
         SharedPtr<Texture> particleTexture = nullptr;
 
+        // the layer that particles will be rendered on
+        RenderLayer layer = 0;
+
         // the number of particles that will be emitted at the same time.
         // can give a range for a random number of particles each time,
         // otherwise set both min and max to the same value.
