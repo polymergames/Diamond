@@ -52,7 +52,8 @@ ParticleDemo::ParticleDemo(Engine2D &engine,
 
 ParticleDemo::~ParticleDemo() {
     delete benchmarkLogger;
-    benchmarkStream.close();
+    if (benchmarkStream.is_open())
+        benchmarkStream.close();
 }
 
 

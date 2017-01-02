@@ -70,7 +70,8 @@ Diamond::Engine2D::~Engine2D() {
     delete timer;
     delete event_handler;
     delete phys_world;
-    logstream.close();
+    if (logstream.is_open())
+        logstream.close();
 }
 
 void Diamond::Engine2D::launch(Game2D &game) {
