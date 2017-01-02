@@ -22,7 +22,7 @@
 
 int main(int argc, char *argv[]) {
     Diamond::Config config;
-    config.vsync = true;
+    config.vsync = false;
     //config.bg_color = { 0, 128, 255, 255 };
 
     // Thank you Joey de Vries for this color :P
@@ -30,16 +30,16 @@ int main(int argc, char *argv[]) {
     // config.fullscreen = true;
     config.window_width = 1920;
     config.window_height = 1080;
-    
+
     bool success;
     Diamond::Engine2D engine(config, success);
-    
+
     if (success) {
         {
             bool play = true;
 
             while (play) {
-                ParticleDemo demo(engine, 0.75, 0.25);
+                ParticleDemo demo(engine, 0.75, 0.25, true, "particleBenchmark.log");
                 engine.launch(demo);
 
                 play = demo.willPlayAgain();
@@ -59,6 +59,6 @@ int main(int argc, char *argv[]) {
     else {
         std::cout << "Diamond Engine failed to initialize!" << std::endl;
     }
-    
+
 	return 0;
 }

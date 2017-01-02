@@ -260,6 +260,8 @@ namespace Diamond {
         SpawnParticleFunc mSpawnParticle;
         InitParticleFunc  mOnInitParticle;
 
+    // DEBUGGING
+    public:
         tD_time  mTimeElapsed;
         tD_time  mLastParticleSpawnTime;
         tD_delta mEmitInterval;

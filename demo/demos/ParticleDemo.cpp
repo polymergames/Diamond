@@ -17,9 +17,13 @@
 #include "ParticleDemo.h"
 
 #include "D_Input.h"
+#include "D_Log.h"
 using namespace Diamond;
 
-ParticleDemo::ParticleDemo(Engine2D &engine, float movespeed, float spinspeed)
+ParticleDemo::ParticleDemo(Engine2D &engine,
+                           float movespeed, float spinspeed,
+                           bool benchmark,
+                           const std::string &benchmarkFile)
     : Game2D(engine),
       movespeed(movespeed), spinspeed(spinspeed), again(false),
       configLoader(),
@@ -35,7 +39,21 @@ ParticleDemo::ParticleDemo(Engine2D &engine, float movespeed, float spinspeed)
                   );
               }
           )
-      ) {}
+      ),
+      benchmarkLogger(nullptr) {
+    if (benchmark) {
+        benchmarkStream.open(benchmarkFile, std::ios::app);
+        if (!benchmarkStream.is_open())
+            Log::log("Failed to open " + benchmarkFile + " for benchmarking!");
+        else
+            benchmarkLogger = new BenchmarkLogger(benchmarkStream);
+    }
+}
+
+ParticleDemo::~ParticleDemo() {
+    delete benchmarkLogger;
+    benchmarkStream.close();
+}
 
 
 void ParticleDemo::update(tD_delta delta) {
@@ -70,4 +88,8 @@ void ParticleDemo::update(tD_delta delta) {
         again = true;
         engine.quit();
     }
+
+    // benchmark
+    if (benchmarkLogger)
+        benchmarkLogger->update(delta);
 }

@@ -14,13 +14,19 @@
     limitations under the License.
 */
 
+#include <fstream>
+#include "D_Benchmark.h"
 #include "D_Game2D.h"
 #include "D_SDLConfigLoader.h"
 #include "D_ParticleManager2D.h"
 
 class ParticleDemo : public Diamond::Game2D {
 public:
-    ParticleDemo(Diamond::Engine2D &engine, float movespeed = 0.75, float spinspeed = 0.75);
+    ParticleDemo(Diamond::Engine2D &engine,
+                 float movespeed = 0.75, float spinspeed = 0.75,
+                 bool benchmark = false,
+                 const std::string &benchmarkFile = "");
+    virtual ~ParticleDemo();
 
     void update(tD_delta delta) override;
 
@@ -36,4 +42,7 @@ private:
     Diamond::TextureFactory    textureFactory;
     Diamond::ParticleManager2D particleManager;
     Diamond::ParticleEmitter2D particleEmitter;
+
+    Diamond::BenchmarkLogger *benchmarkLogger;
+    std::ofstream benchmarkStream;
 };
