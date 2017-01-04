@@ -26,7 +26,7 @@ namespace Diamond {
     struct RGBA {
         uint8_t r, g, b, a;
     };
-    
+
     struct Config {
         std::string         game_name = "A Game Without a Name";
 
@@ -41,6 +41,11 @@ namespace Diamond {
         audio_channels_t    audio_channels = D_STEREO;
         int32_t             audio_out_freq = 44100; // in hertz
         int16_t             audio_out_sample_size = 2048; // in bytes
+
+        // Subsystem constraints
+        // if one of these is false, Diamond will run even if the corresponding
+        // subsystem fails to initialize (ie, that subsystem is optional).
+        bool                require_audio = false;
     };
 }
 

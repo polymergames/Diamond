@@ -24,7 +24,7 @@ if(WIN32)
     set(LINK_LIBS gtest.lib Diamond)
     link_directories(googletest/lib/x86)
 else()
-    set(LINK_LIBS libgtest.a Diamond)
+    set(LINK_LIBS libgtest.a Diamond -stdlib=libc++)
     link_directories(googletest/lib)
 endif()
 

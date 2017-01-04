@@ -125,10 +125,8 @@ bool Diamond::Engine2D::initSDL() {
     }
 
     dj = new SDLDiskJockey2D();
-    if (!dj->init(config)) {
+    if (!dj->init(config) && config.require_audio) {
         // TODO: Handle audio initialization failure
-        // Perhaps make audio non-critical, ie return success even if audio initialization failed
-        // Or return a bitflag indicating which systems initialized successfully and which ones didn't
         return false;
     }
 

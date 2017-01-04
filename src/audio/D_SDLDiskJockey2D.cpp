@@ -28,10 +28,10 @@ Diamond::SDLDiskJockey2D::~SDLDiskJockey2D() {
 
 bool Diamond::SDLDiskJockey2D::init(const Config &config) {
     if (Mix_OpenAudio(config.audio_out_freq,
-            MIX_DEFAULT_FORMAT,
-            config.audio_channels,
-            config.audio_out_sample_size) < 0) {
-        Log::log("SDL_mixer failed to initialize! SDL_mixer Error:" + std::string(Mix_GetError()));
+                      MIX_DEFAULT_FORMAT,
+                      config.audio_channels,
+                      config.audio_out_sample_size) < 0) {
+        Log::log("SDL_mixer failed to initialize! SDL_mixer Error: " + std::string(Mix_GetError()));
         return false;
     }
     return true;

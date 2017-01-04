@@ -15,10 +15,17 @@
 # Header includes
 include_directories(demos/)
 
+# Libraries
+if(APPLE)
+    set(LINK_LIBS Diamond -stdlib=libc++)
+else()
+    set(LINK_LIBS Diamond)
+endif()
+
 # Get source files
 file(GLOB_RECURSE SOURCES demos/*.cpp)
 
 # Build demo
 add_executable(diamondDemo ${SOURCES})
-target_link_libraries(diamondDemo Diamond)
+target_link_libraries(diamondDemo ${LINK_LIBS})
 install(TARGETS diamondDemo DESTINATION bin)
