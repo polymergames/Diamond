@@ -87,31 +87,28 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     SharedPtr<Rigidbody2D> rbody = physworld->makeRigidbody(spike1.transform());
     spike1.addComponent(RIGIDBODY, rbody);
 
-    float scale = spike1.transform().scale.x;
-    tD_pos radius = spike_sprite->getWidth() * scale / 2.0;
+    tD_pos radius = spike_sprite->getWidth() / 2.0;
     spike1.addComponent(COLLIDER, 
         physworld->makeCircleCollider(rbody, &spike1, callback, radius, Vector2<tD_pos>(radius, radius)));
 
     rbody = physworld->makeRigidbody(spike2.transform());
     spike2.addComponent(RIGIDBODY, rbody);
-    scale = spike2.transform().scale.x;
-    radius = spike_sprite->getWidth() * scale / 2.0;
+    radius = spike_sprite->getWidth() / 2.0;
     spike2.addComponent(COLLIDER, 
         physworld->makeCircleCollider(rbody, &spike2, callback, radius, Vector2<tD_pos>(radius, radius)));
 
     
-    scale = zapper1.transform().scale.x;
     // using partial width because the sprite file is 5 times as wide as the actual zapper sprite
     float partial_width = zapper_anim.sprite_sheet->getWidth() / zapper_anim.columns / 5.0;
           
     PointList2D zapperColPoints;
     
-    float zheight = zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows * scale;
-    zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, 0));
-    zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale, 0));
-    zapperColPoints.push_back(Vector2<float>(5 * partial_width * scale, zheight / 2.0));
-    zapperColPoints.push_back(Vector2<float>(3 * partial_width * scale, zheight));
-    zapperColPoints.push_back(Vector2<float>(2 * partial_width * scale, zheight));
+    float zheight = zapper_anim.sprite_sheet->getHeight() / zapper_anim.rows;
+    zapperColPoints.push_back(Vector2<float>(2 * partial_width, 0));
+    zapperColPoints.push_back(Vector2<float>(3 * partial_width, 0));
+    zapperColPoints.push_back(Vector2<float>(5 * partial_width, zheight / 2.0));
+    zapperColPoints.push_back(Vector2<float>(3 * partial_width, zheight));
+    zapperColPoints.push_back(Vector2<float>(2 * partial_width, zheight));
     zapperColPoints.push_back(Vector2<float>(0, zheight / 2.0));
           
     rbody = physworld->makeRigidbody(zapper1.transform());

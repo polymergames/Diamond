@@ -107,6 +107,7 @@ void Diamond::QuantumWorld2D::updateBodies() {
         Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
         rbody.position() = i->second->position;
         rbody.rotation() = i->second->rotation;
+        rbody.scale()    = i->second->scale;
     }
 }
 
@@ -115,8 +116,8 @@ void Diamond::QuantumWorld2D::updateTransforms() {
     for (auto i = m_pairs.begin(); i != m_pairs.end(); ++i) {
         Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(i->first);
         i->second->position = rbody.position();
-        // TODO: test!
         i->second->rotation = rbody.rotation();
+        i->second->scale    = rbody.scale();
     }
 }
 
@@ -131,6 +132,7 @@ Diamond::SharedPtr<Diamond::Rigidbody2D> Diamond::QuantumWorld2D::makeRigidbody(
     Quantum2D::Rigidbody2D &rbody = m_world.getRigidbody(body->getID());
     rbody.position() = transform.position;
     rbody.rotation() = transform.rotation;
+    rbody.scale()    = transform.scale;
     return SharedPtr<Rigidbody2D>(body, m_bodyDeleter);
 }
 

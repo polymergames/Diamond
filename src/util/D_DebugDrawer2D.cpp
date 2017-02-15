@@ -56,7 +56,7 @@ void Diamond::DebugDrawer::draw(const CircleCollider *circle,
                                 const RGBA &color,
                                 float angleInterval) {
     CircleDef circleDef;
-    circleDef.radius = circle->getRadius();
+    circleDef.radius = circle->getWorldRadius();
     circleDef.center = circle->getWorldPos();
     draw(circleDef, color, angleInterval);
 }

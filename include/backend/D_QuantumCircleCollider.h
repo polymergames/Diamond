@@ -44,7 +44,9 @@ namespace Diamond {
 
         tD_pos getRadius() const override { return circle->getRadius(); }
         
-        tD_pos getRadiusSq() const override { return circle->getRadiusSq(); }
+        tD_pos getRadiusSq() const override { return circle->getRadius() * circle->getRadius(); }
+        
+        tD_pos getWorldRadius() const override { return circle->getWorldRadius(); }
         
         Vector2<tD_pos> getCenter() const override { return circle->getCenter(); }
         

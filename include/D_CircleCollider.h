@@ -27,14 +27,19 @@ namespace Diamond {
         virtual ~CircleCollider() {}
         
         /**
-         Get the radius of this circle.
+         Get the radius of this circle in the parent transform's local space.
         */
         virtual tD_pos getRadius() const = 0;
         
         /**
-         Get the radius squared of this circle.
+         Get the local radius squared of this circle.
         */
         virtual tD_pos getRadiusSq() const = 0;
+        
+        /**
+         Get the scaled radius of this circle in world space.
+        */
+        virtual tD_pos getWorldRadius() const = 0;
         
         /**
          Get the center position of this circle in the parent transform's local space.

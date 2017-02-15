@@ -32,14 +32,14 @@ namespace Quantum2D {
                        QLayer layer = 0);
 
         /**
-         Get the radius of this circle.
+         Get the radius of this circle in the parent rigidbody's local space.
         */
         tQ_pos getRadius() const { return radius; }
 
         /**
-         Get the radius squared of this circle.
+         Get the scaled radius of this circle in world space.
         */
-        tQ_pos getRadiusSq() const { return radiusSq; }
+        tQ_pos getWorldRadius() const { return world_radius; }
 
         /**
          Get the center position of this circle in the parent rigidbody's local space.
@@ -51,7 +51,7 @@ namespace Quantum2D {
         */
         const Diamond::Vector2<tQ_pos> &getWorldPos() const { return world_pos; }
 
-        void setRadius(tQ_pos radius) { this->radius = radius; radiusSq = radius * radius; }
+        void setRadius(tQ_pos radius) { this->radius = radius; }
 
         void setCenter(const Diamond::Vector2<tQ_pos> &center) { this->center = center; }
 
@@ -62,7 +62,7 @@ namespace Quantum2D {
 
     private:
         tQ_pos radius;
-        tQ_pos radiusSq;
+        tQ_pos world_radius;
         Diamond::Vector2<tQ_pos> center;
         Diamond::Vector2<tQ_pos> world_pos;
     };
