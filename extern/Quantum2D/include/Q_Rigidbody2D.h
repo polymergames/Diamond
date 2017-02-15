@@ -30,6 +30,9 @@ namespace Quantum2D {
 
         tQ_rot                          rotation() const { return m_rotation; }
         tQ_rot                          &rotation() { return m_rotation; }
+        
+        const Diamond::Vector2<tD_real> &scale() const { return m_scale; }
+        Diamond::Vector2<tD_real>       &scale() { return m_scale; }
 
         const Diamond::Vector2<tQ_pos>  &velocity() const { return m_velocity; }
         Diamond::Vector2<tQ_pos>        &velocity() { return m_velocity; }
@@ -50,6 +53,7 @@ namespace Quantum2D {
     private:
         Diamond::Vector2<tQ_pos> m_position;
         tQ_rot m_rotation;
+        Diamond::Vector2<tD_real> m_scale;
 
         Diamond::Vector2<tQ_pos> m_velocity;
         tQ_rot m_angVelocity;

@@ -35,18 +35,18 @@ int main(int argc, char *argv[]) {
     Diamond::Engine2D engine(config, success);
 
     if (success) {
+        // {
+        //     bool play = true;
+        //
+        //     while (play) {
+        //         ParticleDemo demo(engine, 0.75, 0.25, true, "particleBenchmark.log");
+        //         engine.launch(demo);
+        //
+        //         play = demo.willPlayAgain();
+        //     }
+        // }
+
         {
-            bool play = true;
-
-            while (play) {
-                ParticleDemo demo(engine, 0.75, 0.25, true, "particleBenchmark.log");
-                engine.launch(demo);
-
-                play = demo.willPlayAgain();
-            }
-        }
-
-        /*{
             RandomDemo demo(engine);
             engine.launch(demo);
         }
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
         {
             CollideDemo demo(engine);
             engine.launch(demo);
-        }*/
+        }
     }
     else {
         std::cout << "Diamond Engine failed to initialize!" << std::endl;
