@@ -24,13 +24,13 @@ set(CMAKE_CXX_FLAGS -std=c++11)
 
 # Header includes
 include_directories(
-	include/
+	include
 	include/backend
 	extern/DiamondUtils/include
 	extern/Quantum2D/include
-	extern/SDL2-2.0.3/include
-	extern/SDL2_image-2.0.0/include
-	extern/SDL2_mixer-2.0.0/include
+	extern/SDL2/include
+	extern/SDL2_image/include
+	extern/SDL2_mixer/include
 )
 
 
@@ -40,12 +40,17 @@ if(APPLE)
 	find_library(SDL_2_IMAGE SDL2_image)
 	find_library(SDL_2_MIXER SDL2_mixer)
 	set(LINK_LIBS libQuantum2D.a ${SDL_2} ${SDL_2_IMAGE} ${SDL_2_MIXER} -stdlib=libc++)
+	link_directories(extern/Quantum2D/lib)
 else()
-	# TODO: windows and linux sdl libs
-	set(LINK_LIBS libQuantum2D.a)
+	# Windows
+	# TODO: linux!
+	set(LINK_LIBS Quantum2D.lib SDL2.lib SDL2_image.lib SDL2_mixer.lib)
+	if(CMAKE_VS_PLATFORM_NAME STREQUAL x64)
+		link_directories(extern/Quantum2D/lib/x64 extern/SDL2/lib/x64 extern/SDL2_image/lib/x64 extern/SDL2_mixer/lib/x64)
+	else()
+		link_directories(extern/Quantum2D/lib/x86 extern/SDL2/lib/x86 extern/SDL2_image/lib/x86 extern/SDL2_mixer/lib/x86)
+	endif()
 endif()
-
-link_directories(extern/Quantum2D/lib)
 
 
 # Get source files

@@ -1,0 +1,4 @@
+Procedures for building with CMake on Windows:
+-create directories Debug32 and Debug64
+-in Debug32, run cmake normally with Debug option
+-in Debug64: cmake -G "Visual Studio 14 2015 Win64" --config Debug ..
