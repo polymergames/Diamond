@@ -24,7 +24,7 @@
 #include "D_Transform2.h"
 
 
-Diamond::SDLRenderer2D::SDLRenderer2D() 
+Diamond::SDLRenderer2D::SDLRenderer2D()
     : m_window(nullptr),
       m_renderer(nullptr),
       m_bgColor({0, 0, 0, 100}),
@@ -34,7 +34,8 @@ Diamond::SDLRenderer2D::SDLRenderer2D()
 Diamond::SDLRenderer2D::~SDLRenderer2D() {
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
-    
+
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }
@@ -49,11 +50,11 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
 
     // Create window
     m_window = SDL_CreateWindow(config.game_name.c_str(),
-                                SDL_WINDOWPOS_UNDEFINED, 
                                 SDL_WINDOWPOS_UNDEFINED,
-                                config.window_width, 
-                                config.window_height, 
-                                config.fullscreen 
+                                SDL_WINDOWPOS_UNDEFINED,
+                                config.window_width,
+                                config.window_height,
+                                config.fullscreen
                                 || config.window_width <= 0
                                 || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (m_window == nullptr) {
@@ -62,13 +63,13 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
     }
 
     // Create renderer
-    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | 
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
                                                   (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
     if (m_renderer == nullptr) {
         Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
         return false;
     }
-    
+
     // Set background color
     m_bgColor = config.bg_color;
 
@@ -79,6 +80,12 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
         // return false; // TODO: what's wrong with SDL Image init on Android?
     }
 
+    // Initialize text rendering
+    if (TTF_Init() < 0) {
+        Log::log("SDL_ttf failed to initialize! SDL_ttf Error: " + std::string(TTF_GetError()));
+        return false;
+    }
+
     return true;
 }
 
@@ -87,7 +94,7 @@ void Diamond::SDLRenderer2D::renderAll() {
     SDL_SetRenderDrawColor(m_renderer,
                            m_bgColor.r, m_bgColor.g, m_bgColor.b, m_bgColor.a);
     SDL_RenderClear(m_renderer);
-    
+
     // Render sprites
     for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
         for (auto i = l->begin(); i != l->end(); ++i) {
@@ -117,8 +124,8 @@ void Diamond::SDLRenderer2D::renderAll() {
             );
         }
     }
-    
-    
+
+
     // Render points
     for (SDLRenderablePoint point : m_render_points_queue) {
         SDL_SetRenderDrawColor(m_renderer,
@@ -126,13 +133,13 @@ void Diamond::SDLRenderer2D::renderAll() {
                                point.color.g,
                                point.color.b,
                                point.color.a);
-        
+
         SDL_RenderDrawPoint(m_renderer,
                             point.coords.x, point.coords.y);
     }
-    
+
     m_render_points_queue.clear();
-    
+
     // Render lines
     for (SDLRenderableLine line : m_render_lines_queue) {
         SDL_SetRenderDrawColor(m_renderer,
@@ -140,15 +147,15 @@ void Diamond::SDLRenderer2D::renderAll() {
                                line.color.g,
                                line.color.b,
                                line.color.a);
-        
+
         SDL_RenderDrawLine(m_renderer,
                            line.p1.x, line.p1.y,
                            line.p2.x, line.p2.y);
     }
-    
+
     m_render_lines_queue.clear();
 
-    
+
     // Update screen
     SDL_RenderPresent(m_renderer);
 }
@@ -165,25 +172,71 @@ Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
     return r;
 }
 
+Diamond::SharedPtr<Diamond::Font> Diamond::SDLRenderer2D::loadFont(
+    const std::string &fontPath, int ptsize
+) {
+    TTF_Font *font = TTF_OpenFont(fontPath.c_str(), ptsize);
+    if (!font) {
+        Log::log("Failed to load font " + fontPath + "! SDL_ttf Error: " + std::string(TTF_GetError()));
+        return nullptr;
+    }
+    return makeShared<SDLFont>(font);
+}
+
 Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::string path) {
-    SDL_Surface* surface = IMG_Load(path.c_str());
+    SDL_Surface *surface = IMG_Load(path.c_str());
     if (surface == NULL) {
-        // TODO: Handle image loading failure
         Log::log("Failed to load image " + path + "! SDL_image Error: " + std::string(IMG_GetError()));
         return nullptr;
     }
-    
+
     SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
     if (texture == NULL) {
-        // TODO: Handle texture creation failure
         Log::log("Failed to create texture from " + path + "! SDL Error: " + std::string(SDL_GetError()));
         return nullptr;
     }
     int width = surface->w;
     int height = surface->h;
-    
+
     SDL_FreeSurface(surface);
     return makeShared<SDLTexture>(texture, width, height);
+}
+
+Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
+    const std::string &text,
+    const SharedPtr<const Font> &font,
+    const RGBA &color
+) {
+    auto sdlfont = std::dynamic_pointer_cast<const SDLFont>(font);
+    if (sdlfont) {
+        SDL_Color sdlcolor = {color.r, color.g, color.b, color.a};
+
+        SDL_Surface *surface = TTF_RenderText_Solid(
+            sdlfont->font,
+            text.c_str(),
+            sdlcolor
+        );
+
+        if (surface == NULL) {
+            Log::log("Failed to load text " + text + ". SDL_ttf Error: " + std::string(TTF_GetError()));
+            return nullptr;
+        }
+
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+        if (texture == NULL) {
+            Log::log("Failed to create texture for text " + text + ". SDL Error: " + std::string(SDL_GetError()));
+            return nullptr;
+        }
+        int width = surface->w;
+        int height = surface->h;
+
+        SDL_FreeSurface(surface);
+        return makeShared<SDLTexture>(texture, width, height);
+    }
+    else {
+        Log::log("Given Font is not an SDLFont.");
+    }
+    return nullptr;
 }
 
 Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
@@ -196,7 +249,7 @@ Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRende
     if ((int)layer > (int)m_render_objects.size() - 1) {
         m_render_objects.resize(layer + 1);
     }
-    
+
     SDLrenderobj_id robj = m_render_objects[layer].emplace(
         transform, std::dynamic_pointer_cast<const SDLTexture>(texture), pivot
     );
@@ -224,10 +277,10 @@ Diamond::SDLrenderobj_id Diamond::SDLRenderer2D::changeLayer(RenderLayer curLaye
     if (newLayer > m_render_objects.size() - 1) {
         m_render_objects.resize(newLayer + 1);
     }
-    
+
     SDLrenderobj_id newID =
         m_render_objects[newLayer].insert(std::move(m_render_objects[curLayer][robj]));
     m_render_objects[curLayer].erase(robj);
-    
+
     return newID;
 }

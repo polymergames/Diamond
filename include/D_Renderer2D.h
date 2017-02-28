@@ -32,6 +32,12 @@ namespace Diamond {
     };
 
 
+    class Font {
+    public:
+        virtual ~Font() {}
+    };
+
+
     class Renderer2D {
     public:
         virtual ~Renderer2D() {}
@@ -45,10 +51,25 @@ namespace Diamond {
         virtual Vector2<int> getScreenResolution() const = 0;
 
         /**
+         Loads a font from a font (ie, ttf) file that can be used to render text.
+        */
+        virtual SharedPtr<Font> loadFont(const std::string &fontPath, int ptsize) = 0;
+
+        /**
          Loads an image file as a texture.
          Returns nullptr if texture failed to load.
         */
         virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
+
+        /**
+         Creates a texture displaying the given text
+         using the given font and color.
+         This texture can be used to create a render component
+         (just like a regular texture).
+        */
+        virtual SharedPtr<Texture> loadTextTexture(const std::string &text,
+                                                   const SharedPtr<const Font> &font,
+                                                   const RGBA &color) = 0;
 
 
         virtual SharedPtr<RenderComponent2D> makeRenderComponent(

@@ -19,6 +19,7 @@
 
 #include <vector>
 #include "SDL.h"
+#include "SDL_ttf.h"
 #include "duPoolManager.h"
 #include "D_Renderer2D.h"
 #include "D_SDLRenderObj2D.h"
@@ -30,20 +31,31 @@ namespace Diamond {
         Vector2<int> coords;
         RGBA color;
     };
-    
+
     struct SDLRenderableLine {
         Vector2<int> p1;
         Vector2<int> p2;
         RGBA color;
     };
-    
-    
+
+    class SDLFont : public Font {
+    public:
+        SDLFont(TTF_Font *font) : font(font) {}
+
+        ~SDLFont() {
+            TTF_CloseFont(font);
+        }
+
+        TTF_Font *font;
+    };
+
+
     class SDLRenderComponent2D;
 
     class SDLRenderer2D : public Renderer2D {
     public:
         SDLRenderer2D();
-        
+
         /**
          Destroys window and renderer and shuts down SDL and SDL extensions.
         */
@@ -54,46 +66,52 @@ namespace Diamond {
          Returns whether all of the initialization was successful.
         */
         bool init(const Config &config) override;
-        
+
         void renderAll() override;
-        
+
         Vector2<int> getResolution() const override;
 
         Diamond::Vector2<int> getScreenResolution() const override;
-        
+
+        SharedPtr<Font> loadFont(const std::string &fontPath, int ptsize) override;
+
         SharedPtr<Texture> loadTexture(std::string path) override;
-        
+
+        SharedPtr<Texture> loadTextTexture(const std::string &text,
+                                           const SharedPtr<const Font> &font,
+                                           const RGBA &color) override;
+
         SharedPtr<RenderComponent2D> makeRenderComponent(
             const DTransform2 &transform,
             const SharedPtr<const Texture> &texture,
             RenderLayer layer = 0,
             const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) override;
-        
-        
+
+
         void renderPoint(const Vector2<tD_pos> &coords,
                          const RGBA &color) override;
-        
+
         void renderLine(const Vector2<tD_pos> &p1,
                         const Vector2<tD_pos> &p2,
                         const RGBA &color) override;
-        
-        
+
+
         SDLRenderObj2D &renderObj(RenderLayer layer,
                                   SDLrenderobj_id robj) {
             return m_render_objects[layer][robj];
         }
-        
+
         const SDLRenderObj2D &renderObj(RenderLayer layer,
                                         SDLrenderobj_id robj) const {
             return m_render_objects[layer][robj];
         }
-        
+
         void destroyRenderObj(RenderLayer layer,
                               SDLrenderobj_id robj) {
             m_render_objects[layer].erase(robj);
         }
-        
+
         SDLrenderobj_id changeLayer(RenderLayer curLayer,
                                     SDLrenderobj_id robj,
                                     RenderLayer newLayer);
@@ -101,11 +119,11 @@ namespace Diamond {
     private:
         SDL_Window   *m_window;
         SDL_Renderer *m_renderer;
-        
+
         RGBA          m_bgColor;
 
         std::vector<SwapVector<SDLRenderObj2D> > m_render_objects;
-        
+
         std::vector<SDLRenderablePoint>          m_render_points_queue;
         std::vector<SDLRenderableLine>           m_render_lines_queue;
 
