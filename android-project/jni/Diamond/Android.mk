@@ -31,9 +31,10 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../include \
 	$(LOCAL_PATH)/../../../include/backend \
 	$(LOCAL_PATH)/../../../extern/DiamondUtils/include \
 	$(LOCAL_PATH)/../../../extern/Quantum2D/include \
-	$(LOCAL_PATH)/../../../extern/SDL2_image-2.0.0/include \
-	$(LOCAL_PATH)/../../../extern/SDL2_mixer-2.0.0/include \
-	$(LOCAL_PATH)/../../../extern/SDL2-2.0.3/include
+	$(LOCAL_PATH)/../../../extern/SDL2_ttf/include \
+	$(LOCAL_PATH)/../../../extern/SDL2_image/include \
+	$(LOCAL_PATH)/../../../extern/SDL2_mixer/include \
+	$(LOCAL_PATH)/../../../extern/SDL2/include
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,, \
@@ -44,7 +45,7 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/../../../src/physics/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/../../../src/util/*.cpp))
 
-LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image SDL2_mixer
+LOCAL_SHARED_LIBRARIES := SDL2 SDL2_image SDL2_mixer SDL2_ttf
 
 LOCAL_STATIC_LIBRARIES := Quantum2D
 
