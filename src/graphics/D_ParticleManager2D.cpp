@@ -20,7 +20,7 @@
 Diamond::ParticleManager2D::ParticleManager2D(const ParticleFunc &onDestroyParticle,
                                               size_t particlePoolSize)
     : mOnDestroyParticle(onDestroyParticle) {
-    
+
     mParticles.reserve(particlePoolSize);
 }
 
@@ -34,7 +34,7 @@ Diamond::ParticleEmitter2D Diamond::ParticleManager2D::makeEmitter(const Particl
         transform,
         [this, onConstructParticle](const ParticleSystem2DConfig &configB) -> Particle2D& {
             mParticles.emplace_back();
-            onConstructParticle(mParticles.back(), configB);
+            if (onConstructParticle) onConstructParticle(mParticles.back(), configB);
             return mParticles.back();
         },
         onInitParticle
@@ -68,7 +68,7 @@ void Diamond::ParticleManager2D::update(tD_delta delta) {
         else {
             mParticles[i].update(delta);
 
-            // since no particle has been removed in this case, 
+            // since no particle has been removed in this case,
             // we can advance the iterator.
             ++i;
         }
