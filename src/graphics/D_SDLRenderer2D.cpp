@@ -103,10 +103,10 @@ void Diamond::SDLRenderer2D::renderAll() {
     // Render sprites
     for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
         for (auto i = l->begin(); i != l->end(); ++i) {
-            Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> transform = (*i).getTransform();
+            const Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> &transform = (*i).getTransform();
 
             SDL_Point pivot = (*i).pivot();
-            SDL_Rect clip = (*i).clip();
+            SDL_Rect &clip = (*i).clip();
 
             pivot.x *= transform.scale.x;
             pivot.y *= transform.scale.y;
@@ -120,7 +120,7 @@ void Diamond::SDLRenderer2D::renderAll() {
 
             SDL_RenderCopyEx(
                 m_renderer,              // The SDL backend renderer for this SDL instance.
-                (*i).texture()->texture, // TODO: remove extra dereference, store SDL_Texture directly in SDLRenderObj!
+                (*i).texture(),          // sprite
                 &clip,                   // source rect
                 &render_rect,            // destination rect
                 transform.rotation,      // rotation for destination rect in degrees
@@ -259,7 +259,7 @@ Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRende
         transform, std::dynamic_pointer_cast<const SDLTexture>(texture), pivot
     );
 
-    return m_renderCompPool.make(*this, robj, layer);
+    return m_renderCompPool.make(*this, robj, texture, layer);
 }
 
 

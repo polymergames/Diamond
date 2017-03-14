@@ -27,8 +27,12 @@ namespace Diamond {
     public:
         SDLRenderComponent2D(SDLRenderer2D &renderer,
                              SDLrenderobj_id renderObj,
+                             const SharedPtr<const Texture> &texture,
                              RenderLayer layer)
-            : m_renderer(renderer), m_renderObj(renderObj), m_layer(layer) {}
+            : m_renderer(renderer),
+              m_renderObj(renderObj),
+              m_sprite(texture),
+              m_layer(layer) {}
         
         ~SDLRenderComponent2D() {
             m_renderer.destroyRenderObj(m_layer, m_renderObj);
@@ -36,12 +40,16 @@ namespace Diamond {
 
 
         SharedPtr<const Texture> getSprite() const override {
-            return m_renderer.renderObj(m_layer, m_renderObj).texture();
+            return m_sprite;
         }
 
         void setSprite(const SharedPtr<const Texture> &sprite) override {
-            m_renderer.renderObj(m_layer, m_renderObj).texture()
-                = std::dynamic_pointer_cast<const SDLTexture>(sprite);
+            m_renderer
+                .renderObj(m_layer, m_renderObj)
+                .setTexture(
+                    std::dynamic_pointer_cast<const SDLTexture>(sprite)->texture
+                );
+            m_sprite = sprite;
         }
 
 
@@ -103,6 +111,7 @@ namespace Diamond {
     private:
         SDLRenderer2D &m_renderer;
         SDLrenderobj_id m_renderObj;
+        SharedPtr<const Texture> m_sprite;
         RenderLayer m_layer;
     };
 }

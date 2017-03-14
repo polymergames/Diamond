@@ -29,13 +29,15 @@ namespace Diamond {
         SDLRenderObj2D(const DTransform2 &transform,
                        const SharedPtr<const SDLTexture> &texture,
                        const Vector2<tSDLrender_pos> &pivot)
-            : m_transform(&transform), m_texture(texture), m_flip(SDL_FLIP_NONE) {
+            : m_transform(&transform),
+              m_texture(texture->texture),
+              m_flip(SDL_FLIP_NONE) {
             m_pivot.x = pivot.x;
             m_pivot.y = pivot.y;
             m_clip.x = 0;
             m_clip.y = 0;
-            m_clip.w = m_texture->getWidth();
-            m_clip.h = m_texture->getHeight();
+            m_clip.w = texture->getWidth();
+            m_clip.h = texture->getHeight();
         }
 
 
@@ -44,9 +46,10 @@ namespace Diamond {
         SDL_Point &pivot() { return m_pivot; }
         const SDL_Point &pivot() const { return m_pivot; }
         
-        SharedPtr<const SDLTexture> &texture() { return m_texture; }
-        const SharedPtr<const SDLTexture> &texture() const { return m_texture; }
-
+        SDL_Texture *texture() { return m_texture; }
+        const SDL_Texture *texture() const { return m_texture; }
+        void setTexture(SDL_Texture *texture) { m_texture = texture; }
+        
 
         SDL_RendererFlip getFlip() const { return m_flip; }
         void flipX() { m_flip = (SDL_RendererFlip)(m_flip ^ SDL_FLIP_HORIZONTAL); }
@@ -61,8 +64,8 @@ namespace Diamond {
 
     private:
         const DTransform2 *m_transform;
+        SDL_Texture *m_texture;
         SDL_Point m_pivot;
-        SharedPtr<const SDLTexture> m_texture;
         SDL_Rect m_clip;
         SDL_RendererFlip m_flip;
     };
