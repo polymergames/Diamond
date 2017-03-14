@@ -16,6 +16,7 @@
 
 #include "D_Engine2D.h"
 
+#include <ctime>
 #include <iostream>
 #include "D_Game2D.h"
 #include "D_Log.h"
@@ -38,8 +39,7 @@ Diamond::Engine2D::Engine2D(const Config &config, bool &success)
       timer(nullptr),
       event_handler(nullptr),
       phys_world(nullptr),
-      // TODO: construct transformPool with given estimate of how many transforms max would ever be onscreen
-      transformPool(200) {
+      transformPool(config.max_gameobjects_estimate) {
 
     success = false;
 
@@ -81,13 +81,24 @@ void Diamond::Engine2D::launch(Game2D &game) {
     tD_time time, last_time = timer->msElapsed();
     tD_delta delta;
     int nframes = 0;
+    
+    // DEBUG Benchmark
+    clock_t clocktime;
+    clock_t getmstime;
+    clock_t eventtime;
+    clock_t gametime;
+    clock_t physicstime;
+    clock_t postphysicsgametime;
+    clock_t rendertime;
 
     // Game loop
     while (is_running) {
         // Update time junk
         ++nframes;
 
+        clocktime = clock();
         time = timer->msElapsed();
+        getmstime = clock() - clocktime;
         delta = time - last_time;
         last_time = time;
 
@@ -95,21 +106,48 @@ void Diamond::Engine2D::launch(Game2D &game) {
         // then I just have to go get those values ya know?
         timer->setDelta(delta);
         timer->setFPS(nframes / (time / 1000.0));
-
+        
         // Catch up on events
+        clocktime = clock();
         event_handler->update();
+        eventtime = clock() - clocktime;
 
         // Update game logic
+        clocktime = clock();
         game.update(delta);
+        gametime = clock() - clocktime;
 
         // Update physics
+        clocktime = clock();
         phys_world->update(delta);
+        physicstime = clock() - clocktime;
 
         // Update post-physics game logic
+        clocktime = clock();
         game.postPhysicsUpdate(delta);
+        postphysicsgametime = clock() - clocktime;
 
         // Draw pictures!
+        clocktime = clock();
         renderer->renderAll();
+        rendertime = clock() - clocktime;
+        
+        // DEBUG
+        // TODO: report to an engine benchmarking system
+        float total = eventtime + gametime + physicstime + postphysicsgametime + rendertime;
+        std::cout << "Delta: " << delta << std::endl;
+//        std::cout << "Event time: " << (float)eventtime / total << std::endl;
+//        std::cout << "Game time: " << (float)gametime / total << std::endl;
+//        std::cout << "Physics time: " << (float)physicstime / total << std::endl;
+//        std::cout << "Post physics game time: " << (float)postphysicsgametime / total << std::endl;
+//        std::cout << "Render time: " << (float)rendertime / total << std::endl;
+        std::cout << "Get ms ticks: " << (float)getmstime << std::endl;
+        std::cout << "Event ticks: " << (float)eventtime << std::endl;
+        std::cout << "Game ticks: " << (float)gametime << std::endl;
+        std::cout << "Physics ticks: " << (float)physicstime << std::endl;
+        std::cout << "Post physics game ticks: " << (float)postphysicsgametime << std::endl;
+        std::cout << "Render ticks: " << (float)rendertime << std::endl;
+        std::cout << "Total ticks: " << total << std::endl << std::endl;
     }
 
     // End game
@@ -118,8 +156,9 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
 
 bool Diamond::Engine2D::initSDL() {
-    renderer = new SDLRenderer2D();
-    if (!renderer->init(config)) {
+    bool success = true;
+    renderer = new SDLRenderer2D(config, success);
+    if (!success) {
         // TODO: Handle renderer initialization failure
         return false;
     }

@@ -54,18 +54,16 @@ namespace Diamond {
 
     class SDLRenderer2D : public Renderer2D {
     public:
-        SDLRenderer2D();
+        /**
+         Initializes SDL, creates window, and initializes image loading.
+         Success indicates whether all of the initialization was successful.
+         */
+        SDLRenderer2D(const Config &config, bool &success);
 
         /**
          Destroys window and renderer and shuts down SDL and SDL extensions.
         */
         ~SDLRenderer2D();
-
-        /**
-         Initializes SDL, creates window, and initializes image loading.
-         Returns whether all of the initialization was successful.
-        */
-        bool init(const Config &config) override;
 
         void renderAll() override;
 

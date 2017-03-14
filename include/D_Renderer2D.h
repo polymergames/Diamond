@@ -42,8 +42,6 @@ namespace Diamond {
     public:
         virtual ~Renderer2D() {}
 
-        virtual bool init(const Config &config) = 0;
-
         virtual void renderAll() = 0;
 
         virtual Vector2<int> getResolution() const = 0;

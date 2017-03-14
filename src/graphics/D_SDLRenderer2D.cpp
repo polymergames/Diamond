@@ -24,30 +24,19 @@
 #include "D_Transform2.h"
 
 
-Diamond::SDLRenderer2D::SDLRenderer2D()
+Diamond::SDLRenderer2D::SDLRenderer2D(const Config &config, bool &success)
     : m_window(nullptr),
       m_renderer(nullptr),
       m_bgColor({0, 0, 0, 100}),
-      // TODO: construct renderCompPool with given estimate of how many renderables max would ever be onscreen
-      m_renderCompPool(200) {}
-
-Diamond::SDLRenderer2D::~SDLRenderer2D() {
-    SDL_DestroyRenderer(m_renderer);
-    SDL_DestroyWindow(m_window);
-
-    TTF_Quit();
-    IMG_Quit();
-    SDL_Quit();
-}
-
-
-bool Diamond::SDLRenderer2D::init(const Config &config) {
+      m_renderCompPool(config.max_gameobjects_estimate) {
+    success = true;
+          
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         Log::log("SDL failed to initialize! SDL Error: " + std::string(SDL_GetError()));
-        return false;
+        success = false;
     }
-
+    
     // Create window
     m_window = SDL_CreateWindow(config.game_name.c_str(),
                                 SDL_WINDOWPOS_UNDEFINED,
@@ -59,35 +48,51 @@ bool Diamond::SDLRenderer2D::init(const Config &config) {
                                 || config.window_height <= 0 ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (m_window == nullptr) {
         Log::log("SDL failed to create window! SDL Error: " + std::string(SDL_GetError()));
-        return false;
+        success = false;
     }
-
+    
     // Create renderer
     m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
-                                                  (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
+                                    (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
     if (m_renderer == nullptr) {
         Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
-        return false;
+        success = false;
     }
-
+    
     // Set background color
     m_bgColor = config.bg_color;
-
+    
     // Initialize image loading
     int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
     if (IMG_Init(img_flags) != img_flags) {
         Log::log("SDL_image failed to initialize! SDL_image Error: " + std::string(IMG_GetError()));
-        // return false; // TODO: what's wrong with SDL Image init on Android?
+        // success = false; // TODO: what's wrong with SDL Image init on Android?
     }
-
+    
     // Initialize text rendering
     if (TTF_Init() < 0) {
         Log::log("SDL_ttf failed to initialize! SDL_ttf Error: " + std::string(TTF_GetError()));
-        return false;
+        success = false;
     }
-
-    return true;
+          
+    if (success && config.optimize_render_layers) {
+        m_render_objects.resize(config.num_render_layers_estimate);
+        
+        for (int i = 0; i < config.num_render_layers_estimate; ++i) {
+            m_render_objects[i].data().reserve(config.max_gameobjects_estimate);
+        }
+    }
 }
+
+Diamond::SDLRenderer2D::~SDLRenderer2D() {
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
+
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
+}
+
 
 void Diamond::SDLRenderer2D::renderAll() {
     // Render background
@@ -274,7 +279,7 @@ Diamond::SDLrenderobj_id Diamond::SDLRenderer2D::changeLayer(RenderLayer curLaye
                                                              SDLrenderobj_id robj,
                                                              RenderLayer newLayer) {
     // Make room for a new layer if necessary
-    if (newLayer > m_render_objects.size() - 1) {
+    if (newLayer + 1 > m_render_objects.size()) {
         m_render_objects.resize(newLayer + 1);
     }
 

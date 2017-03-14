@@ -46,6 +46,23 @@ namespace Diamond {
         // if one of these is false, Diamond will run even if the corresponding
         // subsystem fails to initialize (ie, that subsystem is optional).
         bool                require_audio = false;
+        
+        // Estimate of the max number of gameobjects active at any time.
+        // This is used to allocate memory for transforms, render components,
+        // etc.
+        int                 max_gameobjects_estimate = 1000;
+        
+        // Allocates memory for max_gameobjects_estimate render components
+        // in EACH render layer based on num_render_layers_estimate, if
+        // optimize_render_layers is true.
+        // WARNING: if num_render_layers_estimate is a high number
+        // and max_gameobjects_estimate is also a high number,
+        // this may allocate A LOT of memory!!!!
+        // WARNING: this assumes that all render layers used are in order,
+        // starting from 0. If that's not the case, you may have
+        // a lot of wasted memory (A LOT!!!)
+        bool                optimize_render_layers = true;
+        int                 num_render_layers_estimate = 1;
     };
 }
 
