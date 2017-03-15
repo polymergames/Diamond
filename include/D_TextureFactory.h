@@ -40,18 +40,18 @@ namespace Diamond {
          to the path root given in initial construction.
          Returns nullptr if failed to load.
         */
-        DumbPtr<Texture> loadTexture(const std::string &fileName);
-        
+        Texture *loadTexture(const std::string &fileName);
+
         /**
          Erases the texture with the given file name from internal store
          if it is cached.
         */
         void unLoadTexture(const std::string &fileName);
-        
+
     private:
         Renderer2D *m_renderer;
         std::string m_pathRoot;
-        
+
         std::unordered_map<std::string, DumbPtr<Texture> > m_textureMap;
     };
 }

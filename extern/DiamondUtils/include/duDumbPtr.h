@@ -47,7 +47,7 @@ namespace Diamond {
         DumbPtr(T *ptr, const DumbDeleter *d) : ptr(ptr), d(d) {}
 
         // implicit converting constructor
-        template<typename Y>
+        template <typename Y>
         DumbPtr(const DumbPtr<Y> &p) : ptr(p.get()), d(p.get_deleter()) {}
 
         T *get() const { return ptr; }
@@ -65,6 +65,11 @@ namespace Diamond {
         }
 
         explicit operator bool() const { return ptr != nullptr; }
+
+        // conversion operator
+        operator T*() const {
+            return ptr;
+        }
 
     private:
         T *ptr;

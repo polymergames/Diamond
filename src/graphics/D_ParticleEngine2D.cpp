@@ -27,7 +27,7 @@ Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &confi
     : ParticleSystem2DConfig(configTable, textureFactory.loadTexture(configTable.get("particleTexture"))) {}
 
 Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &configTable,
-                                                        const DumbPtr<Texture> &particleTexture)
+                                                        const Texture *particleTexture)
     : particleTexture(particleTexture) {
 
     if (configTable.hasKey("particlePoolSize"))
@@ -325,11 +325,11 @@ void Diamond::Particle2D::update(tD_delta delta) {
 // Particle Emitter
 
 Diamond::ParticleEmitter2D::ParticleEmitter2D(const ParticleSystem2DConfig &config,
-                                              const Transform2Ptr &transform,
+                                              const DTransform2 &transform,
                                               const SpawnParticleFunc &spawnParticle,
                                               const InitParticleFunc &onInitParticle)
     : mConfig(config),
-      mTransform(transform),
+      mTransform(&transform),
       mSpawnParticle(spawnParticle),
       mOnInitParticle(onInitParticle),
       mTimeElapsed(0),

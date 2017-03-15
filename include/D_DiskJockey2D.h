@@ -18,7 +18,7 @@
 #define D_DISK_JOCKEY_2D_H
 
 #include <iostream>
-
+#include "duDumbPtr.h"
 #include "D_Config.h"
 #include "D_Sound2D.h"
 #include "D_Music.h"
@@ -31,9 +31,9 @@ namespace Diamond {
 
         virtual bool init(const Config &config) = 0;
 
-        virtual SharedPtr<Sound2D> loadSound(std::string path) = 0;
+        virtual DumbPtr<Sound2D> loadSound(std::string path) = 0;
 
-        virtual SharedPtr<Music> loadMusic(std::string path) = 0;
+        virtual DumbPtr<Music> loadMusic(std::string path) = 0;
 
         virtual int getMaxVolume() const = 0;
 

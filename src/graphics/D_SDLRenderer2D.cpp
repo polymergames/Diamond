@@ -30,13 +30,13 @@ Diamond::SDLRenderer2D::SDLRenderer2D(const Config &config, bool &success)
       m_bgColor({0, 0, 0, 100}),
       m_renderCompPool(config.max_gameobjects_estimate) {
     success = true;
-          
+
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         Log::log("SDL failed to initialize! SDL Error: " + std::string(SDL_GetError()));
         success = false;
     }
-    
+
     // Create window
     m_window = SDL_CreateWindow(config.game_name.c_str(),
                                 SDL_WINDOWPOS_UNDEFINED,
@@ -50,7 +50,7 @@ Diamond::SDLRenderer2D::SDLRenderer2D(const Config &config, bool &success)
         Log::log("SDL failed to create window! SDL Error: " + std::string(SDL_GetError()));
         success = false;
     }
-    
+
     // Create renderer
     m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
                                     (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
@@ -58,26 +58,26 @@ Diamond::SDLRenderer2D::SDLRenderer2D(const Config &config, bool &success)
         Log::log("SDL failed to create renderer! SDL Error: " + std::string(SDL_GetError()));
         success = false;
     }
-    
+
     // Set background color
     m_bgColor = config.bg_color;
-    
+
     // Initialize image loading
     int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
     if (IMG_Init(img_flags) != img_flags) {
         Log::log("SDL_image failed to initialize! SDL_image Error: " + std::string(IMG_GetError()));
         // success = false; // TODO: what's wrong with SDL Image init on Android?
     }
-    
+
     // Initialize text rendering
     if (TTF_Init() < 0) {
         Log::log("SDL_ttf failed to initialize! SDL_ttf Error: " + std::string(TTF_GetError()));
         success = false;
     }
-          
+
     if (success && config.optimize_render_layers) {
         m_render_objects.resize(config.num_render_layers_estimate);
-        
+
         for (int i = 0; i < config.num_render_layers_estimate; ++i) {
             m_render_objects[i].data().reserve(config.max_gameobjects_estimate);
         }
@@ -209,10 +209,10 @@ Diamond::DumbPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::stri
 
 Diamond::DumbPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
     const std::string &text,
-    const DumbPtr<Font> &font,
+    const Font *font,
     const RGBA &color
 ) {
-    auto sdlfont = dynamic_cast<SDLFont*>(font.get());
+    auto sdlfont = dynamic_cast<const SDLFont*>(font);
     if (sdlfont) {
         SDL_Color sdlcolor = {color.r, color.g, color.b, color.a};
 
@@ -247,7 +247,7 @@ Diamond::DumbPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
 
 Diamond::DumbPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
     const DTransform2 &transform,
-    const DumbPtr<Texture> &texture,
+    const Texture *texture,
     RenderLayer layer,
     const Vector2<tD_pos> &pivot
 ) {
@@ -257,7 +257,7 @@ Diamond::DumbPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderC
     }
 
     SDLrenderobj_id robj = m_render_objects[layer].emplace(
-        transform, dynamic_cast<SDLTexture*>(texture.get()), pivot
+        transform, dynamic_cast<const SDLTexture*>(texture), pivot
     );
 
     return m_renderCompPool.make(*this, robj, texture, layer);

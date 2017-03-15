@@ -28,27 +28,28 @@
 #include "D_Transform2.h"
 
 namespace Diamond {
-    class QuantumBodyDeleter {
+    class QuantumBodyDeleter : public DumbDeleter {
     public:
         QuantumBodyDeleter(MemPool<QuantumBody2D>            &bodyPool,
                            std::map<body2d_id, DTransform2*> &pairs);
 
-        void operator() (Rigidbody2D *body) const;
+        void free(void *body) const override;
 
     private:
         MemPool<QuantumBody2D>            &m_bodyPool;
         std::map<body2d_id, DTransform2*> &m_pairs;
     };
 
-
-    class QuantumColliderDeleter {
+    // TODO: have a separate deleter for each collider type
+    // so you don't have to store so many references in each deleter!
+    class QuantumColliderDeleter : public DumbDeleter {
     public:
-        QuantumColliderDeleter(Quantum2D::DynamicWorld2D      &world, 
-                               MemPool<QuantumAABBCollider2D> &aabbPool, 
+        QuantumColliderDeleter(Quantum2D::DynamicWorld2D      &world,
+                               MemPool<QuantumAABBCollider2D> &aabbPool,
                                MemPool<QuantumCircleCollider> &circlePool,
                                MemPool<QuantumPolyCollider>   &polyPool) ;
 
-        void operator() (Collider2D *collider) const;
+        void free(void *collider) const override;
 
     private:
         Quantum2D::DynamicWorld2D      &m_world;
@@ -64,56 +65,56 @@ namespace Diamond {
         QuantumWorld2D();
 
         bool init(const Config &config) override { return m_world.init(); }
-        
+
 
         void setLayersCollide(CollisionLayer layer1,
                               CollisionLayer layer2,
                               bool collides) override {
             m_world.setLayersCollide(layer1, layer2, collides);
         }
-        
+
         bool doLayersCollide(CollisionLayer layer1,
                              CollisionLayer layer2) const override {
             return m_world.doLayersCollide(layer1, layer2);
         }
-        
-        
+
+
         void allLayersCollideOn() override { m_world.allLayersCollideOn(); }
-        
+
         void allLayersCollideOff() override { m_world.allLayersCollideOff(); }
-        
-        
+
+
         void update(tD_delta delta_ms) override;
-        
+
         void updateBodies();
 
         void updateTransforms();
-        
 
-        SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) override;
-        
-        
-        SharedPtr<AABBCollider2D> makeAABBCollider(const SharedPtr<Rigidbody2D> &body,
-                                                   void *parent,
-                                                   const std::function<void(void *other)> &onCollision,
-                                                   const Vector2<tD_pos> &dims,
-                                                   const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0),
-                                                   CollisionLayer layer = 0) override;
-        
 
-        SharedPtr<CircleCollider> makeCircleCollider(const SharedPtr<Rigidbody2D> &body,
-                                                     void *parent,
-                                                     const std::function<void(void *other)> &onCollision,
-                                                     tD_pos radius,
-                                                     const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0),
-                                                     CollisionLayer layer = 0) override;
+        DumbPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) override;
 
-        
-        SharedPtr<PolyCollider> makePolyCollider(const SharedPtr<Rigidbody2D> &body,
+
+        DumbPtr<AABBCollider2D> makeAABBCollider(const Rigidbody2D *body,
                                                  void *parent,
                                                  const std::function<void(void *other)> &onCollision,
-                                                 const PointList2D &points,
+                                                 const Vector2<tD_pos> &dims,
+                                                 const Vector2<tD_pos> &origin = Vector2<tD_pos>(0, 0),
                                                  CollisionLayer layer = 0) override;
+
+
+        DumbPtr<CircleCollider> makeCircleCollider(const Rigidbody2D *body,
+                                                   void *parent,
+                                                   const std::function<void(void *other)> &onCollision,
+                                                   tD_pos radius,
+                                                   const Vector2<tD_pos> &center = Vector2<tD_pos>(0, 0),
+                                                   CollisionLayer layer = 0) override;
+
+
+        DumbPtr<PolyCollider> makePolyCollider(const Rigidbody2D *body,
+                                               void *parent,
+                                               const std::function<void(void *other)> &onCollision,
+                                               const PointList2D &points,
+                                               CollisionLayer layer = 0) override;
 
     private:
         Quantum2D::DynamicWorld2D         m_world;

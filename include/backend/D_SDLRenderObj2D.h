@@ -45,11 +45,12 @@ namespace Diamond {
 
         SDL_Point &pivot() { return m_pivot; }
         const SDL_Point &pivot() const { return m_pivot; }
-        
+
         SDL_Texture *texture() { return m_texture; }
         const SDL_Texture *texture() const { return m_texture; }
         void setTexture(SDL_Texture *texture) { m_texture = texture; }
-        
+        void setTexture(const SDLTexture *texture) { setTexture(texture->texture); }
+
 
         SDL_RendererFlip getFlip() const { return m_flip; }
         void flipX() { m_flip = (SDL_RendererFlip)(m_flip ^ SDL_FLIP_HORIZONTAL); }

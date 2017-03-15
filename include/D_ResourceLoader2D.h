@@ -27,8 +27,8 @@
 
 namespace Diamond {
     /**
-     * These functions construct resource definition structs from configuration tables 
-     * (that are often loaded from config files using ConfigLoader::load). 
+     * These functions construct resource definition structs from configuration tables
+     * (that are often loaded from config files using ConfigLoader::load).
      * The resource definitions can in turn be used to construct Diamond components.
      *
      * The functions return true if a valid definition was stored
@@ -51,8 +51,8 @@ namespace Diamond {
         bool loadCircleDef(const ConfigTable &config,
                            CircleDef &circle) const;
 
-        bool loadAnimationSheet(const ConfigTable &config, 
-                                TextureFactory &textureFactory, 
+        bool loadAnimationSheet(const ConfigTable &config,
+                                TextureFactory &textureFactory,
                                 AnimationSheet &animationSheet) const;
 
         // This does not return a bool, but you can check if it was successful
@@ -71,7 +71,7 @@ namespace Diamond {
         ConfigTable genCircleConfig(const CircleDef &circle) const;
 
         ConfigTable genPointsConfig(const PointList2D &points) const;
-        
+
     protected:
         bool loadColliderDef(const ConfigTable &config,
                              ColliderDef2D &collider) const;

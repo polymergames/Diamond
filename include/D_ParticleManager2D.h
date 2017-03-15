@@ -68,11 +68,11 @@ namespace Diamond {
          * Particles are constructed without providing
          * a transform or render component to each particle- these should be
          * set in onConstructParticle, which is called after a particle
-         * is constructed by the particle manager but before it is passed 
+         * is constructed by the particle manager but before it is passed
          * to the particle emitter for initialization.
          */
         ParticleEmitter2D makeEmitter(const ParticleSystem2DConfig &config,
-                                      const Transform2Ptr &transform,
+                                      const DTransform2 &transform,
                                       const ParticleConfigFunc &onConstructParticle = nullptr,
                                       const ParticleEmitter2D::InitParticleFunc &onInitParticle = nullptr);
 

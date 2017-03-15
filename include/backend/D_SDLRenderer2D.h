@@ -76,12 +76,12 @@ namespace Diamond {
         DumbPtr<Texture> loadTexture(std::string path) override;
 
         DumbPtr<Texture> loadTextTexture(const std::string &text,
-                                         const DumbPtr<Font> &font,
+                                         const Font *font,
                                          const RGBA &color) override;
 
         DumbPtr<RenderComponent2D> makeRenderComponent(
             const DTransform2 &transform,
-            const DumbPtr<Texture> &texture,
+            const Texture *texture,
             RenderLayer layer = 0,
             const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) override;

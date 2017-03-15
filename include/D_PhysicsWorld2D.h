@@ -34,7 +34,7 @@ namespace Diamond {
     struct ColliderDef2D {
         CollisionLayer layer = 0;
     };
-    
+
     struct AABBDef2D : public ColliderDef2D {
         Vector2<tD_pos> dims = Vector2<tD_pos>(1, 1);
         Vector2<tD_pos> origin;
@@ -64,40 +64,44 @@ namespace Diamond {
         virtual void setLayersCollide(CollisionLayer layer1,
                                       CollisionLayer layer2,
                                       bool collides) = 0;
-        
+
         /**
          * Checks if collision between the given layers is on.
          */
         virtual bool doLayersCollide(CollisionLayer layer1,
                                      CollisionLayer layer2) const = 0;
-        
-        
+
+
         virtual void allLayersCollideOn() = 0;
         virtual void allLayersCollideOff() = 0;
-        
-        
+
+
         /**
          * Steps the physics simulation by the number of milliseconds given
          * and syncs physics and Diamond transform data.
          */
         virtual void update(tD_delta delta_ms) = 0;
-        
+
         /**
          * Creates a rigidbody object attached to the given transform.
          */
-        virtual SharedPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) = 0;
+        virtual DumbPtr<Rigidbody2D> makeRigidbody(DTransform2 &transform) = 0;
 
-        SharedPtr<Rigidbody2D> makeRigidbody(const Transform2Ptr &transform) {
+        DumbPtr<Rigidbody2D> makeRigidbody(const Transform2Ptr &transform) {
             return makeRigidbody(*transform);
         }
 
-        
+        DumbPtr<Rigidbody2D> makeRigidbody(DTransform2 *transform) {
+            return makeRigidbody(*transform);
+        }
+
+
         /**
          * Creates an AABB collider attached to the given rigidbody.
          * parent is a pointer to the object owning the collider.
          */
-        virtual SharedPtr<AABBCollider2D> makeAABBCollider(
-                const SharedPtr<Rigidbody2D> &body,
+        virtual DumbPtr<AABBCollider2D> makeAABBCollider(
+                const Rigidbody2D *body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 const Vector2<tD_pos> &dims,
@@ -105,8 +109,8 @@ namespace Diamond {
                 CollisionLayer layer = 0
         ) = 0;
 
-        SharedPtr<AABBCollider2D> makeAABBCollider(
-                const SharedPtr<Rigidbody2D> &body,
+        DumbPtr<AABBCollider2D> makeAABBCollider(
+                const Rigidbody2D *body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 const AABBDef2D &colDef
@@ -120,8 +124,8 @@ namespace Diamond {
          * Creates a circle collider attached to the given rigidbody.
          * parent is a pointer to the object owning the collider.
          */
-        virtual SharedPtr<CircleCollider> makeCircleCollider(
-                const SharedPtr<Rigidbody2D> &body,
+        virtual DumbPtr<CircleCollider> makeCircleCollider(
+                const Rigidbody2D *body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 tD_pos radius,
@@ -129,8 +133,8 @@ namespace Diamond {
                 CollisionLayer layer = 0
         ) = 0;
 
-        SharedPtr<CircleCollider> makeCircleCollider(
-                const SharedPtr<Rigidbody2D> &body,
+        DumbPtr<CircleCollider> makeCircleCollider(
+                const Rigidbody2D *body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 const CircleDef &colDef
@@ -144,8 +148,8 @@ namespace Diamond {
          * Creates a polygon collider attached to the given rigidbody.
          * parent is a pointer to the object owning the collider.
          */
-        virtual SharedPtr<PolyCollider> makePolyCollider(
-                const SharedPtr<Rigidbody2D> &body,
+        virtual DumbPtr<PolyCollider> makePolyCollider(
+                const Rigidbody2D *body,
                 void *parent,
                 const std::function<void(void *other)> &onCollision,
                 const PointList2D &points,

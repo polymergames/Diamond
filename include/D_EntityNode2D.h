@@ -30,8 +30,8 @@ namespace Diamond {
         EntityNode2D(const Transform2Ptr &world_transform)
             : Node2D(*world_transform), m_transform(world_transform) {}
 
-        virtual ~EntityNode2D() {}
-
+        // Entity is responsible for managing the lifetime of a given transform
+        virtual ~EntityNode2D() { m_transform.free(); }
 
         const Transform2Ptr &getTransformPtr() {
             return m_transform;
@@ -42,7 +42,6 @@ namespace Diamond {
         }
 
     protected:
-        // Entity is responsible for managing the lifetime of a given transform
         Transform2Ptr m_transform;
     };
 }

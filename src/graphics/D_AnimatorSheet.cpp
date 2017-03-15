@@ -24,18 +24,20 @@ namespace {
 }
 
 
-Diamond::AnimatorSheet::AnimatorSheet(const DumbPtr<RenderComponent2D> &rcomp,
+Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rcomp,
                                       const AnimationSheet *anim)
     : m_render_comp(rcomp), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
     if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
         // TODO: throw exception?
         Log::log(EMPTY_ANIMATION_ERROR);
     }
-    if (!rcomp) {
+    else if (!rcomp) {
         Log::log(NULL_RENDERCOMP_ERROR);
     }
-    rcomp->setSprite(anim->sprite_sheet);
-    initClip();
+    else {
+        rcomp->setSprite(anim->sprite_sheet);
+        initClip();
+    }
 }
 
 
@@ -55,7 +57,7 @@ void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {
 }
 
 
-void Diamond::AnimatorSheet::setRenderComponent(const DumbPtr<RenderComponent2D> &rcomp) {
+void Diamond::AnimatorSheet::setRenderComponent(RenderComponent2D *rcomp) {
     if (!rcomp) {
         Log::log(NULL_RENDERCOMP_ERROR);
         return;
@@ -74,7 +76,7 @@ void Diamond::AnimatorSheet::update(tD_delta delta) {
     if (m_elapsed > m_anim->frame_length) {
         m_cur_frame = (m_cur_frame + m_elapsed / m_anim->frame_length) % m_anim->num_frames;
 
-        m_render_comp->setClipPos((m_cur_frame % m_anim->columns) * m_frame_width, 
+        m_render_comp->setClipPos((m_cur_frame % m_anim->columns) * m_frame_width,
                                   (m_cur_frame / m_anim->columns) * m_frame_height);
         m_elapsed %= m_anim->frame_length;
     }

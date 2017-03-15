@@ -27,17 +27,17 @@ Diamond::TextureFactory::~TextureFactory() {
 }
 
 
-Diamond::DumbPtr<Diamond::Texture> Diamond::TextureFactory::loadTexture(const std::string &fileName) {
+Diamond::Texture *Diamond::TextureFactory::loadTexture(const std::string &fileName) {
     // Check if texture has already been loaded
     auto texture = m_textureMap[fileName];
-    
+
     // Otherwise, load the texture and save it to the internal store
     if (!texture) {
         texture = m_renderer->loadTexture(m_pathRoot + fileName);
         m_textureMap[fileName] = texture;
     }
-    
-    return texture;
+
+    return texture.get();
 }
 
 

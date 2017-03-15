@@ -67,20 +67,20 @@ namespace Diamond {
          (just like a regular texture).
         */
         virtual DumbPtr<Texture> loadTextTexture(const std::string &text,
-                                                 const DumbPtr<Font> &font,
+                                                 const Font *font,
                                                  const RGBA &color) = 0;
 
 
         virtual DumbPtr<RenderComponent2D> makeRenderComponent(
                 const DTransform2 &transform,
-                const DumbPtr<Texture> &texture,
+                const Texture *texture,
                 RenderLayer layer = 0,
                 const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) = 0;
 
         DumbPtr<RenderComponent2D> makeRenderComponent(
                 const ConstTransform2Ptr &transform,
-                const DumbPtr<Texture> &texture,
+                const Texture *texture,
                 RenderLayer layer = 0,
                 const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) {
@@ -90,7 +90,7 @@ namespace Diamond {
 
         virtual DumbPtr<RenderComponent2D> makeRenderComponent(
                 const DTransform2 &transform,
-                const DumbPtr<Texture> &texture,
+                const Texture *texture,
                 const RenderDef2D &renderDef
         ) {
             return makeRenderComponent(transform, texture,
@@ -99,7 +99,7 @@ namespace Diamond {
 
         DumbPtr<RenderComponent2D> makeRenderComponent(
                 const ConstTransform2Ptr &transform,
-                const DumbPtr<Texture> &texture,
+                const Texture *texture,
                 const RenderDef2D &renderDef
         ) {
             return makeRenderComponent(transform, texture,

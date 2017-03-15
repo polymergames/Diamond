@@ -27,34 +27,35 @@ namespace Diamond {
     public:
         SDLRenderComponent2D(SDLRenderer2D &renderer,
                              SDLrenderobj_id renderObj,
-                             const DumbPtr<Texture> &texture,
+                             const Texture *texture,
                              RenderLayer layer)
             : m_renderer(renderer),
               m_renderObj(renderObj),
               m_sprite(texture),
               m_layer(layer) {}
-        
+
         ~SDLRenderComponent2D() {
             m_renderer.destroyRenderObj(m_layer, m_renderObj);
         }
 
 
-        DumbPtr<Texture> getSprite() const override {
+        const Texture* getSprite() const override {
             return m_sprite;
         }
 
-        void setSprite(const DumbPtr<Texture> &sprite) override {
-            m_renderer
-                .renderObj(m_layer, m_renderObj)
-                .setTexture(
-                    dynamic_cast<SDLTexture*>(sprite.get())->texture
-                );
-            m_sprite = sprite;
+        void setSprite(const Texture *sprite) override {
+            auto texture = dynamic_cast<const SDLTexture*>(sprite);
+            if (texture) {
+                m_renderer
+                    .renderObj(m_layer, m_renderObj)
+                    .setTexture(texture->texture);
+                m_sprite = sprite;
+            }
         }
 
 
         RenderLayer getLayer() const override { return m_layer; }
-        
+
         void setLayer(RenderLayer newLayer) override {
             m_renderObj = m_renderer.changeLayer(m_layer, m_renderObj, newLayer);
             m_layer = newLayer;
@@ -111,7 +112,7 @@ namespace Diamond {
     private:
         SDLRenderer2D &m_renderer;
         SDLrenderobj_id m_renderObj;
-        DumbPtr<Texture> m_sprite;
+        const Texture *m_sprite;
         RenderLayer m_layer;
     };
 }

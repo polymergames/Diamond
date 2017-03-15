@@ -52,10 +52,10 @@ private:
     Diamond::AnimationSheet zapper2_anim;
 
     Diamond::RGBA spike_color;
-    Diamond::SharedPtr<Diamond::Sound2D> haha;
+    Diamond::DumbPtr<Diamond::Sound2D> haha;
     Diamond::Vector2<int> window;
 
-    Diamond::SharedPtr<Diamond::Rigidbody2D> spikerb;
+    Diamond::DumbPtr<Diamond::Rigidbody2D> spikerb;
 };
 
 #endif // RANDOM_DEMO_H

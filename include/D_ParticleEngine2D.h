@@ -37,7 +37,7 @@ namespace Diamond {
                                TextureFactory &textureFactory);
 
         ParticleSystem2DConfig(const ConfigTable &configTable,
-                               const DumbPtr<Texture> &particleTexture);
+                               const Texture *particleTexture);
 
         ConfigTable genTable(const std::string &particleTexturePath) const;
 
@@ -47,7 +47,7 @@ namespace Diamond {
         size_t particlePoolSize = 0;
 
         // the texture used to render each particle
-        DumbPtr<Texture> particleTexture = nullptr;
+        const Texture *particleTexture = nullptr;
 
         // the layer that particles will be rendered on
         RenderLayer layer = 0;
@@ -129,13 +129,14 @@ namespace Diamond {
     public:
 
         /**
-         * All paramaters are optional.
+         * All parameters are optional.
          */
         Particle2D(const Transform2Ptr &transform = nullptr,
                    const DumbPtr<RenderComponent2D> &renderComponent = nullptr,
                    void *data = nullptr)
             : transform(transform), renderComponent(renderComponent), data(data) {}
 
+        ~Particle2D() { transform.free(); renderComponent.free(); }
 
         /**
          * If update is called every frame, this function can be used to determine
@@ -220,7 +221,7 @@ namespace Diamond {
          * and can be used to customize the particle and perform whatever other mischief the user desires.
          */
         ParticleEmitter2D(const ParticleSystem2DConfig &config,
-                          const Transform2Ptr &transform,
+                          const DTransform2 &transform,
                           const SpawnParticleFunc &spawnParticle,
                           const InitParticleFunc &onInitParticle = nullptr);
 
@@ -243,10 +244,7 @@ namespace Diamond {
 
 
         // the particle emitter's transform (which is the source of all of its particles in a scene graph)
-        DTransform2              &transform()             { return *mTransform; }
         const DTransform2        &transform()       const { return *mTransform; }
-        const Transform2Ptr      &getTransformPtr()       { return mTransform; }
-        const ConstTransform2Ptr &getTransformPtr() const { return mTransform; }
 
 
     private:
@@ -254,7 +252,7 @@ namespace Diamond {
 
 
         ParticleSystem2DConfig mConfig;
-        Transform2Ptr          mTransform;
+        const DTransform2      *mTransform;
         Matrix<tD_real, 2, 2>  mTransMat;
 
         SpawnParticleFunc mSpawnParticle;

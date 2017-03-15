@@ -81,24 +81,24 @@ void Diamond::Engine2D::launch(Game2D &game) {
     tD_time time, last_time = timer->msElapsed();
     tD_delta delta;
     int nframes = 0;
-    
+
     // DEBUG Benchmark
-    clock_t clocktime;
-    clock_t getmstime;
-    clock_t eventtime;
-    clock_t gametime;
-    clock_t physicstime;
-    clock_t postphysicsgametime;
-    clock_t rendertime;
+    // clock_t clocktime;
+    // clock_t getmstime;
+    // clock_t eventtime;
+    // clock_t gametime;
+    // clock_t physicstime;
+    // clock_t postphysicsgametime;
+    // clock_t rendertime;
 
     // Game loop
     while (is_running) {
         // Update time junk
         ++nframes;
 
-        clocktime = clock();
+        // clocktime = clock();
         time = timer->msElapsed();
-        getmstime = clock() - clocktime;
+        // getmstime = clock() - clocktime;
         delta = time - last_time;
         last_time = time;
 
@@ -106,48 +106,48 @@ void Diamond::Engine2D::launch(Game2D &game) {
         // then I just have to go get those values ya know?
         timer->setDelta(delta);
         timer->setFPS(nframes / (time / 1000.0));
-        
+
         // Catch up on events
-        clocktime = clock();
+        // clocktime = clock();
         event_handler->update();
-        eventtime = clock() - clocktime;
+        // eventtime = clock() - clocktime;
 
         // Update game logic
-        clocktime = clock();
+        // clocktime = clock();
         game.update(delta);
-        gametime = clock() - clocktime;
+        // gametime = clock() - clocktime;
 
         // Update physics
-        clocktime = clock();
+        // clocktime = clock();
         phys_world->update(delta);
-        physicstime = clock() - clocktime;
+        // physicstime = clock() - clocktime;
 
         // Update post-physics game logic
-        clocktime = clock();
+        // clocktime = clock();
         game.postPhysicsUpdate(delta);
-        postphysicsgametime = clock() - clocktime;
+        // postphysicsgametime = clock() - clocktime;
 
         // Draw pictures!
-        clocktime = clock();
+        // clocktime = clock();
         renderer->renderAll();
-        rendertime = clock() - clocktime;
-        
+        // rendertime = clock() - clocktime;
+
         // DEBUG
         // TODO: report to an engine benchmarking system
-        float total = eventtime + gametime + physicstime + postphysicsgametime + rendertime;
-        std::cout << "Delta: " << delta << std::endl;
+        // float total = eventtime + gametime + physicstime + postphysicsgametime + rendertime;
+        // std::cout << "Delta: " << delta << std::endl;
 //        std::cout << "Event time: " << (float)eventtime / total << std::endl;
 //        std::cout << "Game time: " << (float)gametime / total << std::endl;
 //        std::cout << "Physics time: " << (float)physicstime / total << std::endl;
 //        std::cout << "Post physics game time: " << (float)postphysicsgametime / total << std::endl;
 //        std::cout << "Render time: " << (float)rendertime / total << std::endl;
-        std::cout << "Get ms ticks: " << (float)getmstime << std::endl;
-        std::cout << "Event ticks: " << (float)eventtime << std::endl;
-        std::cout << "Game ticks: " << (float)gametime << std::endl;
-        std::cout << "Physics ticks: " << (float)physicstime << std::endl;
-        std::cout << "Post physics game ticks: " << (float)postphysicsgametime << std::endl;
-        std::cout << "Render ticks: " << (float)rendertime << std::endl;
-        std::cout << "Total ticks: " << total << std::endl << std::endl;
+        // std::cout << "Get ms ticks: " << (float)getmstime << std::endl;
+        // std::cout << "Event ticks: " << (float)eventtime << std::endl;
+        // std::cout << "Game ticks: " << (float)gametime << std::endl;
+        // std::cout << "Physics ticks: " << (float)physicstime << std::endl;
+        // std::cout << "Post physics game ticks: " << (float)postphysicsgametime << std::endl;
+        // std::cout << "Render ticks: " << (float)rendertime << std::endl;
+        // std::cout << "Total ticks: " << total << std::endl << std::endl;
     }
 
     // End game

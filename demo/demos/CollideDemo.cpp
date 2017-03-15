@@ -84,7 +84,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     PhysicsWorld2D *physworld = engine.getPhysWorld();
     std::function<void(void*)> callback = std::bind(&CollideDemo::m_onCollision, this, std::placeholders::_1);
 
-    SharedPtr<Rigidbody2D> rbody = physworld->makeRigidbody(spike1.transform());
+    DumbPtr<Rigidbody2D> rbody = physworld->makeRigidbody(spike1.transform());
     spike1.addComponent(RIGIDBODY, rbody);
 
     tD_pos radius = spike_sprite->getWidth() / 2.0;

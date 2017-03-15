@@ -37,7 +37,7 @@ namespace Diamond {
             draw(poly->worldPoints(), color);
         }
         
-        void draw(const SharedPtr<PolyCollider> &poly, const RGBA &color) {
+        void draw(const DumbPtr<PolyCollider> &poly, const RGBA &color) {
             draw(poly.get(), color);
         }
 
@@ -51,7 +51,7 @@ namespace Diamond {
                   const RGBA &color,
                   float angleInterval = DEFAULT_ANGLE_INTERVAL);
 
-        void draw(const SharedPtr<CircleCollider> &circle,
+        void draw(const DumbPtr<CircleCollider> &circle,
                   const RGBA &color,
                   float angleInterval = DEFAULT_ANGLE_INTERVAL) {
             draw(circle.get(), color, angleInterval);

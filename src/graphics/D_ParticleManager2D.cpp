@@ -26,7 +26,7 @@ Diamond::ParticleManager2D::ParticleManager2D(const ParticleFunc &onDestroyParti
 
 
 Diamond::ParticleEmitter2D Diamond::ParticleManager2D::makeEmitter(const ParticleSystem2DConfig &config,
-                                                                   const Transform2Ptr &transform,
+                                                                   const DTransform2 &transform,
                                                                    const ParticleConfigFunc &onConstructParticle,
                                                                    const ParticleEmitter2D::InitParticleFunc &onInitParticle) {
     return ParticleEmitter2D(

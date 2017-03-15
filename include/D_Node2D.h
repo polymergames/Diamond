@@ -50,7 +50,7 @@ namespace Diamond {
         /**
          Returns the given child after adding it to children.
          Note: this will overwrite the child's previous local transform,
-         replacing it with the child's world transform converted to 
+         replacing it with the child's world transform converted to
          its local transform in this node's coordinate space.
         */
         Node2D &addChild(Node2D &child);
@@ -67,7 +67,7 @@ namespace Diamond {
 
         // ======= More than meets the eye =======
 
-        /** 
+        /**
          This node's local transform
         */
         DTransform2 &localTransform() { return m_localTransform; }
@@ -91,7 +91,7 @@ namespace Diamond {
 
 
         // ======= Update transforms =======
-        
+
         /**
          Updates all world transforms based on local transforms and parent world transforms
          in the tree rooted at this node.
@@ -102,8 +102,8 @@ namespace Diamond {
         /**
          Updates this node's world transform based on its local transform and the given parent world transform.
         */
-        void updateWorldTransform(const DTransform2 &parent_transform, 
-                                  const Matrix<tD_real, 2, 2> &parent_trans_mat) { 
+        void updateWorldTransform(const DTransform2 &parent_transform,
+                                  const Matrix<tD_real, 2, 2> &parent_trans_mat) {
             m_worldTransform = Node2D::localToWorldSpace(m_localTransform, parent_transform, parent_trans_mat);
             m_cachedWorldTransform = m_worldTransform;
             m_cachedTransformationMatrix = transformationMatrix();
@@ -119,12 +119,12 @@ namespace Diamond {
         */
         void updateAllLocalTransforms(const DTransform2 &parent_transform = DTransform2(),
                                       const Matrix<tD_real, 2, 2> &parent_trans_mat = { { { 1, 0 },{ 0, 1 } } });
-        
+
         /**
          Updates this node's local transform based on its world transform and the given parent world transform.
         */
         void updateLocalTransform(const DTransform2 &parent_transform,
-                                  const Matrix<tD_real, 2, 2> &parent_trans_mat) 
+                                  const Matrix<tD_real, 2, 2> &parent_trans_mat)
         { m_localTransform = Node2D::worldToLocalSpace(m_worldTransform, parent_transform, parent_trans_mat); }
 
 
@@ -147,11 +147,11 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given point from the given local space 
+         Transforms a given point from the given local space
          (specified by local space's origin in world space and transformation matrix) to world space.
         */
         template <typename P>
-        static Vector2<P> localToWorldSpace(const Vector2<P> &local_coords, 
+        static Vector2<P> localToWorldSpace(const Vector2<P> &local_coords,
                                             const Vector2<P> &space_origin,
                                             const Matrix<tD_real, 2, 2> &space_trans_mat) {
             return local_coords.mul(space_trans_mat.m) + space_origin;
@@ -229,7 +229,7 @@ namespace Diamond {
         }
 
         /**
-         Transforms a given point from world space to the given local space 
+         Transforms a given point from world space to the given local space
          (specified by local space's origin in world space and transformation matrix).
         */
         template <typename P>

@@ -24,13 +24,14 @@
 namespace Diamond {
     /**
      A set of components and a 2D transform.
+     Takes ownership of the transform, and frees it upon destruction.
     */
     class Entity2D : public Entity {
     public:
-        Entity2D(const Transform2Ptr &transform) 
+        Entity2D(const Transform2Ptr &transform)
             : m_transform(transform) {}
 
-        virtual ~Entity2D() {}
+        virtual ~Entity2D() { m_transform.free(); }
 
         DTransform2 &transform() { return *m_transform; }
         const DTransform2 &transform() const { return *m_transform; }

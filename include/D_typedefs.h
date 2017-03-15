@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <vector>
+#include "duDumbPtr.h"
 #include "duTypedefs.h"
 #include "duVector2.h"
 
@@ -45,8 +46,8 @@ namespace Diamond {
     template <typename P, typename R, typename S> class Transform2;
 
     using DTransform2 =         Transform2<tD_pos, tD_rot, tD_real>;
-    using Transform2Ptr =       SharedPtr<DTransform2 >;
-    using ConstTransform2Ptr =  SharedPtr<const DTransform2 >;
+    using Transform2Ptr =       DumbPtr<DTransform2 >;
+    using ConstTransform2Ptr =  DumbPtr<const DTransform2 >;
     
     using PointList2D = std::vector<Vector2<tD_pos> >;
 

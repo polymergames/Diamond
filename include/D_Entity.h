@@ -30,7 +30,12 @@ namespace Diamond {
     class Entity {
     public:
         Entity() = default;
-        virtual ~Entity() {}
+        
+        virtual ~Entity() {
+            for (auto i = m_components.begin(); i != m_components.end(); ++i) {
+                i->second.free();
+            }
+        }
 
         // We don't think it's a good idea to copy ownership for a set of unknown components
         Entity(const Entity&) = delete;
@@ -65,15 +70,15 @@ namespace Diamond {
         }
 
         void addComponent(const std::string &name, Component *component) { 
-            addComponent(name, SharedPtr<Component>(component));
+            addComponent(name, DumbPtr<Component>(component));
         }
 
-        void addComponent(const std::string &name, SharedPtr<Component> component) {
+        void addComponent(const std::string &name, DumbPtr<Component> component) {
             m_components[name] = component;
         }
 
         // TODO: make const get functions return const pointers!
-        SharedPtr<Component> getComponent(const std::string &name) const {
+        DumbPtr<Component> getComponent(const std::string &name) const {
             auto i = m_components.find(name);
             if (i != m_components.end())
                 return i->second;
@@ -82,7 +87,7 @@ namespace Diamond {
         }
 
         template <class T>
-        SharedPtr<T> getComponent(const std::string &name) const {
+        DumbPtr<T> getComponent(const std::string &name) const {
             return std::dynamic_pointer_cast<T>(getComponent(name));
         }
 
@@ -91,7 +96,7 @@ namespace Diamond {
         }
 
     protected:
-        std::map<std::string, SharedPtr<Component> > m_components;
+        std::map<std::string, DumbPtr<Component> > m_components;
     };
 }
 
