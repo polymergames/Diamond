@@ -45,6 +45,10 @@ namespace Diamond {
         Entity(Entity &&other) : m_components(std::move(other.m_components)) {}
         Entity& operator=(Entity &&other) {
             if (this != &other) {
+                for (auto i = m_components.begin(); i != m_components.end(); ++i) {
+                    i->second.free();
+                }
+
                 m_components = std::move(other.m_components);
             }
             return *this;
@@ -75,6 +79,8 @@ namespace Diamond {
 
         // TODO: make const get functions return const pointers!
         Component *getComponent(const std::string &name) const {
+            // need to use find instead of []
+            // because [] is not const
             auto i = m_components.find(name);
             if (i != m_components.end())
                 return i->second;
@@ -88,6 +94,7 @@ namespace Diamond {
         }
 
         void removeComponent(const std::string &name) {
+            m_components[name].free();
             m_components.erase(name);
         }
 

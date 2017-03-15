@@ -33,6 +33,24 @@ namespace Diamond {
 
         virtual ~Entity2D() { m_transform.free(); }
 
+        // Since superclass's copy constructor is deleted,
+        // a default one is not automatically created here
+
+        // Move!
+        Entity2D(Entity2D &&other)
+            : Entity(std::move(other)), m_transform(other.m_transform) {
+            other.m_transform = nullptr;
+        }
+        Entity2D& operator=(Entity2D &&other) {
+            if (this != &other) {
+                Entity::operator=(std::move(other));
+                m_transform.free();
+                m_transform = other.m_transform;
+                other.m_transform = nullptr;
+            }
+            return *this;
+        }
+
         DTransform2 &transform() { return *m_transform; }
         const DTransform2 &transform() const { return *m_transform; }
 
