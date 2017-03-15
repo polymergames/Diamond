@@ -138,6 +138,54 @@ namespace Diamond {
 
         ~Particle2D() { transform.free(); renderComponent.free(); }
 
+        // Since a particle owns a transform and renderComponent,
+        // we don't think it's a good idea to copy it.
+        Particle2D(const Particle2D&) = delete;
+        Particle2D &operator=(const Particle2D&) = delete;
+
+        // But moving is OK
+        // TODO: less duplicated way to write this pls?
+        Particle2D(Particle2D &&other)
+            : transform(other.transform),
+              renderComponent(other.renderComponent),
+              data(other.data),
+              age(other.age),
+              lifeTime(other.lifeTime),
+              velocity(other.velocity),
+              acceleration(other.acceleration),
+              angularSpeed(other.angularSpeed),
+              animateScale(other.animateScale),
+              deathScale(other.deathScale),
+              animateColor(other.animateColor),
+              deathColor(other.deathColor) {
+            other.transform = nullptr;
+            other.renderComponent = nullptr;
+        }
+        Particle2D &operator=(Particle2D &&other) {
+            if (this != &other) {
+                transform.free();
+                renderComponent.free();
+
+                transform = other.transform;
+                renderComponent = other.renderComponent;
+                data = other.data;
+                age = other.age;
+                lifeTime = other.lifeTime;
+                velocity = other.velocity;
+                acceleration = other.acceleration;
+                angularSpeed = other.angularSpeed;
+                animateScale = other.animateScale;
+                deathScale = other.deathScale;
+                animateColor = other.animateColor;
+                deathColor = other.deathColor;
+
+                other.transform = nullptr;
+                other.renderComponent = nullptr;
+            }
+            return *this;
+        }
+
+
         /**
          * If update is called every frame, this function can be used to determine
          * if the particle is still alive and should be updated again.
