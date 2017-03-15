@@ -20,10 +20,16 @@
 Diamond::TextureFactory::TextureFactory(Renderer2D *renderer, const std::string &pathRoot)
     : m_renderer(renderer), m_pathRoot(pathRoot) {}
 
+Diamond::TextureFactory::~TextureFactory() {
+    for (auto i = m_textureMap.begin(); i != m_textureMap.end(); ++i) {
+        i->second.free();
+    }
+}
 
-Diamond::SharedPtr<Diamond::Texture> Diamond::TextureFactory::loadTexture(const std::string &fileName) {
+
+Diamond::DumbPtr<Diamond::Texture> Diamond::TextureFactory::loadTexture(const std::string &fileName) {
     // Check if texture has already been loaded
-    SharedPtr<Texture> texture = m_textureMap[fileName];
+    auto texture = m_textureMap[fileName];
     
     // Otherwise, load the texture and save it to the internal store
     if (!texture) {
@@ -36,5 +42,6 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::TextureFactory::loadTexture(const 
 
 
 void Diamond::TextureFactory::unLoadTexture(const std::string &fileName) {
+    m_textureMap[fileName].free();
     m_textureMap[fileName] = nullptr;
 }

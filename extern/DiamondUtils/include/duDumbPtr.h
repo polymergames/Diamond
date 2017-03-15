@@ -20,61 +20,164 @@
 #include <memory>
 
 namespace Diamond {
+    class DumbDeleter {
+    public:
+        virtual ~DumbDeleter() {}
+
+        virtual void free(void *ptr) const = 0;
+    };
+
     /**
-     * Wraps a pointer and a deleter. Does not automatically delete the pointer.
-     * You have to free the pointer manually by calling dumbPtr.free().
+     * Wraps a pointer and a pointer to a deleter of base type DumbDeleter.
+     * This means that the actual deleter object must be stored externally
+     * and outlive this dumb pointer.
+     * Does not automatically free the stored pointer.
+     * You have to free the pointer manually by calling dumbPtr.free(),
+     * which will call deleter->free(ptr).
      * Safe to copy and assign.
      */
-    template <typename T, class Deleter = std::default_delete<T> >
+    template <typename T>
     class DumbPtr {
     public:
-        DumbPtr(T *ptr, Deleter d = Deleter()) : ptr(ptr), d(d) {}
+        DumbPtr() : ptr(nullptr), d(nullptr) {}
+        DumbPtr(std::nullptr_t p) : ptr(p), d(nullptr) {}
+
+        DumbPtr(T *ptr) : ptr(ptr), d(nullptr) {}
+
+        DumbPtr(T *ptr, const DumbDeleter *d) : ptr(ptr), d(d) {}
+
+        // implicit converting constructor
+        template<typename Y>
+        DumbPtr(const DumbPtr<Y> &p) : ptr(p.get()), d(p.get_deleter()) {}
 
         T *get() const { return ptr; }
+
+        const DumbDeleter *get_deleter() const { return d; }
 
         T &operator*() const { return *ptr; }
 
         T *operator->() const { return ptr; }
 
-        void free() { d(ptr); ptr = nullptr; }
+        void free() {
+            if (d)  d->free(ptr);
+            else    delete ptr;
+            ptr = nullptr;
+        }
 
         explicit operator bool() const { return ptr != nullptr; }
 
     private:
         T *ptr;
-        Deleter d;
+        const DumbDeleter *d;
     };
+
+    // Casting
+
+    // template <typename T, typename TD, typename U, typename UD>
+    // DumbPtr<T, TD> static_pointer_cast(const DumbPtr<U, UD> &ptr) noexcept {
+    //     return DumbPtr<T, TD>(static_cast<T*>(ptr.get()), ptr.get_deleter);
+    // }
+    //
+    // template <typename T, typename TD, typename U, typename UD>
+    // DumbPtr<T, TD> dynamic_pointer_cast(const DumbPtr<U, UD> &ptr) noexcept {
+    //     return DumbPtr<T, TD>(dynamic_cast<T*>(ptr.get()), ptr.get_deleter);
+    // }
+    //
+    // template <typename T, typename TD, typename U, typename UD>
+    // DumbPtr<T, TD> const_pointer_cast(const DumbPtr<U, UD> &ptr) noexcept {
+    //     return DumbPtr<T, TD>(const_cast<T*>(ptr.get()), ptr.get_deleter);
+    // }
+    //
+    // template <typename T, typename TD, typename U, typename UD>
+    // DumbPtr<T, TD> reinterpret_pointer_cast(const DumbPtr<U, UD> &ptr) noexcept {
+    //     return DumbPtr<T, TD>(reinterpret_cast<T*>(ptr.get()), ptr.get_deleter);
+    // }
 
     // Comparison operators
 
-    template <typename T, typename TD, typename U, typename UD>
-    bool operator==(const DumbPtr<T,TD> &a, const DumbPtr<U,UD> &b) {
+    template <typename T, typename U>
+    bool operator==(const DumbPtr<T> &a, const DumbPtr<U> &b) {
         return a.get() == b.get();
     }
 
-    template <typename T, typename TD, typename U, typename UD>
-    bool operator!=(const DumbPtr<T,TD> &a, const DumbPtr<U,UD> &b) {
+    template <typename T, typename U>
+    bool operator!=(const DumbPtr<T> &a, const DumbPtr<U> &b) {
         return a.get() != b.get();
     }
 
-    template <typename T, typename TD, typename U, typename UD>
-    bool operator<(const DumbPtr<T,TD> &a, const DumbPtr<U,UD> &b) {
+    template <typename T, typename U>
+    bool operator<(const DumbPtr<T> &a, const DumbPtr<U> &b) {
         return a.get() < b.get();
     }
 
-    template <typename T, typename TD, typename U, typename UD>
-    bool operator>(const DumbPtr<T,TD> &a, const DumbPtr<U,UD> &b) {
+    template <typename T, typename U>
+    bool operator>(const DumbPtr<T> &a, const DumbPtr<U> &b) {
         return a.get() > b.get();
     }
 
-    template <typename T, typename TD, typename U, typename UD>
-    bool operator<=(const DumbPtr<T,TD> &a, const DumbPtr<U,UD> &b) {
+    template <typename T, typename U>
+    bool operator<=(const DumbPtr<T> &a, const DumbPtr<U> &b) {
         return a.get() <= b.get();
     }
 
-    template <typename T, typename TD, typename U, typename UD>
-    bool operator>=(const DumbPtr<T,TD> &a, const DumbPtr<U,UD> &b) {
+    template <typename T, typename U>
+    bool operator>=(const DumbPtr<T> &a, const DumbPtr<U> &b) {
         return a.get() >= b.get();
+    }
+
+
+    template <typename T>
+    bool operator==(const DumbPtr<T> &a, std::nullptr_t b) {
+        return a.get() == b;
+    }
+    template <typename T>
+    bool operator==(std::nullptr_t a, const DumbPtr<T> &b) {
+        return a == b.get();
+    }
+
+    template <typename T>
+    bool operator!=(const DumbPtr<T> &a, std::nullptr_t b) {
+        return a.get() != b;
+    }
+    template <typename T>
+    bool operator!=(std::nullptr_t a, const DumbPtr<T> &b) {
+        return a != b.get();
+    }
+
+    template <typename T>
+    bool operator<(const DumbPtr<T> &a, std::nullptr_t b) {
+        return a.get() < b;
+    }
+    template <typename T>
+    bool operator<(std::nullptr_t a, const DumbPtr<T> &b) {
+        return a < b.get();
+    }
+
+    template <typename T>
+    bool operator>(const DumbPtr<T> &a, std::nullptr_t b) {
+        return a.get() > b;
+    }
+    template <typename T>
+    bool operator>(std::nullptr_t a, const DumbPtr<T> &b) {
+        return a > b.get();
+    }
+
+    template <typename T>
+    bool operator<=(const DumbPtr<T> &a, std::nullptr_t b) {
+        return a.get() <= b;
+    }
+    template <typename T>
+    bool operator<=(std::nullptr_t a, const DumbPtr<T> &b) {
+        return a <= b.get();
+    }
+
+    template <typename T>
+    bool operator>=(const DumbPtr<T> &a, std::nullptr_t b) {
+        return a.get() >= b;
+    }
+    template <typename T>
+    bool operator>=(std::nullptr_t a, const DumbPtr<T> &b) {
+        return a >= b.get();
     }
 }
 

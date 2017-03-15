@@ -24,7 +24,7 @@ namespace {
 }
 
 
-Diamond::Animator2D::Animator2D(const SharedPtr<RenderComponent2D> &rcomp,
+Diamond::Animator2D::Animator2D(const DumbPtr<RenderComponent2D> &rcomp,
                                 const Animation2D *anim)
     : m_render_comp(rcomp), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
     if (!anim || anim->sprites.size() == 0) {
@@ -50,7 +50,7 @@ void Diamond::Animator2D::setAnimation(const Animation2D *anim) {
     m_elapsed   = 0;
 }
 
-void Diamond::Animator2D::setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp) {
+void Diamond::Animator2D::setRenderComponent(const DumbPtr<RenderComponent2D> &rcomp) {
     if (!rcomp) {
         Log::log(NULL_RENDERCOMP_ERROR);
         return;

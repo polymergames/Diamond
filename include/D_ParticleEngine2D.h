@@ -37,7 +37,7 @@ namespace Diamond {
                                TextureFactory &textureFactory);
 
         ParticleSystem2DConfig(const ConfigTable &configTable,
-                               const SharedPtr<Texture> &particleTexture);
+                               const DumbPtr<Texture> &particleTexture);
 
         ConfigTable genTable(const std::string &particleTexturePath) const;
 
@@ -47,7 +47,7 @@ namespace Diamond {
         size_t particlePoolSize = 0;
 
         // the texture used to render each particle
-        SharedPtr<Texture> particleTexture = nullptr;
+        DumbPtr<Texture> particleTexture = nullptr;
 
         // the layer that particles will be rendered on
         RenderLayer layer = 0;
@@ -132,7 +132,7 @@ namespace Diamond {
          * All paramaters are optional.
          */
         Particle2D(const Transform2Ptr &transform = nullptr,
-                   const SharedPtr<RenderComponent2D> &renderComponent = nullptr,
+                   const DumbPtr<RenderComponent2D> &renderComponent = nullptr,
                    void *data = nullptr)
             : transform(transform), renderComponent(renderComponent), data(data) {}
 
@@ -161,7 +161,7 @@ namespace Diamond {
          * The particle system will only modify effects on a render component, and will not change
          * the texture itself. Therefore, the texture can be externally set and animated.
          */
-        SharedPtr<RenderComponent2D> renderComponent = nullptr;
+        DumbPtr<RenderComponent2D> renderComponent = nullptr;
 
         /**
          * Anything can be stored in data by the particle system's user

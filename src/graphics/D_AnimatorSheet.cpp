@@ -24,7 +24,7 @@ namespace {
 }
 
 
-Diamond::AnimatorSheet::AnimatorSheet(const SharedPtr<RenderComponent2D> &rcomp,
+Diamond::AnimatorSheet::AnimatorSheet(const DumbPtr<RenderComponent2D> &rcomp,
                                       const AnimationSheet *anim)
     : m_render_comp(rcomp), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
     if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
@@ -55,7 +55,7 @@ void Diamond::AnimatorSheet::setAnimation(const AnimationSheet *anim) {
 }
 
 
-void Diamond::AnimatorSheet::setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp) {
+void Diamond::AnimatorSheet::setRenderComponent(const DumbPtr<RenderComponent2D> &rcomp) {
     if (!rcomp) {
         Log::log(NULL_RENDERCOMP_ERROR);
         return;

@@ -19,12 +19,13 @@
 
 #include <vector>
 
+#include "duDumbPtr.h"
 #include "D_typedefs.h"
 #include "D_Texture.h"
 
 namespace Diamond {
     struct Animation2D {
-        std::vector<SharedPtr<Texture> > sprites;
+        std::vector<DumbPtr<Texture> > sprites;
 
         /**
          The length of time in type of tD_delta of one animation frame

@@ -27,7 +27,7 @@ Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &confi
     : ParticleSystem2DConfig(configTable, textureFactory.loadTexture(configTable.get("particleTexture"))) {}
 
 Diamond::ParticleSystem2DConfig::ParticleSystem2DConfig(const ConfigTable &configTable,
-                                                        const SharedPtr<Texture> &particleTexture)
+                                                        const DumbPtr<Texture> &particleTexture)
     : particleTexture(particleTexture) {
 
     if (configTable.hasKey("particlePoolSize"))

@@ -177,7 +177,7 @@ Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
     return r;
 }
 
-Diamond::SharedPtr<Diamond::Font> Diamond::SDLRenderer2D::loadFont(
+Diamond::DumbPtr<Diamond::Font> Diamond::SDLRenderer2D::loadFont(
     const std::string &fontPath, int ptsize
 ) {
     TTF_Font *font = TTF_OpenFont(fontPath.c_str(), ptsize);
@@ -185,10 +185,10 @@ Diamond::SharedPtr<Diamond::Font> Diamond::SDLRenderer2D::loadFont(
         Log::log("Failed to load font " + fontPath + "! SDL_ttf Error: " + std::string(TTF_GetError()));
         return nullptr;
     }
-    return makeShared<SDLFont>(font);
+    return DumbPtr<Font>(new SDLFont(font));
 }
 
-Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::string path) {
+Diamond::DumbPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::string path) {
     SDL_Surface *surface = IMG_Load(path.c_str());
     if (surface == NULL) {
         Log::log("Failed to load image " + path + "! SDL_image Error: " + std::string(IMG_GetError()));
@@ -204,15 +204,15 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTexture(std::st
     int height = surface->h;
 
     SDL_FreeSurface(surface);
-    return makeShared<SDLTexture>(texture, width, height);
+    return DumbPtr<Texture>(new SDLTexture(texture, width, height));
 }
 
-Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
+Diamond::DumbPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
     const std::string &text,
-    const SharedPtr<const Font> &font,
+    const DumbPtr<Font> &font,
     const RGBA &color
 ) {
-    auto sdlfont = std::dynamic_pointer_cast<const SDLFont>(font);
+    auto sdlfont = dynamic_cast<SDLFont*>(font.get());
     if (sdlfont) {
         SDL_Color sdlcolor = {color.r, color.g, color.b, color.a};
 
@@ -236,7 +236,8 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
         int height = surface->h;
 
         SDL_FreeSurface(surface);
-        return makeShared<SDLTexture>(texture, width, height);
+        // TODO: use memory pool!
+        return DumbPtr<Texture>(new SDLTexture(texture, width, height));
     }
     else {
         Log::log("Given Font is not an SDLFont.");
@@ -244,9 +245,9 @@ Diamond::SharedPtr<Diamond::Texture> Diamond::SDLRenderer2D::loadTextTexture(
     return nullptr;
 }
 
-Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
+Diamond::DumbPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRenderComponent(
     const DTransform2 &transform,
-    const SharedPtr<const Texture> &texture,
+    const DumbPtr<Texture> &texture,
     RenderLayer layer,
     const Vector2<tD_pos> &pivot
 ) {
@@ -256,7 +257,7 @@ Diamond::SharedPtr<Diamond::RenderComponent2D> Diamond::SDLRenderer2D::makeRende
     }
 
     SDLrenderobj_id robj = m_render_objects[layer].emplace(
-        transform, std::dynamic_pointer_cast<const SDLTexture>(texture), pivot
+        transform, dynamic_cast<SDLTexture*>(texture.get()), pivot
     );
 
     return m_renderCompPool.make(*this, robj, texture, layer);

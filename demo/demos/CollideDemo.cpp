@@ -32,7 +32,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
       m_debug(engine.getRenderer()) {
     Renderer2D *renderer = engine.getRenderer();
 
-    SharedPtr<Texture> spike_sprite = renderer->loadTexture("spike.png");
+    auto spike_sprite = renderer->loadTexture("spike.png");
     
     if (!spike_sprite) {
         std::cout << "Couldn't load sprites!" << std::endl;

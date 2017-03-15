@@ -45,8 +45,8 @@ private:
     Diamond::EntityNode2D root, spike, spike2, zapper, zapper2;
     std::list<Diamond::EntityNode2D> clouds;
 
-    Diamond::SharedPtr<Diamond::Texture> spike_sprite;
-    Diamond::SharedPtr<Diamond::Texture> cloud_sprite;
+    Diamond::DumbPtr<Diamond::Texture> spike_sprite;
+    Diamond::DumbPtr<Diamond::Texture> cloud_sprite;
 
     Diamond::Animation2D zapper_anim;
     Diamond::AnimationSheet zapper2_anim;

@@ -18,6 +18,7 @@
 #define D_RENDERER_2D_H
 
 #include <iostream>
+#include "duDumbPtr.h"
 #include "duVector2.h"
 #include "D_Config.h"
 #include "D_RenderComponent2D.h"
@@ -51,13 +52,13 @@ namespace Diamond {
         /**
          Loads a font from a font (ie, ttf) file that can be used to render text.
         */
-        virtual SharedPtr<Font> loadFont(const std::string &fontPath, int ptsize) = 0;
+        virtual DumbPtr<Font> loadFont(const std::string &fontPath, int ptsize) = 0;
 
         /**
          Loads an image file as a texture.
          Returns nullptr if texture failed to load.
         */
-        virtual SharedPtr<Texture> loadTexture(std::string path) = 0;
+        virtual DumbPtr<Texture> loadTexture(std::string path) = 0;
 
         /**
          Creates a texture displaying the given text
@@ -65,21 +66,21 @@ namespace Diamond {
          This texture can be used to create a render component
          (just like a regular texture).
         */
-        virtual SharedPtr<Texture> loadTextTexture(const std::string &text,
-                                                   const SharedPtr<const Font> &font,
-                                                   const RGBA &color) = 0;
+        virtual DumbPtr<Texture> loadTextTexture(const std::string &text,
+                                                 const DumbPtr<Font> &font,
+                                                 const RGBA &color) = 0;
 
 
-        virtual SharedPtr<RenderComponent2D> makeRenderComponent(
+        virtual DumbPtr<RenderComponent2D> makeRenderComponent(
                 const DTransform2 &transform,
-                const SharedPtr<const Texture> &texture,
+                const DumbPtr<Texture> &texture,
                 RenderLayer layer = 0,
                 const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) = 0;
 
-        SharedPtr<RenderComponent2D> makeRenderComponent(
+        DumbPtr<RenderComponent2D> makeRenderComponent(
                 const ConstTransform2Ptr &transform,
-                const SharedPtr<const Texture> &texture,
+                const DumbPtr<Texture> &texture,
                 RenderLayer layer = 0,
                 const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) {
@@ -87,18 +88,18 @@ namespace Diamond {
         }
 
 
-        virtual SharedPtr<RenderComponent2D> makeRenderComponent(
+        virtual DumbPtr<RenderComponent2D> makeRenderComponent(
                 const DTransform2 &transform,
-                const SharedPtr<const Texture> &texture,
+                const DumbPtr<Texture> &texture,
                 const RenderDef2D &renderDef
         ) {
             return makeRenderComponent(transform, texture,
                                        renderDef.layer, renderDef.pivot);
         }
 
-        SharedPtr<RenderComponent2D> makeRenderComponent(
+        DumbPtr<RenderComponent2D> makeRenderComponent(
                 const ConstTransform2Ptr &transform,
-                const SharedPtr<const Texture> &texture,
+                const DumbPtr<Texture> &texture,
                 const RenderDef2D &renderDef
         ) {
             return makeRenderComponent(transform, texture,

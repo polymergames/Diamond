@@ -23,16 +23,24 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
+    /**
+      Loads and caches reusable textures identified by path.
+      If loadTexture is called on the same path multiple times without
+      calling unLoadTexture, the texture file will only be loaded the first time
+      and the stored texture object will be returned in subsequent loads.
+      When this factory is destroyed, all cached textures will be freed.
+    */
     class TextureFactory {
     public:
         TextureFactory(Renderer2D *renderer, const std::string &pathRoot = "");
+        ~TextureFactory();
 
         /**
          Loads a texture with the file path formed by appending the given filename
          to the path root given in initial construction.
          Returns nullptr if failed to load.
         */
-        SharedPtr<Texture> loadTexture(const std::string &fileName);
+        DumbPtr<Texture> loadTexture(const std::string &fileName);
         
         /**
          Erases the texture with the given file name from internal store
@@ -44,7 +52,7 @@ namespace Diamond {
         Renderer2D *m_renderer;
         std::string m_pathRoot;
         
-        std::unordered_map<std::string, SharedPtr<Texture> > m_textureMap;
+        std::unordered_map<std::string, DumbPtr<Texture> > m_textureMap;
     };
 }
 

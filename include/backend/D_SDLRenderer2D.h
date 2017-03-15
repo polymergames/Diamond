@@ -71,17 +71,17 @@ namespace Diamond {
 
         Diamond::Vector2<int> getScreenResolution() const override;
 
-        SharedPtr<Font> loadFont(const std::string &fontPath, int ptsize) override;
+        DumbPtr<Font> loadFont(const std::string &fontPath, int ptsize) override;
 
-        SharedPtr<Texture> loadTexture(std::string path) override;
+        DumbPtr<Texture> loadTexture(std::string path) override;
 
-        SharedPtr<Texture> loadTextTexture(const std::string &text,
-                                           const SharedPtr<const Font> &font,
-                                           const RGBA &color) override;
+        DumbPtr<Texture> loadTextTexture(const std::string &text,
+                                         const DumbPtr<Font> &font,
+                                         const RGBA &color) override;
 
-        SharedPtr<RenderComponent2D> makeRenderComponent(
+        DumbPtr<RenderComponent2D> makeRenderComponent(
             const DTransform2 &transform,
-            const SharedPtr<const Texture> &texture,
+            const DumbPtr<Texture> &texture,
             RenderLayer layer = 0,
             const Vector2<tD_pos> &pivot = Vector2<tD_pos>(0, 0)
         ) override;
@@ -125,7 +125,7 @@ namespace Diamond {
         std::vector<SDLRenderablePoint>          m_render_points_queue;
         std::vector<SDLRenderableLine>           m_render_lines_queue;
 
-        PoolManager<SDLRenderComponent2D, SharedPtr<SDLRenderComponent2D> > m_renderCompPool;
+        DumbPoolManager<SDLRenderComponent2D>    m_renderCompPool;
     };
 }
 

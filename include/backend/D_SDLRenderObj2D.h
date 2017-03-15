@@ -27,7 +27,7 @@ namespace Diamond {
     class SDLRenderObj2D {
     public:
         SDLRenderObj2D(const DTransform2 &transform,
-                       const SharedPtr<const SDLTexture> &texture,
+                       const SDLTexture *texture,
                        const Vector2<tSDLrender_pos> &pivot)
             : m_transform(&transform),
               m_texture(texture->texture),

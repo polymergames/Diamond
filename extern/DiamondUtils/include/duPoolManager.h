@@ -17,6 +17,7 @@
 #ifndef DU_POOL_MANAGER_H
 #define DU_POOL_MANAGER_H
 
+#include "duDumbPtr.h"
 #include "duMemPool.h"
 
 namespace Diamond {
@@ -38,25 +39,40 @@ namespace Diamond {
         PoolType &m_pool;
     };
 
+    /**
+     Like PoolDeleter but used with DumbPoolManager
+    */
+    template <class PoolType, typename ElemType>
+    class DumbPoolDeleter : public DumbDeleter {
+    public:
+        DumbPoolDeleter(PoolType &pool) : m_pool(pool) {}
+
+        void free(void *ptr) const override {
+            m_pool.free((ElemType*)ptr);
+        }
+
+    private:
+        PoolType &m_pool;
+    };
 
     /**
      Memory pool container that generates smart pointers of
      the pooled object with a pool deleter.
     */
-    template <typename ElemType, 
-              class PtrType, 
+    template <typename ElemType,
+              class PtrType,
               class Allocator = std::allocator<MemNode<ElemType> > >
     class PoolManager {
     public:
-        PoolManager(size_t chunkSize = 10, 
+        PoolManager(size_t chunkSize = 10,
                     Allocator allocator = Allocator())
-            : m_pool(chunkSize, allocator), 
+            : m_pool(chunkSize, allocator),
               m_deleter(m_pool) {}
 
 
         template <typename... Args>
         PtrType make(Args&&... args) {
-            return PtrType(m_pool.make(std::forward<Args>(args)...), 
+            return PtrType(m_pool.make(std::forward<Args>(args)...),
                            m_deleter);
         }
 
@@ -64,6 +80,29 @@ namespace Diamond {
     protected:
         MemPool<ElemType, Allocator> m_pool;
         PoolDeleter<MemPool<ElemType, Allocator>, ElemType> m_deleter;
+    };
+
+    /**
+     Like PoolManager but for dumb pointers.
+    */
+    template <typename ElemType,
+              class Allocator = std::allocator<MemNode<ElemType> > >
+    class DumbPoolManager {
+    public:
+        DumbPoolManager(size_t chunkSize = 10,
+                        Allocator allocator = Allocator())
+            : m_pool(chunkSize, allocator),
+              m_deleter(m_pool) {}
+
+        template <typename... Args>
+        DumbPtr<ElemType> make(Args&&... args) {
+            return DumbPtr<ElemType>(m_pool.make(std::forward<Args>(args)...),
+                                     &m_deleter);
+        }
+
+    protected:
+        MemPool<ElemType, Allocator> m_pool;
+        DumbPoolDeleter<MemPool<ElemType, Allocator>, ElemType> m_deleter;
     };
 }
 

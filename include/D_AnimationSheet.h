@@ -17,12 +17,13 @@
 #ifndef D_ANIMATION_SHEET_H
 #define D_ANIMATION_SHEET_H
 
+#include "duDumbPtr.h"
 #include "D_typedefs.h"
 #include "D_Texture.h"
 
 namespace Diamond {
     struct AnimationSheet {
-        SharedPtr<Texture> sprite_sheet;
+        DumbPtr<Texture> sprite_sheet;
 
         /**
          The length of time in type of tD_delta of one animation frame

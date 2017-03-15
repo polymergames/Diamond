@@ -25,7 +25,7 @@
 namespace Diamond {
     class AnimatorSheet : public Component {
     public:
-        AnimatorSheet(const SharedPtr<RenderComponent2D> &rcomp, 
+        AnimatorSheet(const DumbPtr<RenderComponent2D> &rcomp, 
                       const AnimationSheet *anim);
 
 
@@ -34,9 +34,9 @@ namespace Diamond {
         void                                setAnimation(const AnimationSheet *anim);
 
 
-        const SharedPtr<RenderComponent2D>  &getRenderComponent() const { return m_render_comp; }
+        const DumbPtr<RenderComponent2D>    &getRenderComponent() const { return m_render_comp; }
 
-        void                                setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp);
+        void                                setRenderComponent(const DumbPtr<RenderComponent2D> &rcomp);
         
 
         tD_index                            getCurFrame() const { return m_cur_frame; }
@@ -47,7 +47,7 @@ namespace Diamond {
         void                                update(tD_delta delta) override;
 
     private:
-        SharedPtr<RenderComponent2D>        m_render_comp;
+        DumbPtr<RenderComponent2D>          m_render_comp;
         const AnimationSheet                *m_anim;
 
         int16_t                             m_frame_width, m_frame_height;

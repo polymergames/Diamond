@@ -17,6 +17,7 @@
 #ifndef D_RENDER_COMPONENT_H
 #define D_RENDER_COMPONENT_H
 
+#include "duDumbPtr.h"
 #include "duVector2.h"
 #include "D_Component.h"
 #include "D_Texture.h"
@@ -28,9 +29,9 @@ namespace Diamond {
         virtual ~RenderComponent2D() {}
 
 
-        virtual SharedPtr<const Texture>    getSprite() const = 0;
+        virtual DumbPtr<Texture>            getSprite() const = 0;
 
-        virtual void                        setSprite(const SharedPtr<const Texture> &sprite) = 0;
+        virtual void                        setSprite(const DumbPtr<Texture> &sprite) = 0;
 
         virtual RenderLayer                 getLayer() const = 0;
         virtual void                        setLayer(RenderLayer newLayer) = 0;
