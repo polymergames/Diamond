@@ -30,7 +30,7 @@
 
 class RandomDemo : public Diamond::Game2D {
 public:
-    RandomDemo(Diamond::Engine2D &engine, 
+    RandomDemo(Diamond::Engine2D &engine,
         float movespeed = 0.75f, float spinspeed = 0.75f, float growspeed = 0.00075f);
 
     void update(tD_delta delta) override;
@@ -47,6 +47,7 @@ private:
 
     Diamond::DumbPtr<Diamond::Texture> spike_sprite;
     Diamond::DumbPtr<Diamond::Texture> cloud_sprite;
+    Diamond::DumbPtr<Diamond::Texture> zapper_sprite;
 
     Diamond::Animation2D zapper_anim;
     Diamond::AnimationSheet zapper2_anim;

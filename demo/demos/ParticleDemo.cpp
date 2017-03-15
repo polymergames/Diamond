@@ -26,12 +26,13 @@ ParticleDemo::ParticleDemo(Engine2D &engine,
                            const std::string &benchmarkFile)
     : Game2D(engine),
       movespeed(movespeed), spinspeed(spinspeed), again(false),
+      particleSystemTransform(engine.makeTransform(engine.getRenderer()->getResolution().scalar(0.5))),
       configLoader(),
       textureFactory(engine.getRenderer()),
       particleEmitter(
           particleManager.makeEmitter(
               ParticleSystem2DConfig(configLoader.load(PARTICLE_CONFIG_FILE), textureFactory),
-              engine.makeTransform(engine.getRenderer()->getResolution().scalar(0.5)),
+              *particleSystemTransform,
               [&](Particle2D &particle, const ParticleSystem2DConfig &config) {
                   particle.transform = engine.makeTransform();
                   particle.renderComponent = engine.getRenderer()->makeRenderComponent(
@@ -51,6 +52,7 @@ ParticleDemo::ParticleDemo(Engine2D &engine,
 }
 
 ParticleDemo::~ParticleDemo() {
+    particleSystemTransform.free();
     delete benchmarkLogger;
     if (benchmarkStream.is_open())
         benchmarkStream.close();
@@ -60,24 +62,24 @@ ParticleDemo::~ParticleDemo() {
 void ParticleDemo::update(tD_delta delta) {
     // particle system movement
     if (Input::keydown[Input::K_W]) {
-        particleEmitter.transform().position.y -= movespeed * delta;
+        particleSystemTransform->position.y -= movespeed * delta;
     }
     if (Input::keydown[Input::K_S]) {
-        particleEmitter.transform().position.y += movespeed * delta;
+        particleSystemTransform->position.y += movespeed * delta;
     }
     if (Input::keydown[Input::K_A]) {
-        particleEmitter.transform().position.x -= movespeed * delta;
+        particleSystemTransform->position.x -= movespeed * delta;
     }
     if (Input::keydown[Input::K_D]) {
-        particleEmitter.transform().position.x += movespeed * delta;
+        particleSystemTransform->position.x += movespeed * delta;
     }
 
     // particle system rotation
     if (Input::keydown[Input::K_LEFT]) {
-        particleEmitter.transform().rotation -= spinspeed * delta;
+        particleSystemTransform->rotation -= spinspeed * delta;
     }
     if (Input::keydown[Input::K_RIGHT]) {
-        particleEmitter.transform().rotation += spinspeed * delta;
+        particleSystemTransform->rotation += spinspeed * delta;
     }
 
     particleEmitter.update(delta); // update emitter

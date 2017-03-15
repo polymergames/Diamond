@@ -38,6 +38,8 @@ private:
     float movespeed, spinspeed;
     bool again;
 
+    Diamond::Transform2Ptr     particleSystemTransform;
+
     Diamond::SDLConfigLoader   configLoader;
     Diamond::TextureFactory    textureFactory;
     Diamond::ParticleManager2D particleManager;

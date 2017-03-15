@@ -37,9 +37,9 @@ namespace Diamond {
             return m_transform;
         }
 
-        const ConstTransform2Ptr &getTransformPtr() const {
-            return m_transform;
-        }
+        // const ConstTransform2Ptr &getTransformPtr() const {
+        //     return m_transform;
+        // }
 
     protected:
         Transform2Ptr m_transform;

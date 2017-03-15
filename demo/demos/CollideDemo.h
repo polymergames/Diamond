@@ -34,16 +34,18 @@ public:
 private:
     const float movespeed;
     const float spinspeed = 0.75f;
-    
+
     const float SPIKE_SCALE = 0.1f;
     const float ZAPPER_SCALE = 0.5f;
 
+    Diamond::DumbPtr<Diamond::Texture> spike_sprite;
+    Diamond::DumbPtr<Diamond::Texture> zapper_sprite;
     Diamond::Entity2D spike1, spike2, zapper1, zapper2;
     Diamond::Entity2D indicator_spike;
     Diamond::AnimationSheet zapper_anim;
-    
+
     Diamond::DebugDrawer m_debug;
-    
+
     const Diamond::RGBA colliderColor = {0, 255, 0, 100};
 
     void m_onCollision(void *other);

@@ -30,7 +30,7 @@ namespace Diamond {
     class Entity {
     public:
         Entity() = default;
-        
+
         virtual ~Entity() {
             for (auto i = m_components.begin(); i != m_components.end(); ++i) {
                 i->second.free();
@@ -65,20 +65,16 @@ namespace Diamond {
         }
 
 
-        void addComponent(const std::string &name, Component &component) { 
+        void addComponent(const std::string &name, Component &component) {
             addComponent(name, &component);
         }
 
-        void addComponent(const std::string &name, Component *component) { 
-            addComponent(name, DumbPtr<Component>(component));
-        }
-
-        void addComponent(const std::string &name, DumbPtr<Component> component) {
+        void addComponent(const std::string &name, const DumbPtr<Component> &component) {
             m_components[name] = component;
         }
 
         // TODO: make const get functions return const pointers!
-        DumbPtr<Component> getComponent(const std::string &name) const {
+        Component *getComponent(const std::string &name) const {
             auto i = m_components.find(name);
             if (i != m_components.end())
                 return i->second;
@@ -87,8 +83,8 @@ namespace Diamond {
         }
 
         template <class T>
-        DumbPtr<T> getComponent(const std::string &name) const {
-            return std::dynamic_pointer_cast<T>(getComponent(name));
+        T *getComponent(const std::string &name) const {
+            return dynamic_cast<T*>(getComponent(name));
         }
 
         void removeComponent(const std::string &name) {

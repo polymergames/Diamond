@@ -55,6 +55,12 @@ int main(int argc, char *argv[]) {
             CollideDemo demo(engine);
             engine.launch(demo);
         }
+
+        // TODO: why does this crash?
+        // {
+        //     ParticleDemo demo(engine, 0.75, 0.25, true, "particleBenchmark.log");
+        //     engine.launch(demo);
+        // }
     }
     else {
         std::cout << "Diamond Engine failed to initialize!" << std::endl;
