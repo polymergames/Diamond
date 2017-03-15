@@ -22,7 +22,7 @@
 
 namespace Diamond {
     struct AnimationSheet {
-        Texture *sprite_sheet;
+        Texture *sprite_sheet = nullptr;
 
         /**
          The length of time in type of tD_delta of one animation frame
