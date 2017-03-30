@@ -25,8 +25,13 @@ namespace {
 
 
 Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rcomp,
-                                      const AnimationSheet *anim)
-    : m_render_comp(rcomp), m_anim(anim), m_cur_frame(0), m_elapsed(0) {
+                                      const AnimationSheet *anim,
+                                      bool loop)
+    : m_render_comp(rcomp),
+      m_anim(anim),
+      m_loop(loop),
+      m_cur_frame(0),
+      m_elapsed(0) {
     if (!anim || !(anim->sprite_sheet) || anim->num_frames == 0) {
         // TODO: throw exception?
         Log::log(EMPTY_ANIMATION_ERROR);
@@ -71,14 +76,18 @@ void Diamond::AnimatorSheet::setRenderComponent(RenderComponent2D *rcomp) {
 
 
 void Diamond::AnimatorSheet::update(tD_delta delta) {
-    m_elapsed += delta;
+    // continue animation if it is not yet done
+    if (!isDone()) {
+        m_elapsed += delta;
+        
+        // if the current frame is done, switch to the next frame
+        if (m_elapsed > m_anim->frame_length) {
+                m_cur_frame = (m_cur_frame + m_elapsed / m_anim->frame_length) % m_anim->num_frames;
 
-    if (m_elapsed > m_anim->frame_length) {
-        m_cur_frame = (m_cur_frame + m_elapsed / m_anim->frame_length) % m_anim->num_frames;
-
-        m_render_comp->setClipPos((m_cur_frame % m_anim->columns) * m_frame_width,
-                                  (m_cur_frame / m_anim->columns) * m_frame_height);
-        m_elapsed %= m_anim->frame_length;
+                m_render_comp->setClipPos((m_cur_frame % m_anim->columns) * m_frame_width,
+                                          (m_cur_frame / m_anim->columns) * m_frame_height);
+                m_elapsed %= m_anim->frame_length;
+        }
     }
 }
 
