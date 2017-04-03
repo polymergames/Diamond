@@ -79,7 +79,10 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
     // Init time
     tD_time time, last_time = timer->msElapsed();
-    tD_delta delta = 1000 / renderer->getRefreshRate();
+//    tD_delta delta = 1000 / renderer->getRefreshRate();
+    // TODO: BUG: getting the refresh rate from the renderer
+    // causes it to crash on Android. Fix it and remove hardcoded value!
+    tD_delta delta = 1000 / 60;
     int nframes = 0;
 
     // DEBUG Benchmark
