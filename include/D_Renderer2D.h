@@ -48,6 +48,8 @@ namespace Diamond {
         virtual Vector2<int> getResolution() const = 0;
 
         virtual Vector2<int> getScreenResolution() const = 0;
+        
+        virtual int getRefreshRate() const = 0; // in hertz
 
         /**
          Loads a font from a font (ie, ttf) file that can be used to render text.

@@ -177,6 +177,12 @@ Diamond::Vector2<int> Diamond::SDLRenderer2D::getResolution() const {
     return r;
 }
 
+int Diamond::SDLRenderer2D::getRefreshRate() const {
+    SDL_DisplayMode mode;
+    SDL_GetCurrentDisplayMode(0, &mode);
+    return mode.refresh_rate;
+}
+
 Diamond::DumbPtr<Diamond::Font> Diamond::SDLRenderer2D::loadFont(
     const std::string &fontPath, int ptsize
 ) {

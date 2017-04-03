@@ -70,6 +70,8 @@ namespace Diamond {
         Vector2<int> getResolution() const override;
 
         Diamond::Vector2<int> getScreenResolution() const override;
+        
+        int getRefreshRate() const override;
 
         DumbPtr<Font> loadFont(const std::string &fontPath, int ptsize) override;
 

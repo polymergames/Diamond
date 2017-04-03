@@ -79,7 +79,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
 
     // Init time
     tD_time time, last_time = timer->msElapsed();
-    tD_delta delta;
+    tD_delta delta = 1000 / renderer->getRefreshRate();
     int nframes = 0;
 
     // DEBUG Benchmark
@@ -99,8 +99,13 @@ void Diamond::Engine2D::launch(Game2D &game) {
         // clocktime = clock();
         time = timer->msElapsed();
         // getmstime = clock() - clocktime;
-        delta = time - last_time;
-        last_time = time;
+        
+        // if vsync is on, we will use the delta value calculated
+        // when delta was initialized based on the refresh rate.
+        if (!config.vsync) {
+            delta = time - last_time;
+            last_time = time;
+        }
 
         // TODO: replace with timer functions, timer calculates and stores its own values
         // then I just have to go get those values ya know?
