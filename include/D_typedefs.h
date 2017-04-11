@@ -20,6 +20,7 @@
 #include <memory>
 #include <vector>
 #include "duDumbPtr.h"
+#include "duMatrix.h"
 #include "duTypedefs.h"
 #include "duVector2.h"
 
@@ -54,6 +55,10 @@ namespace Diamond {
     // Layers
     using RenderLayer = uint8_t;
     using CollisionLayer = uint8_t;
+    
+    
+    // Constants
+    const Matrix<tD_pos, 2, 2> IDENTITY_MAT2 = { { { 1, 0 },{ 0, 1 } } };
 }
 
 #endif // D_TYPEDEFS_H
