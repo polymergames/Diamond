@@ -15,6 +15,7 @@
 */
 
 #include "D_UIView.h"
+#include "D_Input.h"
 
 Diamond::UIView::UIView(DTransform2 transform,
                         tD_pos width,
@@ -25,9 +26,10 @@ m_width(width),
 m_height(height) {}
 
 
-void Diamond::UIView::updateTransforms(const DTransform2 &parent_transform,
-                                       const Matrix<tD_real, 2, 2> &parent_trans_mat) {
-    m_node.updateAllWorldTransforms(parent_transform, parent_trans_mat);
+void Diamond::UIView::update() {
+    updateTransforms();
+    updateState();
+    handleInput();
 }
 
 
@@ -57,4 +59,53 @@ bool Diamond::UIView::removeChild(Diamond::UIView *child) {
         return true;
     }
     return false;
+}
+
+
+void Diamond::UIView::updateTransforms(const DTransform2 &parent_transform,
+                                       const Matrix<tD_real, 2, 2> &parent_trans_mat) {
+    m_node.updateAllWorldTransforms(parent_transform, parent_trans_mat);
+}
+
+
+void Diamond::UIView::handleInput() {
+    if (Input::touch_down) {
+        handleTouchDown(Input::touch_pos);
+    }
+    if (Input::touch_drag) {
+        handleTouchDrag(Input::touch_pos);
+    }
+    if (Input::touch_up) {
+        handleTouchUp(Input::touch_pos);
+    }
+}
+
+
+void Diamond::UIView::handleTouchDown(const Vector2<tD_pos> &touchPos) {
+    for (auto child : m_children) {
+        if (child->inside(touchPos))
+            child->handleTouchDown(touchPos);
+    }
+}
+
+void Diamond::UIView::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
+    for (auto child : m_children) {
+        if (child->inside(touchPos))
+            child->handleTouchDrag(touchPos);
+    }
+}
+
+void Diamond::UIView::handleTouchUp(const Vector2<tD_pos> &touchPos) {
+    for (auto child : m_children) {
+        if (child->inside(touchPos))
+            child->handleTouchUp(touchPos);
+    }
+}
+
+
+bool Diamond::UIView::inside(const Vector2<tD_pos> &pos) const {
+    return (pos.x >= m_worldTransform.position.x &&
+            pos.x <= m_worldTransform.position.x + worldWidth() &&
+            pos.y >= m_worldTransform.position.y &&
+            pos.y <= m_worldTransform.position.y + worldHeight());
 }

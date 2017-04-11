@@ -25,7 +25,8 @@ namespace Diamond {
     class UIView;
     using UIChildList = std::vector<UIView*>;
     
-    // Note: because UIViews store pointers/references to each other
+    
+    // NOTE: because UIViews store pointers/references to each other
     // to maintain the UI tree, the memory locations of the UIView
     // objects should never change
     // (ie, be careful storing your views in a vector like data structure).
@@ -36,11 +37,14 @@ namespace Diamond {
                tD_pos height = 0);
         virtual ~UIView() {}
         
-        // Updates the world transforms of all UI views in the tree
-        // rooted at this view, based on their local transforms
-        // and parent transforms.
-        void updateTransforms(const DTransform2 &parent_transform = DTransform2(),
-                              const Matrix<tD_real, 2, 2> &parent_trans_mat = IDENTITY_MAT2);
+        /**
+         Updates the state and behavior of all views in the tree 
+         rooted at this view (transforms, input handlers, etc.).
+         This function calls functions like updateTransforms
+         and handleInput.
+        */
+        void update();
+        
         
         /**
          Returns the given child after adding it to children.
@@ -59,6 +63,44 @@ namespace Diamond {
         bool removeChild(UIView *child);
         
         
+        // Updates the world transforms of all UI views in the tree
+        // rooted at this view, based on their local transforms
+        // and parent transforms.
+        void updateTransforms(const DTransform2 &parent_transform = DTransform2(),
+                              const Matrix<tD_real, 2, 2> &parent_trans_mat = IDENTITY_MAT2);
+        
+        
+        // This can be overriden by UIView subclasses
+        // and is called after updateTransforms(),
+        // before input handlers.
+        virtual void updateState() {}
+        
+        
+        // Gets the input state and handles all input types
+        // (ie, calls handleTouchDown, etc. as appropriate)
+        // for this view and any child views that are affected
+        // by the input (ie, by testing for each child view rect's intersection
+        // with input events).
+        void handleInput();
+        
+        // The handle functions below call their corresponding function
+        // for all children in this view tree.
+        // When overriding input handlers in a subclass,
+        // the overriding function should call its superclass version
+        // after it's done handling its own behavior
+        // in order to update its children.
+        virtual void handleTouchDown(const Vector2<tD_pos> &touchPos);
+        virtual void handleTouchDrag(const Vector2<tD_pos> &touchPos);
+        virtual void handleTouchUp(const Vector2<tD_pos> &touchPos);
+        
+        
+        // Returns whether the given vector position
+        // is inside this view.
+        bool inside(const Vector2<tD_pos> &pos) const;
+        
+        
+        // The UIView's world transform corresponds to the point
+        // at coordinates (0, 0) in the view's local space.
         DTransform2 &worldTransform() { return m_worldTransform; }
         const DTransform2 &worldTransform() const { return m_worldTransform; }
         
