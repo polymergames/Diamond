@@ -17,13 +17,19 @@
 #include "D_UIView.h"
 #include "D_Input.h"
 
+namespace Diamond {
+    const float UI_EPSILON = 0.5; // in pixels
+}
+
 Diamond::UIView::UIView(DTransform2 transform,
+                        UIFlags flags,
                         tD_pos width,
                         tD_pos height) :
 m_worldTransform(transform),
 m_node(m_worldTransform),
 m_width(width),
-m_height(height) {}
+m_height(height),
+m_flags(flags) {}
 
 
 void Diamond::UIView::update() {
@@ -77,6 +83,52 @@ void Diamond::UIView::handleInput() {
     }
     if (Input::touch_up) {
         handleTouchUp(Input::touch_pos);
+    }
+}
+
+
+void Diamond::UIView::updateState() {
+    for (auto child: m_children) {
+        child->updateState();
+    }
+    
+    if ((m_flags & FIT_CONTENTS) && !m_children.empty()) {
+        tD_pos minx = MAXFLOAT, miny = MAXFLOAT;
+        tD_pos maxx = -MAXFLOAT, maxy = -MAXFLOAT;
+        
+        for (auto child : m_children) {
+            auto position = child->localTransform().position;
+            auto width = child->localWidth();
+            auto height = child->localHeight();
+            
+            if (position.x < minx)
+                minx = position.x;
+            
+            if (position.y < miny)
+                miny = position.y;
+            
+            if (position.x + width > maxx)
+                maxx = position.x + width;
+            
+            if (position.y + height > maxy)
+                maxy = position.y + height;
+        }
+        
+        if (minx > UI_EPSILON || minx < -UI_EPSILON || miny > UI_EPSILON || miny < -UI_EPSILON) {
+            // offset all children so that the minx, miny child is at this view's origin.
+            for (auto child : m_children) {
+                child->localTransform().position.x -= minx;
+                child->localTransform().position.y -= miny;
+            }
+            
+            // move this view's origin to minx, miny
+            m_node.localTransform().position.x += minx;
+            m_node.localTransform().position.y += miny;
+        }
+        
+        // resize this view to fit its contents
+        m_width = maxx - minx;
+        m_height = maxy - miny;
     }
 }
 

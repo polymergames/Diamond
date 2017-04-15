@@ -26,8 +26,9 @@ namespace Diamond {
     class UIButton : public UIView {
     public:
         UIButton(DTransform2 transform,
-                 tD_pos width,
-                 tD_pos height,
+                 UIFlags flags = NONE,
+                 tD_pos width = 0,
+                 tD_pos height = 0,
                  const UITouchCallback &onTouchDown = nullptr,
                  const UITouchCallback &onTouchDrag = nullptr,
                  const UITouchCallback &onTouchUp = nullptr);

@@ -32,10 +32,23 @@ namespace Diamond {
     // (ie, be careful storing your views in a vector like data structure).
     class UIView {
     public:
+        enum UIFlags {
+            NONE = 0,
+            FIT_CONTENTS = 1 << 0
+        };
+        
+        
         UIView(DTransform2 transform = DTransform2(),
+               UIFlags flags = NONE,
                tD_pos width = 0,
                tD_pos height = 0);
         virtual ~UIView() {}
+        
+        /**
+         Get the settings of this UIView.
+        */
+        UIFlags &flags() { return m_flags; }
+        const UIFlags &flags() const { return m_flags; }
         
         /**
          Updates the state and behavior of all views in the tree 
@@ -70,10 +83,15 @@ namespace Diamond {
                               const Matrix<tD_real, 2, 2> &parent_trans_mat = IDENTITY_MAT2);
         
         
+        // Updates properties of this view and its children,
+        // including rect size, etc., according to the view's flags.
         // This can be overriden by UIView subclasses
         // and is called after updateTransforms(),
         // before input handlers.
-        virtual void updateState() {}
+        // The overriding function should call its superclass version
+        // of updateState before updating its own state in order to
+        // have its children's states updated.
+        virtual void updateState();
         
         
         // Gets the input state and handles all input types
@@ -126,6 +144,9 @@ namespace Diamond {
         Node2D m_node;
         tD_pos m_width;
         tD_pos m_height;
+        
+        // settings
+        UIFlags m_flags;
         
         UIChildList m_children;
     };
