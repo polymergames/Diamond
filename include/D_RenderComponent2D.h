@@ -28,31 +28,31 @@ namespace Diamond {
         virtual ~RenderComponent2D() {}
 
 
-        virtual const Texture*              getSprite() const = 0;
+        virtual const Texture*  getSprite() const = 0;
 
-        virtual void                        setSprite(const Texture *sprite) = 0;
+        virtual void            setSprite(const Texture *sprite) = 0;
 
-        virtual RenderLayer                 getLayer() const = 0;
-        virtual void                        setLayer(RenderLayer newLayer) = 0;
+        virtual RenderLayer     getLayer() const = 0;
+        virtual void            setLayer(RenderLayer newLayer) = 0;
 
-        virtual Vector2<tD_pos>             getClipPos() const = 0;
-        virtual Vector2<int>                getClipDim() const = 0;
+        virtual Vector2<tD_pos> getClipPos() const = 0;
+        virtual Vector2<int>    getClipDim() const = 0;
 
-        virtual void                        setClip(tD_pos x, tD_pos y, int w, int h) = 0;
-        virtual void                        setClipPos(tD_pos x, tD_pos y) = 0;
-        virtual void                        setClipDim(int w, int h) = 0;
-
-
-        virtual Vector2<tD_pos>             getPivot() const = 0;
-
-        virtual void                        setPivot(const Vector2<tD_pos> &newpivot) = 0;
+        virtual void            setClip(tD_pos x, tD_pos y, int w, int h) = 0;
+        virtual void            setClipPos(tD_pos x, tD_pos y) = 0;
+        virtual void            setClipDim(int w, int h) = 0;
 
 
-        virtual void                        flipX() = 0;
-        virtual void                        flipY() = 0;
+        virtual Vector2<tD_pos> getPivot() const = 0;
 
-        virtual bool                        isFlippedX() const = 0;
-        virtual bool                        isFlippedY() const = 0;
+        virtual void            setPivot(const Vector2<tD_pos> &newpivot) = 0;
+
+
+        virtual void            flipX() = 0;
+        virtual void            flipY() = 0;
+
+        virtual bool            isFlippedX() const = 0;
+        virtual bool            isFlippedY() const = 0;
     };
 }
 

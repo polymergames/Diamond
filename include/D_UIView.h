@@ -38,8 +38,8 @@ namespace Diamond {
         };
         
         
-        UIView(DTransform2 transform = DTransform2(),
-               UIFlags flags = NONE,
+        UIView(UIFlags flags = NONE,
+               const DTransform2 &transform = DTransform2(),
                tD_pos width = 0,
                tD_pos height = 0);
         virtual ~UIView() {}
@@ -136,7 +136,7 @@ namespace Diamond {
         
         const UIChildList &children() const { return m_children; }
         
-    private:
+    protected:
         // world space properties
         DTransform2 m_worldTransform;
         

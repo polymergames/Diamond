@@ -21,8 +21,8 @@ namespace Diamond {
     const float UI_EPSILON = 0.5; // in pixels
 }
 
-Diamond::UIView::UIView(DTransform2 transform,
-                        UIFlags flags,
+Diamond::UIView::UIView(UIFlags flags,
+                        const DTransform2 &transform,
                         tD_pos width,
                         tD_pos height) :
 m_worldTransform(transform),
