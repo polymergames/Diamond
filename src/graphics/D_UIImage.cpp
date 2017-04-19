@@ -17,29 +17,30 @@
 #include "D_UIImage.h"
 
 
-Diamond::UIImage::UIImage(UIFlags flags,
+Diamond::UIImage::UIImage(const UIViewProps &props,
                           const DTransform2 &transform,
                           Renderer2D *renderer,
                           const Texture *texture,
                           RenderLayer layer) :
-UIView(flags, transform) {
+UIView(props, transform) {
     renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
 }
 
 Diamond::UIImage::UIImage(Renderer2D *renderer,
                           const Texture *texture,
                           RenderLayer layer) :
-UIImage(NONE, DTransform2(), renderer, texture, layer) {}
+UIImage(UIViewProps(), DTransform2(), renderer, texture, layer) {}
 
 Diamond::UIImage::~UIImage() {
     renderComponent.free();
 }
 
 
-void Diamond::UIImage::updateState() {
-    UIView::updateState();
-    
+void Diamond::UIImage::updateLayout() {
     // resize this view to fit its image
     m_width  = renderComponent->getSprite()->getWidth() * worldTransform().scale.x;
     m_height = renderComponent->getSprite()->getHeight() * worldTransform().scale.y;
+    
+    // layout children
+    UIView::updateLayout();
 }

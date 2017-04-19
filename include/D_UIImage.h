@@ -23,7 +23,7 @@
 namespace Diamond {
     class UIImage : public UIView {
     public:
-        UIImage(UIFlags flags,
+        UIImage(const UIViewProps &props,
                 const DTransform2 &transform,
                 Renderer2D *renderer,
                 const Texture *texture,
@@ -35,7 +35,7 @@ namespace Diamond {
         
         virtual ~UIImage();
         
-        void updateState() override;
+        void updateLayout() override;
         
         RenderComponent2D *getRenderComponent() { return renderComponent.get(); }
         const RenderComponent2D *getRenderComponent() const { return renderComponent.get(); }

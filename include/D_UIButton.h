@@ -25,7 +25,7 @@ namespace Diamond {
     
     class UIButton : public UIView {
     public:
-        UIButton(UIFlags flags,
+        UIButton(const UIViewProps &props,
                  const DTransform2 &transform = DTransform2(),
                  tD_pos width = 0,
                  tD_pos height = 0,

@@ -16,14 +16,14 @@
 
 #include "D_UIButton.h"
 
-Diamond::UIButton::UIButton(UIFlags flags,
+Diamond::UIButton::UIButton(const UIViewProps &props,
                             const DTransform2 &transform,
                             tD_pos width,
                             tD_pos height,
                             const UITouchCallback &onTouchDown,
                             const UITouchCallback &onTouchDrag,
                             const UITouchCallback &onTouchUp) :
-Diamond::UIView(flags, transform, width, height),
+Diamond::UIView(props, transform, width, height),
 onTouchDown(onTouchDown),
 onTouchDrag(onTouchDrag),
 onTouchUp(onTouchUp) {}
@@ -31,7 +31,7 @@ onTouchUp(onTouchUp) {}
 Diamond::UIButton::UIButton(const UITouchCallback &onTouchDown,
                             const UITouchCallback &onTouchDrag,
                             const UITouchCallback &onTouchUp) :
-UIButton(NONE, DTransform2(), 0, 0, onTouchDown, onTouchDrag, onTouchUp) {}
+UIButton(UIViewProps(), DTransform2(), 0, 0, onTouchDown, onTouchDrag, onTouchUp) {}
 
 
 void Diamond::UIButton::handleTouchDown(const Vector2<tD_pos> &touchPos) {
