@@ -43,6 +43,11 @@ namespace Diamond {
          as well as after game logic in update)
         */
         virtual void postPhysicsUpdate(tD_delta delta) {};
+        
+        /**
+         Called every frame when the game is paused.
+        */
+        virtual void pausedUpdate() {};
 
         /**
          Called when game ends.

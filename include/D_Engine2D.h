@@ -40,24 +40,28 @@ namespace Diamond {
         Engine2D(const Config &config, bool &success);
         ~Engine2D();
 
-        virtual void        launch(Game2D &game);
+        virtual void   launch(Game2D &game);
 
-        Config              &getConfig() { return config; }
-        const Config        &getConfig() const { return config; }
+        Config         &getConfig() { return config; }
+        const Config   &getConfig() const { return config; }
 
-        Renderer2D          *getRenderer() const { return renderer; }
+        Renderer2D     *getRenderer() const { return renderer; }
 
-        DiskJockey2D        *getDJ() const { return dj; }
+        DiskJockey2D   *getDJ() const { return dj; }
 
-        Timer               *getTimer() const { return timer; }
+        Timer          *getTimer() const { return timer; }
 
-        EventHandler        *getEventHandler() const { return event_handler; }
+        EventHandler   *getEventHandler() const { return event_handler; }
 
-        PhysicsWorld2D      *getPhysWorld() const { return phys_world; }
+        PhysicsWorld2D *getPhysWorld() const { return phys_world; }
 
-        virtual bool        isRunning() const { return is_running; }
-
-        virtual void        quit() { is_running = false; }
+        bool isRunning() const { return is_running; }
+        bool isPaused() const { return is_paused; }
+        
+        void pause() { is_paused = true; }
+        void unPause() { is_paused = false; }
+        
+        void quit() { is_running = false; }
 
         /**
          * The returned pointer must be freed manually.
@@ -68,21 +72,22 @@ namespace Diamond {
         }
 
     protected:
-        bool                is_running;
+        bool           is_running;
+        bool           is_paused;
 
-        Config              config;
-        Renderer2D          *renderer;
-        DiskJockey2D        *dj;
-        Timer               *timer;
-        EventHandler        *event_handler;
-        PhysicsWorld2D      *phys_world;
+        Config         config;
+        Renderer2D     *renderer;
+        DiskJockey2D   *dj;
+        Timer          *timer;
+        EventHandler   *event_handler;
+        PhysicsWorld2D *phys_world;
 
-        std::ofstream       logstream;
+        std::ofstream  logstream;
 
         DumbPoolManager<DTransform2> transformPool;
 
-        virtual bool initSDL();
-        virtual bool initQuantum();
+        bool initSDL();
+        bool initQuantum();
 
         virtual bool initWindows();
         virtual bool initMac();

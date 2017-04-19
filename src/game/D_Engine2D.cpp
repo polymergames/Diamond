@@ -33,6 +33,7 @@
 
 Diamond::Engine2D::Engine2D(const Config &config, bool &success)
     : is_running(false),
+      is_paused(false),
       config(config),
       renderer(nullptr),
       dj(nullptr),
@@ -120,20 +121,25 @@ void Diamond::Engine2D::launch(Game2D &game) {
         event_handler->update();
         // eventtime = clock() - clocktime;
 
-        // Update game logic
-        // clocktime = clock();
-        game.update(delta);
-        // gametime = clock() - clocktime;
+        if (is_paused) {
+            game.pausedUpdate();
+        }
+        else {
+            // Update game logic
+            // clocktime = clock();
+            game.update(delta);
+            // gametime = clock() - clocktime;
 
-        // Update physics
-        // clocktime = clock();
-        phys_world->update(delta);
-        // physicstime = clock() - clocktime;
+            // Update physics
+            // clocktime = clock();
+            phys_world->update(delta);
+            // physicstime = clock() - clocktime;
 
-        // Update post-physics game logic
-        // clocktime = clock();
-        game.postPhysicsUpdate(delta);
-        // postphysicsgametime = clock() - clocktime;
+            // Update post-physics game logic
+            // clocktime = clock();
+            game.postPhysicsUpdate(delta);
+            // postphysicsgametime = clock() - clocktime;
+        }
 
         // Draw pictures!
         // clocktime = clock();
