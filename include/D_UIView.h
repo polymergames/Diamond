@@ -22,23 +22,47 @@
 #include "D_typedefs.h"
 
 namespace Diamond {
+    
+    // The layout properties of a UIView, used when calculating
+    // positions and sizes of rects in a UI hierarchy.
+    struct UIViewProps {
+        enum UIFlags {
+            NONE = 0,
+            FIT_CONTENTS = 1 << 0
+        };
+        
+        enum UIAlignment { UNALIGNED, LEFT, CENTER, RIGHT, TOP, BOTTOM };
+        
+        
+        UIFlags flags = NONE;
+        
+        UIAlignment horizontalAlignment = UNALIGNED;
+        UIAlignment verticalAlignment = UNALIGNED;
+        
+        tD_pos leftMargin = 0;
+        tD_pos rightMargin = 0;
+        tD_pos topMargin = 0;
+        tD_pos bottomMargin = 0;
+        
+        tD_pos leftPadding = 0;
+        tD_pos rightPadding = 0;
+        tD_pos topPadding = 0;
+        tD_pos bottomPadding = 0;
+    };
+    
+    
     class UIView;
+    
     using UIChildList = std::vector<UIView*>;
     
     
     // NOTE: because UIViews store pointers/references to each other
     // to maintain the UI tree, the memory locations of the UIView
     // objects should never change
-    // (ie, be careful storing your views in a vector like data structure).
+    // (ie, be careful storing your views in a vector-like data structure).
     class UIView {
     public:
-        enum UIFlags {
-            NONE = 0,
-            FIT_CONTENTS = 1 << 0
-        };
-        
-        
-        UIView(UIFlags flags = NONE,
+        UIView(const UIViewProps &props = UIViewProps(),
                const DTransform2 &transform = DTransform2(),
                tD_pos width = 0,
                tD_pos height = 0);
@@ -47,17 +71,8 @@ namespace Diamond {
         /**
          Get the settings of this UIView.
         */
-        UIFlags &flags() { return m_flags; }
-        const UIFlags &flags() const { return m_flags; }
-        
-        /**
-         Updates the state and behavior of all views in the tree 
-         rooted at this view (transforms, input handlers, etc.).
-         This function calls functions like updateTransforms
-         and handleInput.
-        */
-        void update();
-        
+        UIViewProps &props() { return m_props; }
+        const UIViewProps &props() const { return m_props; }
         
         /**
          Returns the given child after adding it to children.
@@ -76,22 +91,20 @@ namespace Diamond {
         bool removeChild(UIView *child);
         
         
+        // Calculates and updates the local transforms and rects of this view
+        // and its children based on their UIViewProps.
+        // This does not update world transforms, which should be performed
+        // by calling updateTransforms after calling updateLayout.
+        // updateLayout can be overriden by UIView subclasses.
+        virtual void updateLayout();
+        
         // Updates the world transforms of all UI views in the tree
         // rooted at this view, based on their local transforms
         // and parent transforms.
-        void updateTransforms(const DTransform2 &parent_transform = DTransform2(),
-                              const Matrix<tD_real, 2, 2> &parent_trans_mat = IDENTITY_MAT2);
-        
-        
-        // Updates properties of this view and its children,
-        // including rect size, etc., according to the view's flags.
-        // This can be overriden by UIView subclasses
-        // and is called after updateTransforms(),
-        // before input handlers.
-        // The overriding function should call its superclass version
-        // of updateState before updating its own state in order to
-        // have its children's states updated.
-        virtual void updateState();
+        // This should be called on the UI hierarchy's root view,
+        // after calling updateLayout.
+        void updateTransforms(const DTransform2 &parentTransform = DTransform2(),
+                              const Matrix<tD_real, 2, 2> &parentTransMat = IDENTITY_MAT2);
         
         
         // Gets the input state and handles all input types
@@ -99,6 +112,11 @@ namespace Diamond {
         // for this view and any child views that are affected
         // by the input (ie, by testing for each child view rect's intersection
         // with input events).
+        // In order for this to be accurate, it must be called
+        // AFTER updateTransforms.
+        // If the UI is static,
+        // it's sufficient to call updateLayout and updateTransforms only once,
+        // and then call handleInput on every frame.
         void handleInput();
         
         // The handle functions below call their corresponding function
@@ -137,6 +155,9 @@ namespace Diamond {
         const UIChildList &children() const { return m_children; }
         
     protected:
+        // settings
+        UIViewProps m_props;
+        
         // world space properties
         DTransform2 m_worldTransform;
         
@@ -144,9 +165,6 @@ namespace Diamond {
         Node2D m_node;
         tD_pos m_width;
         tD_pos m_height;
-        
-        // settings
-        UIFlags m_flags;
         
         UIChildList m_children;
     };
