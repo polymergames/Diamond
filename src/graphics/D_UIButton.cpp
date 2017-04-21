@@ -34,24 +34,24 @@ Diamond::UIButton::UIButton(const UITouchCallback &onTouchDown,
 UIButton(UIViewProps(), DTransform2(), 0, 0, onTouchDown, onTouchDrag, onTouchUp) {}
 
 
-void Diamond::UIButton::handleTouchDown(const Vector2<tD_pos> &touchPos) {
+bool Diamond::UIButton::handleTouchDown(const Vector2<tD_pos> &touchPos) {
     if (onTouchDown)
         onTouchDown(touchPos);
     
-    UIView::handleTouchDown(touchPos);
+    return UIView::handleTouchDown(touchPos);
 }
 
-void Diamond::UIButton::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
+bool Diamond::UIButton::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
     if (onTouchDrag)
         onTouchDrag(touchPos);
     
-    UIView::handleTouchDrag(touchPos);
+    return UIView::handleTouchDrag(touchPos);
 }
 
-void Diamond::UIButton::handleTouchUp(const Vector2<tD_pos> &touchPos) {
+bool Diamond::UIButton::handleTouchUp(const Vector2<tD_pos> &touchPos) {
     if (onTouchUp)
         onTouchUp(touchPos);
     
-    UIView::handleTouchUp(touchPos);
+    return UIView::handleTouchUp(touchPos);
 }
 

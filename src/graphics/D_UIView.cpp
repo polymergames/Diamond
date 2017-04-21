@@ -155,38 +155,49 @@ void Diamond::UIView::updateTransforms(const DTransform2 &parentTransform,
 }
 
 
-void Diamond::UIView::handleInput() {
+bool Diamond::UIView::handleInput() {
+    bool handled = false;
+    
     if (Input::touch_down) {
-        handleTouchDown(Input::touch_pos);
+        handled = handleTouchDown(Input::touch_pos) || handled;
     }
     if (Input::touch_drag) {
-        handleTouchDrag(Input::touch_pos);
+        handled = handleTouchDrag(Input::touch_pos) || handled;
     }
     if (Input::touch_up) {
-        handleTouchUp(Input::touch_pos);
+        handled = handleTouchUp(Input::touch_pos) || handled;
     }
+    
+    return handled;
 }
 
 
-void Diamond::UIView::handleTouchDown(const Vector2<tD_pos> &touchPos) {
+bool Diamond::UIView::handleTouchDown(const Vector2<tD_pos> &touchPos) {
     for (auto child : m_children) {
-        if (child->inside(touchPos))
+        if (child->inside(touchPos)) {
             child->handleTouchDown(touchPos);
+            return true;
+        }
     }
+    return false;
 }
 
-void Diamond::UIView::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
+bool Diamond::UIView::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
     for (auto child : m_children) {
         if (child->inside(touchPos))
             child->handleTouchDrag(touchPos);
     }
+    return false;
 }
 
-void Diamond::UIView::handleTouchUp(const Vector2<tD_pos> &touchPos) {
+bool Diamond::UIView::handleTouchUp(const Vector2<tD_pos> &touchPos) {
     for (auto child : m_children) {
-        if (child->inside(touchPos))
+        if (child->inside(touchPos)) {
             child->handleTouchUp(touchPos);
+            return true;
+        }
     }
+    return false;
 }
 
 

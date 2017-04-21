@@ -106,6 +106,8 @@ namespace Diamond {
         void updateTransforms(const DTransform2 &parentTransform = DTransform2(),
                               const Matrix<tD_real, 2, 2> &parentTransMat = IDENTITY_MAT2);
         
+        // The handle input functions below return true if the touch input
+        // was handled by a child of this view.
         
         // Gets the input state and handles all input types
         // (ie, calls handleTouchDown, etc. as appropriate)
@@ -117,7 +119,7 @@ namespace Diamond {
         // If the UI is static,
         // it's sufficient to call updateLayout and updateTransforms only once,
         // and then call handleInput on every frame.
-        void handleInput();
+        bool handleInput();
         
         // The handle functions below call their corresponding function
         // for all children in this view tree.
@@ -125,9 +127,9 @@ namespace Diamond {
         // the overriding function should call its superclass version
         // after it's done handling its own behavior
         // in order to update its children.
-        virtual void handleTouchDown(const Vector2<tD_pos> &touchPos);
-        virtual void handleTouchDrag(const Vector2<tD_pos> &touchPos);
-        virtual void handleTouchUp(const Vector2<tD_pos> &touchPos);
+        virtual bool handleTouchDown(const Vector2<tD_pos> &touchPos);
+        virtual bool handleTouchDrag(const Vector2<tD_pos> &touchPos);
+        virtual bool handleTouchUp(const Vector2<tD_pos> &touchPos);
         
         
         // Returns whether the given vector position

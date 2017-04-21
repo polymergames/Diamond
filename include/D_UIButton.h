@@ -50,9 +50,9 @@ namespace Diamond {
         { onTouchUp = callback; }
         
         
-        void handleTouchDown(const Vector2<tD_pos> &touchPos) override;
-        void handleTouchDrag(const Vector2<tD_pos> &touchPos) override;
-        void handleTouchUp(const Vector2<tD_pos> &touchPos) override;
+        bool handleTouchDown(const Vector2<tD_pos> &touchPos) override;
+        bool handleTouchDrag(const Vector2<tD_pos> &touchPos) override;
+        bool handleTouchUp(const Vector2<tD_pos> &touchPos) override;
         
     private:
         UITouchCallback onTouchDown;
