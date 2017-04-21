@@ -155,6 +155,12 @@ void Diamond::UIView::updateTransforms(const DTransform2 &parentTransform,
 }
 
 
+void Diamond::UIView::updateState() {
+    for (auto child : m_children)
+        child->updateState();
+}
+
+
 bool Diamond::UIView::handleInput() {
     bool handled = false;
     

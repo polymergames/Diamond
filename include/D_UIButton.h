@@ -29,35 +29,39 @@ namespace Diamond {
                  const DTransform2 &transform = DTransform2(),
                  tD_pos width = 0,
                  tD_pos height = 0,
-                 const UITouchCallback &onTouchDown = nullptr,
-                 const UITouchCallback &onTouchDrag = nullptr,
-                 const UITouchCallback &onTouchUp = nullptr);
+                 const UITouchCallback &onPress = nullptr,
+                 const UITouchCallback &onHold = nullptr,
+                 const UITouchCallback &onRelease = nullptr);
         
-        UIButton(const UITouchCallback &onTouchDown = nullptr,
-                 const UITouchCallback &onTouchDrag = nullptr,
-                 const UITouchCallback &onTouchUp = nullptr);
+        UIButton(const UITouchCallback &onPress = nullptr,
+                 const UITouchCallback &onHold = nullptr,
+                 const UITouchCallback &onRelease = nullptr);
         
         virtual ~UIButton() {}
         
         
-        void setOnTouchDown(const UITouchCallback &callback)
-        { onTouchDown = callback; }
+        void setOnPress(const UITouchCallback &callback)
+        { onPress = callback; }
         
-        void setOnTouchDrag(const UITouchCallback &callback)
-        { onTouchDrag = callback; }
+        void setOnHold(const UITouchCallback &callback)
+        { onHold = callback; }
         
-        void setOnTouchUp(const UITouchCallback &callback)
-        { onTouchUp = callback; }
+        void setOnRelease(const UITouchCallback &callback)
+        { onRelease = callback; }
         
+//        void updateState() override;
         
         bool handleTouchDown(const Vector2<tD_pos> &touchPos) override;
         bool handleTouchDrag(const Vector2<tD_pos> &touchPos) override;
         bool handleTouchUp(const Vector2<tD_pos> &touchPos) override;
         
     private:
-        UITouchCallback onTouchDown;
-        UITouchCallback onTouchDrag;
-        UITouchCallback onTouchUp;
+        UITouchCallback onPress;
+        UITouchCallback onHold;
+        UITouchCallback onRelease;
+        
+//        bool touchedLastFrame;
+//        bool holdingDown;
     };
 }
 

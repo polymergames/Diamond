@@ -20,37 +20,62 @@ Diamond::UIButton::UIButton(const UIViewProps &props,
                             const DTransform2 &transform,
                             tD_pos width,
                             tD_pos height,
-                            const UITouchCallback &onTouchDown,
-                            const UITouchCallback &onTouchDrag,
-                            const UITouchCallback &onTouchUp) :
+                            const UITouchCallback &onPress,
+                            const UITouchCallback &onHold,
+                            const UITouchCallback &onRelease) :
 Diamond::UIView(props, transform, width, height),
-onTouchDown(onTouchDown),
-onTouchDrag(onTouchDrag),
-onTouchUp(onTouchUp) {}
+onPress(onPress),
+onHold(onHold),
+onRelease(onRelease)
+//touchedLastFrame(false),
+//holdingDown(false)
+{}
 
-Diamond::UIButton::UIButton(const UITouchCallback &onTouchDown,
-                            const UITouchCallback &onTouchDrag,
-                            const UITouchCallback &onTouchUp) :
-UIButton(UIViewProps(), DTransform2(), 0, 0, onTouchDown, onTouchDrag, onTouchUp) {}
+Diamond::UIButton::UIButton(const UITouchCallback &onPress,
+                            const UITouchCallback &onHold,
+                            const UITouchCallback &onRelease) :
+UIButton(UIViewProps(), DTransform2(), 0, 0, onPress, onHold, onRelease) {}
+
+
+//void Diamond::UIButton::updateState() {
+//    // The button is considered held down for as many frames as touch
+//    // input is received- if the button was not touched in the last frame,
+//    // then it is no longer being held down.
+//    holdingDown = touchedLastFrame;
+//    touchedLastFrame = false;
+//}
 
 
 bool Diamond::UIButton::handleTouchDown(const Vector2<tD_pos> &touchPos) {
-    if (onTouchDown)
-        onTouchDown(touchPos);
+//    touchedLastFrame = true;
+    
+    if (onPress)
+        onPress(touchPos);
     
     return UIView::handleTouchDown(touchPos);
 }
 
 bool Diamond::UIButton::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
-    if (onTouchDrag)
-        onTouchDrag(touchPos);
+    // the button is only considered to be held down
+    // on a touchDrag event if it was already being held down.
+    // this ensures that the button is only held down if the first touch
+    // event on it is a touchDown event.
+//    if (holdingDown) {
+//        touchedLastFrame = true;
+    
+        if (onHold)
+            onHold(touchPos);
+//    }
     
     return UIView::handleTouchDrag(touchPos);
 }
 
 bool Diamond::UIButton::handleTouchUp(const Vector2<tD_pos> &touchPos) {
-    if (onTouchUp)
-        onTouchUp(touchPos);
+    // a touchUp event only releases the button
+    // if it was already being held down.
+//    if (holdingDown && onRelease) {
+    if (onRelease)
+        onRelease(touchPos);
     
     return UIView::handleTouchUp(touchPos);
 }

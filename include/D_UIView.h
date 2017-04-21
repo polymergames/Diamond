@@ -60,6 +60,10 @@ namespace Diamond {
     // to maintain the UI tree, the memory locations of the UIView
     // objects should never change
     // (ie, be careful storing your views in a vector-like data structure).
+    
+    // If the UI is static,
+    // it's sufficient to call updateLayout and updateTransforms only once,
+    // and then call updateState and handleInput on every frame.
     class UIView {
     public:
         UIView(const UIViewProps &props = UIViewProps(),
@@ -106,6 +110,11 @@ namespace Diamond {
         void updateTransforms(const DTransform2 &parentTransform = DTransform2(),
                               const Matrix<tD_real, 2, 2> &parentTransMat = IDENTITY_MAT2);
         
+        // Updates the state of all views in this UI hierarchy.
+        // Overriding handleState functions should call their superclass
+        // version in order to update the states of children.
+        virtual void updateState();
+        
         // The handle input functions below return true if the touch input
         // was handled by a child of this view.
         
@@ -116,9 +125,6 @@ namespace Diamond {
         // with input events).
         // In order for this to be accurate, it must be called
         // AFTER updateTransforms.
-        // If the UI is static,
-        // it's sufficient to call updateLayout and updateTransforms only once,
-        // and then call handleInput on every frame.
         bool handleInput();
         
         // The handle functions below call their corresponding function
