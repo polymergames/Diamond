@@ -37,11 +37,20 @@ namespace Diamond {
         
         void updateLayout() override;
         
+        // set whether this image should be rendered.
+        void setVisible(bool visible);
+        
+        // whether this image is currently being rendered.
+        bool isVisible() { return renderComponent; };
+        
         RenderComponent2D *getRenderComponent() { return renderComponent.get(); }
         const RenderComponent2D *getRenderComponent() const { return renderComponent.get(); }
         
     private:
+        const Texture *texture;
+        RenderLayer layer;
         DumbPtr<RenderComponent2D> renderComponent;
+        Renderer2D *renderer;
     };
 }
 

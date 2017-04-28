@@ -29,7 +29,8 @@ m_props(props),
 m_worldTransform(transform),
 m_node(m_worldTransform),
 m_width(width),
-m_height(height) {}
+m_height(height),
+active(true) {}
 
 
 Diamond::UIView &Diamond::UIView::addChild(Diamond::UIView &child) {
@@ -63,40 +64,42 @@ bool Diamond::UIView::removeChild(Diamond::UIView *child) {
 
 void Diamond::UIView::updateLayout() {
     for (auto child: m_children) {
-        child->updateLayout();
-        
-        switch (child->props().horizontalAlignment) {
-            case UIViewProps::LEFT:
-                child->localTransform().position.x =
-                    m_props.leftPadding + child->props().leftMargin;
-                break;
-            case UIViewProps::CENTER:
-                child->localTransform().position.x =
-                    m_width / 2.0 - child->localWidth() / 2.0;
-                break;
-            case UIViewProps::RIGHT:
-                child->localTransform().position.x =
-                    m_width - m_props.rightPadding - child->props().rightMargin - child->localWidth();
-                break;
-            default:
-                break;
-        }
-        
-        switch (child->props().verticalAlignment) {
-            case UIViewProps::TOP:
-                child->localTransform().position.y =
-                    m_props.topPadding + child->props().topMargin;
-                break;
-            case UIViewProps::CENTER:
-                child->localTransform().position.y =
-                    m_height / 2.0 - child->localHeight() / 2.0;
-                break;
-            case UIViewProps::BOTTOM:
-                child->localTransform().position.y =
-                    m_height - m_props.bottomPadding - child->props().bottomMargin - child->localHeight();
-                break;
-            default:
-                break;
+        if (child->isActive()) {
+            child->updateLayout();
+            
+            switch (child->props().horizontalAlignment) {
+                case UIViewProps::LEFT:
+                    child->localTransform().position.x =
+                        m_props.leftPadding + child->props().leftMargin;
+                    break;
+                case UIViewProps::CENTER:
+                    child->localTransform().position.x =
+                        m_width / 2.0 - child->localWidth() / 2.0;
+                    break;
+                case UIViewProps::RIGHT:
+                    child->localTransform().position.x =
+                        m_width - m_props.rightPadding - child->props().rightMargin - child->localWidth();
+                    break;
+                default:
+                    break;
+            }
+            
+            switch (child->props().verticalAlignment) {
+                case UIViewProps::TOP:
+                    child->localTransform().position.y =
+                        m_props.topPadding + child->props().topMargin;
+                    break;
+                case UIViewProps::CENTER:
+                    child->localTransform().position.y =
+                        m_height / 2.0 - child->localHeight() / 2.0;
+                    break;
+                case UIViewProps::BOTTOM:
+                    child->localTransform().position.y =
+                        m_height - m_props.bottomPadding - child->props().bottomMargin - child->localHeight();
+                    break;
+                default:
+                    break;
+            }
         }
     }
     
@@ -105,22 +108,24 @@ void Diamond::UIView::updateLayout() {
         tD_pos maxx = -MAXFLOAT, maxy = -MAXFLOAT;
         
         for (auto child : m_children) {
-            Vector2<tD_pos> position(child->localTransform().position.x - child->props().leftMargin,
-                                     child->localTransform().position.y - child->props().topMargin);
-            auto width = child->localWidth() + child->props().leftMargin + child->props().rightMargin;
-            auto height = child->localHeight() + child->props().topMargin + child->props().bottomMargin;
-            
-            if (position.x < minx)
-                minx = position.x;
-            
-            if (position.y < miny)
-                miny = position.y;
-            
-            if (position.x + width > maxx)
-                maxx = position.x + width;
-            
-            if (position.y + height > maxy)
-                maxy = position.y + height;
+            if (child->isActive()) {
+                Vector2<tD_pos> position(child->localTransform().position.x - child->props().leftMargin,
+                                         child->localTransform().position.y - child->props().topMargin);
+                auto width = child->localWidth() + child->props().leftMargin + child->props().rightMargin;
+                auto height = child->localHeight() + child->props().topMargin + child->props().bottomMargin;
+                
+                if (position.x < minx)
+                    minx = position.x;
+                
+                if (position.y < miny)
+                    miny = position.y;
+                
+                if (position.x + width > maxx)
+                    maxx = position.x + width;
+                
+                if (position.y + height > maxy)
+                    maxy = position.y + height;
+            }
         }
         
         auto offsetx = minx - m_props.leftPadding;
@@ -129,8 +134,10 @@ void Diamond::UIView::updateLayout() {
         if (minx > UI_EPSILON || minx < -UI_EPSILON || miny > UI_EPSILON || miny < -UI_EPSILON) {
             // offset all children so that the minx, miny child is at this view's origin.
             for (auto child : m_children) {
-                child->localTransform().position.x -= offsetx;
-                child->localTransform().position.y -= offsety;
+                if (child->isActive()) {
+                    child->localTransform().position.x -= offsetx;
+                    child->localTransform().position.y -= offsety;
+                }
             }
             
             // NOTE: the code below is commented out for now,
@@ -156,8 +163,19 @@ void Diamond::UIView::updateTransforms(const DTransform2 &parentTransform,
 
 
 void Diamond::UIView::updateState() {
-    for (auto child : m_children)
-        child->updateState();
+    for (auto child : m_children) {
+        if (child->isActive())
+            child->updateState();
+    }
+}
+
+
+void Diamond::UIView::setActive(bool newActive) {
+    active = newActive;
+    
+    for (auto child : m_children) {
+        child->setActive(newActive);
+    }
 }
 
 
@@ -180,7 +198,7 @@ bool Diamond::UIView::handleInput() {
 
 bool Diamond::UIView::handleTouchDown(const Vector2<tD_pos> &touchPos) {
     for (auto child : m_children) {
-        if (child->inside(touchPos)) {
+        if (child->isActive() && child->inside(touchPos)) {
             child->handleTouchDown(touchPos);
             return true;
         }
@@ -190,15 +208,17 @@ bool Diamond::UIView::handleTouchDown(const Vector2<tD_pos> &touchPos) {
 
 bool Diamond::UIView::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
     for (auto child : m_children) {
-        if (child->inside(touchPos))
+        if (child->isActive() && child->inside(touchPos)) {
             child->handleTouchDrag(touchPos);
+            return true;
+        }
     }
     return false;
 }
 
 bool Diamond::UIView::handleTouchUp(const Vector2<tD_pos> &touchPos) {
     for (auto child : m_children) {
-        if (child->inside(touchPos)) {
+        if (child->isActive() && child->inside(touchPos)) {
             child->handleTouchUp(touchPos);
             return true;
         }

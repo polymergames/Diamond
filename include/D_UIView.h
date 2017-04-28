@@ -111,9 +111,22 @@ namespace Diamond {
                               const Matrix<tD_real, 2, 2> &parentTransMat = IDENTITY_MAT2);
         
         // Updates the state of all views in this UI hierarchy.
-        // Overriding handleState functions should call their superclass
+        // Overriding updateState functions should call their superclass
         // version in order to update the states of children.
         virtual void updateState();
+        
+        
+        // If a UIView returns false for isActive, it should not be sent
+        // any input events and its layout/state should not be updated.
+        bool isActive() { return active; }
+        
+        // setActive is called recursively for all children and descendants
+        // of this UIView.
+        // When overriding setActive in a subclass,
+        // the overriding function should call its superclass version
+        // in order to deactivate its children and set the active boolean.
+        virtual void setActive(bool active);
+        
         
         // The handle input functions below return true if the touch input
         // was handled by a child of this view.
@@ -175,6 +188,10 @@ namespace Diamond {
         tD_pos m_height;
         
         UIChildList m_children;
+        
+        // whether the UI tree rooted at this view is currently active
+        // (ie, whether its state and layout are being updated and it's handling input)
+        bool active;
     };
 }
 

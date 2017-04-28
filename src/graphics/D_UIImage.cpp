@@ -22,7 +22,7 @@ Diamond::UIImage::UIImage(const UIViewProps &props,
                           Renderer2D *renderer,
                           const Texture *texture,
                           RenderLayer layer) :
-UIView(props, transform) {
+UIView(props, transform), texture(texture), layer(layer), renderer(renderer) {
     renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
 }
 
@@ -43,4 +43,19 @@ void Diamond::UIImage::updateLayout() {
     
     // layout children
     UIView::updateLayout();
+}
+
+
+void Diamond::UIImage::setVisible(bool newVisible) {
+    if (newVisible && !renderComponent) {
+        // reactivating
+        // make this image visible again
+        renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
+    }
+    else if (!newVisible && renderComponent) {
+        // deactivating, make this image invisible
+        renderComponent.free();
+    }
+    
+    UIView::setActive(active);
 }
