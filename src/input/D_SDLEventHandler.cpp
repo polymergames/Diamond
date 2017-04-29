@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+#include "D_Log.h"
 #include "D_Renderer2D.h"
 #include "D_SDLEventHandler.h"
 
@@ -104,6 +105,15 @@ void Diamond::SDLEventHandler::update() {
         case SDL_FINGERDOWN:
             Input::touch_down = true;
             Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
+            // DEBUG
+//#ifdef __ANDROID__
+//            __android_log_print(ANDROID_LOG_VERBOSE,
+//                                "POLYMER", "Finger pos x: %f y: %f\n", e.tfinger.x, e.tfinger.y);
+//            __android_log_print(ANDROID_LOG_VERBOSE,
+//                                "POLYMER", "Screen x: %d y: %d\n", screen.x, screen.y);
+//            __android_log_print(ANDROID_LOG_VERBOSE,
+//                                "POLYMER", "Touch pos x: %d y: %d\n", Input::touch_pos.x, Input::touch_pos.y);
+//#endif
             break;
         case SDL_FINGERMOTION:
             Input::touch_drag = true;

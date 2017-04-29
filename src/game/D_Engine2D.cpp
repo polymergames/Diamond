@@ -31,6 +31,10 @@
 // Quantum2D
 #include "D_QuantumWorld2D.h"
 
+#if defined __ANDROID__
+#include "D_AndroidLogger.h"
+#endif
+
 Diamond::Engine2D::Engine2D(const Config &config, bool &success)
     : is_running(false),
       is_paused(false),
@@ -185,7 +189,9 @@ bool Diamond::Engine2D::initSDL() {
 
     timer = new SDLTimer();
     event_handler = new SDLEventHandler(
-        renderer->getScreenResolution(),
+//        renderer->getScreenResolution(),
+        // Honestly, I don't know if we should be using getResolution or getScreenResolution
+        renderer->getResolution(),
         [this]() { is_running = false; }
     );
 
@@ -219,9 +225,14 @@ bool Diamond::Engine2D::initMac() {
 bool Diamond::Engine2D::initAndroid() {
     config.fullscreen = true;
     // Log::setLogger(new FileLogger(config.game_name + ".log")); // TODO: Android logger
+#if defined __ANDROID__
+    Log::setLogger(new AndroidLogger(config.game_name));
+#endif
     return initSDL() && initQuantum();
 }
 
 bool Diamond::Engine2D::initIOS() {
-    return initAndroid();
+    config.fullscreen = true;
+    // TODO: iOS logger
+    return initSDL() && initQuantum();
 }
