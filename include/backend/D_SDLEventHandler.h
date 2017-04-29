@@ -29,7 +29,11 @@ namespace Diamond {
     public:
         SDLEventHandler(const Vector2<int> &screenResolution,
                         const std::function<void(void)> &onQuit);
+        
         void update() override;
+        
+        void setResolution(const Vector2<int> &screenResolution)
+        { screen = screenResolution; }
 
     private:
         std::unordered_map<SDL_Keycode, Input::KEY> keymap;

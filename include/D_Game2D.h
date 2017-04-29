@@ -24,10 +24,17 @@ namespace Diamond {
     class Game2D {
     public:
         /**
-         Put game initialization code in subclass constructor.
+         Subclass constructor should not do things that depend on engine subsystems-
+         use the init function for that.
         */
         Game2D(Engine2D &engine) : engine(engine) {}
         virtual ~Game2D() {}
+        
+        /**
+         Put game initialization code here.
+         Return true if initialization was successful, otherwise false.
+        */
+        virtual bool init() { return true; };
 
         /**
          Called once every frame, where delta is the time in seconds since the last frame.

@@ -70,6 +70,15 @@ namespace Diamond {
         DumbPtr<DTransform2> makeTransform(Args&&... args) {
             return transformPool.make(std::forward<Args>(args)...);
         }
+        
+        
+        // This is a weird function that tries to fix some
+        // platform-specific bugs/idiosyncracies in the renderer.
+        // It was created because on Android, SDL's reported screen resolution
+        // changes at some point after initialization,
+        // after which this function is called
+        // to adjust the SDL event handler's stored resolution.
+        void refreshRenderer();
 
     protected:
         bool           is_running;

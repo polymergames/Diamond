@@ -99,77 +99,90 @@ void Diamond::Engine2D::launch(Game2D &game) {
     // clock_t postphysicsgametime;
     // clock_t rendertime;
 
-    // Game loop
-    while (is_running) {
-        // Update time junk
-        ++nframes;
+    // Initialize the game
+    if (game.init()) {
+    
+        // Game loop
+        while (is_running) {
+            // Update time junk
+            ++nframes;
 
-        // clocktime = clock();
-        time = timer->msElapsed();
-        // getmstime = clock() - clocktime;
-        
-        // if vsync is on, we will use the delta value calculated
-        // when delta was initialized based on the refresh rate.
-        if (!config.vsync) {
-            delta = time - last_time;
-            last_time = time;
-        }
-
-        // TODO: replace with timer functions, timer calculates and stores its own values
-        // then I just have to go get those values ya know?
-        timer->setDelta(delta);
-        timer->setFPS(nframes / (time / 1000.0));
-
-        // Catch up on events
-        // clocktime = clock();
-        event_handler->update();
-        // eventtime = clock() - clocktime;
-
-        if (is_paused) {
-            game.pausedUpdate(delta);
-        }
-        else {
-            // Update game logic
             // clocktime = clock();
-            game.update(delta);
-            // gametime = clock() - clocktime;
+            time = timer->msElapsed();
+            // getmstime = clock() - clocktime;
+            
+            // if vsync is on, we will use the delta value calculated
+            // when delta was initialized based on the refresh rate.
+            if (!config.vsync) {
+                delta = time - last_time;
+                last_time = time;
+            }
 
-            // Update physics
-            // clocktime = clock();
-            phys_world->update(delta);
-            // physicstime = clock() - clocktime;
+            // TODO: replace with timer functions, timer calculates and stores its own values
+            // then I just have to go get those values ya know?
+            timer->setDelta(delta);
+            timer->setFPS(nframes / (time / 1000.0));
 
-            // Update post-physics game logic
+            // Catch up on events
             // clocktime = clock();
-            game.postPhysicsUpdate(delta);
-            // postphysicsgametime = clock() - clocktime;
+            event_handler->update();
+            // eventtime = clock() - clocktime;
+
+            if (is_paused) {
+                game.pausedUpdate(delta);
+            }
+            else {
+                // Update game logic
+                // clocktime = clock();
+                game.update(delta);
+                // gametime = clock() - clocktime;
+
+                // Update physics
+                // clocktime = clock();
+                phys_world->update(delta);
+                // physicstime = clock() - clocktime;
+
+                // Update post-physics game logic
+                // clocktime = clock();
+                game.postPhysicsUpdate(delta);
+                // postphysicsgametime = clock() - clocktime;
+            }
+
+            // Draw pictures!
+            // clocktime = clock();
+            renderer->renderAll();
+            // rendertime = clock() - clocktime;
+
+            // DEBUG
+            // TODO: report to an engine benchmarking system
+            // float total = eventtime + gametime + physicstime + postphysicsgametime + rendertime;
+            // std::cout << "Delta: " << delta << std::endl;
+    //        std::cout << "Event time: " << (float)eventtime / total << std::endl;
+    //        std::cout << "Game time: " << (float)gametime / total << std::endl;
+    //        std::cout << "Physics time: " << (float)physicstime / total << std::endl;
+    //        std::cout << "Post physics game time: " << (float)postphysicsgametime / total << std::endl;
+    //        std::cout << "Render time: " << (float)rendertime / total << std::endl;
+            // std::cout << "Get ms ticks: " << (float)getmstime << std::endl;
+            // std::cout << "Event ticks: " << (float)eventtime << std::endl;
+            // std::cout << "Game ticks: " << (float)gametime << std::endl;
+            // std::cout << "Physics ticks: " << (float)physicstime << std::endl;
+            // std::cout << "Post physics game ticks: " << (float)postphysicsgametime << std::endl;
+            // std::cout << "Render ticks: " << (float)rendertime << std::endl;
+            // std::cout << "Total ticks: " << total << std::endl << std::endl;
         }
-
-        // Draw pictures!
-        // clocktime = clock();
-        renderer->renderAll();
-        // rendertime = clock() - clocktime;
-
-        // DEBUG
-        // TODO: report to an engine benchmarking system
-        // float total = eventtime + gametime + physicstime + postphysicsgametime + rendertime;
-        // std::cout << "Delta: " << delta << std::endl;
-//        std::cout << "Event time: " << (float)eventtime / total << std::endl;
-//        std::cout << "Game time: " << (float)gametime / total << std::endl;
-//        std::cout << "Physics time: " << (float)physicstime / total << std::endl;
-//        std::cout << "Post physics game time: " << (float)postphysicsgametime / total << std::endl;
-//        std::cout << "Render time: " << (float)rendertime / total << std::endl;
-        // std::cout << "Get ms ticks: " << (float)getmstime << std::endl;
-        // std::cout << "Event ticks: " << (float)eventtime << std::endl;
-        // std::cout << "Game ticks: " << (float)gametime << std::endl;
-        // std::cout << "Physics ticks: " << (float)physicstime << std::endl;
-        // std::cout << "Post physics game ticks: " << (float)postphysicsgametime << std::endl;
-        // std::cout << "Render ticks: " << (float)rendertime << std::endl;
-        // std::cout << "Total ticks: " << total << std::endl << std::endl;
     }
 
     // End game
     game.quit();
+}
+
+
+void Diamond::Engine2D::refreshRenderer() {
+    SDLEventHandler *sdlEventHandler = dynamic_cast<SDLEventHandler*>(event_handler);
+    
+    if (sdlEventHandler) {
+        sdlEventHandler->setResolution(renderer->getResolution());
+    }
 }
 
 
