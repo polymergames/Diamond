@@ -122,7 +122,7 @@ void Diamond::Engine2D::launch(Game2D &game) {
         // eventtime = clock() - clocktime;
 
         if (is_paused) {
-            game.pausedUpdate();
+            game.pausedUpdate(delta);
         }
         else {
             // Update game logic

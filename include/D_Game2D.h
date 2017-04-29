@@ -47,7 +47,7 @@ namespace Diamond {
         /**
          Called every frame when the game is paused.
         */
-        virtual void pausedUpdate() {};
+        virtual void pausedUpdate(tD_delta delta) {};
 
         /**
          Called when game ends.
