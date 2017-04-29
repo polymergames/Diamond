@@ -206,33 +206,38 @@ bool Diamond::UIView::handleInput() {
 
 
 bool Diamond::UIView::handleTouchDown(const Vector2<tD_pos> &touchPos) {
+    bool handled = false;
+    
     for (auto child : m_children) {
         if (child->isActive() && child->inside(touchPos)) {
-            child->handleTouchDown(touchPos);
-            return true;
+            handled |= child->handleTouchDown(touchPos);
         }
     }
-    return false;
+    
+    return handled;
 }
 
 bool Diamond::UIView::handleTouchDrag(const Vector2<tD_pos> &touchPos) {
+    bool handled = false;
+    
     for (auto child : m_children) {
         if (child->isActive() && child->inside(touchPos)) {
-            child->handleTouchDrag(touchPos);
-            return true;
+            handled |= child->handleTouchDrag(touchPos);
         }
     }
-    return false;
+    return handled;
 }
 
 bool Diamond::UIView::handleTouchUp(const Vector2<tD_pos> &touchPos) {
+    bool handled = false;
+    
     for (auto child : m_children) {
         if (child->isActive() && child->inside(touchPos)) {
-            child->handleTouchUp(touchPos);
-            return true;
+            handled |= child->handleTouchUp(touchPos);
         }
     }
-    return false;
+    
+    return handled;
 }
 
 
