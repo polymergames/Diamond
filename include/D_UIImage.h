@@ -38,10 +38,7 @@ namespace Diamond {
         void updateLayout() override;
         
         // set whether this image should be rendered.
-        void setVisible(bool visible);
-        
-        // whether this image is currently being rendered.
-        bool isVisible() { return renderComponent; };
+        void setVisible(bool visible) override;
         
         RenderComponent2D *getRenderComponent() { return renderComponent.get(); }
         const RenderComponent2D *getRenderComponent() const { return renderComponent.get(); }

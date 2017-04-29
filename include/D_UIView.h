@@ -124,8 +124,20 @@ namespace Diamond {
         // of this UIView.
         // When overriding setActive in a subclass,
         // the overriding function should call its superclass version
-        // in order to deactivate its children and set the active boolean.
+        // in order to activate/deactivate its children and set the active boolean.
         virtual void setActive(bool active);
+        
+        
+        // whether this UI tree is currently visible.
+        bool isVisible() { return visible; }
+        
+        // set whether this UI tree should be visible.
+        // called recursively for all children and descendants
+        // of this UIView.
+        // When overriding setVisible in a subclass,
+        // the overriding function should call its superclass version
+        // in order to set the visibility of its children and set the visible boolean.
+        virtual void setVisible(bool visible);
         
         
         // The handle input functions below return true if the touch input
@@ -192,6 +204,8 @@ namespace Diamond {
         // whether the UI tree rooted at this view is currently active
         // (ie, whether its state and layout are being updated and it's handling input)
         bool active;
+        // whether the UI tree rooted at this view is currently visible.
+        bool visible;
     };
 }
 

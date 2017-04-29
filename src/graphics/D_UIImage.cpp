@@ -38,8 +38,8 @@ Diamond::UIImage::~UIImage() {
 
 void Diamond::UIImage::updateLayout() {
     // resize this view to fit its image
-    m_width  = renderComponent->getSprite()->getWidth() * worldTransform().scale.x;
-    m_height = renderComponent->getSprite()->getHeight() * worldTransform().scale.y;
+    m_width  = texture->getWidth() * worldTransform().scale.x;
+    m_height = texture->getHeight() * worldTransform().scale.y;
     
     // layout children
     UIView::updateLayout();
@@ -48,14 +48,13 @@ void Diamond::UIImage::updateLayout() {
 
 void Diamond::UIImage::setVisible(bool newVisible) {
     if (newVisible && !renderComponent) {
-        // reactivating
         // make this image visible again
         renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
     }
     else if (!newVisible && renderComponent) {
-        // deactivating, make this image invisible
+        // make this image invisible
         renderComponent.free();
     }
     
-    UIView::setActive(active);
+    UIView::setVisible(newVisible);
 }

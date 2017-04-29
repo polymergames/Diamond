@@ -179,6 +179,15 @@ void Diamond::UIView::setActive(bool newActive) {
 }
 
 
+void Diamond::UIView::setVisible(bool newVisible) {
+    visible = newVisible;
+    
+    for (auto child : m_children) {
+        child->setVisible(newVisible);
+    }
+}
+
+
 bool Diamond::UIView::handleInput() {
     bool handled = false;
     
