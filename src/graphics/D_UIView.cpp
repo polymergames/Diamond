@@ -63,7 +63,7 @@ bool Diamond::UIView::removeChild(Diamond::UIView *child) {
 
 
 void Diamond::UIView::updateLayout() {
-    for (auto child: m_children) {
+    for (auto child : m_children) {
         if (child->isActive()) {
             child->updateLayout();
             
