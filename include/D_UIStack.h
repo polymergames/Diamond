@@ -23,14 +23,15 @@ namespace Diamond {
     
     // The layout properties of a UIStack.
     struct UIStackProps {
-        // TODO: implement alignment
-        // (ie, all stack elements are centered, aligned along left, right,
-        // top, or bottom)
         
         enum UIStackOrientation { VERTICAL, HORIZONTAL };
         
         // Whether the stack is vertical or horizontal.
         UIStackOrientation orientation = VERTICAL;
+        
+        // whether all elements in the stack are centered, aligned along left,
+        // right, top, or bottom.
+        UIViewProps::UIAlignment stackAlignment = UIViewProps::LEFT;
         
         // the amount of space between adjacent UIViews in the stack.
         tD_pos spacing = 0;
