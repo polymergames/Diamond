@@ -32,6 +32,7 @@ color(color),
 renderer(renderer),
 layer(layer) {
     setText(text);
+    renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
 }
 
 Diamond::UIText::~UIText() {
@@ -40,17 +41,33 @@ Diamond::UIText::~UIText() {
 }
 
 
+void Diamond::UIText::updateLayout() {
+    if (texture) {
+        // resize this view to fit its text
+        m_width = texture->getWidth() * worldTransform().scale.x;
+        m_height = texture->getHeight() * worldTransform().scale.y;
+        
+        // layout children
+        UIView::updateLayout();
+    }
+}
+
+
 void Diamond::UIText::setText(const std::string &newText) {
     text = newText;
     
-    // A new render component is created so that it is properly sized
-    // for the new text texture.
-    // TODO: modify the existing render component without
-    // breaking the size.
-    renderComponent.free();
     texture.free();
     texture = renderer->loadTextTexture(newText, font, color);
-    renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
+    
+    if (renderComponent) { // if text is currently visible
+        // A new render component is created so that it is properly sized
+        // for the new text texture.
+        // TODO: modify the existing render component without
+        // breaking the size.
+        renderComponent.free();
+        renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
+    }
+    // else, don't make render component because text is currently invisible
 }
 
 

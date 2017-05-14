@@ -35,6 +35,7 @@ namespace Diamond {
         
         virtual ~UIText();
         
+        void updateLayout() override;
         
         std::string getText() const { return text; }
         void setText(const std::string &newText);
