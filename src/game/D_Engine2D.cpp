@@ -80,6 +80,7 @@ Diamond::Engine2D::~Engine2D() {
 }
 
 void Diamond::Engine2D::launch(Game2D &game) {
+    is_paused = false;
     is_running = true;
 
     // Init time
