@@ -49,6 +49,14 @@ public:
     m_layer = newLayer;
   }
 
+  RGB getColor() const override {
+    return m_renderer.renderObj(m_layer, m_renderObj).color();
+  }
+
+  void setColor(const RGB &color) override {
+    m_renderer.renderObj(m_layer, m_renderObj).color() = color;
+  }
+
   uint8_t getAlpha() const override {
     return m_renderer.renderObj(m_layer, m_renderObj).alpha();
   }

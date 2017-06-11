@@ -104,11 +104,10 @@ void Diamond::SDLRenderer2D::renderAll() {
   // Render sprites
   for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
     for (auto i = l->begin(); i != l->end(); ++i) {
-      const Transform2<tSDLrender_pos, tSDLrender_rot, tD_real> &transform =
-          i->getTransform();
+      const auto &transform = i->getTransform();
 
-      SDL_Point pivot = i->pivot();
-      SDL_Rect &clip = i->clip();
+      auto pivot = i->pivot();
+      auto &clip = i->clip();
 
       pivot.x *= transform.scale.x;
       pivot.y *= transform.scale.y;
@@ -121,7 +120,8 @@ void Diamond::SDLRenderer2D::renderAll() {
       };
 
       // Set transparency
-      // TODO: set color
+      const auto &color = i->color();
+      SDL_SetTextureColorMod(i->texture(), color.r, color.g, color.b);
       SDL_SetTextureAlphaMod(i->texture(), i->alpha());
 
       SDL_RenderCopyEx(
@@ -134,7 +134,8 @@ void Diamond::SDLRenderer2D::renderAll() {
           i->getFlip()        // current flip status
           );
 
-      // Reset transparency
+      // Reset the texture's transparency before the next render
+      SDL_SetTextureColorMod(i->texture(), 255, 255, 255);
       SDL_SetTextureAlphaMod(i->texture(), 255);
     }
   }

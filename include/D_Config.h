@@ -21,49 +21,53 @@
 #include <string>
 
 namespace Diamond {
-    enum audio_channels_t {D_MONO, D_STEREO};
+enum audio_channels_t { D_MONO, D_STEREO };
 
-    struct RGBA {
-        uint8_t r, g, b, a;
-    };
+struct RGB {
+  uint8_t r, g, b;
+};
 
-    struct Config {
-        std::string         game_name = "A Game Without a Name";
+struct RGBA {
+  uint8_t r, g, b, a;
+};
 
-        // Graphics settings
-        int16_t             window_width = 1280;
-        int16_t             window_height = 720;
-        bool                vsync = false;
-        bool                fullscreen = false;
-        RGBA                bg_color = RGBA{0, 0, 0, 100};
+struct Config {
+  std::string game_name = "A Game Without a Name";
 
-        // Audio settings
-        audio_channels_t    audio_channels = D_STEREO;
-        int32_t             audio_out_freq = 44100; // in hertz
-        int16_t             audio_out_sample_size = 2048; // in bytes
+  // Graphics settings
+  int16_t window_width = 1280;
+  int16_t window_height = 720;
+  bool vsync = false;
+  bool fullscreen = false;
+  RGBA bg_color = RGBA{0, 0, 0, 100};
 
-        // Subsystem constraints
-        // if one of these is false, Diamond will run even if the corresponding
-        // subsystem fails to initialize (ie, that subsystem is optional).
-        bool                require_audio = false;
-        
-        // Estimate of the max number of gameobjects active at any time.
-        // This is used to allocate memory for transforms, render components,
-        // etc.
-        int                 max_gameobjects_estimate = 1000;
-        
-        // Allocates memory for max_gameobjects_estimate render components
-        // in EACH render layer based on num_render_layers_estimate, if
-        // optimize_render_layers is true.
-        // WARNING: if num_render_layers_estimate is a high number
-        // and max_gameobjects_estimate is also a high number,
-        // this may allocate A LOT of memory!!!!
-        // WARNING: this assumes that all render layers used are in order,
-        // starting from 0. If that's not the case, you may have
-        // a lot of wasted memory (A LOT!!!)
-        bool                optimize_render_layers = true;
-        int                 num_render_layers_estimate = 1;
-    };
-}
+  // Audio settings
+  audio_channels_t audio_channels = D_STEREO;
+  int32_t audio_out_freq = 44100;       // in hertz
+  int16_t audio_out_sample_size = 2048; // in bytes
+
+  // Subsystem constraints
+  // if one of these is false, Diamond will run even if the corresponding
+  // subsystem fails to initialize (ie, that subsystem is optional).
+  bool require_audio = false;
+
+  // Estimate of the max number of gameobjects active at any time.
+  // This is used to allocate memory for transforms, render components,
+  // etc.
+  int max_gameobjects_estimate = 1000;
+
+  // Allocates memory for max_gameobjects_estimate render components
+  // in EACH render layer based on num_render_layers_estimate, if
+  // optimize_render_layers is true.
+  // WARNING: if num_render_layers_estimate is a high number
+  // and max_gameobjects_estimate is also a high number,
+  // this may allocate A LOT of memory!!!!
+  // WARNING: this assumes that all render layers used are in order,
+  // starting from 0. If that's not the case, you may have
+  // a lot of wasted memory (A LOT!!!)
+  bool optimize_render_layers = true;
+  int num_render_layers_estimate = 1;
+};
+} // namespace Diamond
 
 #endif // D_CONFIG_H

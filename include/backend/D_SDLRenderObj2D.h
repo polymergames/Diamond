@@ -29,8 +29,8 @@ class SDLRenderObj2D {
 public:
   SDLRenderObj2D(const DTransform2 &transform, const SDLTexture *texture,
                  const Vector2<tSDLrender_pos> &pivot)
-      : m_transform(&transform), m_texture(texture->texture), m_alpha(255),
-        m_flip(SDL_FLIP_NONE) {
+      : m_transform(&transform), m_texture(texture->texture),
+        m_color({255, 255, 255}), m_alpha(255), m_flip(SDL_FLIP_NONE) {
     m_pivot.x = pivot.x;
     m_pivot.y = pivot.y;
     m_clip.x = 0;
@@ -49,8 +49,11 @@ public:
   void setTexture(SDL_Texture *texture) { m_texture = texture; }
   void setTexture(const SDLTexture *texture) { setTexture(texture->texture); }
 
+  RGB &color() { return m_color; }
+  const RGB &color() const { return m_color; }
+
   uint8_t &alpha() { return m_alpha; }
-  const uint8_t alpha() const { return m_alpha; }
+  uint8_t alpha() const { return m_alpha; }
 
   SDL_RendererFlip getFlip() const { return m_flip; }
   void flipX() { m_flip = (SDL_RendererFlip)(m_flip ^ SDL_FLIP_HORIZONTAL); }
@@ -65,6 +68,7 @@ public:
 private:
   const DTransform2 *m_transform;
   SDL_Texture *m_texture;
+  RGB m_color;
   uint8_t m_alpha;
   SDL_Point m_pivot;
   SDL_Rect m_clip;

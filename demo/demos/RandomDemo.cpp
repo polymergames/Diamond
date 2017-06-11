@@ -133,19 +133,23 @@ void RandomDemo::update(tD_delta delta) {
 
   // Coloring
   if (Input::keydown[Input::K_R]) {
-    spike_color = {255, 0, 0, 255};
-    spike_sprite->setColor(spike_color);
+    spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)
+        ->setColor({100, 0, 0});
+  }
+  if (Input::keydown[Input::K_G]) {
+    spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)
+        ->setColor({100, 255, 50});
+  }
+  if (Input::keydown[Input::K_B]) {
+    spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)
+        ->setColor({100, 0, 255});
   }
   if (Input::keydown[Input::K_T]) {
-    spike_color = {0, 0, 0, 255};
-    spike_sprite->setColor(spike_color);
+    spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)->setColor({0, 0, 0});
   }
   if (Input::keyup[Input::K_Y]) {
-    RGBA sc = spike.getComponent<RenderComponent2D>(RENDERCOMPONENT)
-                  ->getSprite()
-                  ->getColor();
-    sc.a -= 32;
-    spike_sprite->setColor(sc);
+    auto renderComp = spike.getComponent<RenderComponent2D>(RENDERCOMPONENT);
+    renderComp->setAlpha(renderComp->getAlpha() - 32);
   }
 
   // Drawing

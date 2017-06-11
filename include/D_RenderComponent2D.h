@@ -35,6 +35,9 @@ public:
   virtual RenderLayer getLayer() const = 0;
   virtual void setLayer(RenderLayer newLayer) = 0;
 
+  virtual RGB getColor() const = 0;
+  virtual void setColor(const RGB &color) = 0;
+
   // this render component's alpha/transparency
   // with 0 being fully transparent and 255 being fully opaque
   virtual uint8_t getAlpha() const = 0;
