@@ -297,8 +297,15 @@ void Diamond::Particle2D::update(tD_delta delta) {
   }
 
   if (animateAlpha && renderComponent) {
-    renderComponent->setAlpha(
-        Math::lerp(renderComponent->getAlpha(), deathAlpha, t));
+    // cast to int to avoid overflow probs
+    int newAlpha =
+        Math::lerp((int)(renderComponent->getAlpha()), (int)deathAlpha, t);
+    if (newAlpha < 0) {
+      newAlpha = 0;
+    } else if (newAlpha > 255) {
+      newAlpha = 255;
+    }
+    renderComponent->setAlpha(newAlpha);
   }
 }
 
