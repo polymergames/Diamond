@@ -20,23 +20,31 @@
 #include "D_ConfigLoader.h"
 
 namespace Diamond {
-    class SDLConfigLoader : public ConfigLoader {
-    public:
-        static const int DEFAULT_BUFSIZE = 100000;
-        static const int LINESIZE        = 1000;
+class SDLConfigLoader : public ConfigLoader {
+ public:
+  static const int DEFAULT_BUFSIZE = 100000;
+  static const int LINESIZE = 1000;
 
-        SDLConfigLoader(const std::string &pathRoot = "");
+  // All path arguments in this class's functions
+  // should be relative to pathRoot.
+  SDLConfigLoader(const std::string& pathRoot = "");
 
-        ConfigTable load(const std::string &path) override;
+  // Parses the file at the given path using SDL IO
+  // and returns any config that was found in the file.
+  ConfigTable load(const std::string& path) override;
 
-        // WARNING: this function is NOT implemented for SDLConfigLoader!
-        // Try StdConfigLoader instead (might not work on mobile though)
-        bool write(const ConfigTable &table,
-                   const std::string &path) override;
+  // WARNING: this function is NOT implemented for SDLConfigLoader!
+  // Try StdConfigLoader instead (might not work on mobile though)
+  bool write(const ConfigTable& table, const std::string& path) override;
 
-    private:
-        std::string m_pathRoot;
-    };
+  // TODO: move this somewhere else?
+  // Loads the contents of the file at the given path into a string
+  // using SDL IO.
+  std::string loadStr(const std::string& path);
+
+ private:
+  std::string m_pathRoot;
+};
 }
 
-#endif // D_SDLCONFIGLOADER_H
+#endif  // D_SDLCONFIGLOADER_H
