@@ -105,9 +105,9 @@ std::string Diamond::SDLConfigLoader::loadStr(const std::string& path) {
   auto file = SDL_RWFromFile(fullPath.c_str(), "r");
 
   if (file != NULL) {
-    auto size = SDL_RWsize(file);
+    auto size = SDL_RWsize(file) + 1; // +1 to null-terminate string
 
-    if (size <= 0) {
+    if (size <= 1) {
       Log::log("Could not determine size of file " + fullPath +
                ", using constant size buffer (" + toString(DEFAULT_BUFSIZE) +
                " bytes)");
