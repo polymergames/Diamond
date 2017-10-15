@@ -18,7 +18,7 @@
 #define DU_MATRIX_H
 
 #include <iostream>
-#include "DuVector2.h"
+#include "duVector2.h"
 
 namespace Diamond {
     namespace MatrixMath {

@@ -20,7 +20,7 @@
 #include <stdint.h>
 #include <memory>
 #include "duMath.h"
-#include "duSwapvector.h"
+#include "duSwapVector.h"
 #include "duTypedefs.h"
 
 // ID/index typedefs

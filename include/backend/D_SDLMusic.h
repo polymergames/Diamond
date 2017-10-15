@@ -17,7 +17,7 @@
 #ifndef D_SDL_MUSIC_H
 #define D_SDL_MUSIC_H
 
-#include "SDL_Mixer.h"
+#include "SDL_mixer.h"
 
 #include "D_Music.h"
 
