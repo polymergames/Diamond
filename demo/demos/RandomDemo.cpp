@@ -98,6 +98,7 @@ RandomDemo::RandomDemo(Engine2D &engine, float movespeed, float spinspeed,
   zapper2_anim.rows = 2;
   zapper2_anim.columns = 2;
   zapper2_anim.num_frames = 4;
+  zapper2_anim.loop = true;
   float z2scale = 0.5f;
   zapper2.addComponent(RENDERCOMPONENT, renderer->makeRenderComponent(
                                             zapper2.worldTransform(),

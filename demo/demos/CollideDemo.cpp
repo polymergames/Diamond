@@ -68,6 +68,7 @@ CollideDemo::CollideDemo(Engine2D &engine, float movespeed)
     zapper_anim.rows = 2;
     zapper_anim.columns = 2;
     zapper_anim.num_frames = 4;
+    zapper_anim.loop = true;
 
     zapper1.addComponent(RENDERCOMPONENT,
         renderer->makeRenderComponent(zapper1.transform(), spike_sprite.get()));

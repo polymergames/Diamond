@@ -23,44 +23,38 @@
 #include "D_RenderComponent2D.h"
 
 namespace Diamond {
-    class AnimatorSheet : public Component {
-    public:
-        AnimatorSheet(RenderComponent2D *rcomp,
-                      const AnimationSheet *anim,
-                      bool loop = true);
+class AnimatorSheet : public Component {
+ public:
+  AnimatorSheet(RenderComponent2D *rcomp, const AnimationSheet *anim);
 
+  const AnimationSheet *getAnimation() const { return m_anim; }
+  void setAnimation(const AnimationSheet *anim);
 
-        const AnimationSheet *getAnimation() const { return m_anim; }
-        void setAnimation(const AnimationSheet *anim);
-        
-        void setLoop(bool loop) { m_loop = loop; }
-        bool isLoop() const { return m_loop; }
-        
-        // animation is never done if it is looped,
-        // otherwise it is done when it's on the last frame
-        bool isDone() const { return !m_loop && (m_cur_frame + 1 >= m_anim->num_frames); }
+  // animation is never done if it is looped,
+  // otherwise it is done when it's on the last frame
+  bool isDone() const {
+    return !m_anim->loop && (m_cur_frame + 1 >= m_anim->num_frames);
+  }
 
-        RenderComponent2D *getRenderComponent() { return m_render_comp; }
-        const RenderComponent2D *getRenderComponent() const { return m_render_comp; }
-        void setRenderComponent(RenderComponent2D *rcomp);
+  RenderComponent2D *getRenderComponent() { return m_render_comp; }
+  const RenderComponent2D *getRenderComponent() const { return m_render_comp; }
+  void setRenderComponent(RenderComponent2D *rcomp);
 
+  tD_index getCurFrame() const { return m_cur_frame; }
+  tD_delta getCurFrameElapsed() const { return m_elapsed; }
 
-        tD_index getCurFrame() const { return m_cur_frame; }
-        tD_delta getCurFrameElapsed() const { return m_elapsed; }
+  void update(tD_delta delta) override;
 
-        void update(tD_delta delta) override;
+ private:
+  RenderComponent2D *m_render_comp;
+  const AnimationSheet *m_anim;
 
-    private:
-        RenderComponent2D                   *m_render_comp;
-        const AnimationSheet                *m_anim;
-        bool                                m_loop;
+  int16_t m_frame_width, m_frame_height;
+  tD_index m_cur_frame;
+  tD_delta m_elapsed;
 
-        int16_t                             m_frame_width, m_frame_height;
-        tD_index                            m_cur_frame;
-        tD_delta                            m_elapsed;
-
-        void initClip();
-    };
+  void initClip();
+};
 }
 
-#endif // D_ANIMATOR_SHEET_H
+#endif  // D_ANIMATOR_SHEET_H
