@@ -17,10 +17,6 @@
 #ifndef D_ENGINE_H
 #define D_ENGINE_H
 
-#if defined __ANDROID__ || defined IOS
-#include "SDL.h" // Has to be included with game's main function for SDL_main to work. TODO: include for iOS as well?
-#endif
-
 #include <fstream>
 #include "duPoolManager.h"
 #include "D_Component.h"
