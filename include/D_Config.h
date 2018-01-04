@@ -32,7 +32,9 @@ struct RGBA {
 };
 
 struct Config {
-  std::string game_name = "A Game Without a Name";
+  std::string game_name = "A_Game_Without_a_Name";
+  // path where the game's logs will be saved
+  std::string log_path = "game.log";
 
   // Graphics settings
   int16_t window_width = 1280;

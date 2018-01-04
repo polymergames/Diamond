@@ -223,9 +223,9 @@ bool Diamond::Engine2D::initQuantum() {
 }
 
 bool Diamond::Engine2D::initWindows() {
-    logstream.open(config.game_name + ".log", std::ios::app);
+    logstream.open(config.log_path, std::ios::app);
     if (!logstream.is_open())
-        std::cout << "Logger ERROR: Failed to open log file " << config.game_name + ".log" << "!" << std::endl;
+        std::cout << "Logger ERROR: Failed to open log file " << config.log_path << "!" << std::endl;
     else
         Log::setLogger(new StreamLogger(logstream));
 
@@ -238,7 +238,7 @@ bool Diamond::Engine2D::initMac() {
 
 bool Diamond::Engine2D::initAndroid() {
     config.fullscreen = true;
-    // Log::setLogger(new FileLogger(config.game_name + ".log")); // TODO: Android logger
+    // Log::setLogger(new FileLogger(config.log_path)); // TODO: Android file logger
 #if defined __ANDROID__
     Log::setLogger(new AndroidLogger(config.game_name));
 #endif
