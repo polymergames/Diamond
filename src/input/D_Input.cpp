@@ -25,6 +25,8 @@ bool Diamond::Input::touch_up = false;
 
 Diamond::Vector2<int> Diamond::Input::touch_pos;
 
+std::unordered_map<int64_t, Diamond::Input::TouchEvent> Diamond::Input::touch_events;
+
 void Diamond::Input::resetKeyup() {
     std::fill(keyup.begin(), keyup.end(), 0);
 }

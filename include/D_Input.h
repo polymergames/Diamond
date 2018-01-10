@@ -17,6 +17,7 @@
 #ifndef D_INPUT_H
 #define D_INPUT_H
 
+#include <unordered_map>
 #include <vector>
 #include "duVector2.h"
 
@@ -38,9 +39,20 @@ namespace Diamond {
         extern std::vector<bool> keydown;
         extern std::vector<bool> keyup;
         
+        // most recent touch event in the frame
+        // DEPRECATED. Use touch_events instead
         extern bool touch_down, touch_drag, touch_up;
         extern Vector2<int> touch_pos; // using int instead of tD_pos to prevent bugs with SDL int parameters
         
+        // all touch events in the frame (multitouch)
+        enum TOUCH_TYPE { DOWN, HOLD, DRAG, UP };
+        struct TouchEvent {
+            TOUCH_TYPE touch_type;
+            Vector2<int> touch_pos;
+        };
+        // maps touch ID -> touch event
+        extern std::unordered_map<int64_t, TouchEvent> touch_events;
+
         void resetKeyup();
     }
 }

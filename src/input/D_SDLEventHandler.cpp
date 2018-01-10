@@ -91,6 +91,17 @@ void Diamond::SDLEventHandler::update() {
     Input::touch_drag = false;
     Input::touch_up = false;
 
+    // remove touch events from the last frame that were touch up events
+    auto touchIt = Input::touch_events.begin();
+    while (touchIt != Input::touch_events.end()) {
+        if (touchIt->second.touch_type == Input::UP) {
+            touchIt = Input::touch_events.erase(touchIt);            
+        } else {
+            touchIt->second.touch_type = Input::HOLD;
+            ++touchIt;
+        }
+    }
+
     // TODO: try using SDL get state for keys instead of event polling
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
@@ -105,23 +116,17 @@ void Diamond::SDLEventHandler::update() {
         case SDL_FINGERDOWN:
             Input::touch_down = true;
             Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
-            // DEBUG
-//#ifdef __ANDROID__
-//            __android_log_print(ANDROID_LOG_VERBOSE,
-//                                "POLYMER", "Finger pos x: %f y: %f\n", e.tfinger.x, e.tfinger.y);
-//            __android_log_print(ANDROID_LOG_VERBOSE,
-//                                "POLYMER", "Screen x: %d y: %d\n", screen.x, screen.y);
-//            __android_log_print(ANDROID_LOG_VERBOSE,
-//                                "POLYMER", "Touch pos x: %d y: %d\n", Input::touch_pos.x, Input::touch_pos.y);
-//#endif
+            Input::touch_events[e.tfinger.fingerId] = {Input::DOWN, Input::touch_pos};
             break;
         case SDL_FINGERMOTION:
             Input::touch_drag = true;
             Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
+            Input::touch_events[e.tfinger.fingerId] = {Input::DRAG, Input::touch_pos};
             break;
         case SDL_FINGERUP:
             Input::touch_up = true;
             Input::touch_pos.set(e.tfinger.x * screen.x, e.tfinger.y * screen.y);
+            Input::touch_events[e.tfinger.fingerId] = {Input::UP, Input::touch_pos};
             break;
         case SDL_MOUSEBUTTONDOWN:
             Input::touch_down = true;
