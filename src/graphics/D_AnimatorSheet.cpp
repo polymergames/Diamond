@@ -22,7 +22,7 @@ const std::string EMPTY_ANIMATION_ERROR =
     "AnimatorSheet ERROR: Tried to set an empty animation!";
 const std::string NULL_RENDERCOMP_ERROR =
     "AnimatorSheet ERROR: The given render component is null!";
-}
+}  // namespace
 
 Diamond::AnimatorSheet::AnimatorSheet(RenderComponent2D *rcomp,
                                       const AnimationSheet *anim)
@@ -65,11 +65,17 @@ void Diamond::AnimatorSheet::setRenderComponent(RenderComponent2D *rcomp) {
   initClip();
 }
 
+// animation is never done if it is looped,
+// otherwise it is done when the last frame is done
+bool Diamond::AnimatorSheet::isDone() const {
+  return !m_anim->loop && (m_cur_frame + 1 >= m_anim->num_frames) &&
+         (m_elapsed >= m_anim->frame_length);
+}
+
 void Diamond::AnimatorSheet::update(tD_delta delta) {
+  m_elapsed += delta;
   // continue animation if it is not yet done
   if (!isDone()) {
-    m_elapsed += delta;
-
     // if the current frame is done, switch to the next frame
     if (m_elapsed > m_anim->frame_length) {
       m_cur_frame =

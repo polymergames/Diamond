@@ -31,10 +31,8 @@ class AnimatorSheet : public Component {
   void setAnimation(const AnimationSheet *anim);
 
   // animation is never done if it is looped,
-  // otherwise it is done when it's on the last frame
-  bool isDone() const {
-    return !m_anim->loop && (m_cur_frame + 1 >= m_anim->num_frames);
-  }
+  // otherwise it is done when the last frame is done
+  bool isDone() const;
 
   RenderComponent2D *getRenderComponent() { return m_render_comp; }
   const RenderComponent2D *getRenderComponent() const { return m_render_comp; }
