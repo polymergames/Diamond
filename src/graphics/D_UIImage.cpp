@@ -16,45 +16,39 @@
 
 #include "D_UIImage.h"
 
-
-Diamond::UIImage::UIImage(const UIViewProps &props,
-                          const DTransform2 &transform,
-                          Renderer2D *renderer,
-                          const Texture *texture,
-                          RenderLayer layer) :
-UIView(props, transform), texture(texture), layer(layer), renderer(renderer) {
-    renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
+Diamond::UIImage::UIImage(const UIViewProps& props,
+                          const DTransform2& transform, Renderer2D* renderer,
+                          const Texture* texture, RenderLayer layer)
+    : UIView(props, transform),
+      texture(texture),
+      layer(layer),
+      renderer(renderer) {
+  renderComponent =
+      renderer->makeRenderComponent(worldTransform(), texture, layer);
 }
 
-Diamond::UIImage::UIImage(Renderer2D *renderer,
-                          const Texture *texture,
-                          RenderLayer layer) :
-UIImage(UIViewProps(), DTransform2(), renderer, texture, layer) {}
+Diamond::UIImage::UIImage(Renderer2D* renderer, const Texture* texture,
+                          RenderLayer layer)
+    : UIImage(UIViewProps(), DTransform2(), renderer, texture, layer) {}
 
-Diamond::UIImage::~UIImage() {
-    renderComponent.free();
-}
-
+Diamond::UIImage::~UIImage() { renderComponent.free(); }
 
 void Diamond::UIImage::updateLayout() {
-    // resize this view to fit its image
-    m_width  = texture->getWidth() * worldTransform().scale.x;
-    m_height = texture->getHeight() * worldTransform().scale.y;
-    
-    // layout children
-    UIView::updateLayout();
+  // resize this view to fit its image
+  auto clipDims = renderComponent->getClipDim();
+  m_width = clipDims.x * worldTransform().scale.x;
+  m_height = clipDims.y * worldTransform().scale.y;
+
+  // layout children
+  UIView::updateLayout();
 }
 
-
 void Diamond::UIImage::setVisible(bool newVisible) {
-    if (newVisible && !renderComponent) {
-        // make this image visible again
-        renderComponent = renderer->makeRenderComponent(worldTransform(), texture, layer);
-    }
-    else if (!newVisible && renderComponent) {
-        // make this image invisible
-        renderComponent.free();
-    }
-    
-    UIView::setVisible(newVisible);
+  if (newVisible) {
+    renderComponent->setAlpha(255);
+  } else {
+    renderComponent->setAlpha(0);
+  }
+
+  UIView::setVisible(newVisible);
 }

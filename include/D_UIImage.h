@@ -17,38 +17,35 @@
 #ifndef D_UI_IMAGE_H
 #define D_UI_IMAGE_H
 
-#include "D_UIView.h"
 #include "D_Renderer2D.h"
+#include "D_UIView.h"
 
 namespace Diamond {
-    class UIImage : public UIView {
-    public:
-        UIImage(const UIViewProps &props,
-                const DTransform2 &transform,
-                Renderer2D *renderer,
-                const Texture *texture,
-                RenderLayer layer = 1);
-        
-        UIImage(Renderer2D *renderer,
-                const Texture *texture,
-                RenderLayer layer = 1);
-        
-        virtual ~UIImage();
-        
-        void updateLayout() override;
-        
-        // set whether this image should be rendered.
-        void setVisible(bool visible) override;
-        
-        RenderComponent2D *getRenderComponent() { return renderComponent.get(); }
-        const RenderComponent2D *getRenderComponent() const { return renderComponent.get(); }
-        
-    private:
-        const Texture *texture;
-        RenderLayer layer;
-        DumbPtr<RenderComponent2D> renderComponent;
-        Renderer2D *renderer;
-    };
-}
+class UIImage : public UIView {
+ public:
+  UIImage(const UIViewProps& props, const DTransform2& transform,
+          Renderer2D* renderer, const Texture* texture, RenderLayer layer = 1);
 
-#endif // D_UI_IMAGE_H
+  UIImage(Renderer2D* renderer, const Texture* texture, RenderLayer layer = 1);
+
+  virtual ~UIImage();
+
+  void updateLayout() override;
+
+  // set whether this image should be rendered.
+  void setVisible(bool visible) override;
+
+  RenderComponent2D* getRenderComponent() { return renderComponent.get(); }
+  const RenderComponent2D* getRenderComponent() const {
+    return renderComponent.get();
+  }
+
+ private:
+  const Texture* texture;
+  RenderLayer layer;
+  DumbPtr<RenderComponent2D> renderComponent;
+  Renderer2D* renderer;
+};
+}  // namespace Diamond
+
+#endif  // D_UI_IMAGE_H
