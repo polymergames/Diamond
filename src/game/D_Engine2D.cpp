@@ -35,6 +35,16 @@
 #include "D_AndroidLogger.h"
 #endif
 
+// Are we on iOS?
+#ifdef __APPLE__
+#include "TargetConditionals.h"
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+#define IPHONE
+#else
+#define MACOSX
+#endif
+#endif
+
 Diamond::Engine2D::Engine2D(const Config &config, bool &success)
     : is_running(false),
       is_paused(false),
@@ -50,12 +60,12 @@ Diamond::Engine2D::Engine2D(const Config &config, bool &success)
 
 #if defined _WIN32
     success = initWindows();
-#elif defined __APPLE__
-    success = initMac();
 #elif defined __ANDROID__
     success = initAndroid();
-#elif defined IOS // TODO: What is the IOS platform macro? Or define one manually!
+#elif defined IPHONE
     success = initIOS();
+#elif defined MACOSX
+    success = initMac();
 #else
     Log::log("Platform unsupported!");
     success = false;
@@ -242,11 +252,13 @@ bool Diamond::Engine2D::initAndroid() {
 #if defined __ANDROID__
     Log::setLogger(new AndroidLogger(config.game_name));
 #endif
+    Log::log("Hello Android");
     return initSDL() && initQuantum();
 }
 
 bool Diamond::Engine2D::initIOS() {
     config.fullscreen = true;
     // TODO: iOS logger
+    Log::log("Hello IOS");
     return initSDL() && initQuantum();
 }
