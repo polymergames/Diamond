@@ -36,27 +36,33 @@ Diamond::SDLRenderer2D::SDLRenderer2D(const Config &config, bool &success)
   }
 
   // Create window
-  m_window = SDL_CreateWindow(
-      config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED,
-      SDL_WINDOWPOS_UNDEFINED, config.window_width, config.window_height,
-      config.fullscreen || config.window_width <= 0 || config.window_height <= 0
-          ? SDL_WINDOW_FULLSCREEN_DESKTOP
-          : 0);
-  if (m_window == nullptr) {
-    Log::log("SDL failed to create window! SDL Error: " +
-             std::string(SDL_GetError()));
-    success = false;
+  if (success) {
+    auto flags = SDL_WINDOW_ALLOW_HIGHDPI;
+    if (config.fullscreen || config.window_width <= 0 || config.window_height <= 0) {
+      flags = (SDL_WindowFlags)(flags | SDL_WINDOW_FULLSCREEN_DESKTOP);
+    }
+    m_window = SDL_CreateWindow(
+        config.game_name.c_str(), SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED, config.window_width, config.window_height,
+        flags);
+    if (m_window == nullptr) {
+      Log::log("SDL failed to create window! SDL Error: " +
+               std::string(SDL_GetError()));
+      success = false;
+    }
   }
 
   // Create renderer
-  m_renderer = SDL_CreateRenderer(
-      m_window, -1,
-      SDL_RENDERER_ACCELERATED |
-          (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
-  if (m_renderer == nullptr) {
-    Log::log("SDL failed to create renderer! SDL Error: " +
-             std::string(SDL_GetError()));
-    success = false;
+  if (success) {
+    m_renderer = SDL_CreateRenderer(
+        m_window, -1,
+        SDL_RENDERER_ACCELERATED |
+            (config.vsync ? SDL_RENDERER_PRESENTVSYNC : 0x00000000));
+    if (m_renderer == nullptr) {
+      Log::log("SDL failed to create renderer! SDL Error: " +
+               std::string(SDL_GetError()));
+      success = false;
+    }
   }
 
   // Set background color
