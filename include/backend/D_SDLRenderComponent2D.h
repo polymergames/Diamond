@@ -19,13 +19,13 @@
 
 #include <memory>
 
-#include "D_SDLRenderer2D.h"
 #include "duSwapVector.h"
+#include "SDLRenderObjectPool.h"
 
 namespace Diamond {
 class SDLRenderComponent2D : public RenderComponent2D {
 public:
-  SDLRenderComponent2D(SDLRenderer2D &renderer, SDLrenderobj_id renderObj,
+  SDLRenderComponent2D(SDLRenderObjectPool &renderer, SDLrenderobj_id renderObj,
                        const Texture *texture, RenderLayer layer)
       : m_renderer(renderer), m_renderObj(renderObj), m_sprite(texture),
         m_layer(layer) {}
@@ -116,7 +116,7 @@ public:
   }
 
 private:
-  SDLRenderer2D &m_renderer;
+	SDLRenderObjectPool &m_renderer;
   SDLrenderobj_id m_renderObj;
   const Texture *m_sprite;
   RenderLayer m_layer;

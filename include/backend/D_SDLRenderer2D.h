@@ -22,9 +22,9 @@
 #include "SDL_ttf.h"
 #include "duPoolManager.h"
 #include "D_Renderer2D.h"
-#include "D_SDLRenderObj2D.h"
 #include "D_SDLtypedefs.h"
-
+#include "SDLRenderObjectPool.h"
+#include "D_SDLRenderComponent2D.h"
 
 namespace Diamond {
     struct SDLRenderablePoint {
@@ -48,9 +48,6 @@ namespace Diamond {
 
         TTF_Font *font;
     };
-
-
-    class SDLRenderComponent2D;
 
     class SDLRenderer2D : public Renderer2D {
     public:
@@ -97,24 +94,7 @@ namespace Diamond {
                         const RGBA &color) override;
 
 
-        SDLRenderObj2D &renderObj(RenderLayer layer,
-                                  SDLrenderobj_id robj) {
-            return m_render_objects[layer][robj];
-        }
-
-        const SDLRenderObj2D &renderObj(RenderLayer layer,
-                                        SDLrenderobj_id robj) const {
-            return m_render_objects[layer][robj];
-        }
-
-        void destroyRenderObj(RenderLayer layer,
-                              SDLrenderobj_id robj) {
-            m_render_objects[layer].erase(robj);
-        }
-
-        SDLrenderobj_id changeLayer(RenderLayer curLayer,
-                                    SDLrenderobj_id robj,
-                                    RenderLayer newLayer);
+      
 
     private:
         SDL_Window   *m_window;
@@ -122,7 +102,7 @@ namespace Diamond {
 
         RGBA          m_bgColor;
 
-        std::vector<SwapVector<SDLRenderObj2D> > m_render_objects;
+		SDLRenderObjectPool m_render_objects;
 
         std::vector<SDLRenderablePoint>          m_render_points_queue;
         std::vector<SDLRenderableLine>           m_render_lines_queue;

@@ -84,10 +84,10 @@ Diamond::SDLRenderer2D::SDLRenderer2D(const Config &config, bool &success)
   }
 
   if (success && config.optimize_render_layers) {
-    m_render_objects.resize(config.num_render_layers_estimate);
+    m_render_objects.m_render_objects.resize(config.num_render_layers_estimate);
 
     for (int i = 0; i < config.num_render_layers_estimate; ++i) {
-      m_render_objects[i].data().reserve(config.max_gameobjects_estimate);
+      m_render_objects.m_render_objects[i].data().reserve(config.max_gameobjects_estimate);
     }
   }
 }
@@ -108,7 +108,7 @@ void Diamond::SDLRenderer2D::renderAll() {
   SDL_RenderClear(m_renderer);
 
   // Render sprites
-  for (auto l = m_render_objects.begin(); l != m_render_objects.end(); ++l) {
+  for (auto l = m_render_objects.m_render_objects.begin(); l != m_render_objects.m_render_objects.end(); ++l) {
     for (auto i = l->begin(); i != l->end(); ++i) {
       const auto &transform = i->getTransform();
 
@@ -261,14 +261,14 @@ Diamond::SDLRenderer2D::makeRenderComponent(const DTransform2 &transform,
                                             RenderLayer layer,
                                             const Vector2<tD_pos> &pivot) {
   // Make room for a new layer if necessary
-  if ((int)layer > (int)m_render_objects.size() - 1) {
-    m_render_objects.resize(layer + 1);
+  if ((int)layer > (int)m_render_objects.m_render_objects.size() - 1) {
+    m_render_objects.m_render_objects.resize(layer + 1);
   }
 
-  SDLrenderobj_id robj = m_render_objects[layer].emplace(
+  SDLrenderobj_id robj = m_render_objects.m_render_objects[layer].emplace(
       transform, dynamic_cast<const SDLTexture *>(texture), pivot);
 
-  return m_renderCompPool.make(*this, robj, texture, layer);
+  return m_renderCompPool.make(m_render_objects, robj, texture, layer);
 }
 
 void Diamond::SDLRenderer2D::renderPoint(const Vector2<tD_pos> &coords,
@@ -282,17 +282,4 @@ void Diamond::SDLRenderer2D::renderLine(const Vector2<tD_pos> &p1,
   m_render_lines_queue.push_back({p1, p2, color});
 }
 
-Diamond::SDLrenderobj_id
-Diamond::SDLRenderer2D::changeLayer(RenderLayer curLayer, SDLrenderobj_id robj,
-                                    RenderLayer newLayer) {
-  // Make room for a new layer if necessary
-  if (newLayer + 1 > m_render_objects.size()) {
-    m_render_objects.resize(newLayer + 1);
-  }
 
-  SDLrenderobj_id newID = m_render_objects[newLayer].insert(
-      std::move(m_render_objects[curLayer][robj]));
-  m_render_objects[curLayer].erase(robj);
-
-  return newID;
-}

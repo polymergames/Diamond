@@ -104,8 +104,8 @@ void Diamond::UIView::updateLayout() {
     }
     
     if ((m_props.flags & UIViewProps::FIT_CONTENTS) && !m_children.empty()) {
-        tD_pos minx = MAXFLOAT, miny = MAXFLOAT;
-        tD_pos maxx = -MAXFLOAT, maxy = -MAXFLOAT;
+        tD_pos minx = FLT_MAX, miny = FLT_MAX;
+        tD_pos maxx = -FLT_MAX, maxy = -FLT_MAX;
         
         for (auto child : m_children) {
             if (child->isActive()) {
